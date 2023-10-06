@@ -1,0 +1,72 @@
+@use "./variables";
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Manrope", sans-serif;
+}
+
+*::after,
+*::before {
+    box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: bold;
+}
+
+h1 {
+    font-size: $h1-font-size;
+    line-height: $h1-line-height;
+    letter-spacing: $h1-letter-spacing;
+}
+
+h2 {
+    font-size: $h2-font-size;
+    line-height: $h2-line-height;
+    letter-spacing: $h2-letter-spacing;
+}
+
+h3 {
+    font-size: $h3-font-size;
+    line-height: $h3-line-height;
+    letter-spacing: $h3-letter-spacing;
+}
+
+h4 {
+    font-size: $h4-font-size;
+    line-height: $h4-line-height;
+    letter-spacing: $h4-letter-spacing;
+}
+
+h5 {
+    font-size: $h5-font-size;
+    line-height: $h5-line-height;
+    letter-spacing: $h5-letter-spacing;
+}
+
+h6 {
+    font-size: $h6-font-size;
+    line-height: $h6-line-height;
+    letter-spacing: $h6-letter-spacing;
+}
+
+p {
+    font-size: $text-font-size;
+    line-height: $text-line-height;
+    font-weight: 500;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style-type: none;
+}
