@@ -1,4 +1,4 @@
-@use "./variables";
+@use "./variables" as *;
 
 * {
     padding: 0;
@@ -12,13 +12,17 @@
     box-sizing: border-box;
 }
 
+body {
+    background-color: $matte-white;
+}
+
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-    font-weight: bold;
+    font-weight: $bold-weight;
 }
 
 h1 {
@@ -60,13 +64,22 @@ h6 {
 p {
     font-size: $text-font-size;
     line-height: $text-line-height;
-    font-weight: 500;
+    font-weight: $regular-weight;
 }
 
 a {
+    display: block;
+    width: fit-content;
     text-decoration: none;
 }
 
 li {
     list-style-type: none;
+}
+
+button {
+    background-color: transparent;
+    cursor: pointer;
+    outline: none;
+    border: none;
 }
