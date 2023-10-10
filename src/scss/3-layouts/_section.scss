@@ -1,0 +1,53 @@
+@use "../1-base/placeholders";
+@use "../1-base/variables" as vars;
+@use "../1-base/mixins" as mixins;
+
+.categories {
+    padding: 0 2rem;
+    background-color: vars.$matte-white;
+
+    &__inner-container {
+        @extend %inner-container;
+        @include mixins.flex($gap: 1.875rem, $content: center);
+    }
+}
+
+.about-us {
+    padding: 0 2rem;
+    background-color: vars.$matte-white;
+
+    &__inner-container {
+        @extend %inner-container;
+        @include mixins.flex($gap: 2rem, $content: space-between);
+    }
+
+    &__content {
+        width: 40%;
+        flex-shrink: 0;
+    }
+
+    &__title {
+        font-weight: 700;
+        margin-bottom: 2rem;
+    }
+
+    &__highlight {
+        color: vars.$default-orange;
+    }
+
+    &__text {
+        color: rgba(vars.$black, 0.5);
+        font-weight: vars.$medium-weight;
+    }
+
+    &__img-container {
+        max-width: 540px;
+        flex-shrink: 2;
+    }
+
+    &__img {
+        border-radius: 0.5rem;
+        width: 100%;
+        height: 100%;
+    }
+}

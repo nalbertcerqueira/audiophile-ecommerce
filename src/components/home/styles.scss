@@ -1,0 +1,168 @@
+@use "../../scss/1-base/placeholders";
+@use "../../scss/1-base/variables" as vars;
+@use "../../scss/1-base/mixins" as mixins;
+
+.header-hero-wrapper {
+    background-color: #181818;
+    border-radius: 0 0 0.5rem 0.5rem;
+    overflow: hidden;
+}
+
+.hero {
+    padding: 0 2rem;
+
+    &__inner-container {
+        @extend %inner-container;
+        display: grid;
+        grid-template-columns: 400px auto;
+    }
+
+    &__content-wrapper {
+        margin: 128px 0 150px;
+        z-index: 10;
+    }
+
+    &__featured-info {
+        @include mixins.flex($direction: column, $gap: 1.5rem, $items: flex-start);
+    }
+
+    &__overline {
+        @extend %overline-text;
+        color: rgba(vars.$white, 0.49);
+    }
+
+    &__title {
+        color: vars.$white;
+    }
+
+    &__product-info {
+        color: rgba(vars.$white, 0.75);
+        max-width: 90%;
+    }
+
+    &__btn {
+        margin-top: 2.5rem;
+    }
+
+    &__product-img {
+        transform: scale(1.18) translate(-30%, -6%);
+        height: 100%;
+        width: 150%;
+        object-fit: cover;
+    }
+}
+
+.homepage-categories {
+    margin-top: 200px;
+}
+
+.product-grid {
+    padding: 0 2rem;
+    background-color: vars.$matte-white;
+
+    &__inner-container {
+        @extend %inner-container;
+        margin-top: 168px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 560px 320px 320px;
+        row-gap: 3rem;
+        column-gap: 1.875rem;
+    }
+
+    &__large-item,
+    &__medium-item {
+        grid-column: span 2;
+    }
+
+    &__small-item {
+        grid-column: span 1;
+    }
+}
+
+.featured-product {
+    @include mixins.flex($gap: 2rem, $content: space-evenly);
+    @extend %full-width-height;
+    padding: 2rem;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    background-color: vars.$default-orange;
+
+    &__img-box {
+        position: relative;
+        width: calc(300px + 8%);
+        height: 100%;
+    }
+
+    &__img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        transform: translateY(16%);
+    }
+
+    &__circle-patterns {
+        position: absolute;
+        left: 50%;
+        top: -10%;
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+    &__info {
+        position: relative;
+    }
+
+    &__name {
+        font-size: vars.$h1-font-size;
+        line-height: vars.$h1-line-height;
+        letter-spacing: vars.$h1-letter-spacing;
+        color: vars.$white;
+    }
+
+    &__about {
+        color: rgba(vars.$white, 0.75);
+        margin-top: 1.5rem;
+    }
+
+    &__link {
+        margin-top: 2.5rem;
+    }
+}
+
+.medium-banner {
+    @extend %full-width-height;
+    display: flex;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    background: url("/imgs/home/speaker-banner.jpg") right / cover;
+}
+
+.small-banner {
+    @extend %full-width-height;
+    border-radius: 0.5rem;
+    background: url("/imgs/home/earphone-banner.jpg") center / cover;
+}
+
+.small-info {
+    @extend %full-width-height;
+    background-color: vars.$very-light-grey;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    display: flex;
+}
+
+.info-wrapper {
+    @include mixins.flex($gap: 2rem, $direction: column, $content: center, $items: flex-start);
+    margin-left: 4rem;
+
+    &__name {
+        font-weight: vars.$extra-bold-weight;
+        font-size: vars.$h4-font-size;
+        letter-spacing: vars.$h4-letter-spacing;
+    }
+}
+
+.homepage-about-us {
+    margin: 200px auto;
+}

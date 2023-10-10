@@ -1,0 +1,43 @@
+@use "../1-base/variables" as vars;
+@use "../1-base/placeholders";
+
+.btn {
+    @extend %subtitle;
+    line-height: calc(1em);
+    padding: 1.125rem 2rem;
+    white-space: nowrap;
+    outline: none;
+    transition:
+        color vars.$transition-duration,
+        background-color vars.$transition-duration;
+
+    &--primary {
+        color: vars.$white;
+        background-color: vars.$default-orange;
+
+        &:hover {
+            background-color: vars.$light-orange;
+        }
+    }
+
+    &--empty {
+        color: vars.$black;
+        background-color: transparent;
+        border: 1px solid vars.$black;
+
+        &:hover {
+            color: vars.$white;
+            background-color: vars.$black;
+        }
+    }
+
+    &--normal {
+        color: vars.$white;
+        background-color: vars.$black;
+
+        &:hover {
+            color: vars.$white;
+            background-color: #4c4c4c;
+        }
+    }
+}

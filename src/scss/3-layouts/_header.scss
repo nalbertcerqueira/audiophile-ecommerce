@@ -1,0 +1,36 @@
+@use "../1-base/placeholders";
+@use "../1-base/variables" as vars;
+@use "../1-base/mixins" as mixins;
+
+.header {
+    padding: 0 2rem;
+    position: relative;
+    z-index: 10;
+
+    &--black {
+        background-color: vars.$black;
+    }
+
+    &__inner-container {
+        @extend %inner-container;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 2rem;
+        padding: 2rem 0 2.25rem 0;
+    }
+
+    &__cart-btn {
+        justify-self: flex-end;
+        padding: 0.25rem;
+        display: flex;
+    }
+
+    &__division {
+        display: block;
+        max-width: 1110px;
+        height: 2px;
+        margin: 0 auto;
+        background-color: rgba(#979797, 0.25);
+        box-shadow: 4px 4px 10px rgba(vars.$black, 0.25);
+    }
+}

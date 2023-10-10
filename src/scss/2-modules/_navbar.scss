@@ -1,0 +1,21 @@
+@use "../1-base/mixins" as mixins;
+@use "../1-base/variables" as vars;
+
+.navbar {
+    &__link-list {
+        @include mixins.flex($gap: 2.125rem);
+    }
+
+    &__link {
+        font-size: 0.8125rem;
+        padding: 0.25rem 0;
+        letter-spacing: 2px;
+        font-weight: vars.$bold-weight;
+        color: vars.$white;
+        transition: color vars.$transition-duration;
+
+        &:hover {
+            color: vars.$default-orange;
+        }
+    }
+}

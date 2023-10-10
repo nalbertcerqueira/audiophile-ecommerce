@@ -1,12 +1,15 @@
+import { Footer } from "./components/Footer"
 import { PropsWithChildren } from "react"
+import "@/scss/index.scss"
+import "./styles.scss"
 
-export default function HomeLayout({ children }: PropsWithChildren) {
+export function HomeContainer({ children }: PropsWithChildren) {
     return (
-        <html lang="pt-br">
-            <body>
-                <div></div>
+        <body>
+            <div className="app-container">
                 {children}
-            </body>
-        </html>
+                <Footer />
+            </div>
+        </body>
     )
 }
