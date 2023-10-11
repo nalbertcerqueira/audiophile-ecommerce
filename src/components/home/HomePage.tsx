@@ -1,7 +1,7 @@
 import { Header } from "../shared/Header"
 import { HeroSection } from "./components/HeroSection"
 import { CategorySection } from "../shared/CategorySection"
-import { ProductGridSection } from "./components/ProductGrid"
+import { ProductGridSection } from "./components/ProductGridSection"
 import { AboutSection } from "../shared/AboutSection"
 import "./styles.scss"
 
