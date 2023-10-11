@@ -1,6 +1,5 @@
 "use client"
 
-import { Header } from "@/components/shared/Header"
 import { TitleSection } from "./components/TitleSection"
 import { usePathname } from "next/navigation"
 import { PreviewSection } from "./components/PreviewSection"
@@ -12,12 +11,9 @@ export default function Category() {
 
     return (
         <>
-            <div className="header-title-wrapper">
-                <Header className="header--black" />
-                {allowedCategories.includes(pathname) ? (
-                    <TitleSection title={pathname.toUpperCase()} />
-                ) : null}
-            </div>
+            {allowedCategories.includes(pathname) && (
+                <TitleSection title={pathname.toUpperCase()} />
+            )}
             <PreviewSection />
         </>
     )
