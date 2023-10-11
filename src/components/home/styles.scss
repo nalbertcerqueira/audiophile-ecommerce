@@ -9,7 +9,7 @@
 }
 
 .hero {
-    padding: 0 2rem;
+    @extend %section-padding;
 
     &__inner-container {
         @extend %inner-container;
@@ -57,8 +57,7 @@
 }
 
 .product-grid {
-    padding: 0 2rem;
-    background-color: vars.$matte-white;
+    @extend %section-padding;
 
     &__inner-container {
         @extend %inner-container;
@@ -66,8 +65,7 @@
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: 560px 320px 320px;
-        row-gap: 3rem;
-        column-gap: 1.875rem;
+        gap: 3rem 1.875rem;
     }
 
     &__large-item,

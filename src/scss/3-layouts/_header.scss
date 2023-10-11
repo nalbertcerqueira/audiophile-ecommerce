@@ -3,7 +3,7 @@
 @use "../1-base/mixins" as mixins;
 
 .header {
-    padding: 0 2rem;
+    @extend %section-padding;
     position: relative;
     z-index: 10;
 

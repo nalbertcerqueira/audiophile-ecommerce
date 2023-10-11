@@ -3,8 +3,7 @@
 @use "../1-base/mixins" as mixins;
 
 .categories {
-    padding: 0 2rem;
-    background-color: vars.$matte-white;
+    @extend %section-padding;
 
     &__inner-container {
         @extend %inner-container;
@@ -13,8 +12,7 @@
 }
 
 .about-us {
-    padding: 0 2rem;
-    background-color: vars.$matte-white;
+    @extend %section-padding;
 
     &__inner-container {
         @extend %inner-container;
