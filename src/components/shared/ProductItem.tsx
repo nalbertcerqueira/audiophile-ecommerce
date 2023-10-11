@@ -1,15 +1,35 @@
 import Image from "next/image"
 import Link from "next/link"
 import Headphone01 from "/public/imgs/category/headphones/xx99-mark-two-preview.jpg"
+import { Counter } from "./Counter"
 
 interface ProductProps {
     className?: string
+    type: "preview" | "product"
     label?: string
 }
 
-export function Product({ className, label }: ProductProps) {
+export function ProductItem({ className, label, type }: ProductProps) {
+    function renderActions() {
+        if (type === "preview") {
+            return (
+                <Link role="button" href="/" className="btn btn--primary product__link">
+                    SEE PRODUCT
+                </Link>
+            )
+        }
+        return (
+            <div className="product__cart-actions">
+                <Counter />
+                <button className="btn btn--primary" type="button">
+                    ADD TO CART
+                </button>
+            </div>
+        )
+    }
+
     return (
-        <div className={`product ${className}`.trim()}>
+        <div className={`product ${className || ""}`.trim()}>
             <div className="product__img-box">
                 <Image
                     src={Headphone01}
@@ -25,9 +45,8 @@ export function Product({ className, label }: ProductProps) {
                     redefines your premium headphone experience by reproducing the balanced
                     depth and precision of studio-quality sound.
                 </p>
-                <Link role="button" href="/" className="btn btn--primary product__link">
-                    SEE PRODUCT
-                </Link>
+                {type === "preview" ? null : <p className="product__price">$ 2,999</p>}
+                {renderActions()}
             </div>
         </div>
     )

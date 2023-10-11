@@ -1,12 +1,12 @@
-import { Product } from "./Product"
+import { ProductItem } from "../../shared/ProductItem"
 
 export function PreviewSection() {
     return (
         <section className="previews">
             <div className="previews__inner-container">
-                <Product label="new product" />
-                <Product className="product--reverse" />
-                <Product />
+                <ProductItem type="preview" label="new product" />
+                <ProductItem type="preview" className="product--reverse" />
+                <ProductItem type="preview" />
             </div>
         </section>
     )
