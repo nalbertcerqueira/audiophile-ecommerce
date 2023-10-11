@@ -1,0 +1,27 @@
+@use "../1-base/variables" as vars;
+@use "../1-base/mixins" as mixins;
+@use "../1-base/placeholders";
+
+.counter {
+    display: flex;
+    align-items: stretch;
+    height: 50px;
+    background-color: vars.$very-light-grey;
+
+    &__action-btn {
+        @extend %subtitle;
+        padding: 0 1rem;
+        color: rgba(vars.$black, 0.5);
+        transition: color vars.$transition-duration;
+
+        &:hover {
+            color: vars.$default-orange;
+        }
+    }
+
+    &__display {
+        @extend %subtitle;
+        @include mixins.flex;
+        width: 2.75rem;
+    }
+}
