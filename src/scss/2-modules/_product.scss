@@ -1,0 +1,59 @@
+@use "../1-base/variables" as vars;
+@use "../1-base/mixins" as mixins;
+@use "../1-base/placeholders";
+
+.product {
+    @include mixins.flex($gap: 2rem, $content: space-between, $items: center);
+
+    &--reverse {
+        flex-direction: row-reverse;
+    }
+
+    &__img-box {
+        max-width: 540px;
+        flex-shrink: 1;
+    }
+
+    &__img {
+        @extend %full-width-height;
+        border-radius: 0.5rem;
+    }
+
+    &__info {
+        width: 40%;
+        flex-shrink: 0;
+    }
+
+    &__name {
+        font-weight: vars.$extra-bold-weight;
+    }
+
+    &__label {
+        @extend %overline-text;
+        display: block;
+        color: vars.$default-orange;
+        margin-bottom: 1rem;
+    }
+
+    &__description {
+        color: rgba(vars.$black, 0.5);
+        font-weight: vars.$medium-weight;
+        margin-top: 2rem;
+    }
+
+    &__price {
+        font-size: vars.$h6-font-size;
+        letter-spacing: vars.$h6-letter-spacing;
+        font-weight: vars.$extra-bold-weight;
+        margin-top: 2rem;
+    }
+
+    &__link {
+        margin-top: 2.5rem;
+    }
+
+    &__cart-actions {
+        @include mixins.flex($gap: 1.5rem, $content: flex-start);
+        margin-top: 3rem;
+    }
+}
