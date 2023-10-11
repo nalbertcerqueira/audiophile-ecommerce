@@ -7,15 +7,10 @@ export function ArrowRightIcon({ className }: { className?: string }) {
             width="8"
             height="12"
             viewBox="0 0 8 12"
+            stroke="#D87D4A"
             xmlns="http://www.w3.org/2000/svg"
         >
-            <path
-                d="M1.322 1l5 5-5 5"
-                stroke="#D87D4A"
-                strokeWidth="2"
-                fill="none"
-                fillRule="evenodd"
-            />
+            <path d="M1.322 1l5 5-5 5" strokeWidth="2" fill="none" fillRule="evenodd" />
         </svg>
     )
 }
