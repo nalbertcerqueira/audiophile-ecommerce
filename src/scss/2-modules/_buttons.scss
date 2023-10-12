@@ -1,4 +1,5 @@
 @use "../1-base/variables" as vars;
+@use "../../scss/1-base/mixins" as mixins;
 @use "../1-base/placeholders";
 
 .btn {
@@ -38,6 +39,28 @@
         &:hover {
             color: vars.$white;
             background-color: #4c4c4c;
+        }
+    }
+}
+
+.back-button {
+    @include mixins.flex($gap: 1rem);
+    color: rgba(vars.$black, 0.75);
+    padding: 0.25rem 0.5rem;
+    font-weight: vars.$medium-weight;
+    transition: vars.$transition-duration;
+
+    &__icon {
+        transform: rotate(180deg);
+        stroke: rgba(vars.$black, 0.35);
+        transition: vars.$transition-duration;
+    }
+
+    &:hover {
+        color: vars.$default-orange;
+        .back-button__icon {
+            stroke: vars.$default-orange;
+            transform: rotate(180deg) translateX(0.5rem);
         }
     }
 }
