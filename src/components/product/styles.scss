@@ -40,7 +40,7 @@
     }
 
     &__accessories {
-        @include mixins.flex($direction: column, $gap: 0.75rem, $items: flex-start);
+        @include mixins.flex($direction: column, $gap: 0.75rem);
     }
 
     &__accessory {

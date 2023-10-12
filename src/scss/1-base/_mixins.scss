@@ -1,7 +1,11 @@
-@mixin flex($direction: row, $gap: 0, $content: center, $items: center) {
+@mixin flex($direction: row, $gap: 0, $content: flex-start, $items: stretch) {
     display: flex;
-    justify-content: $content;
-    align-items: $items;
+    @if $items !=stretch {
+        align-items: $items;
+    }
+    @if $content !=flex-start {
+        justify-content: $content;
+    }
     @if $direction !=row {
         flex-direction: $direction;
     }

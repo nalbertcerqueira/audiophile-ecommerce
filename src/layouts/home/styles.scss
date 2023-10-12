@@ -3,8 +3,10 @@
 @use "../../scss/1-base/placeholders";
 
 .app-container {
+    position: relative;
     display: grid;
     min-height: 100vh;
+    min-width: fit-content;
     grid-template-rows: min-content;
     background-color: vars.$matte-white;
 
@@ -19,7 +21,7 @@
 
     &__inner-container {
         @extend %inner-container;
-        @include mixins.flex($gap: 2rem, $content: space-between, $items: stretch);
+        @include mixins.flex($gap: 2rem, $content: space-between);
         position: relative;
 
         &::before {

@@ -23,7 +23,7 @@
     }
 
     &__featured-info {
-        @include mixins.flex($direction: column, $gap: 1.5rem, $items: flex-start);
+        @include mixins.flex($direction: column, $gap: 1.5rem);
     }
 
     &__overline {
@@ -79,7 +79,7 @@
 }
 
 .featured-product {
-    @include mixins.flex($gap: 2rem, $content: space-evenly);
+    @include mixins.flex($gap: 2rem, $content: space-evenly, $items: center);
     @extend %full-width-height;
     padding: 2rem;
     overflow: hidden;
@@ -151,7 +151,7 @@
 }
 
 .info-wrapper {
-    @include mixins.flex($gap: 2rem, $direction: column, $content: center, $items: flex-start);
+    @include mixins.flex($gap: 2rem, $direction: column, $content: center);
     margin-left: 4rem;
 
     &__name {

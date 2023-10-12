@@ -44,7 +44,7 @@
 }
 
 .back-button {
-    @include mixins.flex($gap: 1rem);
+    @include mixins.flex($gap: 1rem, $items: center);
     color: rgba(vars.$black, 0.75);
     padding: 0.25rem 0.5rem;
     font-weight: vars.$medium-weight;

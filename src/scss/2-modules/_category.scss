@@ -18,12 +18,12 @@
     }
 
     &__info {
-        @include mixins.flex($gap: 1rem, $content: flex-end, $direction: column);
+        @include mixins.flex($gap: 1rem, $items: center, $direction: column);
         margin-top: 116px;
     }
 
     &__thumb-container {
-        @include mixins.flex;
+        @include mixins.flex($items: center);
         position: absolute;
         top: -50%;
         left: 50%;

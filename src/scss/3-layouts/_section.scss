@@ -18,7 +18,7 @@
 
     &__inner-container {
         @extend %inner-container;
-        @include mixins.flex($gap: 2rem, $content: space-between);
+        @include mixins.flex($gap: 2rem, $content: space-between, $items: center);
     }
 
     &__content {
