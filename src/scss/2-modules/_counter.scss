@@ -4,7 +4,7 @@
 
 .counter {
     display: flex;
-    align-items: stretch;
+    align-items: center;
     height: 50px;
     background-color: vars.$very-light-grey;
 
@@ -21,7 +21,10 @@
 
     &__display {
         @extend %subtitle;
-        @include mixins.flex;
+        height: fit-content;
+        overflow: hidden;
         width: 2.75rem;
+        text-align: center;
+        text-overflow: ellipsis;
     }
 }

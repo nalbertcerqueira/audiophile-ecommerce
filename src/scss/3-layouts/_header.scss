@@ -5,7 +5,7 @@
 .header {
     @extend %section-padding;
     position: relative;
-    z-index: 10;
+    z-index: 20;
 
     &--black {
         background-color: vars.$black;
