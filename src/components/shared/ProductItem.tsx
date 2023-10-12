@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import Headphone01 from "/public/imgs/category/headphones/xx99-mark-two-preview.jpg"
+import ProductImg from "/public/imgs/product/xx99-mark-two/xx99-mark-two-main.jpg"
 import { Counter } from "./Counter"
 
 interface ProductProps {
@@ -32,7 +32,7 @@ export function ProductItem({ className, label, type }: ProductProps) {
         <div className={`product ${className || ""}`.trim()}>
             <div className="product__img-box">
                 <Image
-                    src={Headphone01}
+                    src={ProductImg}
                     alt="xx99 mark one headphone"
                     className="product__img"
                 />
