@@ -4,7 +4,7 @@ import { AudiophileLogo } from "./Logo"
 import { CartIcon } from "./icons/CartIcon"
 import { Navbar } from "./Navbar"
 import Link from "next/link"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { CartModalContext } from "@/contexts/CartModalContext"
 
 interface HeaderProps {
@@ -12,7 +12,9 @@ interface HeaderProps {
 }
 
 export function Header({ className }: HeaderProps) {
-    const { toggleCart } = useContext(CartModalContext)
+    const { toggleCart, closeCart } = useContext(CartModalContext)
+
+    useEffect(() => closeCart, [closeCart])
 
     return (
         <header className={`header ${className || ""}`.trim()}>

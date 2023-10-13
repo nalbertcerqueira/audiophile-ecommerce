@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, PropsWithChildren, useState } from "react"
+import { createContext, PropsWithChildren, useCallback, useState } from "react"
 
 interface CartModalContextProps {
     isOpen: boolean
@@ -15,13 +15,9 @@ export const CartModalContext = createContext<CartModalContextProps>(
 export function CartModalProvider({ children }: PropsWithChildren) {
     const [isOpen, setIsOpen] = useState<boolean>(false)
 
-    function toggleCart(): void {
-        setIsOpen((prevState) => !prevState)
-    }
+    const toggleCart = useCallback(() => setIsOpen((prevState) => !prevState), [])
 
-    function closeCart(): void {
-        setIsOpen(false)
-    }
+    const closeCart = useCallback(() => setIsOpen(false), [])
 
     return (
         <CartModalContext.Provider value={{ isOpen, toggleCart, closeCart }}>
