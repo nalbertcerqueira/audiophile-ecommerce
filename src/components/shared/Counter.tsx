@@ -2,11 +2,11 @@
 
 import { useState } from "react"
 
-export function Counter() {
+export function Counter({ className }: { className?: string }) {
     const [count, setCount] = useState<number>(0)
 
     return (
-        <div className="counter">
+        <div className={`counter ${className || ""}`.trim()}>
             <button
                 onClick={() =>
                     setCount((prevCount) => (prevCount > 0 ? prevCount - 1 : prevCount))
@@ -17,7 +17,7 @@ export function Counter() {
             >
                 -
             </button>
-            <span className="counter__display">{count}</span>
+            <p className="counter__display">{count}</p>
             <button
                 onClick={() => setCount((prevCount) => prevCount + 1)}
                 className="counter__action-btn"

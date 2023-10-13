@@ -9,8 +9,8 @@ interface ProductProps {
     label?: string
 }
 
-export function ProductItem({ className, label, type }: ProductProps) {
-    function renderActions() {
+export function ProductItem({ className, label, type }: ProductProps): JSX.Element {
+    function renderActions(): JSX.Element {
         if (type === "preview") {
             return (
                 <Link role="button" href="/" className="btn btn--primary product__link">
