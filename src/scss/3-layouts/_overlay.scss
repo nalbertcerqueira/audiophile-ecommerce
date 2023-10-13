@@ -1,0 +1,24 @@
+@use "../../scss/1-base/variables" as vars;
+@use "../../scss/1-base/mixins" as mixins;
+@use "../../scss/1-base/placeholders";
+
+.overlay {
+    @extend %section-padding;
+    @extend %full-width-height;
+    padding-top: calc(98px + 2rem);
+    position: absolute;
+    background-color: rgba(vars.$black, 0.4);
+    transition: vars.$transition-duration;
+    top: 0;
+    z-index: 10;
+
+    &--hidden {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    &__inner {
+        @extend %inner-container;
+        @include mixins.flex($content: flex-end);
+    }
+}
