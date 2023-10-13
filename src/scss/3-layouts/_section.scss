@@ -2,6 +2,15 @@
 @use "../1-base/variables" as vars;
 @use "../1-base/mixins" as mixins;
 
+.utils-wrapper {
+    @extend %section-padding;
+
+    &__inner {
+        @extend %inner-container;
+        margin-top: 5rem;
+    }
+}
+
 .categories {
     @extend %section-padding;
 

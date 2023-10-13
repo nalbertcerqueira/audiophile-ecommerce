@@ -2,15 +2,6 @@
 @use "../../scss/1-base/mixins" as mixins;
 @use "../../scss/1-base/variables" as vars;
 
-.utils-wrapper {
-    @extend %section-padding;
-
-    &__inner {
-        @extend %inner-container;
-        margin-top: 5rem;
-    }
-}
-
 .product-section {
     @extend %section-padding;
 
