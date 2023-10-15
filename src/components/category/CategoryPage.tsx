@@ -4,7 +4,7 @@ import { TitleSection } from "./components/TitleSection"
 import { PreviewSection } from "./components/PreviewSection"
 import "./styles.scss"
 
-export default function Category() {
+export function CategoryPageComponent() {
     return (
         <>
             <TitleSection />

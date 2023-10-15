@@ -1,5 +1,5 @@
-import { Product } from "@/components/product/ProductPage"
+import { ProductPageComponent } from "@/components/product/ProductPage"
 
 export default function ProductPage() {
-    return <Product />
+    return <ProductPageComponent />
 }

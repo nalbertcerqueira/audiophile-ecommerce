@@ -5,7 +5,7 @@ import { ProductGridSection } from "./components/ProductGridSection"
 import { AboutSection } from "../shared/AboutSection"
 import "./styles.scss"
 
-export function Home() {
+export function HomePageComponent() {
     return (
         <>
             <div className="header-hero-wrapper">

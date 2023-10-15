@@ -4,7 +4,7 @@ import { BackButton } from "../shared/BackButton"
 import { RelatedProductsSection } from "./components/RelatedProductsSection"
 import "./styles.scss"
 
-export function Product() {
+export function ProductPageComponent() {
     return (
         <>
             <div className="utils-wrapper">
