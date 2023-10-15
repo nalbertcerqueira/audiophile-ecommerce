@@ -9,6 +9,7 @@
     &__inner-container {
         @extend %inner-container;
         padding: 98px 0;
+        border-top: 2px solid rgba(vars.$white, 0.2);
     }
 
     &__title {
