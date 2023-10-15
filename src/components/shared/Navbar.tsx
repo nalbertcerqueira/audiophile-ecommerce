@@ -25,8 +25,8 @@ export function Navbar() {
                             href={`/${link === "home" ? "" : link}`}
                         >
                             {link.toUpperCase()}
+                            {shouldRenderMarker(link) && <span className="navbar__marker" />}
                         </Link>
-                        {shouldRenderMarker(link) && <span className="navbar__marker" />}
                     </li>
                 ))}
             </ul>
