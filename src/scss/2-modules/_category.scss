@@ -35,11 +35,12 @@
             content: "";
             position: absolute;
             top: 83%;
+            left: 50%;
             width: 100%;
             height: 1.125rem;
             border-radius: 50%;
             background-color: vars.$black;
-            transform: translateY(-10%);
+            transform: translate(-50%, -10%);
             filter: blur(20px);
             transition: width vars.$transition-duration;
         }
