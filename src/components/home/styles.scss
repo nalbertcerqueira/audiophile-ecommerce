@@ -13,8 +13,18 @@
 
     &__inner-container {
         @extend %inner-container;
+        position: relative;
         display: grid;
         grid-template-columns: 400px auto;
+    }
+
+    &__division {
+        position: absolute;
+        width: 100%;
+        background-color: rgba(vars.$white, 0.2);
+        height: 2px;
+        z-index: 10;
+        top: 0;
     }
 
     &__content-wrapper {

@@ -6,6 +6,7 @@ export function HeroSection() {
     return (
         <section className="hero">
             <div className="hero__inner-container">
+                <span className="hero__division" />
                 <div className="hero__content-wrapper">
                     <div className="hero__featured-info">
                         <span className="hero__overline">NEW PRODUCT</span>
