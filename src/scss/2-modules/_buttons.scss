@@ -43,7 +43,7 @@
     }
 }
 
-.back-button {
+.back-btn {
     @include mixins.flex($gap: 1rem, $items: center);
     color: rgba(vars.$black, 0.75);
     padding: 0.25rem 0.5rem;
@@ -58,7 +58,7 @@
 
     &:hover {
         color: vars.$default-orange;
-        .back-button__icon {
+        .back-btn__icon {
             stroke: vars.$default-orange;
             transform: rotate(180deg) translateX(0.5rem);
         }
