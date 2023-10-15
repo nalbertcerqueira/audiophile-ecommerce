@@ -1,7 +1,7 @@
 import { Footer } from "./components/Footer"
 import { PropsWithChildren } from "react"
 import { CartModalProvider } from "@/contexts/CartModalContext"
-import { Overlay } from "@/components/shared/Overlay"
+import { Overlay } from "@/components/shared/cart/Overlay"
 import "@/scss/index.scss"
 import "./styles.scss"
 

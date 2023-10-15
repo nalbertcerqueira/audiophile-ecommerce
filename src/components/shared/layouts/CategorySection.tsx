@@ -1,7 +1,7 @@
 import HeadphoneThumb from "/public/imgs/headphones-thumbnail.png"
 import SpeakerThumb from "/public/imgs/speakers-thumbnail.png"
 import EarphoneThumb from "/public/imgs/earphones-thumbnail.png"
-import { CategoryItem, CategoryProps } from "./CategoryItem"
+import { CategoryItem, CategoryProps } from "../CategoryItem"
 
 type Category = CategoryProps
 

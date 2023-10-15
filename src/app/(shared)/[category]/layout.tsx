@@ -1,4 +1,4 @@
-import { Header } from "@/components/shared/Header"
+import { Header } from "@/components/shared/layouts/Header"
 import { PropsWithChildren } from "react"
 
 export default function CategoryLayout({ children }: PropsWithChildren) {

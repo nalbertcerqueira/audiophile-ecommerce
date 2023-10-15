@@ -1,5 +1,5 @@
-import { AboutSection } from "@/components/shared/AboutSection"
-import { CategorySection } from "@/components/shared/CategorySection"
+import { AboutSection } from "@/components/shared/layouts/AboutSection"
+import { CategorySection } from "@/components/shared/layouts/CategorySection"
 import { ReactNode } from "react"
 import "./styles.scss"
 

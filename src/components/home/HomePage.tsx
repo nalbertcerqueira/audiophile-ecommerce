@@ -1,8 +1,8 @@
-import { Header } from "../shared/Header"
+import { Header } from "../shared/layouts/Header"
 import { HeroSection } from "./components/HeroSection"
-import { CategorySection } from "../shared/CategorySection"
+import { CategorySection } from "../shared/layouts/CategorySection"
 import { ProductGridSection } from "./components/ProductGridSection"
-import { AboutSection } from "../shared/AboutSection"
+import { AboutSection } from "../shared/layouts/AboutSection"
 import "./styles.scss"
 
 export function HomePageComponent() {
