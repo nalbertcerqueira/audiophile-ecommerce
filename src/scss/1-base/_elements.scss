@@ -83,3 +83,17 @@ button {
     outline: none;
     border: none;
 }
+
+input {
+    outline: none;
+}
+
+fieldset {
+    border: none;
+}
+
+@keyframes show {
+    100% {
+        opacity: 1;
+    }
+}
