@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import ProductImg from "/public/imgs/product/xx99-mark-two/xx99-mark-two-main.jpg"
+import ProductImg from "/public/imgs/product/xx99-mark-two-headphones/desktop/xx99-mark-two-product.jpg"
 import { Counter } from "./Counter"
 
 interface ProductProps {

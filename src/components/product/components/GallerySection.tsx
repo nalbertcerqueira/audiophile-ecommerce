@@ -1,7 +1,7 @@
 import Image from "next/image"
-import GalleryImage1 from "/public/imgs/product/xx99-mark-two/gallery/image-gallery-1.jpg"
-import GalleryImage2 from "/public/imgs/product/xx99-mark-two/gallery/image-gallery-2.jpg"
-import GalleryImage3 from "/public/imgs/product/xx99-mark-two/gallery/image-gallery-3.jpg"
+import GalleryImage1 from "/public/imgs/product/xx99-mark-two-headphones/desktop/gallery/image-gallery-1.jpg"
+import GalleryImage2 from "/public/imgs/product/xx99-mark-two-headphones/desktop/gallery/image-gallery-2.jpg"
+import GalleryImage3 from "/public/imgs/product/xx99-mark-two-headphones/desktop/gallery/image-gallery-3.jpg"
 
 export function GallerySection() {
     return (
