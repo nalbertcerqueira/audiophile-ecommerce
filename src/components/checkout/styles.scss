@@ -1,0 +1,197 @@
+@use "../../scss/1-base/_variables.scss" as vars;
+@use "../../scss/1-base/_mixins.scss" as mixins;
+@use "../../scss/1-base/_placeholders.scss";
+
+%checkout-fieldset {
+    display: grid;
+    gap: 1.5rem 1rem;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+%show-effect {
+    opacity: 0;
+    animation: show vars.$transition-duration forwards;
+}
+
+.checkout-page-container {
+    background-color: vars.$very-light-grey;
+    height: 100%;
+}
+
+.checkout-section {
+    @extend %section-padding;
+
+    &__inner-container {
+        @extend %inner-container;
+        margin-top: 2.375rem;
+        margin-bottom: 8.8125rem;
+        display: grid;
+        grid-template-columns: 2.1fr 1fr;
+        gap: 1.875rem;
+    }
+}
+
+.checkout {
+    padding: 3.375rem 3rem 3rem;
+    background-color: vars.$white;
+    border-radius: 0.5rem;
+
+    &__title {
+        font-size: vars.$h3-font-size;
+        letter-spacing: vars.$h3-letter-spacing;
+        font-weight: vars.$extra-bold-weight;
+    }
+
+    &__form {
+        margin-top: 2.5rem;
+    }
+
+    &__user-info {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    &__group-name {
+        @extend %subtitle;
+        margin-bottom: 1rem;
+        color: vars.$default-orange;
+    }
+
+    &__billing-details {
+        @extend %checkout-fieldset;
+        margin-bottom: 3.375rem;
+    }
+
+    &__shipping-details {
+        @extend %checkout-fieldset;
+        margin-bottom: 3.75rem;
+
+        & > *:nth-child(2) {
+            grid-column: span 2;
+        }
+    }
+
+    &__payment-details {
+        @extend %checkout-fieldset;
+    }
+
+    &__cc-fields {
+        @extend %show-effect;
+        @extend %checkout-fieldset;
+        grid-column: span 2;
+
+        & > *:first-child {
+            grid-column: span 2;
+        }
+    }
+
+    &__cash-guidance {
+        @extend %show-effect;
+        @include mixins.flex($gap: 2rem, $items: center);
+        margin-top: 1.875rem;
+    }
+
+    &__cash-icon {
+        flex-shrink: 0;
+    }
+
+    &__cash-info {
+        font-weight: vars.$medium-weight;
+        color: rgba(vars.$black, 0.5);
+    }
+}
+
+.summary {
+    height: fit-content;
+    background-color: vars.$white;
+    border-radius: 0.5rem;
+    padding: 2rem;
+
+    &__title {
+        font-size: vars.$h6-font-size;
+        font-weight: vars.$extra-bold-weight;
+        letter-spacing: vars.$h6-letter-spacing;
+        margin-bottom: 2rem;
+    }
+
+    &__items {
+        @include mixins.flex($gap: 1.5rem, $direction: column);
+        margin-bottom: 2rem;
+    }
+
+    &__total-fields {
+        @include mixins.flex($direction: column, $gap: 0.5rem);
+    }
+
+    &__grand-total {
+        margin: 1.5rem 0 2rem;
+
+        span:last-child {
+            color: vars.$default-orange;
+        }
+    }
+
+    &__submit-btn {
+        text-align: center;
+        width: 100%;
+    }
+}
+
+.field {
+    &__label-wrapper {
+        margin-bottom: 0.5rem;
+    }
+
+    &__input-label {
+        display: block;
+        font-size: 0.75rem;
+        font-weight: vars.$extra-bold-weight;
+    }
+
+    &__input {
+        padding: 1.125rem 1.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid #cfcfcf;
+        font-size: 0.875rem;
+        font-weight: vars.$bold-weight;
+        width: 100%;
+        transition: border-color vars.$transition-duration;
+        caret-color: vars.$default-orange;
+
+        &::placeholder {
+            color: rgba(vars.$black, 0.4);
+        }
+
+        &:focus {
+            border-color: vars.$default-orange;
+        }
+    }
+}
+
+.radio-field {
+    position: relative;
+
+    &__input {
+        position: absolute;
+        top: 50%;
+        left: 1rem;
+        transform: translateY(-45%);
+        accent-color: vars.$default-orange;
+    }
+
+    &__input:checked + &__label {
+        border-color: vars.$default-orange;
+    }
+
+    &__label {
+        display: block;
+        padding: 1.125rem 1rem 1.125rem 2.75rem;
+        border-radius: 0.5rem;
+        border: 1px solid #cfcfcf;
+        transition: border-color vars.$transition-duration;
+        white-space: nowrap;
+        font-size: 0.875rem;
+        font-weight: vars.$bold-weight;
+        cursor: pointer;
+    }
+}
