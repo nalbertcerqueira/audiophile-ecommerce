@@ -1,19 +1,39 @@
 import Image from "next/image"
 import Link from "next/link"
-import ProductImg from "/public/imgs/product/xx99-mark-two-headphones/desktop/xx99-mark-two-product.jpg"
+import { formatCurrency } from "@/utils/helpers"
 import { Counter } from "./Counter"
+import { StaticImages } from "@/utils/imageMap/types"
 
-interface ProductProps {
+interface CommonFields {
+    name: string
+    slug: string
+    images: StaticImages
+    new: boolean
+    description: string
     className?: string
-    type: "preview" | "product"
-    label?: string
 }
 
-export function ProductItem({ className, label, type }: ProductProps): JSX.Element {
+interface PreviewProps extends CommonFields {
+    type: "preview"
+    category: string
+}
+
+interface ProductProps extends CommonFields {
+    type: "product"
+    price: number
+}
+
+type ProductItemProps = PreviewProps | ProductProps
+
+export function ProductItem(props: ProductItemProps) {
     function renderActions(): JSX.Element {
-        if (type === "preview") {
+        if (props.type === "preview") {
             return (
-                <Link role="button" href="/" className="btn btn--primary product__link">
+                <Link
+                    role="button"
+                    href={`/${props.category}/${props.slug}`}
+                    className="btn btn--primary product__link"
+                >
                     SEE PRODUCT
                 </Link>
             )
@@ -29,23 +49,22 @@ export function ProductItem({ className, label, type }: ProductProps): JSX.Eleme
     }
 
     return (
-        <div className={`product ${className || ""}`.trim()}>
+        <div className={`product ${props.className || ""}`.trim()}>
             <div className="product__img-box">
                 <Image
-                    src={ProductImg}
-                    alt="xx99 mark one headphone"
+                    placeholder="blur"
+                    src={props.images.desktop}
+                    alt={props.name}
                     className="product__img"
                 />
             </div>
             <div className="product__info">
-                {label ? <span className="product__label">{label.toUpperCase()}</span> : null}
-                <h2 className="product__name">XX99 MARK II HEADPHONES</h2>
-                <p className="product__description">
-                    The new XX99 Mark II headphones is the pinnacle of pristine audio. It
-                    redefines your premium headphone experience by reproducing the balanced
-                    depth and precision of studio-quality sound.
-                </p>
-                {type === "preview" ? null : <p className="product__price">$ 2,999</p>}
+                {props.new ? <span className="product__label">NEW PRODUCT</span> : null}
+                <h2 className="product__name">{props.name.toUpperCase()}</h2>
+                <p className="product__description">{props.description}</p>
+                {props.type === "product" && (
+                    <p className="product__price">{formatCurrency(props.price)}</p>
+                )}
                 {renderActions()}
             </div>
         </div>

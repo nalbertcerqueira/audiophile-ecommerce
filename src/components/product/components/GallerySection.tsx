@@ -1,20 +1,21 @@
-import Image from "next/image"
-import GalleryImage1 from "/public/imgs/product/xx99-mark-two-headphones/desktop/gallery/image-gallery-1.jpg"
-import GalleryImage2 from "/public/imgs/product/xx99-mark-two-headphones/desktop/gallery/image-gallery-2.jpg"
-import GalleryImage3 from "/public/imgs/product/xx99-mark-two-headphones/desktop/gallery/image-gallery-3.jpg"
+"use client"
 
-export function GallerySection() {
+import Image from "next/image"
+import { staticProductImages } from "@/utils/imageMap"
+
+export function GallerySection({ productSlug }: { productSlug: string }) {
+    const images = staticProductImages[productSlug].gallery
     return (
         <section className="gallery">
             <div className="gallery__inner-container">
                 <div className="gallery__small-item">
-                    <Image className="gallery__image" src={GalleryImage1} alt="" />
+                    <Image className="gallery__image" src={images.first.desktop} alt="" />
                 </div>
                 <div className="gallery__small-item">
-                    <Image className="gallery__image" src={GalleryImage2} alt="" />
+                    <Image className="gallery__image" src={images.second.desktop} alt="" />
                 </div>
                 <div className="gallery__large-item">
-                    <Image className="gallery__image" src={GalleryImage3} alt="" />
+                    <Image className="gallery__image" src={images.third.desktop} alt="" />
                 </div>
             </div>
         </section>

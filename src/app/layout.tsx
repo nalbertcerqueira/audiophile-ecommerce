@@ -4,7 +4,7 @@ import "@/scss/1-base/base.scss"
 
 export default function RootLayout({ children }: { children: ReactNode }) {
     return (
-        <html lang="pt-br">
+        <html lang="en-us">
             <head>
                 <title>Audiophile Ecommerce</title>
                 <meta charSet="UTF-8" />
