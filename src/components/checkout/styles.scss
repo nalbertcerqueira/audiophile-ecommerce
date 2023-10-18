@@ -96,8 +96,7 @@
     }
 
     &__cash-info {
-        font-weight: vars.$medium-weight;
-        color: rgba(vars.$black, 0.5);
+        @extend %grey-text;
     }
 }
 
@@ -169,29 +168,23 @@
 }
 
 .radio-field {
-    position: relative;
-
     &__input {
-        position: absolute;
-        top: 50%;
-        left: 1rem;
-        transform: translateY(-45%);
         accent-color: vars.$default-orange;
     }
 
-    &__input:checked + &__label {
-        border-color: vars.$default-orange;
-    }
-
     &__label {
-        display: block;
-        padding: 1.125rem 1rem 1.125rem 2.75rem;
-        border-radius: 0.5rem;
+        @include mixins.flex($gap: 1rem, $items: center);
         border: 1px solid #cfcfcf;
-        transition: border-color vars.$transition-duration;
+        padding: 1.125rem 1rem;
+        border-radius: 0.5rem;
         white-space: nowrap;
         font-size: 0.875rem;
         font-weight: vars.$bold-weight;
+        transition: border-color vars.$transition-duration;
         cursor: pointer;
+
+        &:focus-within {
+            border-color: vars.$default-orange;
+        }
     }
 }
