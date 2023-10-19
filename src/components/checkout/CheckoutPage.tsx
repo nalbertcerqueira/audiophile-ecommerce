@@ -1,6 +1,7 @@
 import { Header } from "@/components/shared/layouts/Header"
 import { BackButton } from "@/components/shared/buttons/BackButton"
 import { CheckoutSection } from "./components/CheckoutSection"
+import { ConfirmationModal } from "./components/ConfirmationModal"
 import "./styles.scss"
 
 export function CheckoutPageComponent() {
@@ -14,6 +15,7 @@ export function CheckoutPageComponent() {
                     </div>
                 </div>
                 <CheckoutSection />
+                <ConfirmationModal />
             </div>
         </>
     )
