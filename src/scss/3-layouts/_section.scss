@@ -1,6 +1,6 @@
-@use "../1-base/placeholders";
 @use "../1-base/variables" as vars;
 @use "../1-base/mixins" as mixins;
+@use "../1-base/placeholders";
 
 .utils-wrapper {
     @extend %section-padding;
@@ -45,8 +45,7 @@
     }
 
     &__text {
-        color: rgba(vars.$black, 0.5);
-        font-weight: vars.$medium-weight;
+        @extend %grey-text;
     }
 
     &__img-container {
@@ -55,8 +54,7 @@
     }
 
     &__img {
+        @extend %full-width-height;
         border-radius: 0.5rem;
-        width: 100%;
-        height: 100%;
     }
 }

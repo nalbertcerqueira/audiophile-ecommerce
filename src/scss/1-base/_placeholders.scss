@@ -27,3 +27,8 @@
 %section-padding {
     padding: 0 2rem;
 }
+
+%grey-text {
+    font-weight: vars.$medium-weight;
+    color: rgba(vars.$black, 0.5);
+}

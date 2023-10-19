@@ -36,8 +36,7 @@
     }
 
     &__description {
-        color: rgba(vars.$black, 0.5);
-        font-weight: vars.$medium-weight;
+        @extend %grey-text;
         margin-top: 2rem;
     }
 
