@@ -3,12 +3,14 @@
 import { CartIcon } from "../icons/CartIcon"
 import { useContext, useEffect } from "react"
 import { CartModalContext } from "@/contexts/CartModalContext"
+import { usePathname } from "next/navigation"
 
 export function CartButton({ className }: { className: string }) {
     const { toggleCart, closeCart } = useContext(CartModalContext)
+    const pathname = usePathname()
 
-    //Fechando o modal durante a desmontagem do componente
-    useEffect(() => closeCart, [closeCart])
+    //Fechando o modal sempre que mudarmos de rota
+    useEffect(() => closeCart, [closeCart, pathname])
 
     return (
         <button

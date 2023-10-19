@@ -1,4 +1,3 @@
-import { Header } from "@/components/shared/layouts/Header"
 import { PropsWithChildren } from "react"
 import { getProductsUseCase } from "@/@core/backend/main/factories/getProductsFactory"
 
@@ -12,10 +11,5 @@ export async function generateStaticParams() {
 }
 
 export default function CategoryLayout({ children }: PropsWithChildren) {
-    return (
-        <>
-            <Header className="header--black" />
-            {children}
-        </>
-    )
+    return <>{children}</>
 }
