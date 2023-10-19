@@ -4,6 +4,8 @@ import zx9TabletPreview from "/public/imgs/product/zx9-speaker/tablet/zx9-previe
 import zx9MobileProduct from "/public/imgs/product/zx9-speaker/mobile/zx9-product.jpg"
 import zx9MobilePreview from "/public/imgs/product/zx9-speaker/mobile/zx9-preview.jpg"
 
+import zx9CartThumb from "/public/imgs/product/zx9-speaker/mobile/zx9-preview.jpg"
+
 import zx9DesktopThumb from "/public/imgs/product/zx9-speaker/desktop/zx9-thumb.jpg"
 import zx9TabletThumb from "/public/imgs/product/zx9-speaker/tablet/zx9-thumb.jpg"
 import zx9MobileThumb from "/public/imgs/product/zx9-speaker/mobile/zx9-thumb.jpg"
@@ -39,6 +41,7 @@ export const zx9Headphones: StaticImageMap = {
             tablet: zx9TabletThumb,
             mobile: zx9MobileThumb
         },
+        cartThumb: zx9CartThumb,
         gallery: {
             first: {
                 desktop: zx9FirstGalleryDesktopImg,

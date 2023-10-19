@@ -15,6 +15,7 @@ export interface StaticImageMap {
         product: StaticImages
         preview: StaticImages
         thumb?: StaticImages
+        cartThumb: StaticImageData
         gallery: StaticGalleryImages
     }
 }

@@ -4,6 +4,8 @@ import xx99MarkTwoTabletPreview from "/public/imgs/product/xx99-mark-two-headpho
 import xx99MarkTwoMobileProduct from "/public/imgs/product/xx99-mark-two-headphones/mobile/xx99-mark-two-product.jpg"
 import xx99MarkTwoMobilePreview from "/public/imgs/product/xx99-mark-two-headphones/mobile/xx99-mark-two-preview.jpg"
 
+import xx99MarkTwoCartThumb from "/public/imgs/cart/xx99-mark-two-headphones.jpg"
+
 import xx99MarkTwoDesktopThumb from "/public/imgs/product/xx99-mark-two-headphones/desktop/xx99-mark-two-thumb.jpg"
 import xx99MarkTwoTabletThumb from "/public/imgs/product/xx99-mark-two-headphones/tablet/xx99-mark-two-thumb.jpg"
 import xx99MarkTwoMobileThumb from "/public/imgs/product/xx99-mark-two-headphones/mobile/xx99-mark-two-thumb.jpg"
@@ -39,6 +41,7 @@ export const xx99MarkTwoHeadphones: StaticImageMap = {
             tablet: xx99MarkTwoTabletThumb,
             mobile: xx99MarkTwoMobileThumb
         },
+        cartThumb: xx99MarkTwoCartThumb,
         gallery: {
             first: {
                 desktop: xx99MarkTwoFirstGalleryDesktopImg,

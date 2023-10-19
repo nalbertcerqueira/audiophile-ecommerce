@@ -4,6 +4,8 @@ import xx99MarkOneTabletPreview from "/public/imgs/product/xx99-mark-one-headpho
 import xx99MarkOneMobileProduct from "/public/imgs/product/xx99-mark-one-headphones/mobile/xx99-mark-one-product.jpg"
 import xx99MarkOneMobilePreview from "/public/imgs/product/xx99-mark-one-headphones/mobile/xx99-mark-one-preview.jpg"
 
+import xx99MarkOneCartThumb from "/public/imgs/cart/xx99-mark-one-headphones.jpg"
+
 import xx99MarkOneDesktopThumb from "/public/imgs/product/xx99-mark-one-headphones/desktop/xx99-mark-one-thumb.jpg"
 import xx99MarkOneTabletThumb from "/public/imgs/product/xx99-mark-one-headphones/tablet/xx99-mark-one-thumb.jpg"
 import xx99MarkOneMobileThumb from "/public/imgs/product/xx99-mark-one-headphones/mobile/xx99-mark-one-thumb.jpg"
@@ -39,6 +41,7 @@ export const xx99MarkOneHeadphones: StaticImageMap = {
             tablet: xx99MarkOneTabletThumb,
             mobile: xx99MarkOneMobileThumb
         },
+        cartThumb: xx99MarkOneCartThumb,
         gallery: {
             first: {
                 desktop: xx99MarkOneFirstGalleryDesktopImg,

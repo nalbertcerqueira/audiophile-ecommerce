@@ -4,6 +4,8 @@ import xx59TabletPreview from "/public/imgs/product/xx59-headphones/tablet/xx59-
 import xx59MobileProduct from "/public/imgs/product/xx59-headphones/mobile/xx59-product.jpg"
 import xx59MobilePreview from "/public/imgs/product/xx59-headphones/mobile/xx59-preview.jpg"
 
+import xx59CartThumb from "/public/imgs/cart/xx59-headphones.jpg"
+
 import xx59DesktopThumb from "/public/imgs/product/xx59-headphones/desktop/xx59-thumb.jpg"
 import xx59TabletThumb from "/public/imgs/product/xx59-headphones/tablet/xx59-thumb.jpg"
 import xx59MobileThumb from "/public/imgs/product/xx59-headphones/mobile/xx59-thumb.jpg"
@@ -39,6 +41,7 @@ export const xx59Headphones: StaticImageMap = {
             tablet: xx59TabletThumb,
             mobile: xx59MobileThumb
         },
+        cartThumb: xx59CartThumb,
         gallery: {
             first: {
                 desktop: xx59FirstGalleryDesktopImg,

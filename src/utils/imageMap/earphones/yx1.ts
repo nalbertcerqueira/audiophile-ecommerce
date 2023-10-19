@@ -4,6 +4,8 @@ import yx1TabletPreview from "/public/imgs/product/yx1-earphones/tablet/yx1-prev
 import yx1MobileProduct from "/public/imgs/product/yx1-earphones/mobile/yx1-product.jpg"
 import yx1MobilePreview from "/public/imgs/product/yx1-earphones/mobile/yx1-preview.jpg"
 
+import yx1CartThumb from "/public/imgs/cart/yx1-earphones.jpg"
+
 import yx1FirstGalleryDesktopImg from "/public/imgs/product/yx1-earphones/desktop/gallery/image-gallery-1.jpg"
 import yx1SecondGalleryDesktopImg from "/public/imgs/product/yx1-earphones/desktop/gallery/image-gallery-2.jpg"
 import yx1ThirdGalleryDesktopImg from "/public/imgs/product/yx1-earphones/desktop/gallery/image-gallery-3.jpg"
@@ -30,6 +32,7 @@ export const yx1Earphones: StaticImageMap = {
             tablet: yx1TabletPreview,
             mobile: yx1MobilePreview
         },
+        cartThumb: yx1CartThumb,
         gallery: {
             first: {
                 desktop: yx1FirstGalleryDesktopImg,

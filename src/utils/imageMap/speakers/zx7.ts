@@ -4,6 +4,8 @@ import zx7TabletPreview from "/public/imgs/product/zx7-speaker/tablet/zx7-previe
 import zx7MobileProduct from "/public/imgs/product/zx7-speaker/mobile/zx7-product.jpg"
 import zx7MobilePreview from "/public/imgs/product/zx7-speaker/mobile/zx7-preview.jpg"
 
+import zx7CartThumb from "/public/imgs/cart/zx7-speaker.jpg"
+
 import zx7DesktopThumb from "/public/imgs/product/zx7-speaker/desktop/zx7-thumb.jpg"
 import zx7TabletThumb from "/public/imgs/product/zx7-speaker/tablet/zx7-thumb.jpg"
 import zx7MobileThumb from "/public/imgs/product/zx7-speaker/mobile/zx7-thumb.jpg"
@@ -39,6 +41,7 @@ export const zx7Headphones: StaticImageMap = {
             tablet: zx7TabletThumb,
             mobile: zx7MobileThumb
         },
+        cartThumb: zx7CartThumb,
         gallery: {
             first: {
                 desktop: zx7FirstGalleryDesktopImg,
