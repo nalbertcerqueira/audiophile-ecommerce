@@ -1,11 +1,11 @@
 import { GetProductsUseCase } from "../../domain/usecases/product/getProductsUseCase"
 import { MockProductRepository } from "../../infra/product/mockProductRepository"
 
-function getProductsFactory(): GetProductsUseCase {
+function createGetProductsUseCase(): GetProductsUseCase {
     const getProductsRepository = new MockProductRepository()
     const getProductsUseCase = new GetProductsUseCase(getProductsRepository)
 
     return getProductsUseCase
 }
 
-export const getProductsUseCase = getProductsFactory()
+export const getProductsUseCase = createGetProductsUseCase()
