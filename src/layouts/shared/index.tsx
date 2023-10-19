@@ -9,8 +9,8 @@ export function SharedLayoutComponent({ children }: { children: ReactNode }) {
         <>
             <Header className="header--black" />
             {children}
-            <CategorySection className="shared-categories" />
-            <AboutSection className="shared-about-us" />
+            <CategorySection className="shared-layout__categories" />
+            <AboutSection className="shared-layout__about-us" />
         </>
     )
 }
