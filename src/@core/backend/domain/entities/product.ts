@@ -26,6 +26,7 @@ export interface ProductProps {
     id: string
     slug: string
     name: string
+    shortName: string
     category: string
     new: boolean
     price: number
