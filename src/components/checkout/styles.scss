@@ -196,10 +196,9 @@
     position: absolute;
     z-index: 10;
     top: 0;
-    // visibility: hidden;
+    visibility: hidden;
 
     hr {
-        margin: 0.75rem 0;
         border-color: rgba(vars.$black, 0.1);
     }
 
@@ -236,6 +235,7 @@
     }
 
     &__wrapper {
+        @include mixins.flex($direction: column, $content: flex-end, $gap: 0.75rem);
         padding: 1.5rem;
     }
 
