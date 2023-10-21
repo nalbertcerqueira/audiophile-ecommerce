@@ -16,7 +16,11 @@ export function HeroSection() {
                             made for the passionate music enthusiast.
                         </p>
                     </div>
-                    <Link className="btn btn--primary hero__btn" role="button" href="/">
+                    <Link
+                        className="btn btn--primary hero__btn"
+                        role="button"
+                        href="/headphones/xx99-mark-two-headphones"
+                    >
                         SEE PRODUCT
                     </Link>
                 </div>
