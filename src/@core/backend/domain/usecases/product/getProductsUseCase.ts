@@ -1,5 +1,5 @@
 import { ProductProps } from "../../entities/product"
-import { GetProductsRepository } from "../../repositories/getProductsRepository"
+import { GetProductsRepository } from "../../repositories/product/getProductsRepository"
 
 export class GetProductsUseCase {
     constructor(private readonly getProductsRepository: GetProductsRepository) {}

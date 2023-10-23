@@ -1,9 +1,9 @@
 import { ProductProps } from "../../domain/entities/product"
-import { GetProductsByCategoryRepository } from "../../domain/repositories/getProductsByCategoryRepository"
+import { GetProductsByCategoryRepository } from "../../domain/repositories/product/getProductsByCategoryRepository"
 import { cwd } from "process"
 import { readFile } from "fs/promises"
 import { resolve } from "path"
-import { GetProductsRepository } from "../../domain/repositories/getProductsRepository"
+import { GetProductsRepository } from "../../domain/repositories/product/getProductsRepository"
 
 export class MockProductRepository
     implements GetProductsByCategoryRepository, GetProductsRepository
