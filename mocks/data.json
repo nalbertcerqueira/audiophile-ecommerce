@@ -1,6 +1,5 @@
 [
     {
-        "id": "eedaec58-b08a-4eda-af8f-d4c67f589501",
         "slug": "yx1-earphones",
         "name": "YX1 Wireless Earphones",
         "shortName": "YX1",
@@ -92,7 +91,6 @@
         ]
     },
     {
-        "id": "76f917ee-b7f4-4aea-9fab-01ebc242873f",
         "slug": "xx99-mark-two-headphones",
         "name": "XX99 Mark II Headphones",
         "shortName": "XX99 MK II",
@@ -163,8 +161,8 @@
             },
             {
                 "slug": "xx59-headphones",
-                "category": "headphones",
                 "name": "XX59",
+                "category": "headphones",
                 "image": {
                     "mobile": "/public/imgs/product/xx59-headphones/mobile/xx59-thumb.jpg",
                     "tablet": "/public/imgs/product/xx59-headphones/tablet/xx59-thumb.jpg",
@@ -184,7 +182,6 @@
         ]
     },
     {
-        "id": "f8f93fd3-1c34-48d4-be81-ee989ff9300f",
         "slug": "xx99-mark-one-headphones",
         "name": "XX99 Mark I Headphones",
         "shortName": "XX99 MK I",
@@ -272,7 +269,6 @@
         ]
     },
     {
-        "id": "68fa1069-fd5c-45dc-886a-7c34bd4185e6",
         "slug": "xx59-headphones",
         "name": "XX59 Headphones",
         "shortName": "XX59",
@@ -360,7 +356,6 @@
         ]
     },
     {
-        "id": "94bb62df-3d31-4f84-b246-4ea6428fa2cf",
         "slug": "zx9-speaker",
         "name": "ZX9 Speaker",
         "shortName": "ZX9",
@@ -452,7 +447,6 @@
         ]
     },
     {
-        "id": "8518c1b6-7356-4b32-bd90-2e2f7484ff5c",
         "slug": "zx7-speaker",
         "name": "ZX7 Speaker",
         "shortName": "ZX7",

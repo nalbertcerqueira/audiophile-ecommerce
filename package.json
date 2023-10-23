@@ -3,9 +3,10 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev",
+        "dev": "npm run migration && next dev",
         "build": "next build",
-        "start": "next start",
+        "migration": "ts-node ./src/@core/backend/infra/db/mongo/config/migrations.ts",
+        "start": "npm run migration && next start",
         "lint": "next lint"
     },
     "dependencies": {

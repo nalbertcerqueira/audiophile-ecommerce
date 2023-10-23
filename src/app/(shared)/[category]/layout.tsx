@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react"
-import { getProductsUseCase } from "@/@core/backend/main/factories/getProductsFactory"
+import { getProductsUseCase } from "@/@core/backend/main/factories/product/getProductsFactory"
 
 export async function generateStaticParams() {
     const products = await getProductsUseCase.execute()

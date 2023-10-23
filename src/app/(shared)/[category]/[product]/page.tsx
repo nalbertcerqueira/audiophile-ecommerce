@@ -1,4 +1,4 @@
-import { getProductsByCategoryUseCase } from "@/@core/backend/main/factories/getProductsByCategoryFactory"
+import { getProductsByCategoryUseCase } from "@/@core/backend/main/factories/product/getProductsByCategoryFactory"
 import { ProductPageComponent } from "@/components/product/ProductPage"
 import { notFound } from "next/navigation"
 
