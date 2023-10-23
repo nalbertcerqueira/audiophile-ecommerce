@@ -1,4 +1,7 @@
 {
+    "ts-node": {
+        "compilerOptions": { "module": "CommonJS" }
+    },
     "compilerOptions": {
         "target": "ES2015",
         "lib": ["dom", "dom.iterable", "esnext"],
