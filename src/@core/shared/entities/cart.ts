@@ -1,5 +1,7 @@
 import { object, ZodType, string, number } from "zod"
 
+type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+
 export interface CartProduct {
     readonly productId: string
     readonly slug: string
@@ -9,6 +11,7 @@ export interface CartProduct {
 }
 
 export interface CartProps {
+    accountId: string
     totalSpent: number
     itemCount: number
     items: CartProduct[]
@@ -23,9 +26,13 @@ const cartItemZodSchema: ZodType<CartProduct> = object({
 }).strict()
 
 export class Cart {
+    private props: CartProps
     private static readonly itemSchema: ZodType<CartProduct> = cartItemZodSchema
 
-    constructor(private props: CartProps) {}
+    constructor(props: Optional<CartProps, "accountId">) {
+        const { itemCount, totalSpent, items, accountId } = props
+        this.props = { itemCount, totalSpent, items, accountId: accountId || "0" }
+    }
 
     public static createEmptyCart(): Cart {
         return new Cart({ items: [], itemCount: 0, totalSpent: 0 })
@@ -66,7 +73,7 @@ export class Cart {
     }
 
     public clear(): void {
-        this.props = { itemCount: 0, totalSpent: 0, items: [] }
+        this.props = { accountId: "0", itemCount: 0, totalSpent: 0, items: [] }
     }
 
     public toJSON(): CartProps {
