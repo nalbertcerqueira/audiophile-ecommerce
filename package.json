@@ -4,9 +4,9 @@
     "private": true,
     "scripts": {
         "dev": "npm run migration && next dev",
-        "build": "next build",
+        "build": "npm run migration && next build",
         "migration": "ts-node ./src/@core/backend/infra/db/mongo/config/migrations.ts",
-        "start": "npm run migration && next start",
+        "start": "next start",
         "lint": "next lint"
     },
     "dependencies": {
