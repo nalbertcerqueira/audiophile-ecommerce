@@ -9,6 +9,8 @@ export class Migration {
     public async run(): Promise<void> {
         await this.createCollections()
         await this.updloadInitialData()
+        await mongoHelper.close()
+        console.log("migration finished.")
     }
 
     private async updloadInitialData(): Promise<void> {
@@ -22,11 +24,9 @@ export class Migration {
         const emptyCollection = (await productCollection.find().toArray()).length === 0
 
         if (emptyCollection) {
-            await productCollection.insertMany(products)
-            console.log("migration finished!")
+            const { insertedCount } = await productCollection.insertMany(products)
+            console.log(`uploaded ${insertedCount} items with sucess!`)
         }
-
-        await mongoHelper.close()
     }
 
     private async createCollections(): Promise<void> {
@@ -40,4 +40,7 @@ export class Migration {
     }
 }
 
-new Migration().run().catch((error) => console.log(error.message))
+new Migration().run().catch((error) => {
+    console.log(error)
+    process.exit(1)
+})
