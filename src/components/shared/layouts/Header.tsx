@@ -15,7 +15,9 @@ export function Header({ className }: HeaderProps) {
                     <AudiophileLogo />
                 </Link>
                 <Navbar />
-                <CartButton className="header__cart-btn" />
+                <div className="header__btn-wrapper">
+                    <CartButton />
+                </div>
             </div>
         </header>
     )

@@ -20,8 +20,9 @@
         padding: 2rem 0 2.25rem 0;
     }
 
-    &__cart-btn {
-        justify-self: flex-end;
+    &__btn-wrapper {
+        display: flex;
+        justify-content: flex-end;
     }
 
     &__division {
