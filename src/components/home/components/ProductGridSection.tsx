@@ -30,7 +30,7 @@ export function ProductGridSection() {
                             <Link
                                 role="button"
                                 className="btn btn--normal featured-product__link"
-                                href="/products"
+                                href="/speakers/zx9-speaker"
                             >
                                 SEE PRODUCT
                             </Link>
@@ -41,7 +41,11 @@ export function ProductGridSection() {
                     <div className="medium-banner">
                         <div className="info-wrapper">
                             <h3 className="info-wrapper__name">ZX7 SPEAKER</h3>
-                            <Link className="btn btn--empty" role="button" href="/products">
+                            <Link
+                                className="btn btn--empty"
+                                role="button"
+                                href="/speakers/zx7-speaker"
+                            >
                                 SEE PRODUCT
                             </Link>
                         </div>
@@ -53,8 +57,12 @@ export function ProductGridSection() {
                 <div className="product-grid__small-item">
                     <div className="small-info">
                         <div className="info-wrapper">
-                            <h3 className="info-wrapper__name">ZX7 SPEAKER</h3>
-                            <Link className="btn btn--empty" role="button" href="/products">
+                            <h3 className="info-wrapper__name">YX1 EARPHONES</h3>
+                            <Link
+                                className="btn btn--empty"
+                                role="button"
+                                href="/earphones/yx1-earphones"
+                            >
                                 SEE PRODUCT
                             </Link>
                         </div>
