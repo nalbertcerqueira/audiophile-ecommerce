@@ -1,7 +1,7 @@
-import { LocalStorageCartItemGateway } from "../../infra/gateways/localStorageCartItemGateway"
+import { LocalStorageCartGateway } from "../../infra/gateways/localStorageCartGateway"
 
-export function createLocalStorageCartGateway(cartKey: string) {
-    return new LocalStorageCartItemGateway(cartKey)
+function createLocalStorageCartGateway(cartKey: string) {
+    return new LocalStorageCartGateway(cartKey)
 }
 
-export const localStorageCartItemGateway = createLocalStorageCartGateway("cart")
+export const localStorageCartGateway = createLocalStorageCartGateway("cart")

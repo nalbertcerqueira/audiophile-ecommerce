@@ -1,12 +1,11 @@
 import { Cart } from "../../../shared/entities/cart"
-import { UpdateCartItemsGateway } from "../../domain/gateways/updateCartItemsGateway"
+import { DeleteCartGateway } from "../../domain/gateways/deleteCartGateway"
 
 export class ClearCartUseCase {
-    constructor(private readonly cartItemGateway: UpdateCartItemsGateway) {}
+    constructor(private readonly deleteCartGateway: DeleteCartGateway) {}
 
-    public execute(): Cart {
-        const emptyCart = Cart.createEmptyCart()
-        this.cartItemGateway.update(emptyCart.toJSON().items)
+    public async execute(): Promise<Cart> {
+        const emptyCart = await this.deleteCartGateway.deleteCart()
 
         return emptyCart
     }

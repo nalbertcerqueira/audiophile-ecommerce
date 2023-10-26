@@ -1,8 +1,8 @@
 import { ClearCartUseCase } from "../../usecases/cart/clearCartUseCase"
-import { localStorageCartItemGateway } from "../gateways/cartGatewayFactory"
+import { localStorageCartGateway } from "../gateways/cartGatewayFactory"
 
 function createClearCartUseCase() {
-    return new ClearCartUseCase(localStorageCartItemGateway)
+    return new ClearCartUseCase(localStorageCartGateway)
 }
 
 export const clearCartUseCase = createClearCartUseCase()
