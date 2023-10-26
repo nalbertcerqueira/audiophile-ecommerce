@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation"
 
 export function Navbar() {
     const links: string[] = ["home", "headphones", "speakers", "earphones"]
-
     const pathname = usePathname()
 
     function shouldRenderMarker(link: string): boolean {

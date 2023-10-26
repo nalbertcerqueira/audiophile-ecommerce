@@ -1,6 +1,6 @@
 import { ProductProps } from "@/@core/backend/domain/entities/product"
 import { ProductDetails } from "./ProductDetails"
-import { ProductItem } from "@/components/shared/ProductItem"
+import { ProductItem } from "@/components/shared/product/ProductItem"
 import { staticProductImages } from "@/utils/imageMap"
 
 export function ProductSection({ product }: { product: ProductProps }) {
@@ -10,6 +10,7 @@ export function ProductSection({ product }: { product: ProductProps }) {
                 {product && (
                     <>
                         <ProductItem
+                            id={product.id}
                             name={product.name}
                             description={product.description}
                             new={product.new}

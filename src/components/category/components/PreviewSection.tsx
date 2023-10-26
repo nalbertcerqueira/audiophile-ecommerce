@@ -1,4 +1,4 @@
-import { ProductItem } from "../../shared/ProductItem"
+import { ProductItem } from "../../shared/product/ProductItem"
 import { ProductProps } from "@/@core/backend/domain/entities/product"
 import { staticProductImages } from "@/utils/imageMap"
 
@@ -9,6 +9,7 @@ export function PreviewSection({ products }: { products: ProductProps[] }) {
                 {products?.map((product, i) => {
                     return (
                         <ProductItem
+                            id={product.id}
                             new={product.new}
                             key={product.id}
                             name={product.name}

@@ -1,16 +1,15 @@
-"use client"
+interface CounterProps {
+    className?: string
+    count: number
+    increment: () => void
+    decrement: () => void
+}
 
-import { useState } from "react"
-
-export function Counter({ className }: { className?: string }) {
-    const [count, setCount] = useState<number>(0)
-
+export function Counter({ className, count, increment, decrement }: CounterProps) {
     return (
         <div className={`counter ${className || ""}`.trim()}>
             <button
-                onClick={() =>
-                    setCount((prevCount) => (prevCount > 0 ? prevCount - 1 : prevCount))
-                }
+                onClick={decrement}
                 className="counter__action-btn"
                 type="button"
                 aria-label="decrement count"
@@ -19,7 +18,7 @@ export function Counter({ className }: { className?: string }) {
             </button>
             <p className="counter__display">{count}</p>
             <button
-                onClick={() => setCount((prevCount) => prevCount + 1)}
+                onClick={increment}
                 className="counter__action-btn"
                 type="button"
                 aria-label="increment count"

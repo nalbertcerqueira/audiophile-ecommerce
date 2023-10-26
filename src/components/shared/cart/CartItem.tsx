@@ -1,19 +1,46 @@
+"use client"
+
+import { formatCurrency } from "@/utils/helpers"
 import { Counter } from "../Counter"
-import ItemThumb from "/public/imgs/cart/xx99-mark-two-headphones.jpg"
+import { useContext } from "react"
+import { CartContext } from "@/contexts/CartContext"
+import { staticProductImages } from "@/utils/imageMap"
 import Image from "next/image"
 
-export function CartItem({ readOnly }: { readOnly?: boolean }) {
+interface CartItemProps {
+    readOnly?: boolean
+    productId: string
+    slug: string
+    name: string
+    quantity: number
+    price: number
+}
+
+export function CartItem({ readOnly, name, productId, slug, quantity, price }: CartItemProps) {
+    const { addItem, removeItem } = useContext(CartContext)
+
     return (
         <div className="cart-item">
-            <Image className="cart-item__thumb" src={ItemThumb} alt="product item" />
+            <Image
+                className="cart-item__thumb"
+                src={staticProductImages[slug].cartThumb}
+                alt={slug.split("-").join(" ")}
+            />
             <div className="cart-item__info">
                 <div>
-                    <p className="cart-item__name">XX99 MK II</p>
-                    <p className="cart-item__price">$ 2,999</p>
+                    <p className="cart-item__name">{name.toUpperCase()}</p>
+                    <p className="cart-item__price">{formatCurrency(price)}</p>
                 </div>
-                {readOnly && <p className="cart-item__qty">x1</p>}
+                {readOnly && <p className="cart-item__qty">{`x${quantity}`}</p>}
             </div>
-            {!readOnly && <Counter className="cart-item__counter" />}
+            {!readOnly && (
+                <Counter
+                    count={quantity}
+                    decrement={() => removeItem(productId)}
+                    increment={() => addItem({ productId, quantity: 1 })}
+                    className="cart-item__counter"
+                />
+            )}
         </div>
     )
 }

@@ -66,6 +66,24 @@
 }
 
 .cart-btn {
+    position: relative;
     padding: 0.25rem;
     display: flex;
+
+    &__counter {
+        @include mixins.flex($content: center, $items: center);
+        position: absolute;
+        top: -0.5rem;
+        left: -0.5rem;
+        background-color: vars.$default-orange;
+        border-radius: 50%;
+        width: 1.5rem;
+        height: 1.5rem;
+        color: vars.$white;
+    }
+
+    &__item-qty {
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
 }

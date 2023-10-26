@@ -1,10 +1,10 @@
 import Image from "next/image"
-import Link from "next/link"
 import { formatCurrency } from "@/utils/helpers"
-import { Counter } from "./Counter"
 import { StaticImages } from "@/utils/imageMap/types"
+import { AddProductAction, ProductLink } from "./ProductActions"
 
 interface CommonFields {
+    id: string
     name: string
     slug: string
     images: StaticImages
@@ -26,46 +26,30 @@ interface ProductProps extends CommonFields {
 type ProductItemProps = PreviewProps | ProductProps
 
 export function ProductItem(props: ProductItemProps) {
-    function renderActions(): JSX.Element {
-        if (props.type === "preview") {
-            return (
-                <Link
-                    role="button"
-                    href={`/${props.category}/${props.slug}`}
-                    className="btn btn--primary product__link"
-                >
-                    SEE PRODUCT
-                </Link>
-            )
-        }
-        return (
-            <div className="product__cart-actions">
-                <Counter />
-                <button className="btn btn--primary" type="button">
-                    ADD TO CART
-                </button>
-            </div>
-        )
-    }
+    const { id, name, slug, description, images } = props
 
     return (
         <div className={`product ${props.className || ""}`.trim()}>
             <div className="product__img-box">
                 <Image
                     placeholder="blur"
-                    src={props.images.desktop}
-                    alt={props.name}
+                    src={images.desktop}
+                    alt={name}
                     className="product__img"
                 />
             </div>
             <div className="product__info">
                 {props.new ? <span className="product__label">NEW PRODUCT</span> : null}
-                <h2 className="product__name">{props.name.toUpperCase()}</h2>
-                <p className="product__description">{props.description}</p>
+                <h2 className="product__name">{name.toUpperCase()}</h2>
+                <p className="product__description">{description}</p>
                 {props.type === "product" && (
                     <p className="product__price">{formatCurrency(props.price)}</p>
                 )}
-                {renderActions()}
+                {props.type === "product" ? (
+                    <AddProductAction productId={id} />
+                ) : (
+                    <ProductLink href={`/${props.category}/${slug}`} />
+                )}
             </div>
         </div>
     )
