@@ -1,6 +1,6 @@
 import { zodErrorFormater } from "@/@core/backend/infra/validators/zod/zod-helpers"
 import { addUserUseCase } from "@/@core/backend/main/factories/user/createUserFactory"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import {
     passwordMessage,
     passwordRegexp,
@@ -21,7 +21,7 @@ const signupValidator = userZodSchema
         message: "passwords don't match"
     })
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     try {
         const body = await req.json()
         const validationResult = signupValidator.safeParse(body)

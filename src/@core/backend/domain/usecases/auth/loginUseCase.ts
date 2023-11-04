@@ -13,16 +13,17 @@ export class LoginUseCase {
     ) {}
     public async execute(loginData: LoginData): Promise<string | null> {
         const { email, password } = loginData
-        const foundUser = (await this.findUserByEmailRepository.findByEmail(email))?.toJSON()
+        const foundUser = await this.findUserByEmailRepository.findByEmail(email)
 
         if (foundUser) {
+            const foundUserProps = foundUser.toJSON()
             const isPasswordCorrect = await this.hashComparer.compare(
                 password,
-                foundUser.password
+                foundUserProps.password
             )
 
             if (isPasswordCorrect) {
-                const payload = { id: foundUser.id }
+                const payload = { id: foundUserProps.id }
                 const accessToken = await this.tokenGenerator.generate(payload)
 
                 return accessToken
