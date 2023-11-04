@@ -1,4 +1,4 @@
-import { ProductProps } from "../../../../../domain/entities/product"
+import { ProductProps } from "../../../../../domain/entities/product/product"
 import { GetProductsByCategoryRepository } from "../../../../../domain/repositories/product/getProductsByCategoryRepository"
 import { GetProductsRepository } from "../../../../../domain/repositories/product/getProductsRepository"
 import { mongoHelper } from "../../config/mongo-config"

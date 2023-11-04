@@ -13,6 +13,7 @@ export interface UserProps {
 
 const passwordRegexp = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%+<>,.?-]).+$/g
 const nameRegexp = /^[A-Za-z]*[0-9]?[A-Za-z]*[0-9]?[A-Za-z]*$/g
+
 const userZodSchema: z.ZodSchema<UserProps> = z.object({
     id: z.string().min(24),
     email: z.string().email(),

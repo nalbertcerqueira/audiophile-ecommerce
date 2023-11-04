@@ -1,4 +1,4 @@
-import { ProductProps } from "@/@core/backend/domain/entities/product"
+import { ProductProps } from "@/@core/backend/domain/entities/product/product"
 import { productMongoSchema } from "./mongo-schemas"
 import { mongoHelper } from "./mongo-config"
 import { readFile } from "fs/promises"

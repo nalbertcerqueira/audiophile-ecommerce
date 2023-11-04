@@ -1,4 +1,4 @@
-import { ProductProps } from "../../entities/product"
+import { ProductProps } from "../../entities/product/product"
 import { GetProductsRepository } from "../../repositories/product/getProductsRepository"
 
 export class GetProductsUseCase {
