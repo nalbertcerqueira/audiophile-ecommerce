@@ -39,8 +39,8 @@ export async function POST(req: NextRequest) {
             )
         }
 
-        const badRequestErrors = zodErrorFormater(validationResult.error)
-        return NextResponse.json({ errors: badRequestErrors }, { status: 400 })
+        const errors = zodErrorFormater(validationResult.error)
+        return NextResponse.json({ errors }, { status: 400 })
     } catch (error: any) {
         return NextResponse.json({ errors: [error.message] }, { status: 500 })
     }
