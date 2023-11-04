@@ -5,7 +5,7 @@ export const nameRegexp = /^[A-Za-z]*[0-9]?[A-Za-z]*[0-9]?[A-Za-z]*$/g
 export const passwordRegexp = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%+<>,.?-]).+$/g
 
 export const nameMessage = "cannot have more than 2 numbers"
-export const passwordMessage = "must have at least 1 number and 1 especial character"
+export const passwordMessage = "must contain letters, numbers and 1 especial character"
 
 export function schemaFromType<T>() {
     return <S extends z.ZodType<T, any, any>>(arg: S) => arg

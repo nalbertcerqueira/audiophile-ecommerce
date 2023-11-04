@@ -1,9 +1,10 @@
-import { UserProps, User } from "../../entities/user/user"
+import { UserProps } from "../../entities/user/user"
 import { AddUserRepository } from "../../repositories/user/addUserRepository"
 import { FindUserByEmailRepository } from "../../repositories/user/findUserByEmailRepository"
 import { HashService } from "../../services/hashService"
 
 type UserData = Pick<UserProps, "email" | "name" | "password">
+type CreateUserOutputDTO = Pick<UserProps, "id" | "name" | "email">
 
 export class AddUserUseCase {
     constructor(
@@ -11,7 +12,7 @@ export class AddUserUseCase {
         private readonly addUserRepository: AddUserRepository,
         private readonly hashService: HashService
     ) {}
-    public async execute(userData: UserData): Promise<User | null> {
+    public async execute(userData: UserData): Promise<CreateUserOutputDTO | null> {
         const { email, name, password } = userData
         const foundUser = await this.findUserByEmailRepository.findByEmail(email)
 
@@ -23,9 +24,9 @@ export class AddUserUseCase {
                 password: hashedPassword,
                 images: { profile: null, profileThumb: null }
             }
-            const addedUser = await this.addUserRepository.add(newUser)
+            const addedUser = (await this.addUserRepository.add(newUser)).toJSON()
 
-            return addedUser
+            return { id: addedUser.id, name: addedUser.name, email: addedUser.email }
         }
 
         return null
