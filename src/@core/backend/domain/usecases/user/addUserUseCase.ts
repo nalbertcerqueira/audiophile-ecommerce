@@ -1,4 +1,4 @@
-import { UserProps, User } from "../../entities/user"
+import { UserProps, User } from "../../entities/user/user"
 import { AddUserRepository } from "../../repositories/user/addUserRepository"
 import { FindUserByEmailRepository } from "../../repositories/user/findUserByEmailRepository"
 import { HashService } from "../../services/hashService"

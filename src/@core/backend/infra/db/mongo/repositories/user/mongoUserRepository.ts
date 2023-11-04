@@ -1,4 +1,4 @@
-import { User } from "@/@core/backend/domain/entities/user"
+import { User } from "@/@core/backend/domain/entities/user/user"
 import {
     AddUserRepository,
     UserWithoutId

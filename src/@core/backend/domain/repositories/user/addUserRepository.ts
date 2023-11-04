@@ -1,4 +1,4 @@
-import { UserProps, User } from "../../entities/user"
+import { UserProps, User } from "../../entities/user/user"
 
 export type UserWithoutId = Omit<UserProps, "id">
 
