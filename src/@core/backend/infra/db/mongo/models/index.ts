@@ -1,6 +1,6 @@
 import { ProductProps } from "@/@core/backend/domain/entities/product/product"
 import { UserProps } from "@/@core/backend/domain/entities/user/user"
-import { CartProduct } from "@/@core/shared/entities/cart"
+import { CartProduct } from "@/@core/shared/entities/cart/cart"
 import { ObjectId } from "mongodb"
 
 export interface MongoProduct extends Omit<ProductProps, "id"> {

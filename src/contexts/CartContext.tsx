@@ -1,6 +1,6 @@
 "use client"
 
-import { CartProps } from "@/@core/shared/entities/cart"
+import { CartProps } from "@/@core/shared/entities/cart/cart"
 import { getCartUseCase } from "@/@core/frontend/main/usecases/getCartFactory"
 import { clearCartUseCase } from "@/@core/frontend/main/usecases/clearCartFactory"
 import { addCartItemUseCase } from "@/@core/frontend/main/usecases/addCartItemFactory"

@@ -1,4 +1,4 @@
-import { CartProduct } from "@/@core/shared/entities/cart"
+import { CartProduct } from "@/@core/shared/entities/cart/cart"
 import { GetCartItemByIdRepository } from "../../repositories/cart/getCartItemByIdRepository"
 
 export class GetCartItemsByIdUseCase {

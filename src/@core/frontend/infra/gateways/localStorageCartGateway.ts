@@ -1,4 +1,4 @@
-import { Cart, CartProduct } from "@/@core/shared/entities/cart"
+import { Cart, CartProduct } from "@/@core/shared/entities/cart/cart"
 import { GetCartGateway } from "../../domain/gateways/getCartGateway"
 import { AddCartItemGateway } from "../../domain/gateways/addCartItemGateway"
 import { RemoveCartItemGateway } from "../../domain/gateways/removeCartItemGateway"

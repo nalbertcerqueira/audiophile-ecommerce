@@ -1,4 +1,5 @@
-import { object, ZodType, string, number } from "zod"
+import { cartItemZodSchema } from "./util"
+import z from "zod"
 
 type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
@@ -17,17 +18,9 @@ export interface CartProps {
     items: CartProduct[]
 }
 
-export const cartItemZodSchema: ZodType<CartProduct> = object({
-    productId: string().min(1),
-    name: string().min(3).trim(),
-    slug: string().min(3).trim().toLowerCase(),
-    price: number().gt(0).finite(),
-    quantity: number().gt(0).finite().int()
-}).strict()
-
 export class Cart {
     private props: CartProps
-    private static readonly itemSchema: ZodType<CartProduct> = cartItemZodSchema
+    private static readonly itemSchema: z.ZodType<CartProduct> = cartItemZodSchema
 
     public static validateItems(items: any[]): CartProduct[] {
         return items

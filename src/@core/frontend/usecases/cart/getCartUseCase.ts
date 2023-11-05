@@ -1,4 +1,4 @@
-import { Cart } from "../../../shared/entities/cart"
+import { Cart } from "../../../shared/entities/cart/cart"
 import { GetCartGateway } from "../../domain/gateways/getCartGateway"
 
 export class GetCartUseCase {

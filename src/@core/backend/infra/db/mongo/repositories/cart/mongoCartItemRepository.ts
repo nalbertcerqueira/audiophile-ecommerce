@@ -1,6 +1,6 @@
 import { GetCartItemsRepository } from "@/@core/backend/domain/repositories/cart/getCartItemsRepository"
 import { GetCartItemByIdRepository } from "@/@core/backend/domain/repositories/cart/getCartItemByIdRepository"
-import { CartProduct } from "@/@core/shared/entities/cart"
+import { CartProduct } from "@/@core/shared/entities/cart/cart"
 import { mongoHelper } from "../../config/mongo-config"
 import { MongoCartItem } from "../../models"
 import { ObjectId } from "mongodb"
