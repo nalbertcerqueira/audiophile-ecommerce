@@ -1,14 +1,9 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { allowedCategories } from "../constants"
 
 export function TitleSection() {
     const pathname = decodeURI(usePathname().slice(1))
-
-    if (!allowedCategories.includes(pathname)) {
-        return null
-    }
 
     return (
         <section className="title-section">
