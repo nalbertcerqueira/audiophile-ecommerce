@@ -10,7 +10,6 @@ export class Migration {
         await this.createCollections()
         await this.updloadInitialData()
         await mongoHelper.close()
-        console.log("migration finished.")
     }
 
     private async updloadInitialData(): Promise<void> {
@@ -26,6 +25,7 @@ export class Migration {
         if (emptyCollection) {
             const { insertedCount } = await productCollection.insertMany(products)
             console.log(`uploaded ${insertedCount} items with sucess!`)
+            console.log("migration finished.")
         }
     }
 
