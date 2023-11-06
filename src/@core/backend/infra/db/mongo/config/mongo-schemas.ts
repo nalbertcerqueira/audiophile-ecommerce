@@ -1,10 +1,12 @@
 import { Document } from "mongodb"
+import { nameRegexp } from "../../../../domain/entities/user/utils"
 
 const categoryMongoSchema: Document = {
     bsonType: "string",
     enum: ["headphones", "speakers", "earphones"]
 }
-const imageMongoSchema: Document = {
+
+const productImageMongoSchema: Document = {
     bsonType: "object",
     additionalProperties: false,
     required: ["desktop", "tablet", "mobile"],
@@ -13,6 +15,18 @@ const imageMongoSchema: Document = {
         tablet: { bsonType: "string" },
         mobile: { bsonType: "string" }
     }
+}
+
+const userImageMongoSchema = {
+    oneOf: [
+        {
+            bsonType: "string",
+            pattern: "^(https|http)://[a-zA-Z-0-9]{4,}.[a-zA-Z0-9]{2,}$"
+        },
+        {
+            bsonType: "null"
+        }
+    ]
 }
 
 export const productMongoSchema: Document = {
@@ -37,9 +51,9 @@ export const productMongoSchema: Document = {
             slug: { bsonType: "string", minLength: 4 },
             name: { bsonType: "string", minLength: 4 },
             shortName: { bsonType: "string", minLength: 3 },
-            image: imageMongoSchema,
+            image: productImageMongoSchema,
             category: categoryMongoSchema,
-            categoryImage: imageMongoSchema,
+            categoryImage: productImageMongoSchema,
             new: { bsonType: "bool" },
             price: { bsonType: ["int", "double"], minimum: 0.01 },
             description: { bsonType: "string" },
@@ -62,9 +76,9 @@ export const productMongoSchema: Document = {
                 required: ["first", "second", "third"],
                 additionalProperties: false,
                 properties: {
-                    first: imageMongoSchema,
-                    second: imageMongoSchema,
-                    third: imageMongoSchema
+                    first: productImageMongoSchema,
+                    second: productImageMongoSchema,
+                    third: productImageMongoSchema
                 }
             },
             others: {
@@ -78,8 +92,42 @@ export const productMongoSchema: Document = {
                         slug: { bsonType: "string", minLength: 3 },
                         name: { bsonType: "string", minLength: 4 },
                         category: categoryMongoSchema,
-                        image: imageMongoSchema
+                        image: productImageMongoSchema
                     }
+                }
+            }
+        }
+    }
+}
+
+export const userMongoSchema: Document = {
+    $jsonSchema: {
+        bsonType: "object",
+        additionalProperties: false,
+        required: ["name", "email", "password", "images"],
+        properties: {
+            _id: {},
+            name: {
+                bsonType: "string",
+                minLength: 5,
+                pattern: `${nameRegexp.source}`
+            },
+            email: {
+                bsonType: "string",
+                minLength: 6,
+                pattern: "^[a-zA-Z0-9._%+-]{1,}@[a-zA-Z0-9.-]{1,}\\.[a-zA-Z0-9]{2,}$"
+            },
+            password: {
+                bsonType: "string",
+                minLength: 8
+            },
+            images: {
+                bsonType: "object",
+                additionalProperties: false,
+                required: ["profile", "profileThumb"],
+                properties: {
+                    profile: userImageMongoSchema,
+                    profileThumb: userImageMongoSchema
                 }
             }
         }
