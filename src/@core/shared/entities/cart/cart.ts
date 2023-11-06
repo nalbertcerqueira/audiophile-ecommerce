@@ -67,13 +67,13 @@ export class Cart {
 
     public addItem(itemId: string, quantity: number): boolean
     public addItem(itemToAdd: CartProduct): void
-    public addItem(itemToAdd: CartProduct | string, quantity?: number): boolean | void {
+    public addItem(itemOrId: CartProduct | string, quantity?: number): boolean | void {
         const foundIndex = this.props.items.findIndex((item) => {
-            if (typeof itemToAdd === "string") return item.productId === itemToAdd
-            else return item.productId === itemToAdd.productId
+            if (typeof itemOrId === "string") return item.productId === itemOrId
+            else return item.productId === itemOrId.productId
         })
 
-        if (typeof itemToAdd === "string") {
+        if (typeof itemOrId === "string") {
             if (foundIndex >= 0 && typeof quantity === "number" && quantity > 0) {
                 this.props.items[foundIndex].quantity += quantity
                 return true
@@ -82,11 +82,11 @@ export class Cart {
             }
         }
 
-        if (itemToAdd.quantity > 0) {
+        if (itemOrId.quantity > 0) {
             if (foundIndex >= 0) {
-                this.props.items[foundIndex].quantity += itemToAdd.quantity
+                this.props.items[foundIndex].quantity += itemOrId.quantity
             } else {
-                this.props.items.push(itemToAdd)
+                this.props.items.push(itemOrId)
             }
         }
     }
