@@ -4,7 +4,7 @@ import { CartModalContext } from "@/contexts/CartModalContext"
 import { useContext, MouseEvent } from "react"
 import { MiniCart } from "./MiniCart"
 
-export function Overlay() {
+export function CartModal() {
     const { isOpen, closeCart } = useContext(CartModalContext)
 
     function handleCloseCart(e: MouseEvent<HTMLDivElement>): void {
