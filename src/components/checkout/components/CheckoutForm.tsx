@@ -1,51 +1,140 @@
 "use client"
 
-import { CashIcon } from "@/components/shared/icons/CashIcon"
+import { CheckoutFields, CheckoutWithCreditCard } from "../types/types"
 import { Input } from "@/components/checkout/components/Input"
+import { CashIcon } from "@/components/shared/icons/CashIcon"
+import { checkoutFieldsSchema } from "../helpers/schemas"
 import { RadioInput } from "./RadioInput"
-import { FormEvent, useState, useEffect } from "react"
+import { useForm, FieldErrors, Controller } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useEffect } from "react"
+import {
+    maskCreditCardNumber,
+    maskCvv,
+    maskPhoneNumber,
+    maskZipCode,
+    handleNumericField,
+    maskExpirationMonth,
+    maskExpirationYear,
+    handleExpirationDate
+} from "../helpers/utils"
 
-type PaymentMethod = "creditCard" | "cash" | null
+export function CheckoutForm({ formId }: { formId: string }) {
+    const {
+        watch,
+        control,
+        setValue,
+        register,
+        resetField,
+        handleSubmit,
+        formState: { errors }
+    } = useForm<CheckoutFields>({
+        mode: "onSubmit",
+        reValidateMode: "onSubmit",
+        resolver: zodResolver(checkoutFieldsSchema)
+    })
+    const paymentMethod = watch("paymentMethod")
 
-interface CheckoutFormProps {
-    formId: string
-}
-
-export function CheckoutForm({ formId }: CheckoutFormProps) {
-    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(null)
-
-    useEffect(() => setPaymentMethod("creditCard"), [])
-
-    function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault()
-    }
+    useEffect(() => setValue("paymentMethod", "cash"), [setValue])
+    useEffect(() => {
+        if (paymentMethod === "creditCard") {
+            resetField("cardNumber")
+            resetField("expDate")
+            resetField("cvv")
+        }
+    }, [paymentMethod, resetField])
 
     function renderCreditCardFields() {
+        const creditCardErrors: FieldErrors<CheckoutWithCreditCard> = errors
+        const expDateError = creditCardErrors.expDate?.root?.message
+
         return (
             <div className="checkout__cc-fields">
-                <Input
-                    label="Card Number"
+                <Controller
                     name="cardNumber"
-                    id="card-number"
-                    type="text"
-                    autocomplete="off"
-                    placeholder="XXXX XXXX XXXX XXXX"
+                    control={control}
+                    render={({ field }) => (
+                        <Input
+                            {...field}
+                            value={maskCreditCardNumber(field.value || "")}
+                            onChange={handleNumericField(field, 16)}
+                            error={creditCardErrors.cardNumber?.message}
+                            label="Card Number"
+                            id="card-number"
+                            type="tel"
+                            autocomplete="off"
+                            placeholder="0000 0000 0000 0000"
+                        />
+                    )}
                 />
-                <Input
-                    label="Expiration Date"
-                    name="expDate"
-                    id="exp-date"
-                    type="text"
-                    autocomplete="off"
-                    placeholder="MM/YY"
-                />
-                <Input
-                    label="CVV"
+                <div>
+                    <label
+                        className={`checkout__expdate-label ${
+                            creditCardErrors.expDate ? "checkout__expdate-label--error" : ""
+                        }`}
+                        htmlFor="exp-month"
+                    >
+                        Expiration Date
+                    </label>
+                    <div className="checkout__expdate">
+                        <Controller
+                            name="expDate.month"
+                            control={control}
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    name="expMonth"
+                                    value={maskExpirationMonth(`${field.value}`)}
+                                    error={
+                                        expDateError ||
+                                        creditCardErrors.expDate?.month?.message
+                                    }
+                                    onChange={handleExpirationDate(field, "month")}
+                                    id="exp-month"
+                                    type="tel"
+                                    autocomplete="off"
+                                    placeholder="MM"
+                                />
+                            )}
+                        />
+                        <Controller
+                            name="expDate.year"
+                            control={control}
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    name="expYear"
+                                    value={maskExpirationYear(`${field.value}`)}
+                                    error={
+                                        !!expDateError ||
+                                        creditCardErrors.expDate?.year?.message
+                                    }
+                                    onChange={handleExpirationDate(field, "year")}
+                                    id="exp-year"
+                                    type="tel"
+                                    autocomplete="off"
+                                    placeholder="YY"
+                                />
+                            )}
+                        />
+                    </div>
+                </div>
+                <Controller
                     name="cvv"
-                    id="cvv"
-                    type="number"
-                    autocomplete="off"
-                    placeholder="xxx"
+                    control={control}
+                    render={({ field }) => (
+                        <Input
+                            {...field}
+                            value={maskCvv(field.value || "")}
+                            onChange={handleNumericField(field, 3)}
+                            error={creditCardErrors.cvv?.message}
+                            label="CVV"
+                            id="cvv"
+                            type="tel"
+                            autocomplete="off"
+                            placeholder="xxx"
+                        />
+                    )}
                 />
             </div>
         )
@@ -67,63 +156,86 @@ export function CheckoutForm({ formId }: CheckoutFormProps) {
     return (
         <div className="checkout">
             <h2 className="checkout__title">CHECKOUT</h2>
-            <form id={formId} onSubmit={handleFormSubmit} className="checkout__form">
+            <form id={formId} className="checkout__form" onSubmit={handleSubmit(() => {})}>
                 <fieldset className="checkout__billing-details">
                     <legend className="checkout__group-name">BILLING DETAILS</legend>
                     <Input
+                        {...register("name")}
+                        error={errors.name?.message}
                         label="Name"
-                        name="name"
                         id="name"
                         type="text"
                         autocomplete="name"
                         placeholder="Alexei Ward"
                     />
                     <Input
+                        {...register("email")}
+                        error={errors.email?.message}
                         label="Email Address"
-                        name="email"
                         id="email"
                         type="text"
                         autocomplete="email"
                         placeholder="alexei@mail.com"
                     />
-                    <Input
-                        label="Phone Number"
+                    <Controller
                         name="phone"
-                        id="phone"
-                        type="tel"
-                        autocomplete="tel"
-                        placeholder="+1 202-555-0136"
+                        control={control}
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                value={maskPhoneNumber(field.value || "")}
+                                onChange={handleNumericField(field, 12)}
+                                error={errors.phone?.message}
+                                label="Phone Number"
+                                id="phone"
+                                type="tel"
+                                autocomplete="tel"
+                                placeholder="+1 202-555-0136"
+                            />
+                        )}
                     />
                 </fieldset>
                 <fieldset className="checkout__shipping-details">
                     <legend className="checkout__group-name">SHIPPING INFO</legend>
                     <Input
+                        {...register("address")}
+                        error={errors.address?.message}
                         label="Address"
-                        name="address"
                         id="address"
                         type="text"
                         autocomplete="shipping"
                         placeholder="1137 Williams Avenue"
                     />
-                    <Input
-                        label="ZIP Code"
+                    <Controller
                         name="zipCode"
-                        id="zip-code"
-                        type="text"
-                        autocomplete="postal-code"
-                        placeholder="10001"
+                        control={control}
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                value={maskZipCode(field.value || "")}
+                                onChange={handleNumericField(field, 8)}
+                                error={errors.zipCode?.message}
+                                label="ZIP Code"
+                                id="zip-code"
+                                type="text"
+                                autocomplete="postal-code"
+                                placeholder="10001"
+                            />
+                        )}
                     />
                     <Input
+                        {...register("city")}
+                        error={errors.city?.message}
                         label="City"
-                        name="city"
                         id="city"
                         type="text"
                         autocomplete="home-city"
                         placeholder="New York"
                     />
                     <Input
+                        {...register("country")}
+                        error={errors.country?.message}
                         label="Country"
-                        name="country"
                         id="country"
                         type="text"
                         autocomplete="country-name"
@@ -133,19 +245,17 @@ export function CheckoutForm({ formId }: CheckoutFormProps) {
                 <fieldset className="checkout__payment-details ">
                     <legend className="checkout__group-name">PAYMENT DETAILS</legend>
                     <RadioInput
+                        {...register("paymentMethod")}
                         checked={paymentMethod === "creditCard"}
-                        onChange={() => setPaymentMethod("creditCard")}
                         value="creditCard"
                         label="Credit Card"
-                        name="paymentMethod"
                         id="credit-card"
                     />
                     <RadioInput
+                        {...register("paymentMethod")}
                         checked={paymentMethod === "cash"}
-                        onChange={() => setPaymentMethod("cash")}
                         value="cash"
                         label="Cash on Delivery"
-                        name="paymentMethod"
                         id="cash"
                     />
                     {paymentMethod === "creditCard" && renderCreditCardFields()}
