@@ -15,7 +15,6 @@
 
 .checkout-page-container {
     background-color: vars.$very-light-grey;
-    height: 100%;
 }
 
 .checkout-section {
@@ -85,6 +84,21 @@
         }
     }
 
+    &__expdate {
+        @include mixins.flex($gap: 0.5rem);
+    }
+
+    &__expdate-label {
+        margin-bottom: 0.5rem;
+        display: block;
+        font-size: 0.75rem;
+        font-weight: vars.$extra-bold-weight;
+
+        &--error {
+            color: vars.$red;
+        }
+    }
+
     &__cash-guidance {
         @extend %show-effect;
         @include mixins.flex($gap: 2rem, $items: center);
@@ -141,10 +155,14 @@
         margin-bottom: 0.5rem;
     }
 
-    &__input-label {
+    &__label {
         display: block;
         font-size: 0.75rem;
         font-weight: vars.$extra-bold-weight;
+
+        &--error {
+            color: vars.$red;
+        }
     }
 
     &__input {
@@ -157,6 +175,11 @@
         transition: border-color vars.$transition-duration;
         caret-color: vars.$default-orange;
 
+        &--error {
+            border-color: vars.$red;
+            border-width: 0.125rem;
+        }
+
         &::placeholder {
             color: rgba(vars.$black, 0.4);
         }
@@ -164,6 +187,13 @@
         &:focus {
             border-color: vars.$default-orange;
         }
+    }
+
+    &__error-msg {
+        color: vars.$red;
+        font-size: 0.75rem;
+        font-weight: vars.$bold-weight;
+        margin-top: 0.5rem;
     }
 }
 
@@ -183,7 +213,7 @@
         transition: border-color vars.$transition-duration;
         cursor: pointer;
 
-        &:focus-within {
+        &--checked {
             border-color: vars.$default-orange;
         }
     }
