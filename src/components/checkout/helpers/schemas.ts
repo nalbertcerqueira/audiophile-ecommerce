@@ -3,13 +3,30 @@ import { CheckoutFields } from "../types/types"
 import z from "zod"
 
 const checkoutBaseSchema = z.object({
-    name: z.string().min(6, lengthErrorMessage("Name", "min", 6)),
-    email: z.string().email("Invalid email formart"),
-    phone: z.string().min(10, lengthErrorMessage("Phone", "min", 10)),
-    address: z.string().min(8, lengthErrorMessage("Address", "min", 8)),
-    zipCode: z.string().min(5, lengthErrorMessage("Zip code", "min", 5)),
-    city: z.string().min(4, lengthErrorMessage("City", "min", 4)),
-    country: z.string().min(4, lengthErrorMessage("Country", "min", 4))
+    name: z
+        .string({ required_error: requiredErrorMessage("Name") })
+        .min(6, lengthErrorMessage("Name", "min", 6)),
+    email: z
+        .string({ required_error: requiredErrorMessage("Email") })
+        .email("Invalid email formart"),
+    phone: z
+        .string({ required_error: requiredErrorMessage("Phone") })
+        .refine((phone) => phone.split(" ").slice(1).join("").replace(/\D/g, "").length >= 9, {
+            message: "Minimum of 9 characters without country code",
+            path: [""]
+        }),
+    address: z
+        .string({ required_error: requiredErrorMessage("Address") })
+        .min(8, lengthErrorMessage("Address", "min", 8)),
+    zipCode: z
+        .string({ required_error: requiredErrorMessage("Zip code") })
+        .min(5, lengthErrorMessage("Zip code", "min", 5)),
+    city: z
+        .string({ required_error: requiredErrorMessage("City") })
+        .min(4, lengthErrorMessage("City", "min", 4)),
+    country: z
+        .string({ required_error: requiredErrorMessage("Country") })
+        .min(4, lengthErrorMessage("Country", "min", 4))
 })
 
 const cashPaymentSchema = z.object({

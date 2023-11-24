@@ -2,27 +2,10 @@ import { ChangeEvent } from "react"
 import { ControllerRenderProps } from "react-hook-form"
 import { CheckoutFields } from "../types/types"
 
-import {
-    alternativePhoneRegexp,
-    creditCardRegexp,
-    phoneRegexp,
-    textMatchRegexp,
-    zipCodeRegexp
-} from "./constants"
+import { creditCardRegexp, textMatchRegexp, zipCodeRegexp } from "./constants"
 
 export function maskZipCode(rawInput: string): string {
     return rawInput.replace(textMatchRegexp, "").slice(0, 8).replace(zipCodeRegexp, "$1-$2")
-}
-
-export function maskPhoneNumber(rawInput: string): string {
-    const onlyNumbers = rawInput.replace(textMatchRegexp, "").slice(0, 12)
-    if (onlyNumbers.length <= 7) {
-        return onlyNumbers.replace(/^(\d{3})(\d{1,4})/g, "($1) $2")
-    }
-    if (onlyNumbers.length > 7 && onlyNumbers.length < 12) {
-        return onlyNumbers.replace(phoneRegexp, "($1) $2-$3")
-    }
-    return onlyNumbers.replace(alternativePhoneRegexp, "($1) $2-$3")
 }
 
 export function maskCreditCardNumber(rawInput: string): string {

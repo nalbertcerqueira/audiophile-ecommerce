@@ -2,13 +2,27 @@
 @use "../../scss/1-base/_mixins.scss" as mixins;
 @use "../../scss/1-base/_placeholders.scss";
 
+%checkout-input {
+    padding: 1.125rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: vars.$bold-weight;
+
+    &::placeholder {
+        color: rgba(vars.$black, 0.4);
+    }
+
+    &:focus {
+        border-color: vars.$default-orange;
+    }
+}
+
 %checkout-fieldset {
     display: grid;
     gap: 1.5rem 1rem;
     grid-template-columns: repeat(2, 1fr);
 }
 
-%show-effect {
+%show-animation {
     opacity: 0;
     animation: show vars.$transition-duration forwards;
 }
@@ -75,7 +89,7 @@
     }
 
     &__cc-fields {
-        @extend %show-effect;
+        @extend %show-animation;
         @extend %checkout-fieldset;
         grid-column: span 2;
 
@@ -100,7 +114,7 @@
     }
 
     &__cash-guidance {
-        @extend %show-effect;
+        @extend %show-animation;
         @include mixins.flex($gap: 2rem, $items: center);
         margin-top: 1.875rem;
     }
@@ -156,6 +170,7 @@
     }
 
     &__label {
+        white-space: nowrap;
         display: block;
         font-size: 0.75rem;
         font-weight: vars.$extra-bold-weight;
@@ -166,11 +181,10 @@
     }
 
     &__input {
+        @extend %checkout-input;
+        border: 1px solid #cfcfcf;
         padding: 1.125rem 1.5rem;
         border-radius: 0.5rem;
-        border: 1px solid #cfcfcf;
-        font-size: 0.875rem;
-        font-weight: vars.$bold-weight;
         width: 100%;
         transition: border-color vars.$transition-duration;
         caret-color: vars.$default-orange;
@@ -179,17 +193,10 @@
             border-color: vars.$red;
             border-width: 0.125rem;
         }
-
-        &::placeholder {
-            color: rgba(vars.$black, 0.4);
-        }
-
-        &:focus {
-            border-color: vars.$default-orange;
-        }
     }
 
     &__error-msg {
+        @extend %show-animation;
         color: vars.$red;
         font-size: 0.75rem;
         font-weight: vars.$bold-weight;
@@ -298,5 +305,47 @@
         width: 100%;
         margin-top: 2.875rem;
         text-align: center;
+    }
+}
+
+//Alterando alguns estilos da lib 'react-international-phone
+.react-international-phone-input-container {
+    border-radius: 0.5rem;
+    border: 1px solid #cfcfcf;
+    transition: border-color vars.$transition-duration;
+
+    &:focus-within {
+        border-color: vars.$default-orange;
+
+        & .react-international-phone-country-selector-button {
+            border-right-color: vars.$default-orange;
+        }
+    }
+
+    & .react-international-phone-input {
+        @extend %checkout-input;
+        border: none;
+        height: auto;
+        width: 100%;
+        border-radius: 0 0.5rem 0.5rem 0;
+    }
+
+    & .react-international-phone-country-selector-button {
+        border: none;
+        border-radius: 0.5rem 0 0 0.5rem;
+        border-right: 1px solid #cfcfcf;
+        height: 100%;
+        padding: 0rem 0.75rem;
+        transition: vars.$transition-duration;
+    }
+}
+
+.react-international-phone--error {
+    border: 0.125rem solid vars.$red;
+}
+
+@keyframes show-error {
+    100% {
+        opacity: 100%;
     }
 }
