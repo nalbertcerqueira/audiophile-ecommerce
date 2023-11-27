@@ -1,4 +1,4 @@
-import { UserProps } from "../../entities/user/user"
+import { UserProps } from "@/@core/shared/entities/user/user"
 import { FindUserByEmailRepository } from "../../repositories/user/findUserByEmailRepository"
 import { HashComparerService } from "../../services/hashComparerService"
 import { TokenGeneratorService } from "../../services/tokenGeneratorService"

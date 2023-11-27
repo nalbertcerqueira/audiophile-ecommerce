@@ -1,5 +1,5 @@
 import { Document } from "mongodb"
-import { nameRegexp } from "../../../../domain/entities/user/utils"
+import { nameRegexp } from "../../../../../shared/entities/user/utils"
 
 const categoryMongoSchema: Document = {
     bsonType: "string",

@@ -1,4 +1,4 @@
-import { userZodSchema } from "@/@core/backend/domain/entities/user/utils"
+import { userZodSchema } from "@/@core/shared/entities/user/utils"
 import { zodErrorFormater } from "@/@core/backend/infra/validators/zod/zod-helpers"
 import { loginUseCase } from "@/@core/backend/main/factories/auth/loginFactory"
 import { NextRequest, NextResponse } from "next/server"

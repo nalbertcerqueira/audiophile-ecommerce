@@ -5,7 +5,7 @@ import {
     passwordMessage,
     passwordRegexp,
     userZodSchema
-} from "@/@core/backend/domain/entities/user/utils"
+} from "@/@core/shared/entities/user/utils"
 import z from "zod"
 
 const signupValidator = userZodSchema
