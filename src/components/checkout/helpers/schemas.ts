@@ -1,4 +1,4 @@
-import { lengthErrorMessage, requiredErrorMessage } from "./errors"
+import { lengthErrorMessage, requiredErrorMessage } from "../../../utils/errors"
 import { CheckoutFields } from "../types/types"
 import z from "zod"
 
@@ -56,7 +56,7 @@ const creditCardPaymentSchema = z.object({
 export const checkoutFieldsSchema: z.ZodType<CheckoutFields> = z.discriminatedUnion(
     "paymentMethod",
     [
-        checkoutBaseSchema.merge(cashPaymentSchema),
-        checkoutBaseSchema.merge(creditCardPaymentSchema)
+        checkoutBaseSchema.merge(cashPaymentSchema).strict(),
+        checkoutBaseSchema.merge(creditCardPaymentSchema).strict()
     ]
 )
