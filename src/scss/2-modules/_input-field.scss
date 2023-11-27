@@ -1,0 +1,42 @@
+@use "../1-base/variables" as vars;
+@use "../1-base/placeholders";
+
+.field {
+    &__label-wrapper {
+        margin-bottom: 0.5rem;
+    }
+
+    &__label {
+        white-space: nowrap;
+        display: block;
+        font-size: 0.75rem;
+        font-weight: vars.$extra-bold-weight;
+
+        &--error {
+            color: vars.$red;
+        }
+    }
+
+    &__input {
+        @extend %input-field;
+        border: 1px solid #cfcfcf;
+        padding: 1.125rem 1.5rem;
+        border-radius: 0.5rem;
+        width: 100%;
+        transition: border-color vars.$transition-duration;
+        caret-color: vars.$default-orange;
+
+        &--error {
+            border-color: vars.$red;
+            border-width: 0.125rem;
+        }
+    }
+
+    &__error-msg {
+        @extend %show-animation;
+        color: vars.$red;
+        font-size: 0.75rem;
+        font-weight: vars.$bold-weight;
+        margin-top: 0.5rem;
+    }
+}

@@ -1,4 +1,4 @@
-import { Input } from "../Input"
+import { Input } from "../../../shared/Input"
 import { Controller } from "react-hook-form"
 import { BaseCheckoutFieldProps } from "./types"
 import { PhoneInput } from "react-international-phone"

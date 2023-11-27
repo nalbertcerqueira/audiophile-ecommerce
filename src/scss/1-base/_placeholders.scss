@@ -32,3 +32,28 @@
     font-weight: vars.$medium-weight;
     color: rgba(vars.$black, 0.5);
 }
+
+%input-field {
+    padding: 1.125rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: vars.$bold-weight;
+
+    &::placeholder {
+        color: rgba(vars.$black, 0.4);
+    }
+
+    &:focus {
+        border-color: vars.$default-orange;
+    }
+}
+
+%show-animation {
+    opacity: 0;
+    animation: show-up vars.$transition-duration forwards;
+}
+
+@keyframes show-up {
+    100% {
+        opacity: 100%;
+    }
+}

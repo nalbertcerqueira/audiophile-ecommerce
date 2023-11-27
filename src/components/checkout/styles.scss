@@ -2,29 +2,10 @@
 @use "../../scss/1-base/_mixins.scss" as mixins;
 @use "../../scss/1-base/_placeholders.scss";
 
-%checkout-input {
-    padding: 1.125rem 1.5rem;
-    font-size: 0.875rem;
-    font-weight: vars.$bold-weight;
-
-    &::placeholder {
-        color: rgba(vars.$black, 0.4);
-    }
-
-    &:focus {
-        border-color: vars.$default-orange;
-    }
-}
-
 %checkout-fieldset {
     display: grid;
     gap: 1.5rem 1rem;
     grid-template-columns: repeat(2, 1fr);
-}
-
-%show-animation {
-    opacity: 0;
-    animation: show vars.$transition-duration forwards;
 }
 
 .checkout-page-container {
@@ -48,6 +29,7 @@
     padding: 3.375rem 3rem 3rem;
     background-color: vars.$white;
     border-radius: 0.5rem;
+    box-shadow: vars.$light-box-shadow;
 
     &__title {
         font-size: vars.$h3-font-size;
@@ -133,6 +115,7 @@
     background-color: vars.$white;
     border-radius: 0.5rem;
     padding: 2rem;
+    box-shadow: vars.$light-box-shadow;
 
     &__title {
         font-size: vars.$h6-font-size;
@@ -161,46 +144,6 @@
     &__submit-btn {
         text-align: center;
         width: 100%;
-    }
-}
-
-.field {
-    &__label-wrapper {
-        margin-bottom: 0.5rem;
-    }
-
-    &__label {
-        white-space: nowrap;
-        display: block;
-        font-size: 0.75rem;
-        font-weight: vars.$extra-bold-weight;
-
-        &--error {
-            color: vars.$red;
-        }
-    }
-
-    &__input {
-        @extend %checkout-input;
-        border: 1px solid #cfcfcf;
-        padding: 1.125rem 1.5rem;
-        border-radius: 0.5rem;
-        width: 100%;
-        transition: border-color vars.$transition-duration;
-        caret-color: vars.$default-orange;
-
-        &--error {
-            border-color: vars.$red;
-            border-width: 0.125rem;
-        }
-    }
-
-    &__error-msg {
-        @extend %show-animation;
-        color: vars.$red;
-        font-size: 0.75rem;
-        font-weight: vars.$bold-weight;
-        margin-top: 0.5rem;
     }
 }
 
@@ -323,7 +266,7 @@
     }
 
     & .react-international-phone-input {
-        @extend %checkout-input;
+        @extend %input-field;
         border: none;
         height: auto;
         width: 100%;
@@ -342,10 +285,4 @@
 
 .react-international-phone--error {
     border: 0.125rem solid vars.$red;
-}
-
-@keyframes show-error {
-    100% {
-        opacity: 100%;
-    }
 }
