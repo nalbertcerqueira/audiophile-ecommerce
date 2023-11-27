@@ -1,11 +1,7 @@
 import { zodErrorFormater } from "@/@core/backend/infra/validators/zod/zod-helpers"
 import { addUserUseCase } from "@/@core/backend/main/factories/user/createUserFactory"
 import { NextRequest, NextResponse } from "next/server"
-import {
-    passwordMessage,
-    passwordRegexp,
-    userZodSchema
-} from "@/@core/shared/entities/user/utils"
+import { userZodSchema } from "@/@core/shared/entities/user/utils"
 import z from "zod"
 
 const signupValidator = userZodSchema
@@ -13,12 +9,12 @@ const signupValidator = userZodSchema
     .extend({
         passwordConfirmation: z
             .string()
-            .min(8)
+            .min(8, "Password confirmation must have at least 8 character(s)")
             .trim()
-            .refine((password) => password.match(passwordRegexp), passwordMessage)
     })
     .refine((data) => data.password === data.passwordConfirmation, {
-        message: "passwords don't match"
+        message: "Passwords don't match",
+        path: ["passwordConfirmation"]
     })
 
 export async function POST(req: NextRequest) {

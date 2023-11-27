@@ -8,13 +8,13 @@ export function zodErrorFormater<T extends z.ZodError<any>>(error: T): string[] 
             if (typeof value === "number") {
                 acc += `[${value}]`
             } else if (pathLength > 1 && i === pathLength - 1 && typeof value === "string") {
-                acc += `.${value}`
+                acc += `.${value}`.replace(/^\./, "")
             } else {
-                acc += value
+                acc += value[0].toUpperCase() + value.slice(1)
             }
             return acc
         }, "")
 
-        return `${formatedPath || ""} ${error.message.toLowerCase()}`.trim()
+        return `${formatedPath || ""} ${error.message.toLocaleLowerCase()}`.trim()
     })
 }
