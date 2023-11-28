@@ -1,8 +1,8 @@
-import { ReactNode } from "react"
+import { PropsWithChildren } from "react"
 import { HomeContainer } from "@/layouts/home"
 import "@/scss/1-base/base.scss"
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: PropsWithChildren) {
     return (
         <html lang="en-us">
             <head>

@@ -41,6 +41,11 @@
             background-color: #4c4c4c;
         }
     }
+
+    &:disabled {
+        pointer-events: none;
+        opacity: 60%;
+    }
 }
 
 .back-btn {
