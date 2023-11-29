@@ -26,10 +26,10 @@ interface ProductProps extends CommonFields {
 type ProductItemProps = PreviewProps | ProductProps
 
 export function ProductItem(props: ProductItemProps) {
-    const { id, name, slug, description, images } = props
+    const { id, name, slug, description, images, type, className } = props
 
     return (
-        <div className={`product ${props.className || ""}`.trim()}>
+        <div className={`product ${className || ""}`.trim()}>
             <div className="product__img-box">
                 <Image
                     placeholder="blur"
@@ -42,10 +42,10 @@ export function ProductItem(props: ProductItemProps) {
                 {props.new ? <span className="product__label">NEW PRODUCT</span> : null}
                 <h2 className="product__name">{name.toUpperCase()}</h2>
                 <p className="product__description">{description}</p>
-                {props.type === "product" && (
+                {type === "product" && (
                     <p className="product__price">{formatCurrency(props.price)}</p>
                 )}
-                {props.type === "product" ? (
+                {type === "product" ? (
                     <AddProductAction productId={id} />
                 ) : (
                     <ProductLink href={`/${props.category}/${slug}`} />
