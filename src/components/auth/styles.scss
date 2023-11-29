@@ -11,51 +11,71 @@
     box-shadow: vars.$light-box-shadow;
 
     &__title {
-        font-size: vars.$h3-font-size;
+        font-size: vars.$h4-font-size;
+        line-height: vars.$h4-line-height;
         letter-spacing: vars.$h3-letter-spacing;
         font-weight: vars.$extra-bold-weight;
+    }
+
+    &__third-party {
+        @include mixins.flex($gap: 1rem, $direction: column);
+        margin-top: 2rem;
+    }
+
+    &__division {
+        @include mixins.flex($gap: 1.5rem, $content: center, $items: center);
+        margin: 1rem 0;
+        font-size: 16px;
+        font-weight: vars.$medium-weight;
+
+        &::before,
+        &::after {
+            content: "";
+            width: 50%;
+            height: 1px;
+            background-color: #cfcfcf;
+        }
     }
 }
 
 .auth-form {
-    margin-top: 2rem;
-
     &__input-wrapper {
         @include mixins.flex($gap: 1.5rem, $direction: column);
     }
 
-    &__btn-wrapper {
-        @include mixins.flex($gap: 1rem, $direction: column);
-        margin: 2.25rem auto 0;
-
-        & > * {
-            height: 3.125rem;
-            padding: 0.75rem 1rem;
-        }
+    &__submit-btn {
+        margin-top: 2.25rem;
+        width: 100%;
     }
 }
 
-.google-btn {
+.third-party-btn {
     @include mixins.flex($gap: 0.75rem, $items: center, $content: center);
     border: 1px solid #afafaf;
-    text-transform: uppercase;
-
-    &:hover {
-        background-color: #4081ec;
-        color: vars.$white;
-
-        path {
-            fill: vars.$white;
-        }
-    }
+    padding: 0.75rem 1rem;
 
     &__icon {
         width: 1.5rem;
         height: 1.5rem;
-        fill: vars.$white;
 
         & > path {
             transition: fill vars.$transition-duration;
+        }
+    }
+
+    &--google:hover {
+        background-color: #4081ec;
+    }
+
+    &--apple:hover {
+        background-color: vars.$matte-black;
+    }
+
+    &:hover {
+        color: vars.$white;
+
+        path {
+            fill: vars.$white;
         }
     }
 }

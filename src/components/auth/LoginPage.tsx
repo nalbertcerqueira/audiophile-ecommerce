@@ -5,8 +5,9 @@ import { customZodResolver } from "@/libs/zod"
 import { AuthFormFields } from "./types/types"
 import { Input } from "../shared/Input"
 import { useForm, FieldErrors } from "react-hook-form"
-import "./styles.scss"
 import { GoogleLoginButton } from "./components/GoogleLoginButton"
+import { AppleLoginButton } from "./components/AppleLoginButton"
+import "./styles.scss"
 
 export const loginFormInitialState: AuthFormFields<"login"> = {
     email: "",
@@ -39,7 +40,16 @@ export function LoginPageComponent() {
 
     return (
         <div className="form-container">
-            <h2 className="form-container__title">Login</h2>
+            <h2 className="form-container__title">Sign-in</h2>
+            <div className="form-container__third-party">
+                <GoogleLoginButton isSubmitting={isSubmitting}>
+                    CONTINUE WITH GOOGLE
+                </GoogleLoginButton>
+                <AppleLoginButton isSubmitting={isSubmitting}>
+                    CONTINUE WITH APPLE
+                </AppleLoginButton>
+            </div>
+            <div className="form-container__division">Or</div>
             <form
                 onSubmit={handleSubmit(handleSuccessfulSubmit, handleFailedSubmit)}
                 className="auth-form"
@@ -65,14 +75,13 @@ export function LoginPageComponent() {
                         error={errors.password?.message}
                     />
                 </div>
-                <div className="auth-form__btn-wrapper">
-                    <button disabled={isSubmitting} className="btn btn--primary" type="submit">
-                        LOGIN
-                    </button>
-                    <GoogleLoginButton isSubmitting={isSubmitting}>
-                        Login with google
-                    </GoogleLoginButton>
-                </div>
+                <button
+                    disabled={isSubmitting}
+                    className="btn btn--primary auth-form__submit-btn"
+                    type="submit"
+                >
+                    LOGIN
+                </button>
             </form>
         </div>
     )

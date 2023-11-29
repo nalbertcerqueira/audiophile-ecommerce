@@ -8,8 +8,12 @@ interface GoogleLoginButtonProps {
 
 export function GoogleLoginButton({ isSubmitting, children }: GoogleLoginButtonProps) {
     return (
-        <button disabled={isSubmitting} className="btn google-btn" type="button">
-            <GoogleIcon className="google-btn__icon" />
+        <button
+            disabled={isSubmitting}
+            className="btn third-party-btn third-party-btn--google"
+            type="button"
+        >
+            <GoogleIcon className="third-party-btn__icon" />
             {children}
         </button>
     )
