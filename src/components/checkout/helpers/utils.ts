@@ -34,8 +34,8 @@ export function maskCvv(rawInput: string): string {
     return rawInput.replace(textMatchRegexp, "").slice(0, 3)
 }
 
-export function sanitizeNumericField(input: string, maxLenght: number) {
-    return input.replace(textMatchRegexp, "").slice(0, maxLenght)
+export function sanitizeNumericField(input: string, maxLength: number) {
+    return input.replace(textMatchRegexp, "").slice(0, maxLength)
 }
 
 export function handleNumericField(
