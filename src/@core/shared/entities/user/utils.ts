@@ -10,18 +10,19 @@ export const nameLengthMessage = "must have at least 5 character(s)"
 export const passwordLengthMessage = "must have at least 8 character(s)"
 export const passwordMessage = "must contain letters, numbers and 1 especial character"
 
+export const passwordZodValidator = z
+    .string()
+    .min(8, passwordLengthMessage)
+    .refine((password) => password.match(passwordRegexp), {
+        message: passwordMessage,
+        path: [""]
+    })
+
 export const userZodSchema = schemaFromType<UserProps>()(
     z.object({
         id: z.string().trim().min(24),
         email: z.string().trim().email("is invalid"),
-        password: z
-            .string()
-            .trim()
-            .min(8, passwordLengthMessage)
-            .refine((password) => password.match(passwordRegexp), {
-                message: passwordMessage,
-                path: [""]
-            }),
+        password: passwordZodValidator,
         name: z
             .string()
             .trim()
