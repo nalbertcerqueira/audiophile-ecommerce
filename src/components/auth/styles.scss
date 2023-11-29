@@ -11,6 +11,7 @@
     box-shadow: vars.$light-box-shadow;
 
     &__title {
+        margin-bottom: 2rem;
         font-size: vars.$h4-font-size;
         line-height: vars.$h4-line-height;
         letter-spacing: vars.$h3-letter-spacing;
@@ -19,7 +20,6 @@
 
     &__third-party {
         @include mixins.flex($gap: 1rem, $direction: column);
-        margin-top: 2rem;
     }
 
     &__division {

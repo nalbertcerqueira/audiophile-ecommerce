@@ -7,6 +7,7 @@ import { Input } from "../shared/Input"
 import { useForm, FieldErrors } from "react-hook-form"
 import { GoogleLoginButton } from "./components/GoogleLoginButton"
 import { AppleLoginButton } from "./components/AppleLoginButton"
+import { AuthForm } from "./components/AuthForm"
 import "./styles.scss"
 
 export const loginFormInitialState: AuthFormFields<"login"> = {
@@ -50,39 +51,31 @@ export function LoginPageComponent() {
                 </AppleLoginButton>
             </div>
             <div className="form-container__division">Or</div>
-            <form
-                onSubmit={handleSubmit(handleSuccessfulSubmit, handleFailedSubmit)}
-                className="auth-form"
+            <AuthForm
+                submitBtn="LOGIN"
+                isSubmitting={isSubmitting}
+                submitHandler={handleSubmit(handleSuccessfulSubmit, handleFailedSubmit)}
             >
-                <div className="auth-form__input-wrapper">
-                    <Input
-                        {...register("email")}
-                        type="text"
-                        autocomplete="email"
-                        id="email"
-                        label="Email Address"
-                        placeholder="youremail@mail.com"
-                        error={errors.email?.message}
-                    />
-                    <Input
-                        {...register("password")}
-                        name="password"
-                        type="password"
-                        autocomplete="password"
-                        id="password"
-                        label="Password"
-                        placeholder="* * * * * * * * * *"
-                        error={errors.password?.message}
-                    />
-                </div>
-                <button
-                    disabled={isSubmitting}
-                    className="btn btn--primary auth-form__submit-btn"
-                    type="submit"
-                >
-                    LOGIN
-                </button>
-            </form>
+                <Input
+                    {...register("email")}
+                    type="text"
+                    autocomplete="email"
+                    id="email"
+                    label="Email Address"
+                    placeholder="youremail@mail.com"
+                    error={errors.email?.message}
+                />
+                <Input
+                    {...register("password")}
+                    name="password"
+                    type="password"
+                    autocomplete="current-password"
+                    id="password"
+                    label="Password"
+                    placeholder="* * * * * * * * * *"
+                    error={errors.password?.message}
+                />
+            </AuthForm>
         </div>
     )
 }
