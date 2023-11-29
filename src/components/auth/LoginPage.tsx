@@ -4,10 +4,11 @@ import { loginSchema } from "./helpers/schemas"
 import { customZodResolver } from "@/libs/zod"
 import { AuthFormFields } from "./types/types"
 import { Input } from "../shared/Input"
-import { useForm, FieldErrors } from "react-hook-form"
 import { GoogleLoginButton } from "./components/GoogleLoginButton"
 import { AppleLoginButton } from "./components/AppleLoginButton"
 import { AuthForm } from "./components/AuthForm"
+import { useForm, FieldErrors } from "react-hook-form"
+import Link from "next/link"
 import "./styles.scss"
 
 export const loginFormInitialState: AuthFormFields<"login"> = {
@@ -76,6 +77,12 @@ export function LoginPageComponent() {
                     error={errors.password?.message}
                 />
             </AuthForm>
+            <div className="form-container__alt-page">
+                <span>Don&apos;t have a account?</span>{" "}
+                <Link className="form-container__signup-link" href="/signup">
+                    Sign up here
+                </Link>
+            </div>
         </div>
     )
 }

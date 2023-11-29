@@ -36,6 +36,24 @@
             background-color: #cfcfcf;
         }
     }
+
+    &__alt-page > * {
+        display: inline-block;
+        font-weight: vars.$medium-weight;
+        font-size: 0.9rem;
+        margin-top: 1.5rem;
+    }
+
+    &__signup-link {
+        font-weight: vars.$bold-weight;
+        text-decoration: underline;
+        text-decoration-color: transparent;
+        color: vars.$default-orange;
+
+        &:hover {
+            text-decoration-color: vars.$default-orange;
+        }
+    }
 }
 
 .auth-form {
