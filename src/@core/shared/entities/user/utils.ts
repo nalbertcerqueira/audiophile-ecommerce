@@ -1,10 +1,10 @@
 import { UserProps } from "./user"
 import z from "zod"
 
-export const nameRegexp = /^[A-Za-z]*[0-9]?[A-Za-z]*[0-9]?[A-Za-z]*$/g
+export const nameRegexp = /^[A-Za-z\s]+$/
 export const passwordRegexp = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%+<>,.?-]).+$/g
 
-export const nameMessage = "cannot have more than 2 numbers"
+export const nameMessage = "can only have letters"
 export const nameLengthMessage = "must have at least 5 character(s)"
 
 export const passwordLengthMessage = "must have at least 8 character(s)"
