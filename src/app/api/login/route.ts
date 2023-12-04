@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
         const unauthorizedHeaders = { "WWW-Authenticate": 'Bearer realm="protected resource"' }
         return NextResponse.json(
-            { errors: ["Unauthorized. You need valid credentials to access this content"] },
+            { errors: ["Invalid email or password"] },
             { status: 401, headers: unauthorizedHeaders }
         )
     } catch (error: any) {
