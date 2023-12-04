@@ -4,6 +4,7 @@
 
 .btn {
     @extend %subtitle;
+    overflow: hidden;
     line-height: calc(1em);
     padding: 1.125rem 2rem;
     white-space: nowrap;
@@ -44,7 +45,6 @@
 
     &:disabled {
         pointer-events: none;
-        opacity: 60%;
     }
 }
 
