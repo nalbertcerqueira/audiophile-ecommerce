@@ -24,8 +24,10 @@ export class Migration {
 
         if (emptyCollection) {
             const { insertedCount } = await productCollection.insertMany(products)
-            console.log(`uploaded ${insertedCount} items with sucess!`)
-            console.log("migration finished.")
+            console.log(`Inserted ${insertedCount} items with sucess!`)
+            console.log("Migration finished.")
+        } else {
+            console.log("Current database is already populated. No need to populate again.")
         }
     }
 
