@@ -4,7 +4,6 @@ import { FindUserByEmailRepository } from "../../repositories/user/findUserByEma
 import { HashService } from "../../services/hashService"
 
 type UserData = Pick<UserProps, "email" | "name" | "password">
-type CreateUserOutputDTO = Pick<UserProps, "id" | "name" | "email">
 
 export class AddUserUseCase {
     constructor(
@@ -12,7 +11,7 @@ export class AddUserUseCase {
         private readonly addUserRepository: AddUserRepository,
         private readonly hashService: HashService
     ) {}
-    public async execute(userData: UserData): Promise<CreateUserOutputDTO | null> {
+    public async execute(userData: UserData): Promise<boolean> {
         const { email, name, password } = userData
         const foundUser = await this.findUserByEmailRepository.findByEmail(email)
 
@@ -24,11 +23,11 @@ export class AddUserUseCase {
                 password: hashedPassword,
                 images: { profile: null, profileThumb: null }
             }
-            const addedUser = (await this.addUserRepository.add(newUser)).toJSON()
+            await this.addUserRepository.add(newUser)
 
-            return { id: addedUser.id, name: addedUser.name, email: addedUser.email }
+            return true
         }
 
-        return null
+        return false
     }
 }

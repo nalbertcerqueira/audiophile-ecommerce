@@ -18,9 +18,9 @@ export async function POST(req: NextRequest) {
 
         if (validationResult.success) {
             const { name, email, password } = validationResult.data
-            const newUser = await addUserUseCase.execute({ name, email, password })
-            if (newUser) {
-                return NextResponse.json({ data: newUser }, { status: 201 })
+            const isUserCreated = await addUserUseCase.execute({ name, email, password })
+            if (isUserCreated) {
+                return NextResponse.json({ data: null }, { status: 201 })
             }
 
             return NextResponse.json(

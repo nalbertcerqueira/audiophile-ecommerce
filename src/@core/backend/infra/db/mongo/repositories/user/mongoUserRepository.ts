@@ -22,12 +22,11 @@ export class MongoUserRepository implements AddUserRepository, FindUserByEmailRe
         return null
     }
 
-    public async add(userProps: UserWithoutId): Promise<User> {
+    public async add(userProps: UserWithoutId): Promise<void> {
         await mongoHelper.connect()
 
         const userCollection = mongoHelper.db.collection("users")
-        const addedUser = await userCollection.insertOne({ ...userProps })
 
-        return new User({ ...userProps, id: addedUser.insertedId.toString() })
+        await userCollection.insertOne({ ...userProps })
     }
 }
