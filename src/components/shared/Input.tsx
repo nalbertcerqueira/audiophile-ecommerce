@@ -7,11 +7,12 @@ import {
 } from "react"
 
 interface InputProps {
-    label?: string
     name: string
+    type: HTMLInputTypeAttribute
+    disabled?: boolean
+    label?: string
     id?: string
     value?: string | number
-    type: HTMLInputTypeAttribute
     autocomplete?: string
     placeholder?: string
     error?: string | boolean
@@ -42,6 +43,7 @@ export const Input = forwardRef(function Input(
         <div className="field">
             {props.label && renderLabel()}
             <input
+                disabled={props.disabled}
                 value={props.value}
                 ref={ref}
                 onBlur={props.onBlur}
