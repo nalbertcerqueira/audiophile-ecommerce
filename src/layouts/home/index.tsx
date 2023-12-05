@@ -1,21 +1,24 @@
-import { Footer } from "./components/Footer"
-import { PropsWithChildren } from "react"
+import { CartModal } from "@/components/shared/cart/Overlay"
 import { CartModalProvider } from "@/contexts/CartModalContext"
 import { CartProvider } from "@/contexts/CartContext"
-import { CartModal } from "@/components/shared/cart/Overlay"
+import { Footer } from "./components/Footer"
+import { PropsWithChildren } from "react"
 import "@/scss/index.scss"
 import "./styles.scss"
+import { AuthProvider } from "@/contexts/AuthContext"
 
 export function HomeContainer({ children }: PropsWithChildren) {
     return (
         <body>
             <div className="app-container">
-                <CartProvider>
-                    <CartModalProvider>
-                        {children}
-                        <CartModal />
-                    </CartModalProvider>
-                </CartProvider>
+                <AuthProvider>
+                    <CartProvider>
+                        <CartModalProvider>
+                            {children}
+                            <CartModal />
+                        </CartModalProvider>
+                    </CartProvider>
+                </AuthProvider>
                 <Footer />
             </div>
         </body>
