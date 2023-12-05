@@ -1,5 +1,5 @@
 import { Cart } from "../../../shared/entities/cart/cart"
-import { DeleteCartGateway } from "../../domain/gateways/deleteCartGateway"
+import { DeleteCartGateway } from "../../domain/gateways/cart/deleteCartGateway"
 
 export class ClearCartUseCase {
     constructor(private readonly deleteCartGateway: DeleteCartGateway) {}

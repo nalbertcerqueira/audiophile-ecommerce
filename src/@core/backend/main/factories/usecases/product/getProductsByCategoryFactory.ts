@@ -1,5 +1,5 @@
-import { MongoProductRepository } from "../../../infra/db/mongo/repositories/product/mongoProductRepository"
-import { GetProductsByCategoryUseCase } from "../../../domain/usecases/product/getProductsByCategoryUseCase"
+import { MongoProductRepository } from "../../../../infra/db/mongo/repositories/product/mongoProductRepository"
+import { GetProductsByCategoryUseCase } from "../../../../domain/usecases/product/getProductsByCategoryUseCase"
 
 function createProductsByCateoryUseCase(): GetProductsByCategoryUseCase {
     const mongoProductRepository = new MongoProductRepository()

@@ -1,5 +1,5 @@
 import { zodErrorFormater } from "@/@core/backend/infra/validators/zod/zod-helpers"
-import { addUserUseCase } from "@/@core/backend/main/factories/user/createUserFactory"
+import { addUserUseCase } from "@/@core/backend/main/factories/usecases/user/createUserFactory"
 import { NextRequest, NextResponse } from "next/server"
 import { passwordZodValidator, userZodSchema } from "@/@core/shared/entities/user/utils"
 

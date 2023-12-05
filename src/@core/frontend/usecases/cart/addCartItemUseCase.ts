@@ -1,5 +1,5 @@
 import { Cart } from "../../../shared/entities/cart/cart"
-import { AddCartItemGateway } from "../../domain/gateways/addCartItemGateway"
+import { AddCartItemGateway } from "../../domain/gateways/cart/addCartItemGateway"
 
 type ItemToAdd = {
     productId: string

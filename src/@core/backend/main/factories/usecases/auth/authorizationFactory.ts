@@ -1,5 +1,5 @@
 import { AuthorizationUseCase } from "@/@core/backend/domain/usecases/auth/authorizationUseCase"
-import { jwtTokenService } from "../services/tokenServiceFactory"
+import { jwtTokenService } from "../../services/tokenServiceFactory"
 import { MongoUserRepository } from "@/@core/backend/infra/db/mongo/repositories/user/mongoUserRepository"
 
 const secretKey = process.env.SECRET_KEY as string

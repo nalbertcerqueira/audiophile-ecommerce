@@ -1,4 +1,4 @@
-import { getCartItemsUseCase } from "@/@core/backend/main/factories/cart/getCartItemsFactory"
+import { getCartItemsUseCase } from "@/@core/backend/main/factories/usecases/cart/getCartItemsFactory"
 import { NextResponse } from "next/server"
 
 export async function GET() {

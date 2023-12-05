@@ -1,4 +1,4 @@
-import { getCartItemByIdUseCase } from "@/@core/backend/main/factories/cart/getCartItemByIdFactory"
+import { getCartItemByIdUseCase } from "@/@core/backend/main/factories/usecases/cart/getCartItemByIdFactory"
 import { NextRequest, NextResponse } from "next/server"
 
 interface Params {

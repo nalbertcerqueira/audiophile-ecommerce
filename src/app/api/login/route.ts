@@ -1,6 +1,6 @@
 import { userZodSchema } from "@/@core/shared/entities/user/utils"
 import { zodErrorFormater } from "@/@core/backend/infra/validators/zod/zod-helpers"
-import { loginUseCase } from "@/@core/backend/main/factories/auth/loginFactory"
+import { loginUseCase } from "@/@core/backend/main/factories/usecases/auth/loginFactory"
 import { NextRequest, NextResponse } from "next/server"
 
 const loginValidator = userZodSchema.pick({ email: true, password: true })

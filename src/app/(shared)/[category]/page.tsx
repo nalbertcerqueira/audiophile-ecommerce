@@ -1,5 +1,5 @@
 import { CategoryPageComponent } from "@/components/category/CategoryPage"
-import { getProductsByCategoryUseCase } from "@/@core/backend/main/factories/product/getProductsByCategoryFactory"
+import { getProductsByCategoryUseCase } from "@/@core/backend/main/factories/usecases/product/getProductsByCategoryFactory"
 import { notFound } from "next/navigation"
 
 interface CategoryPageProps {

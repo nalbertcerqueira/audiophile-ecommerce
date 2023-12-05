@@ -1,5 +1,5 @@
 import { Cart } from "../../../shared/entities/cart/cart"
-import { RemoveCartItemGateway } from "../../domain/gateways/removeCartItemGateway"
+import { RemoveCartItemGateway } from "../../domain/gateways/cart/removeCartItemGateway"
 
 export class RemoveCartItemUseCase {
     constructor(private readonly removeCartItemGateway: RemoveCartItemGateway) {}

@@ -1,8 +1,8 @@
 import { Cart, CartProduct } from "@/@core/shared/entities/cart/cart"
-import { GetCartGateway } from "../../domain/gateways/getCartGateway"
-import { AddCartItemGateway } from "../../domain/gateways/addCartItemGateway"
-import { RemoveCartItemGateway } from "../../domain/gateways/removeCartItemGateway"
-import { DeleteCartGateway } from "../../domain/gateways/deleteCartGateway"
+import { GetCartGateway } from "../../domain/gateways/cart/getCartGateway"
+import { AddCartItemGateway } from "../../domain/gateways/cart/addCartItemGateway"
+import { RemoveCartItemGateway } from "../../domain/gateways/cart/removeCartItemGateway"
+import { DeleteCartGateway } from "../../domain/gateways/cart/deleteCartGateway"
 
 interface LocalStorageItem {
     productId: string
