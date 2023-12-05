@@ -1,15 +1,13 @@
 import { TextEncoder } from "util"
 import { TokenGeneratorService } from "../../domain/services/tokenGeneratorService"
-import { SignJWT } from "jose"
+import { SignJWT, jwtVerify } from "jose"
+import { TokenPayload, TokenVerifierService } from "../../domain/services/tokenVerifierService"
 
-export class JwtTokenService implements TokenGeneratorService {
-    constructor(
-        private readonly key: string,
-        private readonly duration: number
-    ) {}
+export class JwtTokenService implements TokenGeneratorService, TokenVerifierService {
+    constructor(private readonly duration: number) {}
 
-    public async generate(payload: Record<string, any>): Promise<string> {
-        const encodedKey = new TextEncoder().encode(this.key)
+    public async generate(payload: Record<string, any>, secretKey: string): Promise<string> {
+        const encodedKey = new TextEncoder().encode(secretKey)
         const iat = Math.floor(Date.now() / 1000)
         const exp = iat + this.duration
 
@@ -21,5 +19,16 @@ export class JwtTokenService implements TokenGeneratorService {
             .sign(encodedKey)
 
         return token
+    }
+
+    public async verify(token: string, secretKey: string): Promise<TokenPayload | null> {
+        try {
+            const encodedKey = new TextEncoder().encode(secretKey)
+            const { payload } = await jwtVerify(token, encodedKey)
+
+            return { id: payload.id }
+        } catch {
+            return null
+        }
     }
 }

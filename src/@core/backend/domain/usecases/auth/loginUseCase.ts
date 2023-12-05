@@ -7,6 +7,7 @@ type LoginData = Pick<UserProps, "email" | "password">
 
 export class LoginUseCase {
     constructor(
+        private readonly secretKey: string,
         private readonly findUserByEmailRepository: FindUserByEmailRepository,
         private readonly hashComparer: HashComparerService,
         private readonly tokenGenerator: TokenGeneratorService
@@ -24,7 +25,7 @@ export class LoginUseCase {
 
             if (isPasswordCorrect) {
                 const payload = { id: foundUserProps.id }
-                const accessToken = await this.tokenGenerator.generate(payload)
+                const accessToken = await this.tokenGenerator.generate(payload, this.secretKey)
 
                 return accessToken
             }
