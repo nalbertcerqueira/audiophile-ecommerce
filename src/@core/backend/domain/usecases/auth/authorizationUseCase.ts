@@ -1,5 +1,6 @@
 import { FindUserByIdRepository } from "../../repositories/user/findUserByIdRepository"
 import { TokenVerifierService } from "../../services/tokenVerifierService"
+import { User } from "@/@core/shared/entities/user/user"
 
 export class AuthorizationUseCase {
     constructor(
@@ -7,7 +8,7 @@ export class AuthorizationUseCase {
         private readonly tokenVerifierService: TokenVerifierService,
         private readonly findUserByIdRepository: FindUserByIdRepository
     ) {}
-    public async execute(accessToken: string): Promise<{ userId: string } | null> {
+    public async execute(accessToken: string): Promise<User | null> {
         const payload = await this.tokenVerifierService.verify(accessToken, this.secretKey)
 
         if (payload) {
@@ -15,7 +16,7 @@ export class AuthorizationUseCase {
             const foundUser = await this.findUserByIdRepository.findById(id)
 
             if (foundUser) {
-                return { userId: payload.id }
+                return foundUser
             }
         }
 
