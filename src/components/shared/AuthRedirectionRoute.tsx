@@ -24,10 +24,6 @@ export function AuthRedirectionRoute(props: ProtectedRouteProps) {
         }
     }, [isLoading, isLogged, routeToRedirect, routeType, push])
 
-    if (isLoading) {
-        return fallback
-    }
-
     switch (routeType) {
         case "protected":
             if (!isLoading && isLogged) return props.children
@@ -36,4 +32,6 @@ export function AuthRedirectionRoute(props: ProtectedRouteProps) {
             if (!isLoading && !isLogged) return props.children
             break
     }
+
+    return fallback
 }

@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react"
 import { UserProps } from "@/@core/shared/entities/user/user"
 
+interface SessionStatus {
+    isLogged: boolean
+    isLoading: boolean
+}
+
 export function useSession() {
-    const [isLogged, setIsLogged] = useState(false)
-    const [isLoading, setIsLoading] = useState(true)
+    const [status, setStatus] = useState<SessionStatus>({ isLoading: true, isLogged: false })
     const [user, setUser] = useState<Pick<UserProps, "name" | "email"> | null>(null)
 
     useEffect(() => {
@@ -13,18 +17,15 @@ export function useSession() {
                 if (res.ok) {
                     const { data } = await res.json()
                     setUser(data)
-                    setIsLogged(true)
+                    setStatus({ isLoading: false, isLogged: true })
                 } else {
-                    setIsLogged(false)
+                    throw new Error(res.statusText)
                 }
             })
             .catch(() => {
-                setIsLogged(false)
-            })
-            .finally(() => {
-                setIsLoading(false)
+                setStatus({ isLoading: false, isLogged: false })
             })
     }, [])
 
-    return { isLoading, isLogged, user }
+    return { status, user }
 }
