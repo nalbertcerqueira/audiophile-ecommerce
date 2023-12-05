@@ -1,5 +1,5 @@
+import { generateCustomZodErrors } from "@/@core/backend/infra/validators/zod/zod-helpers"
 import { userZodSchema } from "@/@core/shared/entities/user/utils"
-import { zodErrorFormater } from "@/@core/backend/infra/validators/zod/zod-helpers"
 import { loginUseCase } from "@/@core/backend/main/factories/usecases/auth/loginFactory"
 import { NextRequest, NextResponse } from "next/server"
 
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
         const validationResult = loginValidator.safeParse({ email, password })
 
         if (!validationResult.success) {
-            const errors = zodErrorFormater(validationResult.error)
+            const errors = generateCustomZodErrors(validationResult.error, 1)
             return NextResponse.json({ errors }, { status: 400 })
         }
 

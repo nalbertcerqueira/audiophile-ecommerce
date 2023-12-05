@@ -10,7 +10,7 @@ export interface ErrorInfo {
 
 export type ErrorMap = Record<string, ErrorInfo>
 
-export function zodErrorFormater<T extends z.ZodError<any>>(error: T) {
+export function zodErrorFormatter<T extends z.ZodError<any>>(error: T) {
     const errorMap = error.errors.reduce((acc: Record<string, any>, error) => {
         const fieldName = error.path.join("")
         const fieldNameWithSpace = error.path.join("").replace(/([A-Z])/g, " $1")
@@ -44,7 +44,7 @@ export function customZodResolver<T extends z.Schema<any, any>>(schema: T) {
         const validationResult = schema.safeParse(values)
 
         if (!validationResult.success) {
-            const zodErrorMap = zodErrorFormater(validationResult.error)
+            const zodErrorMap = zodErrorFormatter(validationResult.error)
 
             for (const field in options.fields) {
                 if (zodErrorMap[field]) {

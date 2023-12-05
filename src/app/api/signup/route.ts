@@ -1,4 +1,4 @@
-import { zodErrorFormater } from "@/@core/backend/infra/validators/zod/zod-helpers"
+import { generateCustomZodErrors } from "@/@core/backend/infra/validators/zod/zod-helpers"
 import { addUserUseCase } from "@/@core/backend/main/factories/usecases/user/createUserFactory"
 import { NextRequest, NextResponse } from "next/server"
 import { passwordZodValidator, userZodSchema } from "@/@core/shared/entities/user/utils"
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
             )
         }
 
-        const errors = zodErrorFormater(validationResult.error)
+        const errors = generateCustomZodErrors(validationResult.error, 1)
         return NextResponse.json({ errors }, { status: 400 })
     } catch (error: any) {
         return NextResponse.json({ errors: [error.message] }, { status: 500 })
