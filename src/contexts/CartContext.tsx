@@ -1,10 +1,10 @@
 "use client"
 
 import { CartProps } from "@/@core/shared/entities/cart/cart"
-import { getCartUseCase } from "@/@core/frontend/main/usecases/getCartFactory"
-import { clearCartUseCase } from "@/@core/frontend/main/usecases/clearCartFactory"
-import { addCartItemUseCase } from "@/@core/frontend/main/usecases/addCartItemFactory"
-import { removeCartItemUseCase } from "@/@core/frontend/main/usecases/removeCartItemFactory"
+import { getCartUseCase } from "@/@core/frontend/main/usecases/cart/getCartFactory"
+import { clearCartUseCase } from "@/@core/frontend/main/usecases/cart/clearCartFactory"
+import { addCartItemUseCase } from "@/@core/frontend/main/usecases/cart/addCartItemFactory"
+import { removeCartItemUseCase } from "@/@core/frontend/main/usecases/cart/removeCartItemFactory"
 import { PropsWithChildren, createContext, useState, useEffect } from "react"
 
 type ItemData = {
