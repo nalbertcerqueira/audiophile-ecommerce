@@ -1,36 +1,40 @@
 "use client"
 
-import { loginSchema } from "./helpers/schemas"
-import { customZodResolver } from "@/libs/zod"
-import { AuthFormFields } from "./types/types"
-import { Input } from "../shared/Input"
 import { GoogleLoginButton } from "./components/GoogleLoginButton"
+import { customZodResolver } from "@/libs/zod"
 import { AppleLoginButton } from "./components/AppleLoginButton"
+import { AuthFormFields } from "./types/types"
+import { signinUseCase } from "@/@core/frontend/main/usecases/auth/signinFactory"
+import { loginSchema } from "./helpers/schemas"
 import { AuthForm } from "./components/AuthForm"
+import { Input } from "../shared/Input"
 import { useForm, FieldErrors } from "react-hook-form"
 import Link from "next/link"
 import "./styles.scss"
-
-export const loginFormInitialState: AuthFormFields<"login"> = {
-    email: "",
-    password: ""
-}
 
 export function LoginPageComponent() {
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors, isSubmitting }
     } = useForm<AuthFormFields<"login">>({
         mode: "onSubmit",
         reValidateMode: "onSubmit",
-        defaultValues: loginFormInitialState,
         resolver: customZodResolver(loginSchema)
     })
 
     async function handleSuccessfulSubmit(data: AuthFormFields<"login">) {
-        if (!isSubmitting) {
-            console.log(data)
+        try {
+            if (!isSubmitting) {
+                const token = await signinUseCase.execute(data)
+                if (token) {
+                    return localStorage.setItem("accessToken", token)
+                }
+                return setError("password", { message: "Invalid email or password" })
+            }
+        } catch (error: any) {
+            console.log(error)
         }
     }
 
@@ -59,6 +63,7 @@ export function LoginPageComponent() {
             >
                 <Input
                     {...register("email")}
+                    disabled={isSubmitting}
                     type="text"
                     autocomplete="email"
                     id="email"
@@ -68,6 +73,7 @@ export function LoginPageComponent() {
                 />
                 <Input
                     {...register("password")}
+                    disabled={isSubmitting}
                     name="password"
                     type="password"
                     autocomplete="current-password"

@@ -1,3 +1,4 @@
+import { RingLoader } from "@/components/shared/loaders/RingLoader"
 import { FormEvent, ReactNode } from "react"
 
 interface AuthFormProps {
@@ -17,6 +18,11 @@ export function AuthForm({ children, isSubmitting, submitBtn, submitHandler }: A
                 type="submit"
             >
                 {submitBtn}
+                {isSubmitting && (
+                    <div className="auth-form__loading-overlay">
+                        <RingLoader />
+                    </div>
+                )}
             </button>
         </form>
     )

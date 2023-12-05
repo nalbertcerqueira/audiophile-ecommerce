@@ -1,10 +1,11 @@
 "use client"
 
-import { AuthForm } from "./components/AuthForm"
-import { AuthFormFields } from "./types/types"
-import { Input } from "../shared/Input"
+import { signupUseCase } from "@/@core/frontend/main/usecases/auth/signupFactory"
 import { customZodResolver } from "@/libs/zod"
+import { AuthFormFields } from "./types/types"
 import { signupSchema } from "./helpers/schemas"
+import { AuthForm } from "./components/AuthForm"
+import { Input } from "../shared/Input"
 import { FieldErrors, useForm } from "react-hook-form"
 import Link from "next/link"
 import "./styles.scss"
@@ -13,6 +14,7 @@ export function SignupPageComponent() {
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors, isSubmitting }
     } = useForm<AuthFormFields<"signup">>({
         mode: "onSubmit",
@@ -20,9 +22,16 @@ export function SignupPageComponent() {
         resolver: customZodResolver(signupSchema)
     })
 
-    async function handleSuccessfulSubmit(data: AuthFormFields<"signup">) {
-        if (!isSubmitting) {
-            console.log(data)
+    async function handleSuccessfulSubmit(formData: AuthFormFields<"signup">) {
+        try {
+            if (!isSubmitting) {
+                const isUserCreated = await signupUseCase.execute(formData)
+                if (!isUserCreated) {
+                    return setError("email", { message: "This email is already registered" })
+                }
+            }
+        } catch (error: any) {
+            console.log(error)
         }
     }
 
@@ -42,15 +51,17 @@ export function SignupPageComponent() {
             >
                 <Input
                     {...register("name")}
+                    disabled={isSubmitting}
                     type="text"
                     autocomplete="name"
                     id="name"
                     label="Name"
                     placeholder="Your Name"
-                    error={errors.email?.message}
+                    error={errors.name?.message}
                 />
                 <Input
                     {...register("email")}
+                    disabled={isSubmitting}
                     type="text"
                     autocomplete="email"
                     id="email"
@@ -60,6 +71,7 @@ export function SignupPageComponent() {
                 />
                 <Input
                     {...register("password")}
+                    disabled={isSubmitting}
                     name="password"
                     type="password"
                     autocomplete="new-password"
@@ -70,6 +82,7 @@ export function SignupPageComponent() {
                 />
                 <Input
                     {...register("passwordConfirmation")}
+                    disabled={isSubmitting}
                     name="passwordConfirmation"
                     type="password"
                     autocomplete="new-password"
