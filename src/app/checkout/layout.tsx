@@ -4,7 +4,9 @@ import { PropsWithChildren } from "react"
 export default function CheckoutLayout({ children }: PropsWithChildren) {
     return (
         <>
-            <Header className="header--black" />
+            <div className="header-bg--black">
+                <Header />
+            </div>
             {children}
         </>
     )

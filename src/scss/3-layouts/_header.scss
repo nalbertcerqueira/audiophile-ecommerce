@@ -2,14 +2,16 @@
 @use "../1-base/variables" as vars;
 @use "../1-base/mixins" as mixins;
 
+.header-bg {
+    &--black {
+        background-color: vars.$black;
+    }
+}
+
 .header {
     @extend %section-padding;
     position: relative;
     z-index: 20;
-
-    &--black {
-        background-color: vars.$black;
-    }
 
     &__inner-container {
         @extend %inner-container;
@@ -23,6 +25,8 @@
     &__btn-wrapper {
         display: flex;
         justify-content: flex-end;
+        align-items: center;
+        gap: 1.5rem;
     }
 
     &__division {

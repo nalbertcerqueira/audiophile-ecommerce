@@ -5,7 +5,9 @@ import "./styles.scss"
 export function AuthLayoutContainer({ children }: PropsWithChildren) {
     return (
         <>
-            <Header className="header--black" />
+            <div className="header-bg--black">
+                <Header />
+            </div>
             <div className="auth-page-container">{children}</div>
         </>
     )

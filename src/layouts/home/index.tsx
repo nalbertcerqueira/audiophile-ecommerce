@@ -15,11 +15,11 @@ export function HomeContainer({ children }: PropsWithChildren) {
                     <CartProvider>
                         <CartModalProvider>
                             {children}
+                            <Footer />
                             <CartModal />
                         </CartModalProvider>
                     </CartProvider>
                 </AuthProvider>
-                <Footer />
             </div>
         </body>
     )

@@ -7,7 +7,9 @@ import "./styles.scss"
 export function SharedLayoutComponent({ children }: { children: ReactNode }) {
     return (
         <>
-            <Header className="header--black" />
+            <div className="header-bg--black">
+                <Header />
+            </div>
             {children}
             <CategorySection className="shared-layout__categories" />
             <AboutSection className="shared-layout__about-us" />

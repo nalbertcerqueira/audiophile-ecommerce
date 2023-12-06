@@ -3,8 +3,8 @@ export function CartIcon() {
         <svg
             aria-hidden="true"
             focusable="false"
-            width="23"
-            height="20"
+            width="26"
+            height="26"
             viewBox="0 0 23 20"
             xmlns="http://www.w3.org/2000/svg"
         >
