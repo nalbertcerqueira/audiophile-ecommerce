@@ -56,7 +56,7 @@ export class Cart {
             0
         )
         this.props.totalSpent = this.props.items.reduce(
-            (acc, item) => (acc += item.quantity),
+            (acc, item) => (acc += item.price * item.quantity),
             0
         )
     }

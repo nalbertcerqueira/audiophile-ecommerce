@@ -47,7 +47,7 @@ export class LocalStorageCartGateway
         const cart = (await this.get()) || Cart.createEmptyCart()
 
         if (!cart.addItem(itemId, quantity)) {
-            const response = await fetch(`/api/cart-products/${itemId}`)
+            const response = await fetch(`/api/products/${itemId}?type=shortProduct`)
 
             if (response.ok) {
                 const cartItem = (await response.json()) as { data: CartProduct }
@@ -88,7 +88,7 @@ export class LocalStorageCartGateway
         const emptyCache = Object.keys(this.cache.cartItemMap).length === 0
 
         if (emptyCache) {
-            const response = await fetch("/api/cart-products")
+            const response = await fetch("/api/products?type=shortProduct")
             const items = (await response.json()).data as CartProduct[]
 
             for (const item of items) {
