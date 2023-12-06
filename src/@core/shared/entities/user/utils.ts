@@ -1,4 +1,5 @@
 import { UserProps } from "./user"
+import { schemaFromType } from "../helpers"
 import z from "zod"
 
 export const nameRegexp = /^[A-Za-z\s]+$/
@@ -34,7 +35,3 @@ export const userZodSchema = schemaFromType<UserProps>()(
         })
     })
 ).strict()
-
-export function schemaFromType<T>() {
-    return <S extends z.ZodType<T, any, any>>(arg: S) => arg
-}

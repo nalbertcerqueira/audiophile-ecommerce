@@ -1,5 +1,4 @@
 import { cartItemZodSchema } from "./util"
-import z from "zod"
 
 type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
@@ -12,7 +11,7 @@ export interface CartProduct {
 }
 
 export interface CartProps {
-    accountId: string
+    userId: string
     totalSpent: number
     itemCount: number
     items: CartProduct[]
@@ -20,25 +19,24 @@ export interface CartProps {
 
 export class Cart {
     private props: CartProps
-    private static readonly itemSchema: z.ZodType<CartProduct> = cartItemZodSchema
+    private static readonly itemSchema = cartItemZodSchema
 
     public static validateItems(items: any[]): CartProduct[] {
-        return items
-            .map((item) => {
-                const validationResult = this.itemSchema.safeParse(item)
-                return validationResult.success ? validationResult.data : null
-            })
-            .filter((item) => item !== null) as CartProduct[]
+        const validItems = items.map((item) => {
+            const itemValidation = this.itemSchema.safeParse(item)
+            return itemValidation.success ? itemValidation.data : null
+        })
+        return validItems.filter((item) => item !== null) as CartProduct[]
     }
 
     public static createEmptyCart(): Cart {
         return new Cart({ items: [], itemCount: 0, totalSpent: 0 })
     }
 
-    constructor(props: Optional<CartProps, "accountId">) {
-        const { itemCount, totalSpent, items, accountId } = props
+    constructor(props: Optional<CartProps, "userId">) {
+        const { itemCount, totalSpent, items, userId } = props
         const validItems = Cart.validateItems(items)
-        this.props = { itemCount, totalSpent, items: validItems, accountId: accountId || "0" }
+        this.props = { itemCount, totalSpent, items: validItems, userId: userId || "0" }
     }
 
     public removeItem(itemId: string): void {
@@ -53,12 +51,14 @@ export class Cart {
     }
 
     public updateTotalAndCount(): void {
-        this.props.itemCount = this.getCount()
-        this.props.totalSpent = this.getTotal()
-    }
-
-    public clear(): void {
-        this.props = { accountId: "0", itemCount: 0, totalSpent: 0, items: [] }
+        this.props.itemCount = this.props.items.reduce(
+            (acc, item) => (acc += item.quantity),
+            0
+        )
+        this.props.totalSpent = this.props.items.reduce(
+            (acc, item) => (acc += item.quantity),
+            0
+        )
     }
 
     public toJSON(): CartProps {
@@ -89,23 +89,5 @@ export class Cart {
                 this.props.items.push(itemOrId)
             }
         }
-    }
-
-    private getCount(): number {
-        const totalItems = this.props.items.reduce((acc, item) => {
-            acc += item.quantity
-            return acc
-        }, 0)
-
-        return totalItems
-    }
-
-    private getTotal(): number {
-        const totalSpent = this.props.items.reduce((acc, item) => {
-            acc += item.quantity * item.price
-            return acc
-        }, 0)
-
-        return totalSpent
     }
 }

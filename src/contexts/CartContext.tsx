@@ -19,7 +19,7 @@ interface CartContextProps {
     clearCart: () => void
 }
 
-const initialState = { accountId: "0", itemCount: 0, totalSpent: 0, items: [] }
+const initialState = { userId: "0", itemCount: 0, totalSpent: 0, items: [] }
 export const CartContext = createContext<CartContextProps>({} as CartContextProps)
 
 export function CartProvider({ children }: PropsWithChildren) {
