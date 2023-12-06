@@ -15,5 +15,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         return notFound()
     }
 
-    return <CategoryPageComponent products={products || []} />
+    return (
+        <CategoryPageComponent
+            products={products || []}
+            category={params.category.toUpperCase()}
+        />
+    )
 }

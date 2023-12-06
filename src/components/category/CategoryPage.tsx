@@ -3,10 +3,15 @@ import { PreviewSection } from "./components/PreviewSection"
 import "./styles.scss"
 import { ProductProps } from "@/@core/backend/domain/entities/product/product"
 
-export function CategoryPageComponent({ products }: { products?: ProductProps[] }) {
+interface CategoryPageComponentProps {
+    products?: ProductProps[]
+    category: string
+}
+
+export function CategoryPageComponent({ products, category }: CategoryPageComponentProps) {
     return (
         <>
-            <TitleSection />
+            <TitleSection title={category} />
             {products && <PreviewSection products={products} />}
         </>
     )
