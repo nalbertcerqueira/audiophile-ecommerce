@@ -15,7 +15,8 @@ export interface MongoUser extends Omit<UserProps, "id"> {
     readonly _id: ObjectId
 }
 
-export interface MongoUserCartItem extends CartProduct {
+export interface MongoCartItem extends CartProduct {
     readonly _id: ObjectId
-    userId: string
+    readonly productId: string
+    readonly userId: string
 }
