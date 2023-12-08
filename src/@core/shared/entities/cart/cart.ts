@@ -39,10 +39,10 @@ export class Cart {
         this.props = { itemCount, totalSpent, items: validItems, userId: userId || "0" }
     }
 
-    public removeItem(itemId: string): void {
+    public removeItem(itemId: string, quantity: number): void {
         const index = this.props.items.findIndex((item) => item.productId === itemId)
         if (index >= 0) {
-            this.props.items[index].quantity -= 1
+            this.props.items[index].quantity -= quantity
 
             if (this.props.items[index].quantity <= 0) {
                 this.props.items = this.props.items.filter((item) => item.productId !== itemId)

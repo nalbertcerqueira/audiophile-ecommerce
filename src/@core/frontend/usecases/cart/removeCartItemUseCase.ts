@@ -4,8 +4,8 @@ import { RemoveCartItemGateway } from "../../domain/gateways/cart/removeCartItem
 export class RemoveCartItemUseCase {
     constructor(private readonly removeCartItemGateway: RemoveCartItemGateway) {}
 
-    public async execute(itemId: string): Promise<Cart> {
-        const cart = await this.removeCartItemGateway.removeItem(itemId)
+    public async execute(itemId: string, quantity: number): Promise<Cart> {
+        const cart = await this.removeCartItemGateway.removeItem(itemId, quantity)
 
         return cart
     }

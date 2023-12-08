@@ -15,7 +15,7 @@ type ItemData = {
 interface CartContextProps {
     cart: CartProps
     addItem: (itemData: ItemData) => void
-    removeItem: (itemId: string) => void
+    removeItem: (itemId: string, quantity: number) => void
     clearCart: () => void
 }
 
@@ -39,8 +39,8 @@ export function CartProvider({ children }: PropsWithChildren) {
         newCart && setCart(newCart.toJSON())
     }
 
-    async function removeItem(itemId: string) {
-        const newCart = await removeCartItemUseCase.execute(itemId)
+    async function removeItem(itemId: string, quantity: number) {
+        const newCart = await removeCartItemUseCase.execute(itemId, quantity)
         setCart(newCart.toJSON())
     }
 

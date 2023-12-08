@@ -60,10 +60,10 @@ export class LocalStorageCartGateway
         return cart
     }
 
-    public async removeItem(itemId: string): Promise<Cart> {
+    public async removeItem(itemId: string, quantity: number): Promise<Cart> {
         const cart = (await this.get()) || Cart.createEmptyCart()
 
-        cart.removeItem(itemId)
+        cart.removeItem(itemId, quantity)
         cart.updateTotalAndCount()
 
         this.save(cart.toJSON().items)
