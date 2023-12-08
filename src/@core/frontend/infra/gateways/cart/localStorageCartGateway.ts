@@ -2,7 +2,7 @@ import { Cart, CartProduct } from "@/@core/shared/entities/cart/cart"
 import { GetCartGateway } from "../../../domain/gateways/cart/getCartGateway"
 import { AddCartItemGateway } from "../../../domain/gateways/cart/addCartItemGateway"
 import { RemoveCartItemGateway } from "../../../domain/gateways/cart/removeCartItemGateway"
-import { DeleteCartGateway } from "../../../domain/gateways/cart/deleteCartGateway"
+import { ClearCartGateway } from "../../../domain/gateways/cart/clearCartGateway"
 
 interface LocalStorageItem {
     productId: string
@@ -14,7 +14,7 @@ interface CartItemMap {
 }
 
 export class LocalStorageCartGateway
-    implements GetCartGateway, AddCartItemGateway, RemoveCartItemGateway, DeleteCartGateway
+    implements GetCartGateway, AddCartItemGateway, RemoveCartItemGateway, ClearCartGateway
 {
     private cache: { cartItemMap: CartItemMap } = { cartItemMap: {} }
 
@@ -43,6 +43,13 @@ export class LocalStorageCartGateway
         }
     }
 
+    public async clearCart(): Promise<Cart> {
+        const emptyCart = Cart.empty()
+
+        this.save(emptyCart.toJSON().items)
+        return emptyCart
+    }
+
     public async addItem(itemId: string, quantity: number): Promise<Cart> {
         const cart = (await this.get()) || Cart.empty()
 
@@ -68,13 +75,6 @@ export class LocalStorageCartGateway
 
         this.save(cart.toJSON().items)
         return cart
-    }
-
-    public async deleteCart(): Promise<Cart> {
-        const emptyCart = Cart.empty()
-
-        this.save(emptyCart.toJSON().items)
-        return emptyCart
     }
 
     private save(cartItems: CartProduct[]): void {
