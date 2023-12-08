@@ -1,6 +1,6 @@
 import { CartProduct } from "@/@core/shared/entities/cart/cart"
 import { GetProductByIdRepository } from "../../repositories/product/getProductByIdRepository"
-import { ProductType } from "../../repositories/product/getProductsRepository"
+import { ProductType } from "../../repositories/product/protocols"
 import { ProductProps } from "../../entities/product/product"
 
 export class GetProductByIdUseCase {

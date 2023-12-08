@@ -1,7 +1,7 @@
 import { CartProduct } from "@/@core/shared/entities/cart/cart"
 import { ProductProps } from "../../entities/product/product"
 import { GetProductsRepository } from "../../repositories/product/getProductsRepository"
-import { ProductType } from "../../repositories/product/getProductsRepository"
+import { ProductType } from "../../repositories/product/protocols"
 
 export class GetProductsUseCase {
     constructor(private readonly getProductsRepository: GetProductsRepository) {}
