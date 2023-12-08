@@ -1,5 +1,5 @@
 import { Cart } from "@/@core/shared/entities/cart/cart"
 
 export interface GetCartByUserIdRepository {
-    getById(userId: string): Promise<Cart | null>
+    getCartById(userId: string): Promise<Cart | null>
 }

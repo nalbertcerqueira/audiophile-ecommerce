@@ -8,7 +8,7 @@ export class GetCartUseCase {
         const cart = await this.getCartGateway.get()
 
         if (!cart) {
-            const emptyCart = Cart.createEmptyCart()
+            const emptyCart = Cart.empty()
             return emptyCart
         }
 

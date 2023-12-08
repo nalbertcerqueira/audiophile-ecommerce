@@ -1,11 +1,7 @@
 import { AddCartItemRepository } from "../../repositories/cart/addCartItemRepository"
 import { Cart, CartProduct } from "@/@core/shared/entities/cart/cart"
 import { GetProductByIdRepository } from "../../repositories/product/getProductByIdRepository"
-
-export interface CartItemInfo {
-    readonly productId: string
-    quantity: number
-}
+import { CartItemInfo } from "./protocols"
 
 export class AddCartItemUseCase {
     constructor(

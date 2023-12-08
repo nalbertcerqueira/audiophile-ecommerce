@@ -29,8 +29,8 @@ export class Cart {
         return validItems.filter((item) => item !== null) as CartProduct[]
     }
 
-    public static createEmptyCart(): Cart {
-        return new Cart({ items: [], itemCount: 0, totalSpent: 0 })
+    public static empty(userId?: string): Cart {
+        return new Cart({ userId, items: [], itemCount: 0, totalSpent: 0 })
     }
 
     constructor(props: Optional<CartProps, "userId">) {
