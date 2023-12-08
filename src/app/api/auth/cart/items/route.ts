@@ -3,14 +3,14 @@ import { cartItemZodSchema } from "@/@core/shared/entities/cart/util"
 import { NextRequest, NextResponse } from "next/server"
 import { authorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authorizationFactory"
 import { addCartItemUseCase } from "@/@core/backend/main/factories/usecases/cart/addCartItemFactory"
-import { CartItemInfo } from "@/@core/backend/domain/usecases/cart/addCartItemUseCase"
+import { CartItemInfo } from "@/@core/backend/domain/usecases/cart/protocols"
 
 export async function POST(req: NextRequest) {
     const accessToken = req.headers.get("authorization")?.split(" ")[1]
-    const itemInfo = (await req.json()) as CartItemInfo
+    const body = (await req.json()) as CartItemInfo
     const validationResult = cartItemZodSchema
         .pick({ productId: true, quantity: true })
-        .safeParse(itemInfo)
+        .safeParse(body)
 
     try {
         if (!validationResult.success) {
@@ -23,19 +23,17 @@ export async function POST(req: NextRequest) {
         }
 
         const foundUser = await authorizationUseCase.execute(accessToken)
-
         if (!foundUser) {
             return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
         }
 
         const { id } = foundUser.toJSON()
-        const cart = await addCartItemUseCase.execute(id, itemInfo)
+        const { productId, quantity } = body
+        const cart = await addCartItemUseCase.execute(id, { productId, quantity })
 
         if (!cart) {
             return NextResponse.json(
-                {
-                    errors: [`Product with id '${itemInfo.productId}' not found`]
-                },
+                { errors: [`Product with id '${productId}' not found`] },
                 { status: 404 }
             )
         }
