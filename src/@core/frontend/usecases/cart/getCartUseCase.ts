@@ -7,11 +7,6 @@ export class GetCartUseCase {
     public async execute(): Promise<Cart> {
         const cart = await this.getCartGateway.get()
 
-        if (!cart) {
-            const emptyCart = Cart.empty()
-            return emptyCart
-        }
-
         return cart
     }
 }

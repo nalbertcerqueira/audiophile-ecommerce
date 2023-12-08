@@ -36,7 +36,7 @@ export function CartProvider({ children }: PropsWithChildren) {
 
     async function addItem(itemInfo: ItemData) {
         const newCart = await addCartItemUseCase.execute(itemInfo)
-        newCart && setCart(newCart.toJSON())
+        setCart(newCart.toJSON())
     }
 
     async function removeItem(itemId: string, quantity: number) {

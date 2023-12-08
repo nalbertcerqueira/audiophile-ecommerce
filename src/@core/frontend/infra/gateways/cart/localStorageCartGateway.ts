@@ -20,12 +20,12 @@ export class LocalStorageCartGateway
 
     constructor(private readonly key: string) {}
 
-    public async get(): Promise<Cart | null> {
+    public async get(): Promise<Cart> {
         const cartItemMap = await this.generateCartItemMap()
         const localStorageData = this.getLocalStorageItems()
 
         if (!localStorageData) {
-            return null
+            return Cart.empty()
         }
 
         try {
@@ -39,7 +39,7 @@ export class LocalStorageCartGateway
 
             return cart
         } catch {
-            return null
+            return Cart.empty()
         }
     }
 
