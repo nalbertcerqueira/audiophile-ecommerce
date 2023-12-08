@@ -3,7 +3,7 @@ import { CartProduct, CartProps } from "@/@core/shared/entities/cart/cart"
 import { MongoCartItem } from "../../models"
 import { mongoHelper } from "../../config/mongo-config"
 import { Cart } from "@/@core/shared/entities/cart/cart"
-import { GetCartByUserIdRepository } from "@/@core/backend/domain/repositories/cart/getCartByUserIdRepository"
+import { GetCartRepository } from "@/@core/backend/domain/repositories/cart/getCartRepository"
 import {
     OperationDetails,
     RemoveCartItemRepository
@@ -15,7 +15,7 @@ import {
 
 export class MongoCartRepository
     implements
-        GetCartByUserIdRepository,
+        GetCartRepository,
         AddCartItemRepository,
         GetCartItemRepository,
         RemoveCartItemRepository

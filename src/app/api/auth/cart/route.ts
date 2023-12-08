@@ -1,5 +1,5 @@
 import { authorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authorizationFactory"
-import { getCartByUserIdUseCase } from "@/@core/backend/main/factories/usecases/cart/getCartByUserIdFactory"
+import { getCartUseCase } from "@/@core/backend/main/factories/usecases/cart/getCartByUserIdFactory"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest) {
@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
 
             if (foundUser) {
                 const { id } = foundUser.toJSON()
-                const cart = await getCartByUserIdUseCase.execute(id)
+                const cart = await getCartUseCase.execute(id)
                 return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
             }
         }

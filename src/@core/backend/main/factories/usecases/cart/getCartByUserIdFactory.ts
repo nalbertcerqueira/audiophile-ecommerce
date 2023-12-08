@@ -1,11 +1,11 @@
-import { GetCartByUserIdUseCase } from "@/@core/backend/domain/usecases/cart/getCartByUserIdUseCase"
+import { GetCartUseCase } from "@/@core/backend/domain/usecases/cart/getCartUseCase"
 import { MongoCartRepository } from "@/@core/backend/infra/db/mongo/repositories/cart/mongoCartRepository"
 
-export function createGetCartByUserIdUseCase() {
+export function createGetCartUseCase() {
     const mongoCartRepository = new MongoCartRepository()
-    const getCartByUserIdUseCase = new GetCartByUserIdUseCase(mongoCartRepository)
+    const getCartUseCase = new GetCartUseCase(mongoCartRepository)
 
-    return getCartByUserIdUseCase
+    return getCartUseCase
 }
 
-export const getCartByUserIdUseCase = createGetCartByUserIdUseCase()
+export const getCartUseCase = createGetCartUseCase()
