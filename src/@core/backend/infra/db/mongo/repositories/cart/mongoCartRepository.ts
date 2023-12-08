@@ -3,23 +3,32 @@ import { CartProduct, CartProps } from "@/@core/shared/entities/cart/cart"
 import { MongoCartItem } from "../../models"
 import { mongoHelper } from "../../config/mongo-config"
 import { Cart } from "@/@core/shared/entities/cart/cart"
+import { GetCartByUserIdRepository } from "@/@core/backend/domain/repositories/cart/getCartByUserIdRepository"
 
-export class MongoCartRepository implements AddCartItemRepository {
-    public async addItem(userId: string, product: CartProduct): Promise<Cart> {
-        const { productId, slug, name, quantity, price } = product
+export class MongoCartRepository implements GetCartByUserIdRepository, AddCartItemRepository {
+    public async getById(userId: string): Promise<Cart | null> {
         await mongoHelper.connect()
 
-        const userCartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
-        await userCartItemCollection.findOneAndUpdate(
-            { productId },
-            { $inc: { quantity }, $setOnInsert: { slug, name, price, userId } },
+        const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
+        const cartQuery = this.getCartQuery(userId)
+        const queryResult = await cartItemCollection.aggregate<CartProps>(cartQuery).toArray()
+
+        return queryResult[0] ? new Cart(queryResult[0]) : null
+    }
+
+    public async addItem(userId: string, product: CartProduct): Promise<Cart> {
+        await mongoHelper.connect()
+        const { productId, slug, name, quantity, price } = product
+
+        const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
+        await cartItemCollection.findOneAndUpdate(
+            { userId, productId },
+            { $inc: { quantity }, $setOnInsert: { slug, name, price } },
             { upsert: true }
         )
 
         const cartQuery = this.getCartQuery(userId)
-        const queryResult = await userCartItemCollection
-            .aggregate<CartProps>(cartQuery)
-            .toArray()
+        const queryResult = await cartItemCollection.aggregate<CartProps>(cartQuery).toArray()
 
         return new Cart(queryResult[0])
     }
@@ -43,7 +52,7 @@ export class MongoCartRepository implements AddCartItemRepository {
                     }
                 }
             },
-            { $project: { _id: 0, userId: "$_id", itemCount: 1, totalSpent: 1, items: 1 } }
+            { $project: { userId: "$_id", _id: 0, itemCount: 1, totalSpent: 1, items: 1 } }
         ]
     }
 }
