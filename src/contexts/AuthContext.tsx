@@ -13,7 +13,7 @@ interface AuthContextProps {
 export const AuthContext = createContext<AuthContextProps>({} as AuthContextProps)
 
 export function AuthProvider({ children }: PropsWithChildren) {
-    const { status, user } = useSession("/api/auth/user")
+    const { status, user } = useSession()
     const { isLoading, isLogged } = status
 
     return (

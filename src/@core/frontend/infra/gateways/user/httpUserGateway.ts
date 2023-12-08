@@ -3,13 +3,13 @@ import {
     UserData
 } from "@/@core/frontend/domain/gateways/user/createUserGateway"
 import { HttpGatewayResponse } from "../protocols"
+import { GetUserGateway } from "@/@core/frontend/domain/gateways/user/getUserGateway"
+import { UserProps } from "@/@core/shared/entities/user/user"
 
-export class HttpUserGateway implements CreateUserGateway {
-    constructor(private readonly apiUrl: string) {}
-
-    public async add(userInfo: UserData): Promise<boolean> {
+export class HttpUserGateway implements CreateUserGateway, GetUserGateway {
+    public async create(userInfo: UserData): Promise<boolean> {
         const headers: HeadersInit = { "Content-type": "application/json" }
-        const response = await fetch(this.apiUrl, {
+        const response = await fetch("/api/signup", {
             body: JSON.stringify(userInfo),
             method: "POST",
             headers
@@ -27,5 +27,22 @@ export class HttpUserGateway implements CreateUserGateway {
         }
 
         return true
+    }
+
+    public async getUser(): Promise<Pick<UserProps, "name" | "email"> | null> {
+        const accessToken = localStorage.getItem("accessToken") as string
+
+        const response = await fetch("/api/auth/user", {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        })
+
+        if (response.ok) {
+            const responseData = (await response.json()) as HttpGatewayResponse<"success">
+            const { data } = responseData
+
+            return data
+        }
+
+        return null
     }
 }

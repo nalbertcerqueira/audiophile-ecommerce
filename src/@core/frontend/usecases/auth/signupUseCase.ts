@@ -9,7 +9,7 @@ export class SignupUseCase {
     constructor(private readonly createUserGateway: CreateUserGateway) {}
 
     public async execute(signupData: SignupInputDTO): Promise<boolean> {
-        const isUserCreated = await this.createUserGateway.add(signupData)
+        const isUserCreated = await this.createUserGateway.create(signupData)
 
         return isUserCreated
     }

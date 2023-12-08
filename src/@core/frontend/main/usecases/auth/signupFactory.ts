@@ -1,11 +1,11 @@
 import { HttpUserGateway } from "@/@core/frontend/infra/gateways/user/httpUserGateway"
 import { SignupUseCase } from "@/@core/frontend/usecases/auth/signupUseCase"
 
-function createSignupUseCase(apiUrl: string): SignupUseCase {
-    const httpUserGateway = new HttpUserGateway(apiUrl)
+function createSignupUseCase(): SignupUseCase {
+    const httpUserGateway = new HttpUserGateway()
     const signupUseCase = new SignupUseCase(httpUserGateway)
 
     return signupUseCase
 }
 
-export const signupUseCase = createSignupUseCase("/api/signup")
+export const signupUseCase = createSignupUseCase()

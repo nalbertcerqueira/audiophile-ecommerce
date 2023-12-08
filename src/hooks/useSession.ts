@@ -1,31 +1,33 @@
 import { useEffect, useState } from "react"
 import { UserProps } from "@/@core/shared/entities/user/user"
+import { getUserGateway } from "@/@core/frontend/main/usecases/user/getUserFactory"
 
 interface SessionStatus {
     isLogged: boolean
     isLoading: boolean
 }
 
-export function useSession(apiUrl: string) {
+export function useSession() {
     const [status, setStatus] = useState<SessionStatus>({ isLoading: true, isLogged: false })
     const [user, setUser] = useState<Pick<UserProps, "name" | "email"> | null>(null)
 
     useEffect(() => {
-        const token = localStorage.getItem("accessToken")
-        fetch(apiUrl, { headers: { Authorization: `Bearer ${token}` } })
-            .then(async (res) => {
-                if (res.ok) {
-                    const { data } = await res.json()
-                    setUser(data)
+        getUserGateway
+            .execute()
+            .then(async (userData) => {
+                if (userData) {
+                    setUser({ ...userData })
                     setStatus({ isLoading: false, isLogged: true })
                 } else {
-                    throw new Error(res.statusText)
+                    throw new Error("Unauthorized")
                 }
             })
-            .catch(() => {
+            .catch((error) => {
+                console.log(error)
                 setStatus({ isLoading: false, isLogged: false })
+                setUser(null)
             })
-    }, [apiUrl])
+    }, [])
 
     return { status, user }
 }

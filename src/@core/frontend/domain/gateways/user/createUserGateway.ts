@@ -5,5 +5,5 @@ export interface UserData extends Pick<UserProps, "name" | "email" | "password">
 }
 
 export interface CreateUserGateway {
-    add(data: UserData): Promise<boolean>
+    create(data: UserData): Promise<boolean>
 }
