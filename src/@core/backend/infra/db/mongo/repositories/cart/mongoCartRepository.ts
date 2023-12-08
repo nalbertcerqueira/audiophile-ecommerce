@@ -4,9 +4,23 @@ import { MongoCartItem } from "../../models"
 import { mongoHelper } from "../../config/mongo-config"
 import { Cart } from "@/@core/shared/entities/cart/cart"
 import { GetCartByUserIdRepository } from "@/@core/backend/domain/repositories/cart/getCartByUserIdRepository"
+import {
+    OperationDetails,
+    RemoveCartItemRepository
+} from "@/@core/backend/domain/repositories/cart/removeCartItemRepository"
+import {
+    GetCartItemRepository,
+    UserCartItem
+} from "@/@core/backend/domain/repositories/cart/getCartItemRepository"
 
-export class MongoCartRepository implements GetCartByUserIdRepository, AddCartItemRepository {
-    public async getById(userId: string): Promise<Cart | null> {
+export class MongoCartRepository
+    implements
+        GetCartByUserIdRepository,
+        AddCartItemRepository,
+        GetCartItemRepository,
+        RemoveCartItemRepository
+{
+    public async getCartById(userId: string): Promise<Cart | null> {
         await mongoHelper.connect()
 
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
@@ -14,6 +28,20 @@ export class MongoCartRepository implements GetCartByUserIdRepository, AddCartIt
         const queryResult = await cartItemCollection.aggregate<CartProps>(cartQuery).toArray()
 
         return queryResult[0] ? new Cart(queryResult[0]) : null
+    }
+
+    public async getItem(userId: string, productId: string): Promise<UserCartItem | null> {
+        await mongoHelper.connect()
+
+        const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
+        const foundCartItem = await cartItemCollection.findOne({ userId, productId })
+
+        if (foundCartItem) {
+            const { productId, slug, name, quantity, price, userId } = foundCartItem
+            return { productId, slug, name, quantity, price, userId }
+        }
+
+        return null
     }
 
     public async addItem(userId: string, product: CartProduct): Promise<Cart> {
@@ -31,6 +59,32 @@ export class MongoCartRepository implements GetCartByUserIdRepository, AddCartIt
         const queryResult = await cartItemCollection.aggregate<CartProps>(cartQuery).toArray()
 
         return new Cart(queryResult[0])
+    }
+
+    public async removeItem(
+        userId: string,
+        operationInfo: OperationDetails
+    ): Promise<Cart | null> {
+        await mongoHelper.connect()
+
+        const { type, productId, quantity } = operationInfo
+        const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
+
+        if (type === "delete") {
+            await cartItemCollection.findOneAndDelete({ userId, productId })
+        }
+
+        if (type === "decrease") {
+            await cartItemCollection.findOneAndUpdate(
+                { userId, productId },
+                { $inc: { quantity: quantity * -1 } }
+            )
+        }
+
+        const cartQuery = this.getCartQuery(userId)
+        const queryResult = await cartItemCollection.aggregate<CartProps>(cartQuery).toArray()
+
+        return queryResult[0] ? new Cart(queryResult[0]) : null
     }
 
     private getCartQuery(userId: string) {
