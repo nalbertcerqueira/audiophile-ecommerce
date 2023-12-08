@@ -12,10 +12,12 @@ import {
     GetCartItemRepository,
     UserCartItem
 } from "@/@core/backend/domain/repositories/cart/getCartItemRepository"
+import { ClearCartRepository } from "@/@core/backend/domain/repositories/cart/clearCartRepository"
 
 export class MongoCartRepository
     implements
         GetCartRepository,
+        ClearCartRepository,
         AddCartItemRepository,
         GetCartItemRepository,
         RemoveCartItemRepository
@@ -28,6 +30,13 @@ export class MongoCartRepository
         const queryResult = await cartItemCollection.aggregate<CartProps>(cartQuery).toArray()
 
         return queryResult[0] ? new Cart(queryResult[0]) : null
+    }
+
+    public async clearCartById(userId: string): Promise<void> {
+        await mongoHelper.connect()
+
+        const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
+        await cartItemCollection.deleteMany({ userId })
     }
 
     public async getItem(userId: string, productId: string): Promise<UserCartItem | null> {
