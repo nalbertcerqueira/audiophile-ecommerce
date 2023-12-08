@@ -2,7 +2,7 @@ import { generateCustomZodErrors } from "@/@core/backend/infra/validators/zod/zo
 import { cartItemZodSchema } from "@/@core/shared/entities/cart/util"
 import { NextRequest, NextResponse } from "next/server"
 import { authorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authorizationFactory"
-import { addCartItemUseCase } from "@/@core/backend/main/factories/usecases/cart/addCartItemFactory"
+import { dbAddCartItemUseCase } from "@/@core/backend/main/factories/usecases/cart/dbAddCartItemFactory"
 import { CartItemInfo } from "@/@core/backend/domain/usecases/cart/protocols"
 
 export async function POST(req: NextRequest) {
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
 
         const { id } = foundUser.toJSON()
         const { productId, quantity } = body
-        const cart = await addCartItemUseCase.execute(id, { productId, quantity })
+        const cart = await dbAddCartItemUseCase.execute(id, { productId, quantity })
 
         if (!cart) {
             return NextResponse.json(

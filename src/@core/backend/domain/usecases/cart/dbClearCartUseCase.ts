@@ -1,7 +1,7 @@
 import { Cart } from "@/@core/shared/entities/cart/cart"
 import { ClearCartRepository } from "../../repositories/cart/clearCartRepository"
 
-export class ClearCartUseCase {
+export class DbClearCartUseCase {
     constructor(private readonly clearCartRepository: ClearCartRepository) {}
 
     public async execute(userId: string): Promise<Cart> {

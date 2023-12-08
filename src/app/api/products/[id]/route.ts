@@ -1,5 +1,5 @@
-import { ProductType } from "@/@core/backend/domain/repositories/product/getProductsRepository"
-import { getProductByIdUseCase } from "@/@core/backend/main/factories/usecases/product/getProductByIdFactory"
+import { ProductType } from "@/@core/backend/domain/repositories/product/protocols"
+import { dbGetProductByIdUseCase } from "@/@core/backend/main/factories/usecases/product/dbGetProductByIdFactory"
 import { NextRequest, NextResponse } from "next/server"
 
 interface Params {
@@ -9,7 +9,7 @@ interface Params {
 export async function GET(req: NextRequest, { params }: { params: Params }) {
     const productId = params.id
     const type = req.nextUrl.searchParams.get("type") as ProductType
-    const foundProduct = await getProductByIdUseCase.execute(productId, type)
+    const foundProduct = await dbGetProductByIdUseCase.execute(productId, type)
 
     if (!foundProduct) {
         return NextResponse.json(

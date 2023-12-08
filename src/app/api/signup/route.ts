@@ -1,5 +1,5 @@
 import { generateCustomZodErrors } from "@/@core/backend/infra/validators/zod/zod-helpers"
-import { addUserUseCase } from "@/@core/backend/main/factories/usecases/user/createUserFactory"
+import { dbAddUserUseCase } from "@/@core/backend/main/factories/usecases/user/dbAddUserFactory"
 import { NextRequest, NextResponse } from "next/server"
 import { passwordZodValidator, userZodSchema } from "@/@core/shared/entities/user/utils"
 
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
         if (validationResult.success) {
             const { name, email, password } = validationResult.data
-            const isUserCreated = await addUserUseCase.execute({ name, email, password })
+            const isUserCreated = await dbAddUserUseCase.execute({ name, email, password })
             if (isUserCreated) {
                 return NextResponse.json({ data: null }, { status: 201 })
             }

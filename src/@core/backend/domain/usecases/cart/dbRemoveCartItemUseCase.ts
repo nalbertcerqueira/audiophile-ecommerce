@@ -5,7 +5,7 @@ import { CartItemInfo } from "./protocols"
 import { CartProduct } from "@/@core/shared/entities/cart/cart"
 import { Cart } from "@/@core/shared/entities/cart/cart"
 
-export class RemoveCartItemUseCase {
+export class DbRemoveCartItemUseCase {
     constructor(
         private readonly getProductByIdRepository: GetProductByIdRepository,
         private readonly getCartItemRepository: GetCartItemRepository,

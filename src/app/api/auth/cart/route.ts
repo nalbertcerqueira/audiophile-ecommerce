@@ -1,6 +1,6 @@
 import { authorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authorizationFactory"
-import { clearCartUseCase } from "@/@core/backend/main/factories/usecases/cart/clearCartFactory"
-import { getCartUseCase } from "@/@core/backend/main/factories/usecases/cart/getCartFactory"
+import { dbClearCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbClearCartFactory"
+import { dbGetCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbGetCartFactory"
 
 import { NextRequest, NextResponse } from "next/server"
 
@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
 
             if (foundUser) {
                 const { id } = foundUser.toJSON()
-                const cart = await getCartUseCase.execute(id)
+                const cart = await dbGetCartUseCase.execute(id)
                 return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
             }
         }
@@ -40,7 +40,7 @@ export async function DELETE(req: NextRequest) {
 
             if (foundUser) {
                 const { id } = foundUser.toJSON()
-                const cart = await clearCartUseCase.execute(id)
+                const cart = await dbClearCartUseCase.execute(id)
 
                 return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
             }

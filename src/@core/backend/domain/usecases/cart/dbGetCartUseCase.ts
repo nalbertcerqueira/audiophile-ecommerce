@@ -1,7 +1,7 @@
 import { Cart } from "@/@core/shared/entities/cart/cart"
 import { GetCartRepository } from "../../repositories/cart/getCartRepository"
 
-export class GetCartUseCase {
+export class DbGetCartUseCase {
     constructor(private readonly getCartRepository: GetCartRepository) {}
 
     public async execute(userId: string): Promise<Cart> {

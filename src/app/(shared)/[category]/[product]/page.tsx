@@ -1,4 +1,4 @@
-import { getProductsByCategoryUseCase } from "@/@core/backend/main/factories/usecases/product/getProductsByCategoryFactory"
+import { dbGetProductsByCategoryUseCase } from "@/@core/backend/main/factories/usecases/product/dbGetProductsByCategoryFactory"
 import { ProductPageComponent } from "@/components/product/ProductPage"
 import { notFound } from "next/navigation"
 
@@ -14,7 +14,7 @@ interface PoductPageProps {
 }
 
 export async function generateStaticParams({ params }: { params: StaticParams }) {
-    const productsByCategory = await getProductsByCategoryUseCase.execute(params.category)
+    const productsByCategory = await dbGetProductsByCategoryUseCase.execute(params.category)
 
     return productsByCategory.map((product) => ({
         params: {
@@ -24,7 +24,7 @@ export async function generateStaticParams({ params }: { params: StaticParams })
 }
 
 export default async function ProductPage({ params }: PoductPageProps) {
-    const products = await getProductsByCategoryUseCase.execute(params.category)
+    const products = await dbGetProductsByCategoryUseCase.execute(params.category)
     const foundProduct = products.find((product) => product.slug === params.product)
 
     if (!foundProduct) {

@@ -3,7 +3,7 @@ import { ProductProps } from "../../entities/product/product"
 import { GetProductsRepository } from "../../repositories/product/getProductsRepository"
 import { ProductType } from "../../repositories/product/protocols"
 
-export class GetProductsUseCase {
+export class DbGetProductsUseCase {
     constructor(private readonly getProductsRepository: GetProductsRepository) {}
 
     public async execute(type: ProductType): Promise<ProductProps[] | CartProduct[]> {

@@ -5,7 +5,7 @@ import { TokenGeneratorService } from "../../services/tokenGeneratorService"
 
 type LoginData = Pick<UserProps, "email" | "password">
 
-export class LoginUseCase {
+export class DbSigninUseCase {
     constructor(
         private readonly secretKey: string,
         private readonly findUserByEmailRepository: FindUserByEmailRepository,

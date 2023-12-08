@@ -5,7 +5,7 @@ import { HashService } from "../../services/hashService"
 
 type UserData = Pick<UserProps, "email" | "name" | "password">
 
-export class AddUserUseCase {
+export class DbAddUserUseCase {
     constructor(
         private readonly findUserByEmailRepository: FindUserByEmailRepository,
         private readonly addUserRepository: AddUserRepository,

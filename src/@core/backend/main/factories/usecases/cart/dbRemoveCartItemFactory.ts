@@ -1,17 +1,17 @@
-import { RemoveCartItemUseCase } from "@/@core/backend/domain/usecases/cart/removeCartItemUseCase"
+import { DbRemoveCartItemUseCase } from "@/@core/backend/domain/usecases/cart/dbRemoveCartItemUseCase"
 import { MongoCartRepository } from "@/@core/backend/infra/db/mongo/repositories/cart/mongoCartRepository"
 import { MongoProductRepository } from "@/@core/backend/infra/db/mongo/repositories/product/mongoProductRepository"
 
-function createRemoveCartItemUseCase() {
+function createDbRemoveCartItemUseCase() {
     const mongoProductRepository = new MongoProductRepository()
     const mongoCartRepository = new MongoCartRepository()
-    const removeCartItemUseCase = new RemoveCartItemUseCase(
+    const dbRemoveCartItemUseCase = new DbRemoveCartItemUseCase(
         mongoProductRepository,
         mongoCartRepository,
         mongoCartRepository
     )
 
-    return removeCartItemUseCase
+    return dbRemoveCartItemUseCase
 }
 
-export const removeCartItemUseCase = createRemoveCartItemUseCase()
+export const dbRemoveCartItemUseCase = createDbRemoveCartItemUseCase()

@@ -1,6 +1,6 @@
 import { generateCustomZodErrors } from "@/@core/backend/infra/validators/zod/zod-helpers"
 import { authorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authorizationFactory"
-import { removeCartItemUseCase } from "@/@core/backend/main/factories/usecases/cart/removeCartItemFactory"
+import { dbRemoveCartItemUseCase } from "@/@core/backend/main/factories/usecases/cart/dbRemoveCartItemFactory"
 import { cartItemZodSchema } from "@/@core/shared/entities/cart/util"
 import { NextRequest, NextResponse } from "next/server"
 
@@ -29,7 +29,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
         const productId = params.id
         const quantity = body.quantity as number
 
-        const cart = await removeCartItemUseCase.execute(userId, { productId, quantity })
+        const cart = await dbRemoveCartItemUseCase.execute(userId, { productId, quantity })
 
         if (!cart) {
             return NextResponse.json(

@@ -3,7 +3,7 @@ import { Cart, CartProduct } from "@/@core/shared/entities/cart/cart"
 import { GetProductByIdRepository } from "../../repositories/product/getProductByIdRepository"
 import { CartItemInfo } from "./protocols"
 
-export class AddCartItemUseCase {
+export class DbAddCartItemUseCase {
     constructor(
         private readonly getProductByIdRepository: GetProductByIdRepository,
         private readonly addCartItemRepository: AddCartItemRepository

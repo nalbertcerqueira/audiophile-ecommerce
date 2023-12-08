@@ -3,7 +3,7 @@ import { GetProductByIdRepository } from "../../repositories/product/getProductB
 import { ProductType } from "../../repositories/product/protocols"
 import { ProductProps } from "../../entities/product/product"
 
-export class GetProductByIdUseCase {
+export class DbGetProductByIdUseCase {
     constructor(private readonly getProductByIdRepository: GetProductByIdRepository) {}
 
     public async execute(

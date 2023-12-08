@@ -1,6 +1,6 @@
 import { generateCustomZodErrors } from "@/@core/backend/infra/validators/zod/zod-helpers"
 import { userZodSchema } from "@/@core/shared/entities/user/utils"
-import { loginUseCase } from "@/@core/backend/main/factories/usecases/auth/loginFactory"
+import { dbSigninUseCase } from "@/@core/backend/main/factories/usecases/auth/dbSigninFactory"
 import { NextRequest, NextResponse } from "next/server"
 
 const loginValidator = userZodSchema.pick({ email: true, password: true })
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ errors }, { status: 400 })
         }
 
-        const token = await loginUseCase.execute(validationResult.data)
+        const token = await dbSigninUseCase.execute(validationResult.data)
         if (token) {
             return NextResponse.json({ data: token }, { status: 200 })
         }

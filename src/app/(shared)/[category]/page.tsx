@@ -1,5 +1,5 @@
 import { CategoryPageComponent } from "@/components/category/CategoryPage"
-import { getProductsByCategoryUseCase } from "@/@core/backend/main/factories/usecases/product/getProductsByCategoryFactory"
+import { dbGetProductsByCategoryUseCase } from "@/@core/backend/main/factories/usecases/product/dbGetProductsByCategoryFactory"
 import { notFound } from "next/navigation"
 
 interface CategoryPageProps {
@@ -9,7 +9,7 @@ interface CategoryPageProps {
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-    const products = await getProductsByCategoryUseCase.execute(params.category)
+    const products = await dbGetProductsByCategoryUseCase.execute(params.category)
 
     if (!products.length) {
         return notFound()

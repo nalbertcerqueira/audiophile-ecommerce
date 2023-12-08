@@ -1,16 +1,16 @@
 import { MongoCartRepository } from "@/@core/backend/infra/db/mongo/repositories/cart/mongoCartRepository"
-import { AddCartItemUseCase } from "@/@core/backend/domain/usecases/cart/addCartItemUseCase"
+import { DbAddCartItemUseCase } from "@/@core/backend/domain/usecases/cart/dbAddCartItemUseCase"
 import { MongoProductRepository } from "@/@core/backend/infra/db/mongo/repositories/product/mongoProductRepository"
 
-export function createAddCartItemUseCase() {
+export function createDbAddCartItemUseCase() {
     const mongoProductRepository = new MongoProductRepository()
     const mongoCartRepository = new MongoCartRepository()
-    const addCartItemUseCase = new AddCartItemUseCase(
+    const dbAddCartItemUseCase = new DbAddCartItemUseCase(
         mongoProductRepository,
         mongoCartRepository
     )
 
-    return addCartItemUseCase
+    return dbAddCartItemUseCase
 }
 
-export const addCartItemUseCase = createAddCartItemUseCase()
+export const dbAddCartItemUseCase = createDbAddCartItemUseCase()
