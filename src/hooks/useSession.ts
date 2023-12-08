@@ -6,13 +6,13 @@ interface SessionStatus {
     isLoading: boolean
 }
 
-export function useSession() {
+export function useSession(apiUrl: string) {
     const [status, setStatus] = useState<SessionStatus>({ isLoading: true, isLogged: false })
     const [user, setUser] = useState<Pick<UserProps, "name" | "email"> | null>(null)
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken")
-        fetch("/api/auth/user", { headers: { Authorization: `Bearer ${token}` } })
+        fetch(apiUrl, { headers: { Authorization: `Bearer ${token}` } })
             .then(async (res) => {
                 if (res.ok) {
                     const { data } = await res.json()
@@ -25,7 +25,7 @@ export function useSession() {
             .catch(() => {
                 setStatus({ isLoading: false, isLogged: false })
             })
-    }, [])
+    }, [apiUrl])
 
     return { status, user }
 }

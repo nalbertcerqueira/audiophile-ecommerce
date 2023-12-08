@@ -14,15 +14,15 @@ interface ProtectedRouteProps {
 export function AuthRedirectionRoute(props: ProtectedRouteProps) {
     const { fallback, routeToRedirect, routeType } = props
     const { isLoading, isLogged } = useContext(AuthContext)
-    const { push } = useRouter()
+    const { replace } = useRouter()
 
     useEffect(() => {
         if (routeType === "protected") {
-            if (!isLoading && !isLogged) push(routeToRedirect)
+            if (!isLoading && !isLogged) replace(routeToRedirect)
         } else {
-            if (!isLoading && isLogged) push(routeToRedirect)
+            if (!isLoading && isLogged) replace(routeToRedirect)
         }
-    }, [isLoading, isLogged, routeToRedirect, routeType, push])
+    }, [isLoading, isLogged, routeToRedirect, routeType, replace])
 
     switch (routeType) {
         case "protected":
