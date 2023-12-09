@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
             )
         }
 
-        return NextResponse.json({ teste: cart.toJSON() }, { status: 200 })
+        return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
     } catch (error: any) {
         return NextResponse.json({ errors: [error.message] }, { status: 500 })
     }

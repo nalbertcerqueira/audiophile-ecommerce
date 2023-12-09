@@ -45,7 +45,7 @@ export class HttpCartGateway
 
     public async addItem(itemId: string, quantity: number): Promise<Cart> {
         const accessToken = localStorage.getItem("accessToken")
-        const fullUrl = `${this.baseApiUrl}/cart`
+        const fullUrl = `${this.baseApiUrl}/cart/items`
         const body = { productId: itemId, quantity }
 
         const cartData = await this.submitRequest({
