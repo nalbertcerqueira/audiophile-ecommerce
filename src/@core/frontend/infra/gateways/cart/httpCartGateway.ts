@@ -5,6 +5,13 @@ import { AddCartItemGateway } from "@/@core/frontend/domain/gateways/cart/addCar
 import { RemoveCartItemGateway } from "@/@core/frontend/domain/gateways/cart/removeCartItemGateway"
 import { ClearCartGateway } from "@/@core/frontend/domain/gateways/cart/clearCartGateway"
 
+export interface RequestDetails {
+    routeUrl: string
+    method: "GET" | "POST" | "PUT" | "DELETE"
+    body?: Record<string, any>
+    headers?: HeadersInit
+}
+
 export class HttpCartGateway
     implements GetCartGateway, AddCartItemGateway, RemoveCartItemGateway, ClearCartGateway
 {
@@ -14,42 +21,26 @@ export class HttpCartGateway
         const accessToken = localStorage.getItem("accessToken")
         const fullUrl = `${this.baseApiUrl}/cart`
 
-        const response = await fetch(fullUrl, {
+        const cartData = await this.submitRequest({
+            method: "GET",
+            routeUrl: fullUrl,
             headers: { Authorization: `Bearer ${accessToken}` }
         })
 
-        const responseData = await response.json()
-
-        if (!response.ok && responseData.errors) {
-            const { errors } = responseData as HttpGatewayResponse<"failed">
-            throw new Error(errors.join(","))
-        }
-
-        const { data } = responseData as HttpGatewayResponse<"success">
-        return new Cart(data)
+        return new Cart(cartData)
     }
 
     public async clearCart(): Promise<Cart> {
         const accessToken = localStorage.getItem("accessToken")
         const fullUrl = `${this.baseApiUrl}/cart`
 
-        const response = await fetch(fullUrl, {
+        const cartData = await this.submitRequest({
             method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json"
-            }
+            routeUrl: fullUrl,
+            headers: { Authorization: `Bearer ${accessToken}` }
         })
 
-        const responseData = await response.json()
-
-        if (!response.ok && responseData.errors) {
-            const { errors } = responseData as HttpGatewayResponse<"failed">
-            throw new Error(errors.join(","))
-        }
-
-        const { data } = responseData as HttpGatewayResponse<"success">
-        return new Cart(data)
+        return new Cart(cartData)
     }
 
     public async addItem(itemId: string, quantity: number): Promise<Cart> {
@@ -57,24 +48,17 @@ export class HttpCartGateway
         const fullUrl = `${this.baseApiUrl}/cart`
         const body = { productId: itemId, quantity }
 
-        const response = await fetch(fullUrl, {
+        const cartData = await this.submitRequest({
             method: "POST",
-            body: JSON.stringify(body),
+            routeUrl: fullUrl,
+            body: body,
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`
             }
         })
 
-        const responseData = await response.json()
-
-        if (!response.ok && responseData.errors) {
-            const { errors } = responseData as HttpGatewayResponse<"failed">
-            throw new Error(errors.join(","))
-        }
-
-        const { data } = responseData as HttpGatewayResponse<"success">
-        return new Cart(data)
+        return new Cart(cartData)
     }
 
     public async removeItem(itemId: string, quantity: number): Promise<Cart> {
@@ -82,13 +66,26 @@ export class HttpCartGateway
         const fullUrl = `${this.baseApiUrl}/cart/items/${itemId}`
         const body = { quantity }
 
-        const response = await fetch(fullUrl, {
+        const cartData = await this.submitRequest({
             method: "DELETE",
-            body: JSON.stringify(body),
+            routeUrl: fullUrl,
+            body: body,
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`
             }
+        })
+
+        return new Cart(cartData)
+    }
+
+    private async submitRequest(request: RequestDetails): Promise<any> {
+        const { routeUrl, method, headers, body } = request
+
+        const response = await fetch(routeUrl, {
+            method: method,
+            body: body && JSON.stringify(body),
+            headers: headers
         })
 
         const responseData = await response.json()
@@ -99,6 +96,6 @@ export class HttpCartGateway
         }
 
         const { data } = responseData as HttpGatewayResponse<"success">
-        return new Cart(data)
+        return data
     }
 }
