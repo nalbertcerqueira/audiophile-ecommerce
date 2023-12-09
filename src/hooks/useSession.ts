@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { UserProps } from "@/@core/shared/entities/user/user"
-import { getUserGateway } from "@/@core/frontend/main/usecases/user/getUserFactory"
+import { getUserUseCase } from "@/@core/frontend/main/usecases/user/getUserFactory"
 
 interface SessionStatus {
     isLogged: boolean
@@ -12,7 +12,7 @@ export function useSession() {
     const [user, setUser] = useState<Pick<UserProps, "name" | "email"> | null>(null)
 
     useEffect(() => {
-        getUserGateway
+        getUserUseCase
             .execute()
             .then(async (userData) => {
                 if (userData) {
@@ -22,8 +22,7 @@ export function useSession() {
                     throw new Error("Unauthorized")
                 }
             })
-            .catch((error) => {
-                console.log(error)
+            .catch(() => {
                 setStatus({ isLoading: false, isLogged: false })
                 setUser(null)
             })

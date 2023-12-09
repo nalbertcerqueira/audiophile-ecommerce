@@ -4,7 +4,7 @@ import { HttpGatewayResponse } from "../protocols"
 import { AddCartItemGateway } from "@/@core/frontend/domain/gateways/cart/addCartItemGateway"
 import { RemoveCartItemGateway } from "@/@core/frontend/domain/gateways/cart/removeCartItemGateway"
 import { ClearCartGateway } from "@/@core/frontend/domain/gateways/cart/clearCartGateway"
-
+import { UnauthorizedError } from "@/@core/backend/presentation/errors"
 export interface RequestDetails {
     routeUrl: string
     method: "GET" | "POST" | "PUT" | "DELETE"
@@ -43,10 +43,10 @@ export class HttpCartGateway
         return new Cart(cartData)
     }
 
-    public async addItem(itemId: string, quantity: number): Promise<Cart> {
+    public async addItem(productId: string, quantity: number): Promise<Cart> {
         const accessToken = localStorage.getItem("accessToken")
         const fullUrl = `${this.baseApiUrl}/cart/items`
-        const body = { productId: itemId, quantity }
+        const body = { productId: productId, quantity }
 
         const cartData = await this.submitRequest({
             method: "POST",
@@ -61,9 +61,9 @@ export class HttpCartGateway
         return new Cart(cartData)
     }
 
-    public async removeItem(itemId: string, quantity: number): Promise<Cart> {
+    public async removeItem(productId: string, quantity: number): Promise<Cart> {
         const accessToken = localStorage.getItem("accessToken")
-        const fullUrl = `${this.baseApiUrl}/cart/items/${itemId}`
+        const fullUrl = `${this.baseApiUrl}/cart/items/${productId}`
         const body = { quantity }
 
         const cartData = await this.submitRequest({
@@ -89,6 +89,10 @@ export class HttpCartGateway
         })
 
         const responseData = await response.json()
+
+        if (response.status === 401) {
+            throw new UnauthorizedError("User unauthorized")
+        }
 
         if (!response.ok && responseData.errors) {
             const { errors } = responseData as HttpGatewayResponse<"failed">

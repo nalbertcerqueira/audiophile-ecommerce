@@ -3,9 +3,9 @@ import { GetUserUseCase } from "@/@core/frontend/usecases/user/getUserUseCase"
 
 function createGetUserUseCase() {
     const httpUserGateway = new HttpUserGateway()
-    const getUserGateway = new GetUserUseCase(httpUserGateway)
+    const getUserUseCase = new GetUserUseCase(httpUserGateway)
 
-    return getUserGateway
+    return getUserUseCase
 }
 
-export const getUserGateway = createGetUserUseCase()
+export const getUserUseCase = createGetUserUseCase()

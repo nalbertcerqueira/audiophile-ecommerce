@@ -19,7 +19,7 @@ export function AddProductAction({ productId }: { productId: string }) {
                 }
             />
             <button
-                onClick={() => addItem({ productId, quantity: count })}
+                onClick={() => addItem(productId, count)}
                 className="btn btn--primary"
                 type="button"
             >

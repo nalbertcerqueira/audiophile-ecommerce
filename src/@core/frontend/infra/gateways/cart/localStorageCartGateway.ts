@@ -50,11 +50,11 @@ export class LocalStorageCartGateway
         return emptyCart
     }
 
-    public async addItem(itemId: string, quantity: number): Promise<Cart> {
+    public async addItem(productId: string, quantity: number): Promise<Cart> {
         const cart = (await this.get()) || Cart.empty()
 
-        if (!cart.addItem(itemId, quantity)) {
-            const response = await fetch(`/api/products/${itemId}?type=shortProduct`)
+        if (!cart.addItem(productId, quantity)) {
+            const response = await fetch(`/api/products/${productId}?type=shortProduct`)
 
             if (response.ok) {
                 const cartItem = (await response.json()) as { data: CartProduct }
@@ -67,10 +67,10 @@ export class LocalStorageCartGateway
         return cart
     }
 
-    public async removeItem(itemId: string, quantity: number): Promise<Cart> {
+    public async removeItem(productId: string, quantity: number): Promise<Cart> {
         const cart = (await this.get()) || Cart.empty()
 
-        cart.removeItem(itemId, quantity)
+        cart.removeItem(productId, quantity)
         cart.updateTotalAndCount()
 
         this.save(cart.toJSON().items)

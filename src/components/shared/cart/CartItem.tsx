@@ -37,7 +37,7 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
                 <Counter
                     count={quantity}
                     decrement={() => removeItem(productId, 1)}
-                    increment={() => addItem({ productId, quantity: 1 })}
+                    increment={() => addItem(productId, 1)}
                     className="cart-item__counter"
                 />
             )}

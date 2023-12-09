@@ -1,52 +1,98 @@
 "use client"
 
+import { PropsWithChildren, createContext, useState, useEffect, useContext } from "react"
 import { CartProps } from "@/@core/shared/entities/cart/cart"
-import { localStorageGetCartUseCase } from "@/@core/frontend/main/usecases/cart/getCartFactory"
-import { localStorageClearCartUseCase } from "@/@core/frontend/main/usecases/cart/clearCartFactory"
-import { localStorageAddCartItemUseCase } from "@/@core/frontend/main/usecases/cart/addCartItemFactory"
-import { localStorageRemoveCartItemUseCase } from "@/@core/frontend/main/usecases/cart/removeCartItemFactory"
-import { PropsWithChildren, createContext, useState, useEffect } from "react"
-
-type ItemData = {
-    productId: string
-    quantity: number
-}
+import { AuthContext } from "./AuthContext"
+import {
+    httpGetCartUseCase,
+    localStorageGetCartUseCase
+} from "@/@core/frontend/main/usecases/cart/getCartFactory"
+import {
+    httpClearCartUseCase,
+    localStorageClearCartUseCase
+} from "@/@core/frontend/main/usecases/cart/clearCartFactory"
+import {
+    httpAddCartItemUseCase,
+    localStorageAddCartItemUseCase
+} from "@/@core/frontend/main/usecases/cart/addCartItemFactory"
+import {
+    httpRemoveCartItemUseCase,
+    localStorageRemoveCartItemUseCase
+} from "@/@core/frontend/main/usecases/cart/removeCartItemFactory"
 
 interface CartContextProps {
     cart: CartProps
-    addItem: (itemData: ItemData) => void
-    removeItem: (itemId: string, quantity: number) => void
+    addItem: (productId: string, quantity: number) => void
+    removeItem: (productId: string, quantity: number) => void
     clearCart: () => void
 }
 
 const initialState = { userId: "0", itemCount: 0, totalSpent: 0, items: [] }
+
 export const CartContext = createContext<CartContextProps>({} as CartContextProps)
 
 export function CartProvider({ children }: PropsWithChildren) {
     const [cart, setCart] = useState<CartProps>(initialState)
+    const { isLogged, isLoading } = useContext(AuthContext)
 
     useEffect(() => {
         getCart()
-    }, [])
+        async function getCart() {
+            const useCase = isLogged ? httpGetCartUseCase : localStorageGetCartUseCase
+            try {
+                if (!isLoading) {
+                    const cart = await useCase.execute()
+                    setCart(cart.toJSON())
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }, [isLogged, isLoading])
 
-    async function getCart() {
-        const newCart = await localStorageGetCartUseCase.execute()
-        setCart(newCart.toJSON())
+    async function addItem(productId: string, quantity: number) {
+        const useCase = isLogged ? httpAddCartItemUseCase : localStorageAddCartItemUseCase
+        try {
+            if (!isLoading) {
+                const cart = await useCase.execute({ productId, quantity })
+                setCart(cart.toJSON())
+            }
+        } catch (error: any) {
+            if (error.name === "Unauthorized error") {
+                location.reload()
+            }
+        }
     }
 
-    async function addItem(itemInfo: ItemData) {
-        const newCart = await localStorageAddCartItemUseCase.execute(itemInfo)
-        setCart(newCart.toJSON())
-    }
+    async function removeItem(productId: string, quantity: number) {
+        const useCase = isLogged
+            ? httpRemoveCartItemUseCase
+            : localStorageRemoveCartItemUseCase
 
-    async function removeItem(itemId: string, quantity: number) {
-        const newCart = await localStorageRemoveCartItemUseCase.execute(itemId, quantity)
-        setCart(newCart.toJSON())
+        try {
+            if (!isLoading) {
+                const cart = await useCase.execute({ productId, quantity })
+                setCart(cart.toJSON())
+            }
+        } catch (error: any) {
+            if (error.name === "Unauthorized error") {
+                location.reload()
+            }
+        }
     }
 
     async function clearCart() {
-        const emptyCart = await localStorageClearCartUseCase.execute()
-        setCart(emptyCart.toJSON())
+        const useCase = isLogged ? httpClearCartUseCase : localStorageClearCartUseCase
+        try {
+            if (!isLoading) {
+                const cart = await useCase.execute()
+                setCart(cart.toJSON())
+            }
+        } catch (error: any) {
+            if (error.name === "Unauthorized error") {
+                location.reload()
+            }
+        }
     }
 
     return (
