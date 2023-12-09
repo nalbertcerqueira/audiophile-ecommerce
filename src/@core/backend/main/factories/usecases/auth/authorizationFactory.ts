@@ -4,7 +4,7 @@ import { MongoUserRepository } from "@/@core/backend/infra/db/mongo/repositories
 
 const secretKey = process.env.SECRET_KEY as string
 
-export function createAuthorizationUseCase(secretKey: string): AuthorizationUseCase {
+function createAuthorizationUseCase(secretKey: string): AuthorizationUseCase {
     const mongoUserRepository = new MongoUserRepository()
 
     const authorizationUseCase = new AuthorizationUseCase(
