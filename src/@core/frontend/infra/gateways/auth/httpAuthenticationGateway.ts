@@ -5,14 +5,15 @@ import {
 import { HttpGatewayResponse } from "../protocols"
 
 export class HttpAuthenticationGateway implements AuthenticationGateway {
-    constructor(private readonly apiUrl: string) {}
+    constructor(private readonly baseApiUrl: string) {}
 
     public async authenticateUser(authData: AuthData): Promise<string | null> {
-        const headers: HeadersInit = { "Content-Type": "application/json" }
-        const response = await fetch(this.apiUrl, {
+        const fullUrl = `${this.baseApiUrl}/login`
+
+        const response = await fetch(fullUrl, {
             method: "POST",
             body: JSON.stringify(authData),
-            headers
+            headers: { "Content-Type": "application/json" }
         })
 
         const responseData = await response.json()

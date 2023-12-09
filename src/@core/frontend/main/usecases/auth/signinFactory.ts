@@ -8,4 +8,4 @@ function createSigninUseCase(apiUrl: string): SigninUseCase {
     return signinUseCase
 }
 
-export const signinUseCase = createSigninUseCase("/api/login")
+export const signinUseCase = createSigninUseCase("/api")

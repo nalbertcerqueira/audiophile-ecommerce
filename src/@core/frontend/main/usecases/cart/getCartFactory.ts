@@ -1,9 +1,14 @@
-import { localStorageCartGateway } from "../../gateways/cartGatewayFactory"
+import { httpCartGateway, localStorageCartGateway } from "../../gateways/cartGatewayFactory"
 import { GetCartUseCase } from "../../../usecases/cart/getCartUseCase"
 
-export function createGetCartUseCase() {
-    const getCartUseCase = new GetCartUseCase(localStorageCartGateway)
-    return getCartUseCase
+function createLocalStorageGetCartUseCase() {
+    return new GetCartUseCase(localStorageCartGateway)
 }
 
-export const getCartUseCase = createGetCartUseCase()
+function createHttpGetCartUseCase() {
+    return new GetCartUseCase(httpCartGateway)
+}
+
+export const localStorageGetCartUseCase = createLocalStorageGetCartUseCase()
+
+export const httpGetCartUseCase = createHttpGetCartUseCase()

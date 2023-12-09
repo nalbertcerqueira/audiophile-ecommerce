@@ -1,10 +1,10 @@
 "use client"
 
 import { CartProps } from "@/@core/shared/entities/cart/cart"
-import { getCartUseCase } from "@/@core/frontend/main/usecases/cart/getCartFactory"
-import { clearCartUseCase } from "@/@core/frontend/main/usecases/cart/clearCartFactory"
-import { addCartItemUseCase } from "@/@core/frontend/main/usecases/cart/addCartItemFactory"
-import { removeCartItemUseCase } from "@/@core/frontend/main/usecases/cart/removeCartItemFactory"
+import { localStorageGetCartUseCase } from "@/@core/frontend/main/usecases/cart/getCartFactory"
+import { localStorageClearCartUseCase } from "@/@core/frontend/main/usecases/cart/clearCartFactory"
+import { localStorageAddCartItemUseCase } from "@/@core/frontend/main/usecases/cart/addCartItemFactory"
+import { localStorageRemoveCartItemUseCase } from "@/@core/frontend/main/usecases/cart/removeCartItemFactory"
 import { PropsWithChildren, createContext, useState, useEffect } from "react"
 
 type ItemData = {
@@ -30,22 +30,22 @@ export function CartProvider({ children }: PropsWithChildren) {
     }, [])
 
     async function getCart() {
-        const newCart = await getCartUseCase.execute()
+        const newCart = await localStorageGetCartUseCase.execute()
         setCart(newCart.toJSON())
     }
 
     async function addItem(itemInfo: ItemData) {
-        const newCart = await addCartItemUseCase.execute(itemInfo)
+        const newCart = await localStorageAddCartItemUseCase.execute(itemInfo)
         setCart(newCart.toJSON())
     }
 
     async function removeItem(itemId: string, quantity: number) {
-        const newCart = await removeCartItemUseCase.execute(itemId, quantity)
+        const newCart = await localStorageRemoveCartItemUseCase.execute(itemId, quantity)
         setCart(newCart.toJSON())
     }
 
     async function clearCart() {
-        const emptyCart = await clearCartUseCase.execute()
+        const emptyCart = await localStorageClearCartUseCase.execute()
         setCart(emptyCart.toJSON())
     }
 
