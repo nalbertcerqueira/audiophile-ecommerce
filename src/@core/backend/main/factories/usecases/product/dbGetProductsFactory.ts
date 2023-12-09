@@ -1,11 +1,8 @@
+import { mongoProductRepository } from "../../repositories/productRepositoryFactory"
 import { DbGetProductsUseCase } from "../../../../domain/usecases/product/dbGetProductsUseCase"
-import { MongoProductRepository } from "../../../../infra/db/mongo/repositories/product/mongoProductRepository"
 
 function createDbGetProductsUseCase(): DbGetProductsUseCase {
-    const mongoProductsRepository = new MongoProductRepository()
-    const getDbProductsUseCase = new DbGetProductsUseCase(mongoProductsRepository)
-
-    return getDbProductsUseCase
+    return new DbGetProductsUseCase(mongoProductRepository)
 }
 
 export const getDbProductsUseCase = createDbGetProductsUseCase()

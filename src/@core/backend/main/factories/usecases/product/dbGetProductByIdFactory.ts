@@ -1,11 +1,8 @@
+import { mongoProductRepository } from "../../repositories/productRepositoryFactory"
 import { DbGetProductByIdUseCase } from "@/@core/backend/domain/usecases/product/dbGetProductByIdUseCase"
-import { MongoProductRepository } from "@/@core/backend/infra/db/mongo/repositories/product/mongoProductRepository"
 
 function createDbGetProductByIdUseCase() {
-    const mongoProductRepository = new MongoProductRepository()
-    const dbGetProductByIdUseCase = new DbGetProductByIdUseCase(mongoProductRepository)
-
-    return dbGetProductByIdUseCase
+    return new DbGetProductByIdUseCase(mongoProductRepository)
 }
 
 export const dbGetProductByIdUseCase = createDbGetProductByIdUseCase()
