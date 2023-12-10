@@ -12,7 +12,7 @@ export class JwtTokenService implements TokenGeneratorService, TokenVerifierServ
         const exp = iat + this.duration
 
         const token = await new SignJWT({ ...payload })
-            .setProtectedHeader({ alg: "HS256", typ: "JWT", enc: undefined })
+            .setProtectedHeader({ alg: "HS256", typ: "JWT" })
             .setExpirationTime(exp)
             .setNotBefore(iat)
             .setIssuedAt(iat)
@@ -24,7 +24,7 @@ export class JwtTokenService implements TokenGeneratorService, TokenVerifierServ
     public async verify(token: string, secretKey: string): Promise<TokenPayload | null> {
         try {
             const encodedKey = new TextEncoder().encode(secretKey)
-            const { payload } = await jwtVerify(token, encodedKey)
+            const { payload } = await jwtVerify(token, encodedKey, { algorithms: ["HS256"] })
 
             return { id: payload.id }
         } catch {
