@@ -17,29 +17,32 @@ export function LoginPageComponent() {
         register,
         handleSubmit,
         setError,
-        formState: { errors, isSubmitting }
+        formState: { errors, isSubmitting, isSubmitSuccessful }
     } = useForm<AuthFormFields<"login">>({
         mode: "onSubmit",
         reValidateMode: "onSubmit",
         resolver: customZodResolver(loginSchema)
     })
 
+    const isFormBlocked = isSubmitting || isSubmitSuccessful
+
     async function handleSuccessfulSubmit(data: AuthFormFields<"login">) {
+        if (isFormBlocked) return
+
         try {
-            if (!isSubmitting) {
-                const token = await signinUseCase.execute(data)
-                if (token) {
-                    return localStorage.setItem("accessToken", token)
-                }
-                return setError("password", { message: "Invalid email or password" })
+            const token = await signinUseCase.execute(data)
+            if (token) {
+                localStorage.setItem("accessToken", token)
+                return setTimeout(() => location.reload(), 1000)
             }
+            setError("password", { message: "Invalid email or password" })
         } catch (error: any) {
             console.log(error)
         }
     }
 
     async function handleFailedSubmit(errors: FieldErrors<AuthFormFields<"login">>) {
-        if (!isSubmitting) {
+        if (!isFormBlocked) {
             console.log(errors)
         }
     }
@@ -48,22 +51,22 @@ export function LoginPageComponent() {
         <div className="form-container">
             <h2 className="form-container__title">Sign-in</h2>
             <div className="form-container__third-party">
-                <GoogleLoginButton isSubmitting={isSubmitting}>
+                <GoogleLoginButton isSubmitting={isFormBlocked}>
                     CONTINUE WITH GOOGLE
                 </GoogleLoginButton>
-                <AppleLoginButton isSubmitting={isSubmitting}>
+                <AppleLoginButton isSubmitting={isFormBlocked}>
                     CONTINUE WITH APPLE
                 </AppleLoginButton>
             </div>
             <div className="form-container__division">Or</div>
             <AuthForm
                 submitBtn="LOGIN"
-                isSubmitting={isSubmitting}
+                isSubmitting={isFormBlocked}
                 submitHandler={handleSubmit(handleSuccessfulSubmit, handleFailedSubmit)}
             >
                 <Input
                     {...register("email")}
-                    disabled={isSubmitting}
+                    disabled={isFormBlocked}
                     type="text"
                     autocomplete="email"
                     id="email"
@@ -73,7 +76,7 @@ export function LoginPageComponent() {
                 />
                 <Input
                     {...register("password")}
-                    disabled={isSubmitting}
+                    disabled={isFormBlocked}
                     name="password"
                     type="password"
                     autocomplete="current-password"

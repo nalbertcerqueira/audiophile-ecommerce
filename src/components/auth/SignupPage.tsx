@@ -15,28 +15,31 @@ export function SignupPageComponent() {
         register,
         handleSubmit,
         setError,
-        formState: { errors, isSubmitting }
+        formState: { errors, isSubmitting, isSubmitSuccessful }
     } = useForm<AuthFormFields<"signup">>({
         mode: "onSubmit",
         reValidateMode: "onSubmit",
         resolver: customZodResolver(signupSchema)
     })
 
+    const isFormBlocked = isSubmitting || isSubmitSuccessful
+
     async function handleSuccessfulSubmit(formData: AuthFormFields<"signup">) {
+        if (isFormBlocked) return
+
         try {
-            if (!isSubmitting) {
-                const isUserCreated = await signupUseCase.execute(formData)
-                if (!isUserCreated) {
-                    return setError("email", { message: "This email is already registered" })
-                }
+            const isUserCreated = await signupUseCase.execute(formData)
+            if (!isUserCreated) {
+                return setError("email", { message: "This email is already registered" })
             }
+            setTimeout(() => location.assign("/login"), 1000)
         } catch (error: any) {
             console.log(error)
         }
     }
 
     async function handleFailedSubmit(errors: FieldErrors<AuthFormFields<"signup">>) {
-        if (!isSubmitting) {
+        if (!isFormBlocked) {
             console.log(errors)
         }
     }
@@ -46,12 +49,12 @@ export function SignupPageComponent() {
             <h2 className="form-container__title">Sign-up</h2>
             <AuthForm
                 submitBtn="SIGN UP"
-                isSubmitting={isSubmitting}
+                isSubmitting={isFormBlocked}
                 submitHandler={handleSubmit(handleSuccessfulSubmit, handleFailedSubmit)}
             >
                 <Input
                     {...register("name")}
-                    disabled={isSubmitting}
+                    disabled={isFormBlocked}
                     type="text"
                     autocomplete="name"
                     id="name"
@@ -61,7 +64,7 @@ export function SignupPageComponent() {
                 />
                 <Input
                     {...register("email")}
-                    disabled={isSubmitting}
+                    disabled={isFormBlocked}
                     type="text"
                     autocomplete="email"
                     id="email"
@@ -71,7 +74,7 @@ export function SignupPageComponent() {
                 />
                 <Input
                     {...register("password")}
-                    disabled={isSubmitting}
+                    disabled={isFormBlocked}
                     name="password"
                     type="password"
                     autocomplete="new-password"
@@ -82,7 +85,7 @@ export function SignupPageComponent() {
                 />
                 <Input
                     {...register("passwordConfirmation")}
-                    disabled={isSubmitting}
+                    disabled={isFormBlocked}
                     name="passwordConfirmation"
                     type="password"
                     autocomplete="new-password"
