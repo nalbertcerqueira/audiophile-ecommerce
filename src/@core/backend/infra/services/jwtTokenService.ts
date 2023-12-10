@@ -4,10 +4,13 @@ import { SignJWT, jwtVerify } from "jose"
 import { TokenPayload, TokenVerifierService } from "../../domain/services/tokenVerifierService"
 
 export class JwtTokenService implements TokenGeneratorService, TokenVerifierService {
-    constructor(private readonly duration: number) {}
+    constructor(
+        private readonly duration: number,
+        private readonly secretKey: string
+    ) {}
 
-    public async generate(payload: Record<string, any>, secretKey: string): Promise<string> {
-        const encodedKey = new TextEncoder().encode(secretKey)
+    public async generate(payload: Record<string, any>): Promise<string> {
+        const encodedKey = new TextEncoder().encode(this.secretKey)
         const iat = Math.floor(Date.now() / 1000)
         const exp = iat + this.duration
 
@@ -21,9 +24,9 @@ export class JwtTokenService implements TokenGeneratorService, TokenVerifierServ
         return token
     }
 
-    public async verify(token: string, secretKey: string): Promise<TokenPayload | null> {
+    public async verify(token: string): Promise<TokenPayload | null> {
         try {
-            const encodedKey = new TextEncoder().encode(secretKey)
+            const encodedKey = new TextEncoder().encode(this.secretKey)
             const { payload } = await jwtVerify(token, encodedKey, { algorithms: ["HS256"] })
 
             return { id: payload.id }

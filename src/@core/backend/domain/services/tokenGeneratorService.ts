@@ -1,3 +1,3 @@
 export interface TokenGeneratorService {
-    generate(payload: any, secretKey: string): Promise<string>
+    generate(payload: any): Promise<string>
 }

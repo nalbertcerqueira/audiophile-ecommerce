@@ -4,12 +4,11 @@ import { User } from "@/@core/shared/entities/user/user"
 
 export class AuthorizationUseCase {
     constructor(
-        private readonly secretKey: string,
         private readonly tokenVerifierService: TokenVerifierService,
         private readonly findUserByIdRepository: FindUserByIdRepository
     ) {}
     public async execute(accessToken: string): Promise<User | null> {
-        const payload = await this.tokenVerifierService.verify(accessToken, this.secretKey)
+        const payload = await this.tokenVerifierService.verify(accessToken)
 
         if (payload) {
             const { id } = payload
