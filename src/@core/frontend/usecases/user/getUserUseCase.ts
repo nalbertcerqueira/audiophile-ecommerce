@@ -1,9 +1,10 @@
-import { UserProps } from "@/@core/shared/entities/user/user"
-import { GetUserGateway } from "../../domain/gateways/user/getUserGateway"
+import {
+    AuthenticatedUser,
+    GetUserGateway,
+    GuestUser
+} from "../../domain/gateways/user/getUserGateway"
 
-type GetUserOutputDTO =
-    | (Pick<UserProps, "id"> & Partial<Pick<UserProps, "name" | "email">>)
-    | string
+type GetUserOutputDTO = AuthenticatedUser | GuestUser | string
 
 export class GetUserUseCase {
     constructor(private readonly getUserGateway: GetUserGateway) {}

@@ -16,12 +16,15 @@ export async function GET(req: NextRequest) {
 
             if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
                 const { id, email, name } = authenticatedUser.value.toJSON()
-                return NextResponse.json({ data: { id, name, email } }, { status: 200 })
+                return NextResponse.json(
+                    { data: { id, name, email, type: "authenticated" } },
+                    { status: 200 }
+                )
             }
 
             if (guestUser.status === "fulfilled" && guestUser.value) {
                 const { id } = guestUser.value
-                return NextResponse.json({ data: { id } }, { status: 200 })
+                return NextResponse.json({ data: { id, type: "guest" } }, { status: 200 })
             }
         }
 

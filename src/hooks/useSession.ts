@@ -22,10 +22,9 @@ export function useSession() {
                     return setStatus({ isLoading: false, isLogged: false })
                 }
 
-                if (typeof data === "object") {
-                    setUser({ ...data })
-                    return setStatus({ isLoading: false, isLogged: true })
-                }
+                const { type, ...userRest } = data
+                setStatus({ isLoading: false, isLogged: type === "authenticated" })
+                setUser(userRest)
             })
             .catch(() => {
                 setStatus({ isLoading: false, isLogged: false })

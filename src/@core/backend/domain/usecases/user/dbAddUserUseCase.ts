@@ -3,7 +3,7 @@ import { AddUserRepository } from "../../repositories/user/addUserRepository"
 import { FindUserByEmailRepository } from "../../repositories/user/findUserByEmailRepository"
 import { HashService } from "../../services/hashService"
 
-type UserData = Pick<UserProps, "email" | "name" | "password">
+type UserToAdd = Pick<UserProps, "email" | "name" | "password">
 
 export class DbAddUserUseCase {
     constructor(
@@ -11,8 +11,8 @@ export class DbAddUserUseCase {
         private readonly addUserRepository: AddUserRepository,
         private readonly hashService: HashService
     ) {}
-    public async execute(userData: UserData): Promise<boolean> {
-        const { email, name, password } = userData
+    public async execute(user: UserToAdd): Promise<boolean> {
+        const { email, name, password } = user
         const foundUser = await this.findUserByEmailRepository.findByEmail(email)
 
         if (!foundUser) {
