@@ -29,7 +29,7 @@ export class HttpUserGateway implements CreateUserGateway, GetUserGateway {
         return true
     }
 
-    public async getUser(): Promise<Pick<UserProps, "name" | "email"> | null> {
+    public async getUser(): Promise<Pick<UserProps, "id" | "name" | "email"> | null> {
         const sessionToken = localStorage.getItem("sessionToken") as string
 
         const response = await fetch("/api/auth/user", {

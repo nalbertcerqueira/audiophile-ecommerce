@@ -10,12 +10,9 @@ export async function GET(req: NextRequest) {
             const foundUser = await dbAuthorizationUseCase.execute(sessionToken)
 
             if (foundUser) {
-                const userInfo = foundUser?.toJSON()
+                const { id, email, name } = foundUser.toJSON()
 
-                return NextResponse.json(
-                    { data: { name: userInfo.name, email: userInfo.email } },
-                    { status: 200 }
-                )
+                return NextResponse.json({ data: { id, name, email } }, { status: 200 })
             }
         }
 

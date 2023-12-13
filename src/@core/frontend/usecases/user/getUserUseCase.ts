@@ -1,7 +1,7 @@
 import { UserProps } from "@/@core/shared/entities/user/user"
 import { GetUserGateway } from "../../domain/gateways/user/getUserGateway"
 
-type GetUserOutputDTO = Pick<UserProps, "name" | "email">
+type GetUserOutputDTO = Pick<UserProps, "id" | "name" | "email">
 
 export class GetUserUseCase {
     constructor(private readonly getUserGateway: GetUserGateway) {}

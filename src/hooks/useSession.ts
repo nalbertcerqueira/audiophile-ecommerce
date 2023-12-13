@@ -9,7 +9,7 @@ interface SessionStatus {
 
 export function useSession() {
     const [status, setStatus] = useState<SessionStatus>({ isLoading: true, isLogged: false })
-    const [user, setUser] = useState<Pick<UserProps, "name" | "email"> | null>(null)
+    const [user, setUser] = useState<Pick<UserProps, "id" | "name" | "email"> | null>(null)
 
     useEffect(() => {
         getUserUseCase

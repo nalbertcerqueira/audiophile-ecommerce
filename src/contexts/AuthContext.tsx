@@ -7,7 +7,7 @@ import { UserProps } from "@/@core/shared/entities/user/user"
 interface AuthContextProps {
     isLogged: boolean
     isLoading: boolean
-    user: Pick<UserProps, "name" | "email"> | null
+    user: Pick<UserProps, "id" | "name" | "email"> | null
 }
 
 export const AuthContext = createContext<AuthContextProps>({} as AuthContextProps)
