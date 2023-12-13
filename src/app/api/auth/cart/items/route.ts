@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbAuthorizationFactory"
 import { dbAddCartItemUseCase } from "@/@core/backend/main/factories/usecases/cart/dbAddCartItemFactory"
 import { CartItemInfo } from "@/@core/backend/domain/usecases/cart/protocols"
+import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbGuestAuthorizationFactory"
 
 export async function POST(req: NextRequest) {
     const sessionToken = req.headers.get("authorization")?.split(" ")[1]
@@ -22,23 +23,47 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
         }
 
-        const foundUser = await dbAuthorizationUseCase.execute(sessionToken)
-        if (!foundUser) {
-            return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
-        }
-
-        const { id } = foundUser.toJSON()
         const { productId, quantity } = body
-        const cart = await dbAddCartItemUseCase.execute(id, { productId, quantity })
+        const [authenticatedUser, guestUser] = await Promise.allSettled([
+            dbAuthorizationUseCase.execute(sessionToken),
+            dbGuestAuthorizationUseCase.execute(sessionToken)
+        ])
 
-        if (!cart) {
+        if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
+            const { id } = authenticatedUser.value.toJSON()
+            const cart = await dbAddCartItemUseCase.execute(
+                { id, type: "authenticated" },
+                { productId, quantity }
+            )
+
+            if (cart) {
+                return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
+            }
+
             return NextResponse.json(
                 { errors: [`Product with id '${productId}' not found`] },
                 { status: 404 }
             )
         }
 
-        return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
+        if (guestUser.status === "fulfilled" && guestUser.value) {
+            const { id } = guestUser.value
+            const cart = await dbAddCartItemUseCase.execute(
+                { id, type: "guest" },
+                { productId, quantity }
+            )
+
+            if (cart) {
+                return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
+            }
+
+            return NextResponse.json(
+                { errors: [`Product with id '${productId}' not found`] },
+                { status: 404 }
+            )
+        }
+
+        return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
     } catch (error: any) {
         return NextResponse.json({ errors: [error.message] }, { status: 500 })
     }

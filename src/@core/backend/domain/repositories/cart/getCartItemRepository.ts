@@ -1,9 +1,13 @@
-import { CartProduct } from "@/@core/shared/entities/cart/cart"
+import { CartProduct, UserType } from "@/@core/shared/entities/cart/cart"
 
 export interface UserCartItem extends CartProduct {
     readonly userId: string
 }
 
 export interface GetCartItemRepository {
-    getItem(userId: string, productId: string): Promise<UserCartItem | null>
+    getItem(
+        userId: string,
+        userType: UserType,
+        productId: string
+    ): Promise<UserCartItem | null>
 }

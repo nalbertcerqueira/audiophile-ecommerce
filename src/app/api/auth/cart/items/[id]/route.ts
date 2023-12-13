@@ -1,5 +1,6 @@
 import { generateCustomZodErrors } from "@/@core/backend/infra/validators/zod/zod-helpers"
 import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbAuthorizationFactory"
+import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbGuestAuthorizationFactory"
 import { dbRemoveCartItemUseCase } from "@/@core/backend/main/factories/usecases/cart/dbRemoveCartItemFactory"
 import { cartItemZodSchema } from "@/@core/shared/entities/cart/util"
 import { NextRequest, NextResponse } from "next/server"
@@ -20,25 +21,49 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
             return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
         }
 
-        const foundUser = await dbAuthorizationUseCase.execute(sessionToken)
-        if (!foundUser) {
-            return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
-        }
-
-        const { id: userId } = foundUser.toJSON()
         const productId = params.id
         const quantity = body.quantity as number
 
-        const cart = await dbRemoveCartItemUseCase.execute(userId, { productId, quantity })
+        const [authenticatedUser, guestUser] = await Promise.allSettled([
+            dbAuthorizationUseCase.execute(sessionToken),
+            dbGuestAuthorizationUseCase.execute(sessionToken)
+        ])
 
-        if (!cart) {
+        if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
+            const { id } = authenticatedUser.value.toJSON()
+            const cart = await dbRemoveCartItemUseCase.execute(
+                { id, type: "authenticated" },
+                { productId, quantity }
+            )
+
+            if (cart) {
+                return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
+            }
+
             return NextResponse.json(
                 { errors: [`Product with id '${productId}' not found`] },
                 { status: 404 }
             )
         }
 
-        return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
+        if (guestUser.status === "fulfilled" && guestUser.value) {
+            const { id } = guestUser.value
+            const cart = await dbRemoveCartItemUseCase.execute(
+                { id, type: "guest" },
+                { productId, quantity }
+            )
+
+            if (cart) {
+                return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
+            }
+
+            return NextResponse.json(
+                { errors: [`Product with id '${productId}' not found`] },
+                { status: 404 }
+            )
+        }
+
+        return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
     } catch (error: any) {
         return NextResponse.json({ errors: [error.message] }, { status: 500 })
     }

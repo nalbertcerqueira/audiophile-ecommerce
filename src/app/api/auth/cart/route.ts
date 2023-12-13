@@ -1,4 +1,5 @@
 import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbAuthorizationFactory"
+import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbGuestAuthorizationFactory"
 import { dbClearCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbClearCartFactory"
 import { dbGetCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbGetCartFactory"
 
@@ -9,11 +10,20 @@ export async function GET(req: NextRequest) {
 
     try {
         if (sessionToken) {
-            const foundUser = await dbAuthorizationUseCase.execute(sessionToken)
+            const [authenticatedUser, guestUser] = await Promise.allSettled([
+                dbAuthorizationUseCase.execute(sessionToken),
+                dbGuestAuthorizationUseCase.execute(sessionToken)
+            ])
 
-            if (foundUser) {
-                const { id } = foundUser.toJSON()
-                const cart = await dbGetCartUseCase.execute(id)
+            if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
+                const { id } = authenticatedUser.value.toJSON()
+                const cart = await dbGetCartUseCase.execute(id, "authenticated")
+                return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
+            }
+
+            if (guestUser.status === "fulfilled" && guestUser.value) {
+                const { id } = guestUser.value
+                const cart = await dbGetCartUseCase.execute(id, "guest")
                 return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
             }
         }
@@ -36,12 +46,20 @@ export async function DELETE(req: NextRequest) {
 
     try {
         if (sessionToken) {
-            const foundUser = await dbAuthorizationUseCase.execute(sessionToken)
+            const [authenticatedUser, guestUser] = await Promise.allSettled([
+                dbAuthorizationUseCase.execute(sessionToken),
+                dbGuestAuthorizationUseCase.execute(sessionToken)
+            ])
 
-            if (foundUser) {
-                const { id } = foundUser.toJSON()
-                const cart = await dbClearCartUseCase.execute(id)
+            if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
+                const { id } = authenticatedUser.value.toJSON()
+                const cart = await dbClearCartUseCase.execute(id, "authenticated")
+                return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
+            }
 
+            if (guestUser.status === "fulfilled" && guestUser.value) {
+                const { id } = guestUser.value
+                const cart = await dbClearCartUseCase.execute(id, "guest")
                 return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
             }
         }

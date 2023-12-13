@@ -1,8 +1,8 @@
 import { DbGuestAuthorizationUseCase } from "@/@core/backend/domain/usecases/auth/dbGuestAuthorizationUseCase"
-import { jwtTokenService } from "../../services/tokenServiceFactory"
+import { guestJwtTokenService } from "../../services/tokenServiceFactory"
 
 function createDbGuestAuthorizationUseCase() {
-    return new DbGuestAuthorizationUseCase(jwtTokenService)
+    return new DbGuestAuthorizationUseCase(guestJwtTokenService)
 }
 
 export const dbGuestAuthorizationUseCase = createDbGuestAuthorizationUseCase()

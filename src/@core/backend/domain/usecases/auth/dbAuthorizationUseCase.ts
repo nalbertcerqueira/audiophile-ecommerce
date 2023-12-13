@@ -7,8 +7,8 @@ export class DbAuthorizationUseCase {
         private readonly tokenVerifierService: TokenVerifierService,
         private readonly findUserByIdRepository: FindUserByIdRepository
     ) {}
-    public async execute(sessionToken: string): Promise<User | null> {
-        const payload = await this.tokenVerifierService.verify(sessionToken)
+    public async execute(token: string): Promise<User | null> {
+        const payload = await this.tokenVerifierService.verify(token)
 
         if (payload && payload.sessionType === "authenticated") {
             const { id } = payload

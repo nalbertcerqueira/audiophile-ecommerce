@@ -1,6 +1,6 @@
 import { ProductProps } from "@/@core/backend/domain/entities/product/product"
 import { UserProps } from "@/@core/shared/entities/user/user"
-import { CartProduct } from "@/@core/shared/entities/cart/cart"
+import { CartProduct, UserType } from "@/@core/shared/entities/cart/cart"
 import { ObjectId } from "mongodb"
 
 export interface MongoProduct extends Omit<ProductProps, "id"> {
@@ -21,5 +21,6 @@ export interface MongoCartItem extends CartProduct {
     readonly _id: ObjectId
     readonly productId: string
     readonly userId: string
+    readonly userType: UserType
     createdAt: Date
 }

@@ -1,7 +1,7 @@
 import { RemoveCartItemRepository } from "../../repositories/cart/removeCartItemRepository"
 import { GetProductByIdRepository } from "../../repositories/product/getProductByIdRepository"
 import { GetCartItemRepository } from "../../repositories/cart/getCartItemRepository"
-import { CartItemInfo } from "./protocols"
+import { CartItemInfo, UserInfo } from "./protocols"
 import { CartProduct } from "@/@core/shared/entities/cart/cart"
 import { Cart } from "@/@core/shared/entities/cart/cart"
 
@@ -12,8 +12,9 @@ export class DbRemoveCartItemUseCase {
         private readonly removeCartItemRepository: RemoveCartItemRepository
     ) {}
 
-    public async execute(userId: string, itemInfo: CartItemInfo): Promise<Cart | null> {
+    public async execute(userInfo: UserInfo, itemInfo: CartItemInfo): Promise<Cart | null> {
         const { productId, quantity } = itemInfo
+        const { id, type } = userInfo
 
         const foundProduct = (await this.getProductByIdRepository.getById(
             productId,
@@ -21,16 +22,16 @@ export class DbRemoveCartItemUseCase {
         )) as CartProduct
 
         if (foundProduct) {
-            const foundCartItem = await this.getCartItemRepository.getItem(userId, productId)
+            const foundCartItem = await this.getCartItemRepository.getItem(id, type, productId)
 
             if (foundCartItem) {
-                const cart = await this.removeCartItemRepository.removeItem(userId, {
+                const cart = await this.removeCartItemRepository.removeItem(id, type, {
                     type: foundCartItem.quantity - quantity < 1 ? "delete" : "decrease",
                     productId,
                     quantity
                 })
 
-                return cart || Cart.empty(userId)
+                return cart || Cart.empty(type, id)
             }
 
             throw new Error(`There is no item with id: '${productId}' in the cart`)
