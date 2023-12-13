@@ -1,24 +1,11 @@
 "use client"
 
-import { PropsWithChildren, createContext, useState, useEffect, useContext } from "react"
-import { CartProps } from "@/@core/shared/entities/cart/cart"
-import { AuthContext } from "./AuthContext"
-import {
-    httpGetCartUseCase,
-    localStorageGetCartUseCase
-} from "@/@core/frontend/main/usecases/cart/getCartFactory"
-import {
-    httpClearCartUseCase,
-    localStorageClearCartUseCase
-} from "@/@core/frontend/main/usecases/cart/clearCartFactory"
-import {
-    httpAddCartItemUseCase,
-    localStorageAddCartItemUseCase
-} from "@/@core/frontend/main/usecases/cart/addCartItemFactory"
-import {
-    httpRemoveCartItemUseCase,
-    localStorageRemoveCartItemUseCase
-} from "@/@core/frontend/main/usecases/cart/removeCartItemFactory"
+import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
+import { getCartUseCase } from "@/@core/frontend/main/usecases/cart/getCartFactory"
+import { clearCartUseCase } from "@/@core/frontend/main/usecases/cart/clearCartFactory"
+import { addCartItemUseCase } from "@/@core/frontend/main/usecases/cart/addCartItemFactory"
+import { removeCartItemUseCase } from "@/@core/frontend/main/usecases/cart/removeCartItemFactory"
+import { PropsWithChildren, createContext, useState, useEffect } from "react"
 
 interface CartContextProps {
     cart: CartProps
@@ -27,36 +14,31 @@ interface CartContextProps {
     clearCart: () => void
 }
 
-const initialState = { userId: "0", itemCount: 0, totalSpent: 0, items: [] }
+const initialState = Cart.empty("guest", "0").toJSON()
 
 export const CartContext = createContext<CartContextProps>({} as CartContextProps)
 
 export function CartProvider({ children }: PropsWithChildren) {
     const [cart, setCart] = useState<CartProps>(initialState)
-    const { isLogged, isLoading } = useContext(AuthContext)
 
     useEffect(() => {
         getCart()
         async function getCart() {
-            const useCase = isLogged ? httpGetCartUseCase : localStorageGetCartUseCase
             try {
-                if (!isLoading) {
-                    const cart = await useCase.execute()
-                    setCart(cart.toJSON())
+                const cart = await getCartUseCase.execute()
+                setCart(cart.toJSON())
+            } catch (error: any) {
+                if (error.name !== "Unauthorized error") {
+                    console.log(error)
                 }
-            } catch (error) {
-                console.log(error)
             }
         }
-    }, [isLogged, isLoading])
+    }, [])
 
     async function addItem(productId: string, quantity: number) {
-        const useCase = isLogged ? httpAddCartItemUseCase : localStorageAddCartItemUseCase
         try {
-            if (!isLoading) {
-                const cart = await useCase.execute({ productId, quantity })
-                setCart(cart.toJSON())
-            }
+            const cart = await addCartItemUseCase.execute({ productId, quantity })
+            setCart(cart.toJSON())
         } catch (error: any) {
             if (error.name === "Unauthorized error") {
                 location.reload()
@@ -65,15 +47,9 @@ export function CartProvider({ children }: PropsWithChildren) {
     }
 
     async function removeItem(productId: string, quantity: number) {
-        const useCase = isLogged
-            ? httpRemoveCartItemUseCase
-            : localStorageRemoveCartItemUseCase
-
         try {
-            if (!isLoading) {
-                const cart = await useCase.execute({ productId, quantity })
-                setCart(cart.toJSON())
-            }
+            const cart = await removeCartItemUseCase.execute({ productId, quantity })
+            setCart(cart.toJSON())
         } catch (error: any) {
             if (error.name === "Unauthorized error") {
                 location.reload()
@@ -82,12 +58,9 @@ export function CartProvider({ children }: PropsWithChildren) {
     }
 
     async function clearCart() {
-        const useCase = isLogged ? httpClearCartUseCase : localStorageClearCartUseCase
         try {
-            if (!isLoading) {
-                const cart = await useCase.execute()
-                setCart(cart.toJSON())
-            }
+            const cart = await clearCartUseCase.execute()
+            setCart(cart.toJSON())
         } catch (error: any) {
             if (error.name === "Unauthorized error") {
                 location.reload()

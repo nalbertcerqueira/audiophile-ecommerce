@@ -8,8 +8,8 @@ export class AddCartItemUseCase {
 
     public async execute(item: ItemToAdd): Promise<Cart> {
         const { productId, quantity } = item
-        const newCart = await this.addCartItemGateway.addItem(productId, quantity)
+        const cart = await this.addCartItemGateway.addItem(productId, quantity)
 
-        return newCart
+        return cart
     }
 }

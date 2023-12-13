@@ -1,15 +1,15 @@
+import { HttpGatewayResponse } from "../protocols"
 import {
     CreateUserGateway,
-    UserData
+    SignupData
 } from "@/@core/frontend/domain/gateways/user/createUserGateway"
-import { HttpGatewayResponse } from "../protocols"
 import {
     GetUserGateway,
     UserOrGuestToken
 } from "@/@core/frontend/domain/gateways/user/getUserGateway"
 
 export class HttpUserGateway implements CreateUserGateway, GetUserGateway {
-    public async create(userInfo: UserData): Promise<boolean> {
+    public async create(userInfo: SignupData): Promise<boolean> {
         const headers: HeadersInit = { "Content-type": "application/json" }
         const response = await fetch("/api/signup", {
             body: JSON.stringify(userInfo),

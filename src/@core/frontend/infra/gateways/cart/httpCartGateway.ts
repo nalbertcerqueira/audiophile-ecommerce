@@ -1,5 +1,5 @@
 import { GetCartGateway } from "@/@core/frontend/domain/gateways/cart/getCartGateway"
-import { Cart } from "@/@core/shared/entities/cart/cart"
+import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
 import { HttpGatewayResponse } from "../protocols"
 import { AddCartItemGateway } from "@/@core/frontend/domain/gateways/cart/addCartItemGateway"
 import { RemoveCartItemGateway } from "@/@core/frontend/domain/gateways/cart/removeCartItemGateway"
@@ -79,7 +79,7 @@ export class HttpCartGateway
         return new Cart(cartData)
     }
 
-    private async submitRequest(request: RequestDetails): Promise<any> {
+    private async submitRequest(request: RequestDetails): Promise<CartProps> {
         const { routeUrl, method, headers, body } = request
 
         const response = await fetch(routeUrl, {
