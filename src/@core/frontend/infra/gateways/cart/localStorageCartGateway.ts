@@ -4,7 +4,9 @@ import { AddCartItemGateway } from "../../../domain/gateways/cart/addCartItemGat
 import { RemoveCartItemGateway } from "../../../domain/gateways/cart/removeCartItemGateway"
 import { ClearCartGateway } from "../../../domain/gateways/cart/clearCartGateway"
 
-interface LocalStorageItem {
+import { HttpGatewayResponse } from "../protocols"
+
+interface LocalStorageCartItem {
     productId: string
     quantity: number
 }
@@ -28,6 +30,16 @@ export class LocalStorageCartGateway
             return Cart.empty()
         }
 
+        const promises = localStorageData.map(({ productId }) => {
+            return async () => {
+                const res = await fetch(`/api/products/${productId}?type=shortProduct`)
+                return await res.json()
+            }
+        })
+
+        const allSetled = await Promise.allSettled(promises.map((promise) => promise()))
+        console.log(allSetled)
+
         try {
             const items = localStorageData.map(({ productId, quantity }) => {
                 const cartItem = cartItemMap[productId]
@@ -46,24 +58,29 @@ export class LocalStorageCartGateway
     public async clearCart(): Promise<Cart> {
         const emptyCart = Cart.empty()
 
-        this.save(emptyCart.toJSON().items)
+        this.save(emptyCart)
         return emptyCart
     }
 
     public async addItem(productId: string, quantity: number): Promise<Cart> {
         const cart = (await this.get()) || Cart.empty()
+        const isIncrementing = cart.addItem(productId, quantity)
 
-        if (!cart.addItem(productId, quantity)) {
+        if (!isIncrementing) {
             const response = await fetch(`/api/products/${productId}?type=shortProduct`)
+            const responseData = await response.json()
 
-            if (response.ok) {
-                const cartItem = (await response.json()) as { data: CartProduct }
-                cart.addItem({ ...cartItem.data, quantity })
+            if (!response.ok && responseData.errors) {
+                const { errors } = responseData as HttpGatewayResponse<"failed">
+                throw new Error(errors.join(","))
             }
+
+            const { data } = responseData as HttpGatewayResponse<"success">
+            cart.addItem({ ...data, quantity })
         }
 
         cart.updateTotalAndCount()
-        this.save(cart.toJSON().items)
+        this.save(cart)
         return cart
     }
 
@@ -73,14 +90,16 @@ export class LocalStorageCartGateway
         cart.removeItem(productId, quantity)
         cart.updateTotalAndCount()
 
-        this.save(cart.toJSON().items)
+        this.save(cart)
         return cart
     }
 
-    private save(cartItems: CartProduct[]): void {
-        const localStorageItems: LocalStorageItem[] = cartItems.map((item) => {
+    private save(cart: Cart): void {
+        const items = cart.toJSON().items
+        const localStorageItems: LocalStorageCartItem[] = items.map((item) => {
             return { productId: item.productId, quantity: item.quantity }
         })
+
         localStorage.setItem(this.key, JSON.stringify(localStorageItems))
     }
 
@@ -99,7 +118,7 @@ export class LocalStorageCartGateway
         return this.cache.cartItemMap
     }
 
-    private getLocalStorageItems(): LocalStorageItem[] | null {
+    private getLocalStorageItems(): LocalStorageCartItem[] | null {
         const serializedData = localStorage.getItem(this.key)
 
         if (!serializedData) {
@@ -107,7 +126,7 @@ export class LocalStorageCartGateway
         }
 
         try {
-            const storageData = JSON.parse(serializedData) as LocalStorageItem[]
+            const storageData = JSON.parse(serializedData) as LocalStorageCartItem[]
             return storageData
         } catch {
             return null

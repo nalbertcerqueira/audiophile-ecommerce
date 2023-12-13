@@ -40,11 +40,11 @@ export class Cart {
     }
 
     public removeItem(itemId: string, quantity: number): void {
-        const index = this.props.items.findIndex((item) => item.productId === itemId)
-        if (index >= 0) {
-            this.props.items[index].quantity -= quantity
+        const foundItem = this.props.items.find((item) => item.productId === itemId)
+        if (foundItem) {
+            foundItem.quantity -= quantity
 
-            if (this.props.items[index].quantity <= 0) {
+            if (foundItem.quantity <= 0) {
                 this.props.items = this.props.items.filter((item) => item.productId !== itemId)
             }
         }
