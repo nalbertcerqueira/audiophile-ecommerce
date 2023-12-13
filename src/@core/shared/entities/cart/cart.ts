@@ -10,6 +10,8 @@ export interface CartProduct {
     price: number
 }
 
+export type UserType = "authenticated" | "guest"
+
 export interface CartProps {
     userId: string
     totalSpent: number

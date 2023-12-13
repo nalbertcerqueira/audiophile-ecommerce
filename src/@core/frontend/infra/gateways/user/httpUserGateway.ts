@@ -3,8 +3,10 @@ import {
     UserData
 } from "@/@core/frontend/domain/gateways/user/createUserGateway"
 import { HttpGatewayResponse } from "../protocols"
-import { GetUserGateway } from "@/@core/frontend/domain/gateways/user/getUserGateway"
-import { UserProps } from "@/@core/shared/entities/user/user"
+import {
+    GetUserGateway,
+    UserOrGuestToken
+} from "@/@core/frontend/domain/gateways/user/getUserGateway"
 
 export class HttpUserGateway implements CreateUserGateway, GetUserGateway {
     public async create(userInfo: UserData): Promise<boolean> {
@@ -29,20 +31,22 @@ export class HttpUserGateway implements CreateUserGateway, GetUserGateway {
         return true
     }
 
-    public async getUser(): Promise<Pick<UserProps, "id" | "name" | "email"> | null> {
+    public async getUser(): Promise<UserOrGuestToken> {
         const sessionToken = localStorage.getItem("sessionToken") as string
 
         const response = await fetch("/api/auth/user", {
             headers: { Authorization: `Bearer ${sessionToken}` }
         })
 
-        if (response.ok) {
-            const responseData = (await response.json()) as HttpGatewayResponse<"success">
-            const { data } = responseData
+        const responseData = await response.json()
 
-            return data
+        if (!response.ok && responseData.errors) {
+            const { errors } = responseData as HttpGatewayResponse<"failed">
+            throw new Error(errors.join(","))
         }
 
-        return null
+        const { data } = responseData as HttpGatewayResponse<"success">
+
+        return data
     }
 }

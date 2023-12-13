@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { UserProps } from "@/@core/shared/entities/user/user"
 import { getUserUseCase } from "@/@core/frontend/main/usecases/user/getUserFactory"
 
+type UserData = Pick<UserProps, "id"> & Partial<Pick<UserProps, "name" | "email">>
+
 interface SessionStatus {
     isLogged: boolean
     isLoading: boolean
@@ -9,17 +11,20 @@ interface SessionStatus {
 
 export function useSession() {
     const [status, setStatus] = useState<SessionStatus>({ isLoading: true, isLogged: false })
-    const [user, setUser] = useState<Pick<UserProps, "id" | "name" | "email"> | null>(null)
+    const [user, setUser] = useState<UserData | null>(null)
 
     useEffect(() => {
         getUserUseCase
             .execute()
-            .then(async (userData) => {
-                if (userData) {
-                    setUser({ ...userData })
-                    setStatus({ isLoading: false, isLogged: true })
-                } else {
-                    throw new Error("Unauthorized")
+            .then(async (data) => {
+                if (typeof data === "string") {
+                    localStorage.setItem("sessionToken", data)
+                    return setStatus({ isLoading: false, isLogged: false })
+                }
+
+                if (typeof data === "object") {
+                    setUser({ ...data })
+                    return setStatus({ isLoading: false, isLogged: true })
                 }
             })
             .catch(() => {

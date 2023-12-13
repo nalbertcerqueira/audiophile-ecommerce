@@ -1,4 +1,6 @@
 import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbAuthorizationFactory"
+import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbGuestAuthorizationFactory"
+import { dbGuestSessionUseCase } from "@/@core/backend/main/factories/usecases/auth/dbGuestSessionUseCase"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest) {
@@ -7,23 +9,25 @@ export async function GET(req: NextRequest) {
 
     try {
         if (sessionToken) {
-            const foundUser = await dbAuthorizationUseCase.execute(sessionToken)
+            const [authenticatedUser, guestUser] = await Promise.allSettled([
+                dbAuthorizationUseCase.execute(sessionToken),
+                dbGuestAuthorizationUseCase.execute(sessionToken)
+            ])
 
-            if (foundUser) {
-                const { id, email, name } = foundUser.toJSON()
-
+            if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
+                const { id, email, name } = authenticatedUser.value.toJSON()
                 return NextResponse.json({ data: { id, name, email } }, { status: 200 })
+            }
+
+            if (guestUser.status === "fulfilled" && guestUser.value) {
+                const { id } = guestUser.value
+                return NextResponse.json({ data: { id } }, { status: 200 })
             }
         }
 
-        const unauthorizedHeaders = { "WWW-Authenticate": 'Bearer realm="protected resource"' }
-        const unauthorizedMsg =
-            "Unauthorized: you need valid credentials to access this conontent"
+        const { token } = await dbGuestSessionUseCase.execute()
 
-        return NextResponse.json(
-            { errors: [unauthorizedMsg] },
-            { status: 401, headers: unauthorizedHeaders }
-        )
+        return NextResponse.json({ data: token })
     } catch (error: any) {
         return NextResponse.json({ errors: [error.message] }, { status: 500 })
     }
