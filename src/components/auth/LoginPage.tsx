@@ -32,7 +32,7 @@ export function LoginPageComponent() {
         try {
             const token = await signinUseCase.execute(data)
             if (token) {
-                localStorage.setItem("accessToken", token)
+                localStorage.setItem("sessionToken", token)
                 return setTimeout(() => location.reload(), 1000)
             }
             setError("password", { message: "Invalid email or password" })

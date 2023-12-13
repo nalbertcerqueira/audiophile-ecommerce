@@ -18,33 +18,33 @@ export class HttpCartGateway
     constructor(private readonly baseApiUrl: string) {}
 
     public async get(): Promise<Cart> {
-        const accessToken = localStorage.getItem("accessToken")
+        const sessionToken = localStorage.getItem("sessionToken")
         const fullUrl = `${this.baseApiUrl}/cart`
 
         const cartData = await this.submitRequest({
             method: "GET",
             routeUrl: fullUrl,
-            headers: { Authorization: `Bearer ${accessToken}` }
+            headers: { Authorization: `Bearer ${sessionToken}` }
         })
 
         return new Cart(cartData)
     }
 
     public async clearCart(): Promise<Cart> {
-        const accessToken = localStorage.getItem("accessToken")
+        const sessionToken = localStorage.getItem("sessionToken")
         const fullUrl = `${this.baseApiUrl}/cart`
 
         const cartData = await this.submitRequest({
             method: "DELETE",
             routeUrl: fullUrl,
-            headers: { Authorization: `Bearer ${accessToken}` }
+            headers: { Authorization: `Bearer ${sessionToken}` }
         })
 
         return new Cart(cartData)
     }
 
     public async addItem(productId: string, quantity: number): Promise<Cart> {
-        const accessToken = localStorage.getItem("accessToken")
+        const sessionToken = localStorage.getItem("sessionToken")
         const fullUrl = `${this.baseApiUrl}/cart/items`
         const body = { productId: productId, quantity }
 
@@ -54,7 +54,7 @@ export class HttpCartGateway
             body: body,
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`
+                Authorization: `Bearer ${sessionToken}`
             }
         })
 
@@ -62,7 +62,7 @@ export class HttpCartGateway
     }
 
     public async removeItem(productId: string, quantity: number): Promise<Cart> {
-        const accessToken = localStorage.getItem("accessToken")
+        const sessionToken = localStorage.getItem("sessionToken")
         const fullUrl = `${this.baseApiUrl}/cart/items/${productId}`
         const body = { quantity }
 
@@ -72,7 +72,7 @@ export class HttpCartGateway
             body: body,
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`
+                Authorization: `Bearer ${sessionToken}`
             }
         })
 

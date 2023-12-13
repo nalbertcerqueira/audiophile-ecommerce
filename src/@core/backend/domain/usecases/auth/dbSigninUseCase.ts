@@ -24,9 +24,9 @@ export class DbSigninUseCase {
 
             if (isPasswordCorrect) {
                 const payload = { id: foundUserProps.id }
-                const accessToken = await this.tokenGenerator.generate(payload)
+                const sessionToken = await this.tokenGenerator.generate(payload)
 
-                return accessToken
+                return sessionToken
             }
         }
 

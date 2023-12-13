@@ -30,10 +30,10 @@ export class HttpUserGateway implements CreateUserGateway, GetUserGateway {
     }
 
     public async getUser(): Promise<Pick<UserProps, "name" | "email"> | null> {
-        const accessToken = localStorage.getItem("accessToken") as string
+        const sessionToken = localStorage.getItem("sessionToken") as string
 
         const response = await fetch("/api/auth/user", {
-            headers: { Authorization: `Bearer ${accessToken}` }
+            headers: { Authorization: `Bearer ${sessionToken}` }
         })
 
         if (response.ok) {

@@ -9,10 +9,10 @@ export class SigninUseCase {
     constructor(private readonly authenticationGateway: AuthenticationGateway) {}
 
     public async execute({ email, password }: SinginInputDTO): Promise<string | null> {
-        const accessToken = await this.authenticationGateway.authenticateUser({
+        const sessionToken = await this.authenticationGateway.authenticateUser({
             email,
             password
         })
-        return accessToken
+        return sessionToken
     }
 }

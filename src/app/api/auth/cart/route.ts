@@ -5,11 +5,11 @@ import { dbGetCartUseCase } from "@/@core/backend/main/factories/usecases/cart/d
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest) {
-    const accessToken = req.headers.get("authorization")?.split(" ")[1]
+    const sessionToken = req.headers.get("authorization")?.split(" ")[1]
 
     try {
-        if (accessToken) {
-            const foundUser = await dbAuthorizationUseCase.execute(accessToken)
+        if (sessionToken) {
+            const foundUser = await dbAuthorizationUseCase.execute(sessionToken)
 
             if (foundUser) {
                 const { id } = foundUser.toJSON()
@@ -32,11 +32,11 @@ export async function GET(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-    const accessToken = req.headers.get("authorization")?.split(" ")[1]
+    const sessionToken = req.headers.get("authorization")?.split(" ")[1]
 
     try {
-        if (accessToken) {
-            const foundUser = await dbAuthorizationUseCase.execute(accessToken)
+        if (sessionToken) {
+            const foundUser = await dbAuthorizationUseCase.execute(sessionToken)
 
             if (foundUser) {
                 const { id } = foundUser.toJSON()

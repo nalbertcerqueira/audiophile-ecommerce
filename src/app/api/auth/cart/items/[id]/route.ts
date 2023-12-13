@@ -5,7 +5,7 @@ import { cartItemZodSchema } from "@/@core/shared/entities/cart/util"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
-    const accessToken = req.headers.get("authorization")?.split(" ")[1]
+    const sessionToken = req.headers.get("authorization")?.split(" ")[1]
     const body = await req.json()
 
     const validationResult = cartItemZodSchema.pick({ quantity: true }).safeParse(body)
@@ -16,11 +16,11 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
             return NextResponse.json({ errors }, { status: 400 })
         }
 
-        if (!accessToken) {
+        if (!sessionToken) {
             return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
         }
 
-        const foundUser = await dbAuthorizationUseCase.execute(accessToken)
+        const foundUser = await dbAuthorizationUseCase.execute(sessionToken)
         if (!foundUser) {
             return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
         }

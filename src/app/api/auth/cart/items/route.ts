@@ -6,7 +6,7 @@ import { dbAddCartItemUseCase } from "@/@core/backend/main/factories/usecases/ca
 import { CartItemInfo } from "@/@core/backend/domain/usecases/cart/protocols"
 
 export async function POST(req: NextRequest) {
-    const accessToken = req.headers.get("authorization")?.split(" ")[1]
+    const sessionToken = req.headers.get("authorization")?.split(" ")[1]
     const body = (await req.json()) as CartItemInfo
     const validationResult = cartItemZodSchema
         .pick({ productId: true, quantity: true })
@@ -18,11 +18,11 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ errors }, { status: 400 })
         }
 
-        if (!accessToken) {
+        if (!sessionToken) {
             return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
         }
 
-        const foundUser = await dbAuthorizationUseCase.execute(accessToken)
+        const foundUser = await dbAuthorizationUseCase.execute(sessionToken)
         if (!foundUser) {
             return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
         }

@@ -3,11 +3,11 @@ import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest) {
     const authHeader = req.headers.get("Authorization")
-    const accessToken = authHeader?.split(" ")[1]
+    const sessionToken = authHeader?.split(" ")[1]
 
     try {
-        if (accessToken) {
-            const foundUser = await dbAuthorizationUseCase.execute(accessToken)
+        if (sessionToken) {
+            const foundUser = await dbAuthorizationUseCase.execute(sessionToken)
 
             if (foundUser) {
                 const userInfo = foundUser?.toJSON()
