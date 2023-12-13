@@ -33,7 +33,7 @@ export class Migration {
 
     private async createCollections(): Promise<void> {
         try {
-            await Promise.all([
+            await Promise.allSettled([
                 mongoHelper.db.createCollection("products", { validator: productMongoSchema }),
                 mongoHelper.db.createCollection("users", { validator: userMongoSchema })
             ])

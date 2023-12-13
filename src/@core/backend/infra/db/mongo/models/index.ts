@@ -13,10 +13,13 @@ export interface MongoShortProduct extends Omit<CartProduct, "productId"> {
 
 export interface MongoUser extends Omit<UserProps, "id"> {
     readonly _id: ObjectId
+    createdAt: Date
+    updatedAt: Date
 }
 
 export interface MongoCartItem extends CartProduct {
     readonly _id: ObjectId
     readonly productId: string
     readonly userId: string
+    createdAt: Date
 }

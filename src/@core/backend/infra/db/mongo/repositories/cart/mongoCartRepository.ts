@@ -60,7 +60,7 @@ export class MongoCartRepository
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
         await cartItemCollection.findOneAndUpdate(
             { userId, productId },
-            { $inc: { quantity }, $setOnInsert: { slug, name, price } },
+            { $inc: { quantity }, $setOnInsert: { slug, name, price, createdAt: new Date() } },
             { upsert: true }
         )
 

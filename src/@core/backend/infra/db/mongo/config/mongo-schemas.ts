@@ -104,7 +104,7 @@ export const userMongoSchema: Document = {
     $jsonSchema: {
         bsonType: "object",
         additionalProperties: false,
-        required: ["name", "email", "password", "images"],
+        required: ["name", "email", "password", "images", "createdAt", "updatedAt"],
         properties: {
             _id: {},
             name: {
@@ -129,6 +129,12 @@ export const userMongoSchema: Document = {
                     profile: userImageMongoSchema,
                     profileThumb: userImageMongoSchema
                 }
+            },
+            createdAt: {
+                bsonType: "date"
+            },
+            updatedAt: {
+                bsonType: "date"
             }
         }
     }

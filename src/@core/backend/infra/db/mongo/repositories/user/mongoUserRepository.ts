@@ -19,8 +19,8 @@ export class MongoUserRepository
         const foundUser = await userCollection.findOne<MongoUser>({ email })
 
         if (foundUser) {
-            const { _id, ...otherProps } = foundUser
-            return new User({ ...otherProps, id: _id.toString() })
+            const { _id, name, email, password, images } = foundUser
+            return new User({ id: _id.toString(), name, email, password, images })
         }
 
         return null
@@ -29,9 +29,15 @@ export class MongoUserRepository
     public async add(userProps: UserWithoutId): Promise<void> {
         await mongoHelper.connect()
 
-        const userCollection = mongoHelper.db.collection("users")
+        const userCollection = mongoHelper.db.collection<Omit<MongoUser, "_id">>("users")
 
-        await userCollection.insertOne({ ...userProps })
+        const creationDate = new Date()
+
+        await userCollection.insertOne({
+            ...userProps,
+            createdAt: creationDate,
+            updatedAt: creationDate
+        })
     }
 
     public async findById(userId: string): Promise<User | null> {
@@ -44,8 +50,8 @@ export class MongoUserRepository
             const foundUser = await userCollection.findOne<MongoUser>({ _id })
 
             if (foundUser) {
-                const { _id, ...otherProps } = foundUser
-                return new User({ id: _id.toString(), ...otherProps })
+                const { _id, name, email, password, images } = foundUser
+                return new User({ id: _id.toString(), name, email, password, images })
             }
 
             return null
