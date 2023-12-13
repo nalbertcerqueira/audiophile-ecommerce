@@ -1,5 +1,5 @@
 import { generateCustomZodErrors } from "@/@core/backend/infra/validators/zod/zod-helpers"
-import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authorizationFactory"
+import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbAuthorizationFactory"
 import { dbRemoveCartItemUseCase } from "@/@core/backend/main/factories/usecases/cart/dbRemoveCartItemFactory"
 import { cartItemZodSchema } from "@/@core/shared/entities/cart/util"
 import { NextRequest, NextResponse } from "next/server"

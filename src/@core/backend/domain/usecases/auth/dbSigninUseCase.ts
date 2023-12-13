@@ -1,7 +1,7 @@
 import { UserProps } from "@/@core/shared/entities/user/user"
 import { FindUserByEmailRepository } from "../../repositories/user/findUserByEmailRepository"
 import { HashComparerService } from "../../services/hashComparerService"
-import { TokenGeneratorService } from "../../services/tokenGeneratorService"
+import { TokenGeneratorService } from "../../services/token/tokenGeneratorService"
 
 type LoginData = Pick<UserProps, "email" | "password">
 
@@ -23,8 +23,10 @@ export class DbSigninUseCase {
             )
 
             if (isPasswordCorrect) {
-                const payload = { id: foundUserProps.id }
-                const sessionToken = await this.tokenGenerator.generate(payload)
+                const sessionToken = await this.tokenGenerator.generate({
+                    id: foundUserProps.id,
+                    sessionType: "authenticated"
+                })
 
                 return sessionToken
             }

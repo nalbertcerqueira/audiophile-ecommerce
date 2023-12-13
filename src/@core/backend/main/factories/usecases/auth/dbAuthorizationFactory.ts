@@ -1,4 +1,4 @@
-import { DbAuthorizationUseCase } from "@/@core/backend/domain/usecases/auth/dbauthorizationUseCase"
+import { DbAuthorizationUseCase } from "@/@core/backend/domain/usecases/auth/dbAuthorizationUseCase"
 import { jwtTokenService } from "../../services/tokenServiceFactory"
 import { MongoUserRepository } from "@/@core/backend/infra/db/mongo/repositories/user/mongoUserRepository"
 

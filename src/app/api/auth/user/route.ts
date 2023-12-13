@@ -1,4 +1,4 @@
-import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authorizationFactory"
+import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbAuthorizationFactory"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest) {

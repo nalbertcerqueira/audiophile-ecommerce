@@ -1,7 +1,7 @@
 import { JwtTokenService } from "@/@core/backend/infra/services/jwtTokenService"
 
 const duration = 3600 * 24
-const secretKey = process.env.SECRET_KEY as string
+const secretKey = process.env.AUTHENTICATED_TOKEN_SECRET_KEY as string
 
 function createJwtTokenService(duration: number, secretKey: string): JwtTokenService {
     return new JwtTokenService(duration, secretKey)

@@ -1,7 +1,8 @@
+import { TokenVerifierService } from "../../domain/services/token/tokenVerifierService"
+import { TokenGeneratorService } from "../../domain/services/token/tokenGeneratorService"
+import { TokenPayload } from "../../domain/services/token/protocols"
 import { TextEncoder } from "util"
-import { TokenGeneratorService } from "../../domain/services/tokenGeneratorService"
 import { SignJWT, jwtVerify } from "jose"
-import { TokenPayload, TokenVerifierService } from "../../domain/services/tokenVerifierService"
 
 export class JwtTokenService implements TokenGeneratorService, TokenVerifierService {
     constructor(
@@ -9,7 +10,7 @@ export class JwtTokenService implements TokenGeneratorService, TokenVerifierServ
         private readonly secretKey: string
     ) {}
 
-    public async generate(payload: Record<string, any>): Promise<string> {
+    public async generate(payload: TokenPayload): Promise<string> {
         const encodedKey = new TextEncoder().encode(this.secretKey)
         const iat = Math.floor(Date.now() / 1000)
         const exp = iat + this.duration
@@ -27,9 +28,11 @@ export class JwtTokenService implements TokenGeneratorService, TokenVerifierServ
     public async verify(token: string): Promise<TokenPayload | null> {
         try {
             const encodedKey = new TextEncoder().encode(this.secretKey)
-            const { payload } = await jwtVerify(token, encodedKey, { algorithms: ["HS256"] })
+            const { payload } = await jwtVerify<TokenPayload>(token, encodedKey, {
+                algorithms: ["HS256"]
+            })
 
-            return { id: payload.id }
+            return { id: payload.id, sessionType: payload.sessionType }
         } catch {
             return null
         }
