@@ -1,7 +1,7 @@
 import { generateCustomZodErrors } from "@/@core/backend/infra/validators/zod/zod-helpers"
 import { cartItemZodSchema } from "@/@core/shared/entities/cart/util"
 import { NextRequest, NextResponse } from "next/server"
-import { authorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authorizationFactory"
+import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authorizationFactory"
 import { dbAddCartItemUseCase } from "@/@core/backend/main/factories/usecases/cart/dbAddCartItemFactory"
 import { CartItemInfo } from "@/@core/backend/domain/usecases/cart/protocols"
 
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
         }
 
-        const foundUser = await authorizationUseCase.execute(accessToken)
+        const foundUser = await dbAuthorizationUseCase.execute(accessToken)
         if (!foundUser) {
             return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
         }

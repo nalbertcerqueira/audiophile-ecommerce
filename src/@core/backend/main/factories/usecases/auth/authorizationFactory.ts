@@ -1,13 +1,11 @@
-import { AuthorizationUseCase } from "@/@core/backend/domain/usecases/auth/authorizationUseCase"
+import { DbAuthorizationUseCase } from "@/@core/backend/domain/usecases/auth/dbauthorizationUseCase"
 import { jwtTokenService } from "../../services/tokenServiceFactory"
 import { MongoUserRepository } from "@/@core/backend/infra/db/mongo/repositories/user/mongoUserRepository"
 
-function createAuthorizationUseCase(): AuthorizationUseCase {
+function createDbAuthorizationUseCase(): DbAuthorizationUseCase {
     const mongoUserRepository = new MongoUserRepository()
 
-    const authorizationUseCase = new AuthorizationUseCase(jwtTokenService, mongoUserRepository)
-
-    return authorizationUseCase
+    return new DbAuthorizationUseCase(jwtTokenService, mongoUserRepository)
 }
 
-export const authorizationUseCase = createAuthorizationUseCase()
+export const dbAuthorizationUseCase = createDbAuthorizationUseCase()

@@ -2,7 +2,7 @@ import { FindUserByIdRepository } from "../../repositories/user/findUserByIdRepo
 import { TokenVerifierService } from "../../services/tokenVerifierService"
 import { User } from "@/@core/shared/entities/user/user"
 
-export class AuthorizationUseCase {
+export class DbAuthorizationUseCase {
     constructor(
         private readonly tokenVerifierService: TokenVerifierService,
         private readonly findUserByIdRepository: FindUserByIdRepository

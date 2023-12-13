@@ -1,5 +1,5 @@
 import { generateCustomZodErrors } from "@/@core/backend/infra/validators/zod/zod-helpers"
-import { authorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authorizationFactory"
+import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authorizationFactory"
 import { dbRemoveCartItemUseCase } from "@/@core/backend/main/factories/usecases/cart/dbRemoveCartItemFactory"
 import { cartItemZodSchema } from "@/@core/shared/entities/cart/util"
 import { NextRequest, NextResponse } from "next/server"
@@ -20,7 +20,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
             return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
         }
 
-        const foundUser = await authorizationUseCase.execute(accessToken)
+        const foundUser = await dbAuthorizationUseCase.execute(accessToken)
         if (!foundUser) {
             return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
         }

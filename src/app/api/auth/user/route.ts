@@ -1,4 +1,4 @@
-import { authorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authorizationFactory"
+import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authorizationFactory"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest) {
@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
 
     try {
         if (accessToken) {
-            const foundUser = await authorizationUseCase.execute(accessToken)
+            const foundUser = await dbAuthorizationUseCase.execute(accessToken)
 
             if (foundUser) {
                 const userInfo = foundUser?.toJSON()

@@ -1,4 +1,4 @@
-import { authorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authorizationFactory"
+import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authorizationFactory"
 import { dbClearCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbClearCartFactory"
 import { dbGetCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbGetCartFactory"
 
@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
 
     try {
         if (accessToken) {
-            const foundUser = await authorizationUseCase.execute(accessToken)
+            const foundUser = await dbAuthorizationUseCase.execute(accessToken)
 
             if (foundUser) {
                 const { id } = foundUser.toJSON()
@@ -36,7 +36,7 @@ export async function DELETE(req: NextRequest) {
 
     try {
         if (accessToken) {
-            const foundUser = await authorizationUseCase.execute(accessToken)
+            const foundUser = await dbAuthorizationUseCase.execute(accessToken)
 
             if (foundUser) {
                 const { id } = foundUser.toJSON()
