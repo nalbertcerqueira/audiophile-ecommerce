@@ -1,5 +1,5 @@
-import { HashComparerService } from "../../domain/services/hashComparerService"
-import { HashService } from "../../domain/services/hashService"
+import { HashComparerService } from "../../domain/services/crypto/hashComparerService"
+import { HashService } from "../../domain/services/crypto/hashService"
 import bcrypt from "bcrypt"
 
 export class BcryptEncrypterService implements HashService, HashComparerService {

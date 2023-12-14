@@ -1,7 +1,7 @@
 import { UserProps } from "@/@core/shared/entities/user/user"
 import { AddUserRepository } from "../../repositories/user/addUserRepository"
 import { FindUserByEmailRepository } from "../../repositories/user/findUserByEmailRepository"
-import { HashService } from "../../services/hashService"
+import { HashService } from "../../services/crypto/hashService"
 
 type UserToAdd = Pick<UserProps, "email" | "name" | "password">
 
