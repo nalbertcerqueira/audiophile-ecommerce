@@ -2,8 +2,6 @@ import { useEffect, useState } from "react"
 import { UserProps } from "@/@core/shared/entities/user/user"
 import { getUserUseCase } from "@/@core/frontend/main/usecases/user/getUserFactory"
 
-type UserData = Pick<UserProps, "id"> & Partial<Pick<UserProps, "name" | "email">>
-
 interface SessionStatus {
     isLogged: boolean
     isLoading: boolean
@@ -11,7 +9,7 @@ interface SessionStatus {
 
 export function useSession() {
     const [status, setStatus] = useState<SessionStatus>({ isLoading: true, isLogged: false })
-    const [user, setUser] = useState<UserData | null>(null)
+    const [user, setUser] = useState<Pick<UserProps, "name" | "email"> | null>(null)
 
     useEffect(() => {
         getUserUseCase
@@ -22,9 +20,13 @@ export function useSession() {
                     return setStatus({ isLoading: false, isLogged: false })
                 }
 
-                const { type, ...userRest } = data
-                setStatus({ isLoading: false, isLogged: type === "authenticated" })
-                setUser(userRest)
+                if (data.type === "authenticated") {
+                    const { name, email } = data
+                    setUser({ email, name })
+                    return setStatus({ isLoading: false, isLogged: true })
+                }
+
+                throw new Error()
             })
             .catch(() => {
                 setStatus({ isLoading: false, isLogged: false })

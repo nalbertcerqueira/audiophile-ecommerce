@@ -59,8 +59,10 @@ export function CartProvider({ children }: PropsWithChildren) {
 
     async function clearCart() {
         try {
-            const cart = await clearCartUseCase.execute()
-            setCart(cart.toJSON())
+            if (cart.items.length) {
+                const cart = await clearCartUseCase.execute()
+                setCart(cart.toJSON())
+            }
         } catch (error: any) {
             if (error.name === "Unauthorized error") {
                 location.reload()
