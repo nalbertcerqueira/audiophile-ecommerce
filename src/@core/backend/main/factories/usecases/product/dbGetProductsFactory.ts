@@ -5,4 +5,4 @@ function createDbGetProductsUseCase(): DbGetProductsUseCase {
     return new DbGetProductsUseCase(mongoProductRepository)
 }
 
-export const getDbProductsUseCase = createDbGetProductsUseCase()
+export const dbGetProductsUseCase = createDbGetProductsUseCase()
