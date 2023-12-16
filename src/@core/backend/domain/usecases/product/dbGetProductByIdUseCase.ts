@@ -10,7 +10,7 @@ export class DbGetProductByIdUseCase {
         itemId: string,
         type: ProductType
     ): Promise<ProductProps | CartProduct | null> {
-        const foundItem = await this.getProductByIdRepository.getById(itemId, type)
-        return foundItem
+        const foundProduct = await this.getProductByIdRepository.getById(itemId, type)
+        return foundProduct
     }
 }

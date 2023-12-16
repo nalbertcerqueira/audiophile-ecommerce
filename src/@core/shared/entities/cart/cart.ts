@@ -47,6 +47,9 @@ export class Cart {
     }
 
     public toJSON(): CartProps {
-        return this.props
+        return {
+            ...this.props,
+            items: this.props.items.map((item) => ({ ...item }))
+        }
     }
 }

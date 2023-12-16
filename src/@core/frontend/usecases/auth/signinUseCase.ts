@@ -1,9 +1,7 @@
+import { UserProps } from "@/@core/shared/entities/user/user"
 import { AuthenticationGateway } from "../../domain/gateways/auth/authenticationGateway"
 
-interface SinginInputDTO {
-    email: string
-    password: string
-}
+type SinginInputDTO = Pick<UserProps, "email" | "password">
 
 export class SigninUseCase {
     constructor(private readonly authenticationGateway: AuthenticationGateway) {}

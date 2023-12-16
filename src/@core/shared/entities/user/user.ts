@@ -13,6 +13,6 @@ export class User {
     constructor(private props: UserProps) {}
 
     public toJSON(): UserProps {
-        return this.props
+        return { ...this.props, images: { ...this.props.images } }
     }
 }
