@@ -1,7 +1,7 @@
 "use client"
 
 import { signupUseCase } from "@/@core/frontend/main/usecases/auth/signupFactory"
-import { customZodResolver } from "@/libs/zod"
+import { customZodResolver } from "@/libs/zod/resolvers"
 import { AuthFormFields } from "./types/types"
 import { signupSchema } from "./helpers/schemas"
 import { AuthForm } from "./components/AuthForm"

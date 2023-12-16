@@ -1,14 +1,5 @@
-import z from "zod"
 import { FieldValues, ResolverResult } from "react-hook-form"
-import { ResolverOptions } from "react-hook-form"
-
-export interface ErrorInfo {
-    type: string | number
-    message?: string
-    ref?: HTMLElement
-}
-
-export type ErrorMap = Record<string, ErrorInfo>
+import z from "zod"
 
 export function zodErrorFormatter<T extends z.ZodError<any>>(error: T) {
     const errorMap = error.errors.reduce((acc: Record<string, any>, error) => {
@@ -36,21 +27,13 @@ export function zodErrorFormatter<T extends z.ZodError<any>>(error: T) {
 }
 
 export function customZodResolver<T extends z.Schema<any, any>>(schema: T) {
-    return function <TFieldValues extends FieldValues, TContext>(
-        values: TFieldValues,
-        context: TContext | undefined,
-        options: ResolverOptions<TFieldValues>
+    return function <TFieldValues extends FieldValues>(
+        values: TFieldValues
     ): Promise<ResolverResult<TFieldValues>> {
         const validationResult = schema.safeParse(values)
 
         if (!validationResult.success) {
             const zodErrorMap = zodErrorFormatter(validationResult.error)
-
-            for (const field in options.fields) {
-                if (zodErrorMap[field]) {
-                    zodErrorMap[field].ref = options.fields[field].ref
-                }
-            }
 
             return Promise.resolve({ errors: zodErrorMap, values: {} })
         }

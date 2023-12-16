@@ -28,7 +28,7 @@ export function CartProvider({ children }: PropsWithChildren) {
                 const cart = await getCartUseCase.execute()
                 setCart(cart.toJSON())
             } catch (error: any) {
-                if (error.name !== "Unauthorized error") {
+                if (error.name !== "UnauthorizedError") {
                     console.log(error)
                 }
             }
@@ -40,7 +40,7 @@ export function CartProvider({ children }: PropsWithChildren) {
             const cart = await addCartItemUseCase.execute({ productId, quantity })
             setCart(cart.toJSON())
         } catch (error: any) {
-            if (error.name === "Unauthorized error") {
+            if (error.name === "UnauthorizedError") {
                 location.reload()
             }
         }
@@ -51,7 +51,7 @@ export function CartProvider({ children }: PropsWithChildren) {
             const cart = await removeCartItemUseCase.execute({ productId, quantity })
             setCart(cart.toJSON())
         } catch (error: any) {
-            if (error.name === "Unauthorized error") {
+            if (error.name === "UnauthorizedError") {
                 location.reload()
             }
         }
@@ -64,7 +64,7 @@ export function CartProvider({ children }: PropsWithChildren) {
                 setCart(cart.toJSON())
             }
         } catch (error: any) {
-            if (error.name === "Unauthorized error") {
+            if (error.name === "UnauthorizedError") {
                 location.reload()
             }
         }

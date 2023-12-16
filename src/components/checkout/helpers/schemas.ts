@@ -1,4 +1,4 @@
-import { lengthErrorMessage, requiredErrorMessage } from "../../../utils/errors"
+import { lengthErrorMessage, requiredErrorMessage } from "../../../libs/zod/errors"
 import { CheckoutFields } from "../types/types"
 import z from "zod"
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { GoogleLoginButton } from "./components/GoogleLoginButton"
-import { customZodResolver } from "@/libs/zod"
+import { customZodResolver } from "@/libs/zod/resolvers"
 import { AppleLoginButton } from "./components/AppleLoginButton"
 import { AuthFormFields } from "./types/types"
 import { signinUseCase } from "@/@core/frontend/main/usecases/auth/signinFactory"

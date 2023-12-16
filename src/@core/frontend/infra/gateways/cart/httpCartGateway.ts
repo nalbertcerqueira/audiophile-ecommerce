@@ -5,6 +5,7 @@ import { AddCartItemGateway } from "@/@core/frontend/domain/gateways/cart/addCar
 import { RemoveCartItemGateway } from "@/@core/frontend/domain/gateways/cart/removeCartItemGateway"
 import { ClearCartGateway } from "@/@core/frontend/domain/gateways/cart/clearCartGateway"
 import { UnauthorizedError } from "@/@core/backend/presentation/errors"
+
 export interface RequestDetails {
     routeUrl: string
     method: "GET" | "POST" | "PUT" | "DELETE"
