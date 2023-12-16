@@ -1,15 +1,15 @@
-import { generateCustomZodErrors } from "@/@core/backend/infra/validators/zod/zod-helpers"
-import { cartItemZodSchema } from "@/@core/shared/entities/cart/util"
-import { NextRequest, NextResponse } from "next/server"
+import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbGuestAuthorizationFactory"
+import { generateCustomZodErrors } from "@/@core/shared/entities/helpers"
 import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbAuthorizationFactory"
 import { dbAddCartItemUseCase } from "@/@core/backend/main/factories/usecases/cart/dbAddCartItemFactory"
 import { CartItemInfo } from "@/@core/backend/domain/usecases/cart/protocols"
-import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbGuestAuthorizationFactory"
+import { Cart } from "@/@core/shared/entities/cart/cart"
+import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest) {
     const sessionToken = req.headers.get("authorization")?.split(" ")[1]
     const body = (await req.json()) as CartItemInfo
-    const validationResult = cartItemZodSchema
+    const validationResult = Cart.itemSchema
         .pick({ productId: true, quantity: true })
         .safeParse(body)
 

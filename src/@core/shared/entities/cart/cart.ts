@@ -1,4 +1,6 @@
-import { cartItemZodSchema } from "./util"
+import { generateCustomZodErrors } from "../helpers"
+import { cartItemZodSchema, cartZodSchema } from "./util"
+import { EntityValidationResult } from "../protocols"
 
 export type UserType = "authenticated" | "guest"
 
@@ -20,14 +22,19 @@ export interface CartProps {
 
 export class Cart {
     private props: CartProps
-    private static readonly itemSchema = cartItemZodSchema
+    public static readonly cartSchema = cartZodSchema
+    public static readonly itemSchema = cartItemZodSchema
 
-    public static validateItems(items: any[]): CartProduct[] {
-        const validItems = items.map((item) => {
-            const itemValidation = this.itemSchema.safeParse(item)
-            return itemValidation.success ? itemValidation.data : null
-        })
-        return validItems.filter((item) => item !== null) as CartProduct[]
+    public static validateCart(cart: any): EntityValidationResult<CartProps> {
+        const validationResult = Cart.cartSchema.safeParse(cart)
+
+        if (validationResult.success) {
+            return { success: true, data: validationResult.data }
+        } else
+            return {
+                success: false,
+                errors: generateCustomZodErrors(validationResult.error, 1)
+            }
     }
 
     public static empty(userType: UserType, userId: string): Cart {
@@ -35,14 +42,17 @@ export class Cart {
     }
 
     constructor(props: CartProps) {
-        const { itemCount, totalSpent, items, userType, userId } = props
-        const validItems = Cart.validateItems(items)
+        const validationResult = Cart.validateCart(props)
+
+        if (!validationResult.success) {
+            const firstError = validationResult.errors[0]
+            throw new Error(firstError)
+        }
+
+        const { data } = validationResult
         this.props = {
-            itemCount,
-            totalSpent,
-            items: validItems,
-            userType,
-            userId: userId || "0"
+            ...data,
+            items: data.items.map((item) => ({ ...item }))
         }
     }
 

@@ -1,13 +1,14 @@
-import z from "zod"
+import { passwordZodValidator } from "@/@core/shared/entities/user/utils"
 import { AuthFormFields } from "../types/types"
-import { passwordZodValidator, userZodSchema } from "@/@core/shared/entities/user/utils"
+import { User } from "@/@core/shared/entities/user/user"
+import z from "zod"
 
-export const loginSchema: z.ZodType<AuthFormFields<"login">> = userZodSchema.pick({
+export const loginSchema: z.ZodType<AuthFormFields<"login">> = User.userSchema.pick({
     email: true,
     password: true
 })
 
-export const signupSchema: z.ZodType<AuthFormFields<"signup">> = userZodSchema
+export const signupSchema: z.ZodType<AuthFormFields<"signup">> = User.userSchema
     .pick({
         name: true,
         email: true,

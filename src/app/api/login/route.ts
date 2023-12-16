@@ -1,9 +1,9 @@
-import { generateCustomZodErrors } from "@/@core/backend/infra/validators/zod/zod-helpers"
-import { userZodSchema } from "@/@core/shared/entities/user/utils"
+import { generateCustomZodErrors } from "@/@core/shared/entities/helpers"
 import { dbSigninUseCase } from "@/@core/backend/main/factories/usecases/auth/dbSigninFactory"
+import { User } from "@/@core/shared/entities/user/user"
 import { NextRequest, NextResponse } from "next/server"
 
-const loginValidator = userZodSchema.pick({ email: true, password: true })
+const loginValidator = User.userSchema.pick({ email: true, password: true })
 
 export async function POST(req: NextRequest) {
     try {

@@ -1,9 +1,10 @@
-import { generateCustomZodErrors } from "@/@core/backend/infra/validators/zod/zod-helpers"
+import { generateCustomZodErrors } from "@/@core/shared/entities/helpers"
+import { passwordZodValidator } from "@/@core/shared/entities/user/utils"
 import { dbAddUserUseCase } from "@/@core/backend/main/factories/usecases/user/dbAddUserFactory"
+import { User } from "@/@core/shared/entities/user/user"
 import { NextRequest, NextResponse } from "next/server"
-import { passwordZodValidator, userZodSchema } from "@/@core/shared/entities/user/utils"
 
-const signupValidator = userZodSchema
+const signupValidator = User.userSchema
     .pick({ name: true, email: true, password: true })
     .extend({ passwordConfirmation: passwordZodValidator })
     .refine((data) => data.password === data.passwordConfirmation, {

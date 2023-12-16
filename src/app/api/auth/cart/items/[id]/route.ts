@@ -1,15 +1,15 @@
-import { generateCustomZodErrors } from "@/@core/backend/infra/validators/zod/zod-helpers"
-import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbAuthorizationFactory"
 import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbGuestAuthorizationFactory"
 import { dbRemoveCartItemUseCase } from "@/@core/backend/main/factories/usecases/cart/dbRemoveCartItemFactory"
-import { cartItemZodSchema } from "@/@core/shared/entities/cart/util"
+import { generateCustomZodErrors } from "@/@core/shared/entities/helpers"
+import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbAuthorizationFactory"
+import { Cart } from "@/@core/shared/entities/cart/cart"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
     const sessionToken = req.headers.get("authorization")?.split(" ")[1]
     const body = await req.json()
 
-    const validationResult = cartItemZodSchema.pick({ quantity: true }).safeParse(body)
+    const validationResult = Cart.itemSchema.pick({ quantity: true }).safeParse(body)
 
     try {
         if (!validationResult.success) {
