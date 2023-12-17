@@ -1,5 +1,5 @@
 import { ProductProps } from "../../../../domain/entities/product/product"
-import { productMongoSchema, userMongoSchema } from "./mongo-schemas"
+import { cartItemMongoSchema, productMongoSchema, userMongoSchema } from "./mongo-schemas"
 import { mongoHelper } from "./mongo-config"
 import { readFile } from "fs/promises"
 import { resolve } from "path"
@@ -35,7 +35,10 @@ export class Migration {
         try {
             await Promise.allSettled([
                 mongoHelper.db.createCollection("products", { validator: productMongoSchema }),
-                mongoHelper.db.createCollection("users", { validator: userMongoSchema })
+                mongoHelper.db.createCollection("users", { validator: userMongoSchema }),
+                mongoHelper.db.createCollection("cartItems", {
+                    validator: cartItemMongoSchema
+                })
             ])
         } catch {
             null
