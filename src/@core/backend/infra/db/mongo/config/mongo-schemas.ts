@@ -48,9 +48,9 @@ export const productMongoSchema: Document = {
         ],
         properties: {
             _id: {},
-            slug: { bsonType: "string", minLength: 4 },
-            name: { bsonType: "string", minLength: 4 },
-            shortName: { bsonType: "string", minLength: 3 },
+            slug: { bsonType: "string", minLength: 1 },
+            name: { bsonType: "string", minLength: 1 },
+            shortName: { bsonType: "string", minLength: 1 },
             image: productImageMongoSchema,
             category: categoryMongoSchema,
             categoryImage: productImageMongoSchema,
@@ -67,7 +67,7 @@ export const productMongoSchema: Document = {
                     required: ["quantity", "item"],
                     properties: {
                         quantity: { bsonType: "int", minimum: 1 },
-                        item: { bsonType: "string", minLength: 4 }
+                        item: { bsonType: "string", minLength: 1 }
                     }
                 }
             },
@@ -89,8 +89,8 @@ export const productMongoSchema: Document = {
                     additionalProperties: false,
                     required: ["name", "slug", "category", "image"],
                     properties: {
-                        slug: { bsonType: "string", minLength: 3 },
-                        name: { bsonType: "string", minLength: 4 },
+                        slug: { bsonType: "string", minLength: 1 },
+                        name: { bsonType: "string", minLength: 1 },
                         category: categoryMongoSchema,
                         image: productImageMongoSchema
                     }
@@ -109,7 +109,7 @@ export const userMongoSchema: Document = {
             _id: {},
             name: {
                 bsonType: "string",
-                minLength: 5,
+                minLength: 6,
                 pattern: `${nameRegexp.source}`
             },
             email: {

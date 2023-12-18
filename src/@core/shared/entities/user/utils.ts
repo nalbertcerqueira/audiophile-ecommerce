@@ -2,7 +2,7 @@ import { UserProps } from "./user"
 import { schemaFromType } from "../helpers"
 import z from "zod"
 
-export const nameRegexp = /^[A-Za-z\s]+$/
+export const nameRegexp = /^[A-zÀ-ú\s]+$/
 export const passwordRegexp = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%+<>,.?-]).+$/g
 
 export const nameMessage = "can only have letters"
@@ -21,13 +21,13 @@ export const passwordZodValidator = z
 
 export const userZodSchema = schemaFromType<UserProps>()(
     z.object({
-        id: z.string().trim().min(24),
+        id: z.string().trim().min(1),
         email: z.string().trim().email("is invalid"),
         password: passwordZodValidator,
         name: z
             .string()
             .trim()
-            .min(5, nameLengthMessage)
+            .min(6, nameLengthMessage)
             .refine((name) => name.match(nameRegexp), { message: nameMessage, path: [""] }),
         images: z.object({
             profile: z.string().trim().url().nullable(),

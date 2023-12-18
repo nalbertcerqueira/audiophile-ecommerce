@@ -33,8 +33,6 @@ export class DbRemoveCartItemUseCase {
 
                 return cart || Cart.empty(type, id)
             }
-
-            throw new Error(`There is no item with id: '${productId}' in the cart`)
         }
 
         return null
