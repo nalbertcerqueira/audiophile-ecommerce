@@ -1,4 +1,4 @@
-import { ProductProps } from "@/@core/backend/domain/entities/product/product"
+import { ProductProps } from "@/@core/shared/entities/product/product"
 import { ProductDetails } from "./ProductDetails"
 import { ProductItem } from "@/components/shared/product/ProductItem"
 import { staticProductImages } from "@/utils/imageMap"

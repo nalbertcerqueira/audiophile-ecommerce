@@ -2,7 +2,7 @@ import { ProductSection } from "./components/ProductSection"
 import { GallerySection } from "./components/GallerySection"
 import { BackButton } from "../shared/buttons/BackButton"
 import { RelatedProductsSection } from "./components/RelatedProductsSection"
-import { ProductProps } from "@/@core/backend/domain/entities/product/product"
+import { ProductProps } from "@/@core/shared/entities/product/product"
 import "./styles.scss"
 
 export function ProductPageComponent({ product }: { product?: ProductProps }) {

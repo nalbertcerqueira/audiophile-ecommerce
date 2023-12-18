@@ -1,4 +1,4 @@
-import { ProductProps } from "../../../../domain/entities/product/product"
+import { ProductProps } from "../../../../../shared/entities/product/product"
 import { cartItemMongoSchema, productMongoSchema, userMongoSchema } from "./mongo-schemas"
 import { mongoHelper } from "./mongo-config"
 import { readFile } from "fs/promises"

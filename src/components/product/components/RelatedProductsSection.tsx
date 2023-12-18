@@ -1,6 +1,6 @@
 import { staticProductImages } from "@/utils/imageMap"
 import { OtherProduct } from "./OtherProduct"
-import { RelatedProduct } from "@/@core/backend/domain/entities/product/product"
+import { RelatedProduct } from "@/@core/shared/entities/product/product"
 
 interface RelatedProductsSectionProps {
     otherProducts: RelatedProduct[]

@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react"
 import { dbGetProductsUseCase } from "@/@core/backend/main/factories/usecases/product/dbGetProductsFactory"
-import { ProductProps } from "@/@core/backend/domain/entities/product/product"
+import { ProductProps } from "@/@core/shared/entities/product/product"
 
 export async function generateStaticParams() {
     const products = (await dbGetProductsUseCase.execute("fullProduct")) as ProductProps[]

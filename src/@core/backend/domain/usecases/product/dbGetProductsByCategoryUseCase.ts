@@ -1,4 +1,4 @@
-import { ProductProps } from "../../entities/product/product"
+import { ProductProps } from "../../../../shared/entities/product/product"
 import { GetProductsByCategoryRepository } from "../../repositories/product/getProductsByCategoryRepository"
 
 export class DbGetProductsByCategoryUseCase {

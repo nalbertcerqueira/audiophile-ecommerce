@@ -1,4 +1,4 @@
-import { ProductProps } from "@/@core/backend/domain/entities/product/product"
+import { ProductProps } from "@/@core/shared/entities/product/product"
 import { UserProps } from "@/@core/shared/entities/user/user"
 import { CartProduct, UserType } from "@/@core/shared/entities/cart/cart"
 import { ObjectId } from "mongodb"

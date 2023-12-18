@@ -1,7 +1,7 @@
 import { TitleSection } from "./components/TitleSection"
 import { PreviewSection } from "./components/PreviewSection"
 import "./styles.scss"
-import { ProductProps } from "@/@core/backend/domain/entities/product/product"
+import { ProductProps } from "@/@core/shared/entities/product/product"
 
 interface CategoryPageComponentProps {
     products?: ProductProps[]

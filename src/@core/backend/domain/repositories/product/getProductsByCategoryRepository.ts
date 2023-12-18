@@ -1,4 +1,4 @@
-import { ProductProps } from "../../entities/product/product"
+import { ProductProps } from "../../../../shared/entities/product/product"
 
 export interface GetProductsByCategoryRepository {
     getByCategory(category: string): Promise<ProductProps[]>

@@ -1,5 +1,5 @@
 import { ProductItem } from "../../shared/product/ProductItem"
-import { ProductProps } from "@/@core/backend/domain/entities/product/product"
+import { ProductProps } from "@/@core/shared/entities/product/product"
 import { staticProductImages } from "@/utils/imageMap"
 
 export function PreviewSection({ products }: { products: ProductProps[] }) {

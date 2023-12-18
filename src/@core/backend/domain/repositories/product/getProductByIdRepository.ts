@@ -1,5 +1,5 @@
 import { CartProduct } from "@/@core/shared/entities/cart/cart"
-import { ProductProps } from "../../entities/product/product"
+import { ProductProps } from "../../../../shared/entities/product/product"
 import { ProductType } from "./protocols"
 
 export interface GetProductByIdRepository {
