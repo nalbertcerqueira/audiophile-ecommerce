@@ -8,6 +8,15 @@
     height: 50px;
     background-color: vars.$very-light-grey;
 
+    &--disabled {
+        opacity: 0.75;
+    }
+
+    &--disabled > &__action-btn,
+    &--disabled > &__display {
+        pointer-events: none;
+    }
+
     &__action-btn {
         @extend %subtitle;
         padding: 0 1rem;

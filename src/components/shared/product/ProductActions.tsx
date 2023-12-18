@@ -7,11 +7,13 @@ import { CartContext } from "@/contexts/CartContext"
 
 export function AddProductAction({ productId }: { productId: string }) {
     const [count, setCount] = useState<number>(0)
-    const { addItem } = useContext(CartContext)
+    const { loadingState, addItem } = useContext(CartContext)
+    const isLoading = loadingState.currentProductIds.includes(productId)
 
     return (
         <div className="product__cart-actions">
             <Counter
+                disabled={isLoading}
                 count={count}
                 increment={() => setCount((prevCount) => prevCount + 1)}
                 decrement={() =>
@@ -19,6 +21,7 @@ export function AddProductAction({ productId }: { productId: string }) {
                 }
             />
             <button
+                disabled={isLoading}
                 onClick={() => addItem(productId, count)}
                 className="btn btn--primary"
                 type="button"

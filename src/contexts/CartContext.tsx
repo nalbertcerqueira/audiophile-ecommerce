@@ -5,10 +5,14 @@ import { getCartUseCase } from "@/@core/frontend/main/usecases/cart/getCartFacto
 import { clearCartUseCase } from "@/@core/frontend/main/usecases/cart/clearCartFactory"
 import { addCartItemUseCase } from "@/@core/frontend/main/usecases/cart/addCartItemFactory"
 import { removeCartItemUseCase } from "@/@core/frontend/main/usecases/cart/removeCartItemFactory"
-import { PropsWithChildren, createContext, useState, useEffect } from "react"
+import { CartLoadingState } from "@/store/cartLoading/types"
+import { cartLoadingReducer } from "@/store/cartLoading/reducer"
+import { cartLoadingInititalState } from "@/store/cartLoading/initialState"
+import { PropsWithChildren, createContext, useState, useEffect, useReducer } from "react"
 
 interface CartContextProps {
     cart: CartProps
+    loadingState: CartLoadingState
     addItem: (productId: string, quantity: number) => void
     removeItem: (productId: string, quantity: number) => void
     clearCart: () => void
@@ -20,22 +24,35 @@ export const CartContext = createContext<CartContextProps>({} as CartContextProp
 
 export function CartProvider({ children }: PropsWithChildren) {
     const [cart, setCart] = useState<CartProps>(initialState)
+    const [loadingState, loadingDispatch] = useReducer(
+        cartLoadingReducer,
+        cartLoadingInititalState
+    )
 
     useEffect(() => {
         getCart()
         async function getCart() {
+            loadingDispatch({ type: "ENABLE" })
             try {
                 const cart = await getCartUseCase.execute()
                 setCart(cart.toJSON())
             } catch (error: any) {
                 if (error.name !== "UnauthorizedError") {
-                    console.log(error)
+                    return console.log(error)
                 }
+            } finally {
+                loadingDispatch({ type: "DISABLE" })
             }
         }
     }, [])
 
-    async function addItem(productId: string, quantity: number) {
+    async function addItem(productId: string, quantity: number): Promise<void> {
+        if (shouldBlockAction(productId)) return
+
+        const timerRef = setTimeout(
+            () => loadingDispatch({ type: "ENABLE", payload: { productId } }),
+            200
+        )
         try {
             const cart = await addCartItemUseCase.execute({ productId, quantity })
             setCart(cart.toJSON())
@@ -43,10 +60,19 @@ export function CartProvider({ children }: PropsWithChildren) {
             if (error.name === "UnauthorizedError") {
                 location.reload()
             }
+        } finally {
+            clearTimeout(timerRef)
+            loadingDispatch({ type: "DISABLE", payload: { productId } })
         }
     }
 
-    async function removeItem(productId: string, quantity: number) {
+    async function removeItem(productId: string, quantity: number): Promise<void> {
+        if (shouldBlockAction(productId)) return
+
+        const timerRef = setTimeout(
+            () => loadingDispatch({ type: "ENABLE", payload: { productId } }),
+            200
+        )
         try {
             const cart = await removeCartItemUseCase.execute({ productId, quantity })
             setCart(cart.toJSON())
@@ -54,10 +80,16 @@ export function CartProvider({ children }: PropsWithChildren) {
             if (error.name === "UnauthorizedError") {
                 location.reload()
             }
+        } finally {
+            clearTimeout(timerRef)
+            loadingDispatch({ type: "DISABLE", payload: { productId } })
         }
     }
 
-    async function clearCart() {
+    async function clearCart(): Promise<void> {
+        if (loadingState.isLoading) return
+
+        loadingDispatch({ type: "CLEAR" })
         try {
             if (cart.items.length) {
                 const cart = await clearCartUseCase.execute()
@@ -67,11 +99,20 @@ export function CartProvider({ children }: PropsWithChildren) {
             if (error.name === "UnauthorizedError") {
                 location.reload()
             }
+        } finally {
+            loadingDispatch({ type: "DISABLE" })
         }
     }
 
+    function shouldBlockAction(productId: string): boolean {
+        const isProductAction = loadingState.currentProductIds.includes(productId)
+        const isCleaning = loadingState.isLoading && !loadingState.currentProductIds.length
+
+        return isProductAction || isCleaning
+    }
+
     return (
-        <CartContext.Provider value={{ cart, addItem, removeItem, clearCart }}>
+        <CartContext.Provider value={{ loadingState, cart, addItem, removeItem, clearCart }}>
             {children}
         </CartContext.Provider>
     )

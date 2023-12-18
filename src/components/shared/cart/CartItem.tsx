@@ -17,10 +17,11 @@ interface CartItemProps {
 }
 
 export function CartItem({ readOnly, name, productId, slug, quantity, price }: CartItemProps) {
-    const { addItem, removeItem } = useContext(CartContext)
+    const { addItem, removeItem, loadingState } = useContext(CartContext)
+    const isLoading = loadingState.currentProductIds.includes(productId)
 
     return (
-        <div className="cart-item">
+        <div className="cart-item" style={{ opacity: isLoading ? "0.4" : "1" }}>
             <Image
                 className="cart-item__thumb"
                 src={staticProductImages[slug].cartThumb}
@@ -35,6 +36,7 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
             </div>
             {!readOnly && (
                 <Counter
+                    disabled={isLoading}
                     count={quantity}
                     decrement={() => removeItem(productId, 1)}
                     increment={() => addItem(productId, 1)}
