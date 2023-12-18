@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
         ])
 
         if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
-            const { id } = authenticatedUser.value.toJSON()
+            const { id } = authenticatedUser.value
             const cart = await dbAddCartItemUseCase.execute(
                 { id, type: "authenticated" },
                 { productId, quantity }

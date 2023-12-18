@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react"
-import { UserProps } from "@/@core/shared/entities/user/user"
 import { getUserUseCase } from "@/@core/frontend/main/usecases/user/getUserFactory"
+import { UserProps } from "@/@core/shared/entities/user/user"
+import { useEffect, useState } from "react"
+
+type UserBasicInfo = Pick<UserProps, "name" | "email">
 
 interface SessionStatus {
     isLogged: boolean
@@ -9,7 +11,7 @@ interface SessionStatus {
 
 export function useSession() {
     const [status, setStatus] = useState<SessionStatus>({ isLoading: true, isLogged: false })
-    const [user, setUser] = useState<Pick<UserProps, "name" | "email"> | null>(null)
+    const [user, setUser] = useState<UserBasicInfo | null>(null)
 
     useEffect(() => {
         getUserUseCase
@@ -19,13 +21,10 @@ export function useSession() {
                     localStorage.setItem("sessionToken", data)
                     return setStatus({ isLoading: false, isLogged: false })
                 }
-
                 if (data.type === "authenticated") {
-                    const { name, email } = data
-                    setUser({ email, name })
+                    setUser({ name: data.name, email: data.email })
                     return setStatus({ isLoading: false, isLogged: true })
                 }
-
                 throw new Error()
             })
             .catch(() => {

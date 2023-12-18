@@ -1,10 +1,12 @@
 import { UserProps } from "@/@core/shared/entities/user/user"
 
-export interface GuestUser extends Pick<UserProps, "id"> {
+export interface GuestUser {
+    id: string
     type: "guest"
 }
 
-export interface AuthenticatedUser extends Pick<UserProps, "id" | "name" | "email"> {
+export interface AuthenticatedUser extends Pick<UserProps, "name" | "email"> {
+    id: string
     type: "authenticated"
 }
 

@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
             ])
 
             if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
-                const { id, email, name } = authenticatedUser.value.toJSON()
+                const { id, email, name } = authenticatedUser.value
                 return NextResponse.json(
                     { data: { id, name, email, type: "authenticated" } },
                     { status: 200 }

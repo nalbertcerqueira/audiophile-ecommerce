@@ -1,4 +1,4 @@
-import { UserProps } from "@/@core/shared/entities/user/user"
+import { User, UserProps } from "@/@core/shared/entities/user/user"
 import { AddUserRepository } from "../../repositories/user/addUserRepository"
 import { FindUserByEmailRepository } from "../../repositories/user/findUserByEmailRepository"
 import { HashService } from "../../services/crypto/hashService"
@@ -17,12 +17,12 @@ export class DbAddUserUseCase {
 
         if (!foundUser) {
             const hashedPassword = await this.hashService.hash(password)
-            const newUser = {
+            const newUser = new User({
                 name,
                 email,
                 password: hashedPassword,
                 images: { profile: null, profileThumb: null }
-            }
+            })
             await this.addUserRepository.add(newUser)
 
             return true

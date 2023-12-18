@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
             ])
 
             if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
-                const { id } = authenticatedUser.value.toJSON()
+                const { id } = authenticatedUser.value
                 const cart = await dbGetCartUseCase.execute(id, "authenticated")
                 return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
             }
@@ -51,7 +51,7 @@ export async function DELETE(req: NextRequest) {
             ])
 
             if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
-                const { id } = authenticatedUser.value.toJSON()
+                const { id } = authenticatedUser.value
                 const cart = await dbClearCartUseCase.execute(id, "authenticated")
                 return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
             }

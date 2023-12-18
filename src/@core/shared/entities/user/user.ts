@@ -3,7 +3,6 @@ import { EntityValidationResult } from "../protocols"
 import { userZodSchema } from "./utils"
 
 export interface UserProps {
-    readonly id: string
     name: string
     email: string
     password: string

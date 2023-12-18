@@ -18,12 +18,12 @@ interface CartContextProps {
     clearCart: () => void
 }
 
-const initialState = Cart.empty("guest", "0").toJSON()
+const cartInitialState = Cart.empty("guest", "0").toJSON()
 
 export const CartContext = createContext<CartContextProps>({} as CartContextProps)
 
 export function CartProvider({ children }: PropsWithChildren) {
-    const [cart, setCart] = useState<CartProps>(initialState)
+    const [cart, setCart] = useState<CartProps>(cartInitialState)
     const [loadingState, loadingDispatch] = useReducer(
         cartLoadingReducer,
         cartLoadingInititalState

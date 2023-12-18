@@ -30,7 +30,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
         ])
 
         if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
-            const { id } = authenticatedUser.value.toJSON()
+            const { id } = authenticatedUser.value
             const cart = await dbRemoveCartItemUseCase.execute(
                 { id, type: "authenticated" },
                 { productId, quantity }

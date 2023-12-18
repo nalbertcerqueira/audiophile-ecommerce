@@ -16,15 +16,14 @@ export class DbSigninUseCase {
         const foundUser = await this.findUserByEmailRepository.findByEmail(email)
 
         if (foundUser) {
-            const foundUserProps = foundUser.toJSON()
             const isPasswordCorrect = await this.hashComparer.compare(
                 password,
-                foundUserProps.password
+                foundUser.password
             )
 
             if (isPasswordCorrect) {
                 const sessionToken = await this.tokenGenerator.generate({
-                    id: foundUserProps.id,
+                    id: foundUser.id,
                     sessionType: "authenticated"
                 })
 

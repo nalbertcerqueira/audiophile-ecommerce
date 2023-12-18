@@ -1,7 +1,5 @@
-import { UserProps } from "@/@core/shared/entities/user/user"
-
-export type UserWithoutId = Omit<UserProps, "id">
+import { User } from "@/@core/shared/entities/user/user"
 
 export interface AddUserRepository {
-    add(userProps: UserWithoutId): Promise<void>
+    add(user: User): Promise<void>
 }
