@@ -6,10 +6,14 @@ type ItemToAdd = Pick<CartProduct, "productId" | "quantity">
 export class AddCartItemUseCase {
     constructor(private readonly addCartItemGateway: AddCartItemGateway) {}
 
-    public async execute(item: ItemToAdd): Promise<Cart> {
+    public async execute(item: ItemToAdd): Promise<Cart | null> {
         const { productId, quantity } = item
-        const cart = await this.addCartItemGateway.addItem(productId, quantity)
 
-        return cart
+        if (quantity >= 1) {
+            const cart = await this.addCartItemGateway.addItem(productId, quantity)
+            return cart
+        }
+
+        return null
     }
 }
