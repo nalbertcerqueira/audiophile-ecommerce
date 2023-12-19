@@ -55,6 +55,7 @@
 
 .cart-item {
     @include mixins.flex($items: center, $gap: 1rem);
+    @extend %show-animation;
 
     &__thumb {
         width: 4rem;
@@ -101,6 +102,7 @@
 
 .summary-field {
     @include mixins.flex($content: space-between, $gap: 2rem);
+    @extend %show-animation;
 
     &__name,
     &__value {

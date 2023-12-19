@@ -18,10 +18,10 @@ interface CartItemProps {
 
 export function CartItem({ readOnly, name, productId, slug, quantity, price }: CartItemProps) {
     const { addItem, removeItem, loadingState } = useContext(CartContext)
-    const isLoading = loadingState.currentProductIds.includes(productId)
+    const isLoading = loadingState.currentProductIds.includes(productId) && !readOnly
 
     return (
-        <div className="cart-item" style={{ opacity: isLoading ? "0.4" : "1" }}>
+        <div className="cart-item">
             <Image
                 className="cart-item__thumb"
                 src={staticProductImages[slug].cartThumb}
