@@ -1,4 +1,3 @@
-import { CartProduct } from "@/@core/shared/entities/cart/cart"
 import { ProductProps } from "../../../../../../shared/entities/product/product"
 import { GetProductsByCategoryRepository } from "../../../../../domain/repositories/product/getProductsByCategoryRepository"
 import { GetProductsRepository } from "../../../../../domain/repositories/product/getProductsRepository"
@@ -6,7 +5,10 @@ import { mongoHelper } from "../../config/mongo-config"
 import { MongoShortProduct, MongoProduct } from "../../models"
 import { GetProductByIdRepository } from "@/@core/backend/domain/repositories/product/getProductByIdRepository"
 import { ObjectId } from "mongodb"
-import { ProductType } from "@/@core/backend/domain/repositories/product/protocols"
+import {
+    ProductFromType,
+    ProductType
+} from "@/@core/backend/domain/repositories/product/protocols"
 
 export class MongoProductRepository
     implements
@@ -25,24 +27,10 @@ export class MongoProductRepository
         })
     }
 
-    public async getAll(type: ProductType): Promise<ProductProps[] | CartProduct[]> {
+    public async getAll(): Promise<ProductProps[]> {
         await mongoHelper.connect()
 
         const productCollection = mongoHelper.db.collection("products")
-
-        if (type === "shortProduct") {
-            const shortProductQuery = this.getShortProductQuery()
-            const shortProducts = await productCollection
-                .aggregate<MongoShortProduct>([shortProductQuery])
-                .toArray()
-
-            return shortProducts.map(({ productId, ...otherProps }) => {
-                return {
-                    productId: productId.toString(),
-                    ...otherProps
-                }
-            })
-        }
 
         const products = await productCollection.find<MongoProduct>({}).toArray()
         return products.map(({ _id, ...productProps }) => {
@@ -50,10 +38,10 @@ export class MongoProductRepository
         })
     }
 
-    public async getById(
+    public async getById<T extends ProductType>(
         productId: string,
-        type: ProductType
-    ): Promise<ProductProps | CartProduct | null> {
+        type: T
+    ): Promise<ProductFromType<T> | null> {
         await mongoHelper.connect()
 
         try {
@@ -73,7 +61,7 @@ export class MongoProductRepository
 
             if (shortProducts[0]) {
                 const { productId, ...otherProps } = shortProducts[0]
-                return { productId: productId.toString(), ...otherProps }
+                return { productId: productId.toString(), ...otherProps } as ProductFromType<T>
             }
 
             return null
@@ -83,7 +71,7 @@ export class MongoProductRepository
 
         if (product) {
             const { _id, ...otherProps } = product
-            return { id: _id.toString(), ...otherProps }
+            return { id: _id.toString(), ...otherProps } as ProductFromType<T>
         }
 
         return null
