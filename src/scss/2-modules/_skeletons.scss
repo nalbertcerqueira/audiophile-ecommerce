@@ -1,10 +1,13 @@
 @use "../1-base/variables" as vars;
 @use "../1-base/mixins" as mixins;
+@use "../1-base/placeholders";
 
 %skeleton-box {
+    @extend %show-animation;
     overflow: hidden;
     position: relative;
-    background-color: vars.$very-light-grey;
+    background-color: #e6e6e6;
+    opacity: 0;
 }
 
 %shimer-bg {
