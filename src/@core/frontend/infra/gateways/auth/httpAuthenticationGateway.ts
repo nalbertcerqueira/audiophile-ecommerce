@@ -9,11 +9,15 @@ export class HttpAuthenticationGateway implements AuthenticationGateway {
 
     public async authenticateUser(authData: AuthData): Promise<string | null> {
         const fullUrl = `${this.baseApiUrl}/login`
+        const guestSessionToken = localStorage.getItem("sessionToken")
 
         const response = await fetch(fullUrl, {
             method: "POST",
             body: JSON.stringify(authData),
-            headers: { "Content-Type": "application/json" }
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${guestSessionToken}`
+            }
         })
 
         const responseData = await response.json()

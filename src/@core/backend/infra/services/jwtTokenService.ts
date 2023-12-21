@@ -2,9 +2,12 @@ import { TokenVerifierService } from "../../domain/services/token/tokenVerifierS
 import { TokenGeneratorService } from "../../domain/services/token/tokenGeneratorService"
 import { TokenPayload } from "../../domain/services/token/protocols"
 import { TextEncoder } from "util"
-import { SignJWT, jwtVerify } from "jose"
+import { SignJWT, jwtVerify, decodeJwt } from "jose"
+import { TokenDecoderService } from "../../domain/services/token/tokenDecoderService"
 
-export class JwtTokenService implements TokenGeneratorService, TokenVerifierService {
+export class JwtTokenService
+    implements TokenGeneratorService, TokenVerifierService, TokenDecoderService
+{
     constructor(
         private readonly duration: number,
         private readonly secretKey: string
@@ -33,6 +36,15 @@ export class JwtTokenService implements TokenGeneratorService, TokenVerifierServ
             })
 
             return { id: payload.id, sessionType: payload.sessionType }
+        } catch {
+            return null
+        }
+    }
+
+    public decode(token: string): TokenPayload | null {
+        try {
+            const payload = decodeJwt<TokenPayload>(token)
+            return payload
         } catch {
             return null
         }
