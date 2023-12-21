@@ -1,6 +1,6 @@
 import { UuidGeneratorService } from "@/@core/backend/infra/services/uuidGeneratorService"
 
-function createUuidGeneratorService() {
+function createUuidGeneratorService(): UuidGeneratorService {
     return new UuidGeneratorService()
 }
 

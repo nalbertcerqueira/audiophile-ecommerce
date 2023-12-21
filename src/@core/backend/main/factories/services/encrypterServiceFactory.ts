@@ -1,6 +1,6 @@
 import { BcryptEncrypterService } from "@/@core/backend/infra/services/bcryptEncrypterService"
 
-function createBcryptEncrypterService(saltRounds: number) {
+function createBcryptEncrypterService(saltRounds: number): BcryptEncrypterService {
     return new BcryptEncrypterService(saltRounds)
 }
 

@@ -2,7 +2,7 @@ import { DbGuestSessionUseCase } from "@/@core/backend/domain/usecases/auth/dbGu
 import { guestJwtTokenService } from "../../services/tokenServiceFactory"
 import { uuidGeneratorService } from "../../services/idGeneratorServiceFactory"
 
-function createDbGuestSessionUseCase() {
+function createDbGuestSessionUseCase(): DbGuestSessionUseCase {
     return new DbGuestSessionUseCase(uuidGeneratorService, guestJwtTokenService)
 }
 

@@ -3,7 +3,7 @@ import { MongoUserRepository } from "@/@core/backend/infra/db/mongo/repositories
 import { bcryptEncrypterService } from "../../services/encrypterServiceFactory"
 import { authenticatedJwtTokenService } from "../../services/tokenServiceFactory"
 
-function createDbSigninUseCase() {
+function createDbSigninUseCase(): DbSigninUseCase {
     const mongoUserRepository = new MongoUserRepository()
 
     return new DbSigninUseCase(
