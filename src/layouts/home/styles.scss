@@ -17,50 +17,90 @@
 
 .footer {
     background-color: vars.$matte-black;
-    padding: 4.6875rem 2rem 3rem;
+    padding: 4.6875rem 2.5rem 3rem;
+
+    @include mixins.media-768 {
+        padding-block: 3.75rem 2.875rem;
+    }
 
     &__inner-container {
         @extend %inner-container;
-        @include mixins.flex($gap: 2rem, $content: space-between);
         position: relative;
 
         &::before {
             content: "";
             position: absolute;
-            top: -75px;
+            top: -4.6875rem;
             left: 0;
             height: 0.25rem;
             background-color: vars.$default-orange;
             width: 6.25rem;
+
+            @include mixins.media-768 {
+                top: -3.75rem;
+            }
         }
     }
 
-    &__about-container {
-        width: 48%;
+    &__inner-links {
+        @include mixins.flex($content: space-between, $items: center, $gap: 2rem);
+
+        @include mixins.media-768 {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+    &__nav-links {
+        @include mixins.flex($items: center, $gap: 2.125rem);
+
+        @include mixins.media-768 {
+            gap: 1.75rem;
+        }
+    }
+
+    &__wrapper {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, auto);
+        row-gap: 3.5rem;
+        margin-top: 2.25rem;
+
+        @include mixins.media-768 {
+            row-gap: 3rem;
+            margin-top: 2rem;
+        }
     }
 
     &__about-brand {
         color: rgba(vars.$white, 0.5);
-        margin-top: 2.25rem;
+
+        @include mixins.media-768 {
+            grid-column: 1/3;
+        }
     }
 
-    &__copyright {
-        color: rgba(vars.$white, 0.5);
-        font-weight: vars.$medium-weight;
-        margin-top: 3.5rem;
-    }
+    &__social-media {
+        @include mixins.flex($gap: 0.75rem, $content: flex-end);
+        align-self: flex-end;
 
-    &__links {
-        @include mixins.flex($content: space-between, $direction: column, $items: flex-end);
-    }
-
-    &__social-links {
-        display: flex;
-        gap: 0.75rem;
+        @include mixins.media-768 {
+            grid-column: 2/3;
+            grid-row: 2/3;
+        }
     }
 
     &__social-icon {
         transition: fill vars.$transition-duration;
+    }
+
+    &__external-links {
+        @include mixins.flex($items: flex-end, $direction: column-reverse);
+
+        @include mixins.media-768 {
+            flex-direction: column;
+            align-self: flex-end;
+        }
     }
 
     &__social-link {
@@ -77,6 +117,13 @@
 
     &__attributions {
         color: rgba(vars.$white, 0.5);
+        position: absolute;
+        right: 0;
+        bottom: 0;
+
+        @include mixins.media-768 {
+            position: static;
+        }
     }
 
     &__github {
@@ -87,6 +134,17 @@
 
         &:hover {
             color: vars.$white;
+        }
+    }
+
+    &__copyright {
+        color: rgba(vars.$white, 0.5);
+        font-weight: vars.$medium-weight;
+
+        @include mixins.media-768 {
+            grid-column: 1;
+            grid-row: 2/3;
+            align-self: flex-end;
         }
     }
 }

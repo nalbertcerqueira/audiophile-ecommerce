@@ -17,9 +17,13 @@
         @extend %inner-container;
         display: grid;
         align-items: center;
-        grid-template-columns: 1fr auto 1fr;
+        grid-template-columns: repeat(3, 1fr);
         gap: 2rem;
-        padding: 1.75rem 0 2.25rem 0;
+        padding: 1.75rem 0;
+
+        @include mixins.media-920 {
+            grid-template-columns: 1fr auto;
+        }
     }
 
     &__btn-wrapper {

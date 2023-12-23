@@ -1,31 +1,16 @@
-"use client"
-
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { NavLink } from "./NavLink"
 
 export function Navbar() {
-    const links: string[] = ["home", "headphones", "speakers", "earphones"]
-    const pathname = usePathname()
-
-    function shouldRenderMarker(link: string): boolean {
-        if (pathname === "/" && link === "home") {
-            return true
-        }
-        return !!pathname.match(link)
-    }
+    const paths: string[] = ["/home", "/headphones", "/speakers", "/earphones"]
 
     return (
         <nav className="navbar">
             <ul className="navbar__link-list">
-                {links.map((link) => (
-                    <li key={link}>
-                        <Link
-                            className="navbar__link"
-                            href={`/${link === "home" ? "" : link}`}
-                        >
-                            {link.toUpperCase()}
-                            {shouldRenderMarker(link) && <span className="navbar__marker" />}
-                        </Link>
+                {paths.map((path) => (
+                    <li key={path}>
+                        <NavLink path={`${path === "/home" ? "/" : path}`}>
+                            {path.slice(1).toUpperCase()}
+                        </NavLink>
                     </li>
                 ))}
             </ul>

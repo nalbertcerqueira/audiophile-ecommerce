@@ -8,39 +8,53 @@
     border-radius: 0.5rem;
     padding: 0 2rem 2rem;
 
+    @include mixins.media-768 {
+        padding: 0 1rem 1.5rem;
+    }
+
     &:hover {
         .category__thumb {
-            transform: translateY(-1rem);
+            transform: translateY(-12%);
         }
+
         .category__thumb-container::before {
-            width: 110%;
+            width: 100%;
         }
     }
 
     &__info {
         @include mixins.flex($gap: 1rem, $items: center, $direction: column);
         margin-top: 116px;
+
+        @include mixins.media-768 {
+            margin-top: 88px;
+        }
     }
 
     &__thumb-container {
         @include mixins.flex($items: center);
         position: absolute;
-        top: -50%;
+        top: 0;
         left: 50%;
-        height: 100%;
         max-width: 125px;
-        transform: translateX(-50%);
+        min-width: 103px;
+        transform: translate(-50%, -50%);
+
+        @include mixins.media-768 {
+            min-width: auto;
+            width: 80px;
+        }
 
         &::before {
             content: "";
             position: absolute;
-            top: 83%;
-            left: 50%;
-            width: 100%;
+            width: 90%;
             height: 1.125rem;
             border-radius: 50%;
             background-color: vars.$black;
-            transform: translate(-50%, -10%);
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, 25%);
             filter: blur(20px);
             transition: width vars.$transition-duration;
         }
@@ -59,6 +73,12 @@
         letter-spacing: vars.$h6-letter-spacing;
         line-height: 1em;
         font-weight: 700;
+        word-break: break-all;
+        text-align: center;
+
+        @include mixins.media-768 {
+            font-size: vars.$text-font-size;
+        }
     }
 
     &__link {
@@ -66,7 +86,7 @@
         @include mixins.flex($gap: 0.8125rem);
         color: rgba(vars.$black, 0.5);
         transition: color vars.$transition-duration;
-        padding: 0.25rem 0.5rem;
+        padding: 0 0.5rem;
 
         &:hover {
             color: vars.$default-orange;

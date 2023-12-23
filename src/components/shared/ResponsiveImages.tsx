@@ -18,9 +18,23 @@ interface ReponsiveImagesProps {
 export function ResponsiveImages({ images }: ReponsiveImagesProps) {
     return (
         <>
-            {images.map((image, i) => (
-                <Image {...image} alt={image.alt} key={i} />
-            ))}
+            {images.map((image, i) => {
+                return (
+                    <Image
+                        src={{
+                            src: image.src,
+                            width: image.width,
+                            height: image.height,
+                            blurDataURL: image.blurDataURL,
+                            blurHeight: image.blurHeight,
+                            blurWidth: image.blurWidth
+                        }}
+                        alt={image.alt}
+                        className={image.className}
+                        key={i}
+                    />
+                )
+            })}
         </>
     )
 }

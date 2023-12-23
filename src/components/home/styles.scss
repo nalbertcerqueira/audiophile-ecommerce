@@ -1,11 +1,35 @@
-@use "../../scss/1-base/placeholders";
 @use "../../scss/1-base/variables" as vars;
 @use "../../scss/1-base/mixins" as mixins;
+@use "../../scss/1-base/placeholders";
 
 .header-hero-wrapper {
-    background-color: #181818;
+    background-color: #191919;
     border-radius: 0 0 0.5rem 0.5rem;
     overflow: hidden;
+    position: relative;
+}
+
+.hero-banner {
+    display: none;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    height: 100%;
+    width: auto;
+    transform: translateX(-50%);
+    pointer-events: none;
+
+    &--desktop {
+        @include mixins.media-desktop {
+            display: block;
+        }
+    }
+
+    &--tablet {
+        @include mixins.media-768 {
+            display: block;
+        }
+    }
 }
 
 .hero {
@@ -14,8 +38,11 @@
     &__inner-container {
         @extend %inner-container;
         position: relative;
-        display: grid;
-        grid-template-columns: 400px auto;
+        display: flex;
+
+        @include mixins.media-768 {
+            justify-content: center;
+        }
     }
 
     &__division {
@@ -28,42 +55,64 @@
     }
 
     &__content-wrapper {
+        width: 400px;
         margin: 128px 0 150px;
         z-index: 10;
+
+        @include mixins.media-768 {
+            margin: 126px 0 167px;
+        }
     }
 
     &__featured-info {
         @include mixins.flex($direction: column, $gap: 1.5rem);
+
+        @include mixins.media-768 {
+            align-items: center;
+        }
     }
 
     &__overline {
         @extend %overline-text;
         color: rgba(vars.$white, 0.49);
+
+        @include mixins.media-768 {
+            text-align: center;
+        }
     }
 
     &__title {
         color: vars.$white;
+
+        @include mixins.media-768 {
+            text-align: center;
+        }
     }
 
     &__product-info {
         color: rgba(vars.$white, 0.75);
         max-width: 90%;
+
+        @include mixins.media-768 {
+            text-align: center;
+        }
     }
 
     &__btn {
-        margin-top: 2.5rem;
-    }
+        margin: 2.5rem 0 0;
 
-    &__product-img {
-        transform: scale(1.18) translate(-30%, -6%);
-        height: 100%;
-        width: 150%;
-        object-fit: cover;
+        @include mixins.media-768 {
+            margin: 2.5rem auto 0;
+        }
     }
 }
 
 .homepage-categories {
     margin-top: 200px;
+
+    @include mixins.media-768 {
+        margin-top: 148px;
+    }
 }
 
 .product-grid {
@@ -74,8 +123,13 @@
         margin-top: 168px;
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: 560px 320px 320px;
+        grid-template-rows: auto 320px 320px;
         gap: 3rem 1.875rem;
+
+        @include mixins.media-768 {
+            margin-top: 96px;
+            gap: 2rem 0.75rem;
+        }
     }
 
     &__large-item,
@@ -91,22 +145,47 @@
 .featured-product {
     @include mixins.flex($gap: 2rem, $content: space-evenly, $items: center);
     @extend %full-width-height;
-    padding: 2rem;
+    padding: 2.75rem 2rem;
     overflow: hidden;
     border-radius: 0.5rem;
     background-color: vars.$default-orange;
+
+    @include mixins.media-768 {
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 3rem;
+        padding: 4rem 2.5rem;
+    }
 
     &__img-box {
         position: relative;
         width: calc(300px + 8%);
         height: 100%;
+
+        @include mixins.media-768 {
+            max-width: 194px;
+            height: auto;
+        }
     }
 
     &__img {
+        display: none;
         width: 100%;
         height: auto;
         object-fit: contain;
-        transform: translateY(16%);
+
+        &--desktop {
+            @include mixins.media-desktop {
+                display: block;
+                transform: translateY(14%);
+            }
+        }
+
+        &--tablet {
+            @include mixins.media-768 {
+                display: block;
+            }
+        }
     }
 
     &__circle-patterns {
@@ -115,6 +194,11 @@
         top: -10%;
         transform: translateX(-50%);
         pointer-events: none;
+
+        @include mixins.media-768 {
+            top: 0;
+            transform: translate(-50%, -35%);
+        }
     }
 
     &__info {
@@ -126,15 +210,27 @@
         line-height: vars.$h1-line-height;
         letter-spacing: vars.$h1-letter-spacing;
         color: vars.$white;
+
+        @include mixins.media-768 {
+            text-align: center;
+        }
     }
 
     &__about {
         color: rgba(vars.$white, 0.75);
         margin-top: 1.5rem;
+
+        @include mixins.media-768 {
+            text-align: center;
+        }
     }
 
     &__link {
-        margin-top: 2.5rem;
+        margin: 2.5rem 0 0;
+
+        @include mixins.media-768 {
+            margin: 2.5rem auto 0;
+        }
     }
 }
 
@@ -143,13 +239,62 @@
     display: flex;
     padding: 2rem;
     border-radius: 0.5rem;
-    background: url("/imgs/home/speaker-banner.jpg") right / cover;
+    position: relative;
+    overflow: hidden;
+
+    @include mixins.media-768 {
+        padding: 2.5rem;
+    }
+
+    &__img {
+        @extend %full-width-height;
+        position: absolute;
+        left: 0;
+        display: none;
+        object-fit: cover;
+        pointer-events: none;
+    }
+
+    &__img--tablet {
+        @include mixins.media-768 {
+            display: block;
+        }
+    }
+
+    &__img--desktop {
+        @include mixins.media-desktop {
+            display: block;
+        }
+    }
 }
 
 .small-banner {
     @extend %full-width-height;
     border-radius: 0.5rem;
-    background: url("/imgs/home/earphone-banner.jpg") center / cover;
+    position: relative;
+    overflow: hidden;
+
+    &__img {
+        @extend %full-width-height;
+        display: none;
+        position: absolute;
+        left: 0;
+        display: none;
+        object-fit: cover;
+        pointer-events: none;
+    }
+
+    &__img--desktop {
+        @include mixins.media-desktop {
+            display: block;
+        }
+    }
+
+    &__img--tablet {
+        @include mixins.media-768 {
+            display: block;
+        }
+    }
 }
 
 .small-info {
@@ -158,11 +303,20 @@
     border-radius: 0.5rem;
     padding: 2rem;
     display: flex;
+
+    @include mixins.media-768 {
+        padding: 2.5rem;
+    }
 }
 
 .info-wrapper {
     @include mixins.flex($gap: 2rem, $direction: column, $content: center);
     margin-left: 4rem;
+    position: relative;
+
+    @include mixins.media-920 {
+        margin-left: 0;
+    }
 
     &__name {
         font-weight: vars.$extra-bold-weight;
@@ -173,4 +327,8 @@
 
 .homepage-about-us {
     margin: 200px auto;
+
+    @include mixins.media-768 {
+        margin: 96px auto;
+    }
 }

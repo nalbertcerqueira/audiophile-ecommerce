@@ -1,5 +1,6 @@
-import Image from "next/image"
 import BeastGearImage from "/public/imgs/home/best-gear.jpg"
+import BeastGearImageTablet from "/public/imgs/home/best-gear-tablet.jpg"
+import { ResponsiveImages } from "../ResponsiveImages"
 
 export function AboutSection({ className }: { className?: string }) {
     return (
@@ -7,8 +8,8 @@ export function AboutSection({ className }: { className?: string }) {
             <div className={`about-us__inner-container ${className}`.trim()}>
                 <div className="about-us__content">
                     <h2 className="about-us__title">
-                        BRINGING YOU THE <br />{" "}
-                        <span className="about-us__highlight">BEST</span> AUDIO GEAR
+                        BRINGING YOU THE <span className="about-us__highlight">BEST</span>{" "}
+                        AUDIO GEAR
                     </h2>
                     <p className="about-us__text">
                         Located at the heart of New York City, Audiophile is the premier store
@@ -20,10 +21,19 @@ export function AboutSection({ className }: { className?: string }) {
                     </p>
                 </div>
                 <div className="about-us__img-container">
-                    <Image
-                        className="about-us__img"
-                        src={BeastGearImage}
-                        alt="a man using a headset while looks at something"
+                    <ResponsiveImages
+                        images={[
+                            {
+                                ...BeastGearImage,
+                                alt: "",
+                                className: "about-us__img about-us__img--desktop"
+                            },
+                            {
+                                ...BeastGearImageTablet,
+                                alt: "",
+                                className: "about-us__img about-us__img--tablet"
+                            }
+                        ]}
                     />
                 </div>
             </div>

@@ -20,6 +20,24 @@
         }
     }
 
+    @include mixins.media-920 {
+        display: none;
+    }
+}
+
+.nav-link {
+    position: relative;
+    font-size: 0.8125rem;
+    padding: 0.25rem 0;
+    letter-spacing: 2px;
+    font-weight: vars.$bold-weight;
+    color: vars.$white;
+    transition: color vars.$transition-duration;
+
+    &:hover {
+        color: vars.$default-orange;
+    }
+
     &__marker {
         position: absolute;
         top: 100%;

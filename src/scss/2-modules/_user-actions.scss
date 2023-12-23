@@ -1,0 +1,74 @@
+@use "../1-base/variables" as vars;
+@use "../1-base/mixins" as mixins;
+@use "../1-base/placeholders";
+
+%text-default-styles {
+    color: rgba(vars.$white, 0.9);
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.user-actions {
+    @include mixins.flex($gap: 0.5rem, $items: center);
+
+    &--hidden {
+        visibility: hidden;
+    }
+
+    &__avatar {
+        flex-shrink: 0;
+        width: 36px;
+        height: 36px;
+        border: 2px solid rgba($color: vars.$white, $alpha: 0.5);
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    &__avatar-img {
+        @extend %full-width-height;
+        object-fit: cover;
+    }
+
+    &__name {
+        @extend %text-default-styles;
+        font-weight: vars.$bold-weight;
+        max-width: 110px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__wrapper {
+        @include mixins.flex($gap: 0.25rem, $items: center);
+
+        & > span {
+            @extend %text-default-styles;
+            font-weight: vars.$light-weight;
+        }
+    }
+
+    &__action,
+    &__auth-link {
+        @extend %text-default-styles;
+        font-weight: vars.$light-weight;
+        text-decoration: underline;
+        text-decoration-color: transparent;
+        transition: vars.$transition-duration;
+
+        &:hover {
+            text-decoration-color: vars.$white;
+            color: #ffffff;
+        }
+    }
+
+    &__auth {
+        display: flex;
+        flex-direction: column;
+        span {
+            @extend %text-default-styles;
+        }
+    }
+
+    &__auth-link {
+        display: inline-block;
+    }
+}

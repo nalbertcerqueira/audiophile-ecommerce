@@ -3,9 +3,8 @@ import { CartModalProvider } from "@/contexts/CartModalContext"
 import { CartProvider } from "@/contexts/CartContext"
 import { Footer } from "./components/Footer"
 import { PropsWithChildren } from "react"
-import "@/scss/index.scss"
-import "./styles.scss"
 import { AuthProvider } from "@/contexts/AuthContext"
+import "./styles.scss"
 
 export function HomeContainer({ children }: PropsWithChildren) {
     return (
