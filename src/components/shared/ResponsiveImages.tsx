@@ -21,6 +21,7 @@ export function ResponsiveImages({ images }: ReponsiveImagesProps) {
             {images.map((image, i) => {
                 return (
                     <Image
+                        placeholder="blur"
                         src={{
                             src: image.src,
                             width: image.width,

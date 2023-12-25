@@ -34,7 +34,7 @@ export function AddProductAction({ productId }: { productId: string }) {
 
 export function ProductLink({ href }: { href: string }) {
     return (
-        <Link role="button" href={href} className="btn btn--primary product__link">
+        <Link role="button" href={href} className="btn btn--primary preview__product-link">
             SEE PRODUCT
         </Link>
     )

@@ -2,26 +2,36 @@
 @use "../1-base/mixins" as mixins;
 @use "../1-base/placeholders";
 
-.product {
-    @include mixins.flex($gap: 2rem, $content: space-between, $items: center);
-
-    &--reverse {
-        flex-direction: row-reverse;
-    }
-
-    &__img-box {
-        max-width: 540px;
-        flex-shrink: 1;
-    }
+.product,
+.preview {
+    display: grid;
+    grid-template-columns: minmax(280px, 540px) auto;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 3.75rem;
 
     &__img {
         @extend %full-width-height;
+        display: none;
         border-radius: 0.5rem;
+        object-fit: cover;
+    }
+
+    &__img--desktop {
+        @include mixins.media-desktop {
+            display: block;
+        }
+    }
+
+    &__img--tablet {
+        @include mixins.media-tablet {
+            display: block;
+        }
     }
 
     &__info {
-        width: 40%;
-        flex-shrink: 0;
+        align-self: center;
+        max-width: 450px;
     }
 
     &__name {
@@ -30,14 +40,110 @@
 
     &__label {
         @extend %overline-text;
+        margin-bottom: 1rem;
         display: block;
         color: vars.$default-orange;
-        margin-bottom: 1rem;
     }
 
     &__description {
         @extend %grey-text;
         margin-top: 2rem;
+    }
+}
+
+.preview {
+    @include mixins.media-tablet {
+        grid-template-columns: auto;
+        grid-template-rows: 350px auto;
+        justify-items: center;
+        gap: 3rem;
+    }
+
+    &--reverse {
+        grid-template-columns: auto minmax(280px, 540px);
+    }
+
+    &--reverse > &__img-box {
+        grid-column: 2/3;
+
+        @include mixins.media-tablet {
+            grid-column: 1/3;
+            grid-row: 1;
+        }
+    }
+
+    &--reverse > &__info {
+        grid-row: 1;
+        grid-column: 1/2;
+
+        @include mixins.media-tablet {
+            grid-column: 1/3;
+            grid-row: 2/3;
+        }
+    }
+
+    &__info {
+        @include mixins.media-tablet {
+            max-width: 570px;
+        }
+    }
+
+    &__name {
+        @include mixins.media-tablet {
+            text-align: center;
+        }
+    }
+
+    &__label {
+        @include mixins.media-tablet {
+            text-align: center;
+        }
+    }
+
+    &__description {
+        @include mixins.media-tablet {
+            text-align: center;
+        }
+    }
+
+    &__product-link {
+        margin: 2.5rem 0 0;
+
+        @include mixins.media-tablet {
+            margin: 1.5rem auto 0;
+        }
+    }
+}
+
+.product {
+    @include mixins.media-tablet {
+        grid-template-columns: minmax(0, 280px) 1fr;
+        gap: 3rem;
+    }
+
+    &__img-box {
+        @include mixins.media-tablet {
+            height: 480px;
+        }
+    }
+
+    &__info {
+        @include mixins.media-tablet {
+            max-width: unset;
+        }
+    }
+
+    &__name {
+        @include mixins.media-tablet {
+            font-size: vars.$h4-font-size;
+            line-height: 2rem;
+        }
+    }
+
+    &__label {
+        @include mixins.media-tablet {
+            font-size: 0.75rem;
+        }
     }
 
     &__price {
@@ -47,12 +153,13 @@
         margin-top: 2rem;
     }
 
-    &__link {
-        margin-top: 2.5rem;
-    }
-
     &__cart-actions {
         @include mixins.flex($gap: 1.5rem);
         margin-top: 3rem;
+
+        @include mixins.media-tablet {
+            margin-top: 2rem;
+            gap: 1rem;
+        }
     }
 }

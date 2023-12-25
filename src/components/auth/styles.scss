@@ -10,6 +10,10 @@
     border-radius: 0.5rem;
     box-shadow: vars.$light-shadow;
 
+    @include mixins.media-tablet {
+        padding: 2rem;
+    }
+
     &__title {
         margin-bottom: 2rem;
         font-size: vars.$h4-font-size;

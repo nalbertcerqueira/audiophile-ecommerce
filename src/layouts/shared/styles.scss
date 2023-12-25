@@ -1,7 +1,17 @@
+@use "../../scss/1-base/mixins" as mixins;
+
 .shared-layout__about-us {
     margin: 160px auto;
+
+    @include mixins.media-tablet {
+        margin: 120px auto;
+    }
 }
 
 .shared-layout__categories {
     margin-top: 240px;
+
+    @include mixins.media-tablet {
+        margin-top: 170px;
+    }
 }

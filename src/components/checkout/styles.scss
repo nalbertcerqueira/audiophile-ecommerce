@@ -17,11 +17,18 @@
 
     &__inner-container {
         @extend %inner-container;
-        margin-top: 2.375rem;
-        margin-bottom: 8.8125rem;
+        margin: 2.375rem auto 8.8125rem;
         display: grid;
         grid-template-columns: 2.1fr 1fr;
-        gap: 1.875rem;
+        gap: 2rem;
+
+        @include mixins.media-920 {
+            grid-template-columns: auto;
+        }
+
+        @include mixins.media-tablet {
+            margin: 1.5rem auto 7.25rem;
+        }
     }
 }
 
@@ -30,6 +37,10 @@
     background-color: vars.$white;
     border-radius: 0.5rem;
     box-shadow: vars.$light-shadow;
+
+    @include mixins.media-tablet {
+        padding: 2.5rem 2rem 2rem;
+    }
 
     &__title {
         font-size: vars.$h3-font-size;
@@ -171,10 +182,11 @@
 
 .order-confirmation {
     @extend %section-padding;
-    @extend %full-width-height;
     background-color: rgba(vars.$black, 0.4);
+    min-width: 100%;
+    min-height: 100%;
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     top: 0;
     visibility: hidden;
 
@@ -206,12 +218,15 @@
     }
 
     &__details {
-        display: grid;
-        grid-template-columns: 1.25fr 1fr;
+        display: flex;
         background-color: vars.$very-light-grey;
         border-radius: 0.5rem;
         margin-top: 2rem;
         overflow: hidden;
+
+        @include mixins.media-620 {
+            flex-direction: column;
+        }
     }
 
     &__wrapper {
@@ -234,6 +249,10 @@
         @include mixins.flex($direction: column, $content: flex-end, $gap: 0.5rem);
         padding: 2.625rem 2rem;
         background-color: vars.$black;
+
+        @include mixins.media-tablet {
+            padding: 1.5rem;
+        }
     }
 
     &__total-label {

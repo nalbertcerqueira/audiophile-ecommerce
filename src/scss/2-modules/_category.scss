@@ -8,7 +8,7 @@
     border-radius: 0.5rem;
     padding: 0 2rem 2rem;
 
-    @include mixins.media-768 {
+    @include mixins.media-tablet {
         padding: 0 1rem 1.5rem;
     }
 
@@ -26,7 +26,7 @@
         @include mixins.flex($gap: 1rem, $items: center, $direction: column);
         margin-top: 116px;
 
-        @include mixins.media-768 {
+        @include mixins.media-tablet {
             margin-top: 88px;
         }
     }
@@ -40,7 +40,7 @@
         min-width: 103px;
         transform: translate(-50%, -50%);
 
-        @include mixins.media-768 {
+        @include mixins.media-tablet {
             min-width: auto;
             width: 80px;
         }
@@ -76,7 +76,7 @@
         word-break: break-all;
         text-align: center;
 
-        @include mixins.media-768 {
+        @include mixins.media-tablet {
             font-size: vars.$text-font-size;
         }
     }

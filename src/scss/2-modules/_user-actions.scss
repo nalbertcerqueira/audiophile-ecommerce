@@ -9,7 +9,7 @@
 }
 
 .user-actions {
-    @include mixins.flex($gap: 0.5rem, $items: center);
+    @include mixins.flex($gap: 0.5rem, $items: flex-start);
 
     &--hidden {
         visibility: hidden;
@@ -17,8 +17,8 @@
 
     &__avatar {
         flex-shrink: 0;
-        width: 36px;
-        height: 36px;
+        width: 42px;
+        height: 42px;
         border: 2px solid rgba($color: vars.$white, $alpha: 0.5);
         border-radius: 50%;
         overflow: hidden;
@@ -52,7 +52,7 @@
         font-weight: vars.$light-weight;
         text-decoration: underline;
         text-decoration-color: transparent;
-        transition: vars.$transition-duration;
+        transition: 0.1s;
 
         &:hover {
             text-decoration-color: vars.$white;

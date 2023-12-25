@@ -8,6 +8,10 @@
     &__inner {
         @extend %inner-container;
         margin-top: 5rem;
+
+        @include mixins.media-tablet {
+            margin-top: 2rem;
+        }
     }
 }
 
@@ -20,7 +24,7 @@
         grid-template-columns: repeat(3, 1fr);
         column-gap: 1.875rem;
 
-        @include mixins.media-768 {
+        @include mixins.media-tablet {
             column-gap: 0.75rem;
         }
     }
@@ -33,7 +37,7 @@
         @extend %inner-container;
         @include mixins.flex($gap: 2rem, $content: space-between, $items: center);
 
-        @include mixins.media-768 {
+        @include mixins.media-tablet {
             flex-direction: column-reverse;
             gap: 4rem;
         }
@@ -43,7 +47,7 @@
         width: 445px;
         flex-shrink: 1.25;
 
-        @include mixins.media-768 {
+        @include mixins.media-tablet {
             width: auto;
             max-width: 570px;
         }
@@ -53,7 +57,7 @@
         font-weight: vars.$extra-bold-weight;
         margin-bottom: 2rem;
 
-        @include mixins.media-768 {
+        @include mixins.media-tablet {
             text-align: center;
         }
     }
@@ -65,7 +69,7 @@
     &__text {
         @extend %grey-text;
 
-        @include mixins.media-768 {
+        @include mixins.media-tablet {
             text-align: center;
         }
     }
@@ -76,7 +80,7 @@
         object-fit: cover;
         overflow: hidden;
 
-        @include mixins.media-768 {
+        @include mixins.media-tablet {
             max-width: none;
             width: 100%;
             height: 300px;
@@ -96,7 +100,7 @@
     }
 
     &__img--tablet {
-        @include mixins.media-768 {
+        @include mixins.media-tablet {
             display: block;
         }
     }

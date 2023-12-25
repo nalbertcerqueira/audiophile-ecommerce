@@ -4,7 +4,8 @@
 
 .overlay {
     @extend %section-padding;
-    @extend %full-width-height;
+    min-height: 100%;
+    min-width: 100%;
     padding-top: calc(98px + 2rem);
     position: absolute;
     background-color: rgba(vars.$black, 0.4);

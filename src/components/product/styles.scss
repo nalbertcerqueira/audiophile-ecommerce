@@ -1,6 +1,6 @@
-@use "../../scss/1-base/placeholders";
-@use "../../scss/1-base/mixins" as mixins;
 @use "../../scss/1-base/variables" as vars;
+@use "../../scss/1-base/mixins" as mixins;
+@use "../../scss/1-base/placeholders";
 
 .product-section {
     @extend %section-padding;
@@ -11,6 +11,11 @@
         flex-direction: column;
         gap: 160px;
         margin-top: 3.5rem;
+
+        @include mixins.media-tablet {
+            margin-top: 1.5rem;
+            gap: 120px;
+        }
     }
 }
 
@@ -19,8 +24,24 @@
     grid-template-columns: 57% 30%;
     justify-content: space-between;
 
+    @include mixins.media-tablet {
+        grid-template-columns: auto;
+        gap: 120px;
+    }
+
+    &__wrapper,
+    &__about {
+        @include mixins.flex($gap: 2rem, $direction: column);
+    }
+
+    &__wrapper {
+        @include mixins.media-tablet {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    }
+
     &__title {
-        margin-bottom: 2rem;
         white-space: nowrap;
         font-weight: vars.$extra-bold-weight;
     }
@@ -51,10 +72,15 @@
     &__inner-container {
         @extend %inner-container;
         margin-top: 160px;
-
         display: grid;
         gap: 2rem 1.875rem;
         grid-template-rows: repeat(2, 280px);
+
+        @include mixins.media-tablet {
+            margin-top: 120px;
+            grid-template-rows: repeat(2, 174px);
+            gap: 1.25rem;
+        }
     }
 
     &__small-item {
@@ -68,10 +94,24 @@
     }
 
     &__image {
+        display: none;
         width: 100%;
+        height: 100%;
         object-fit: cover;
         object-position: top center;
         border-radius: 0.5rem;
+    }
+
+    &__image--desktop {
+        @include mixins.media-desktop {
+            display: block;
+        }
+    }
+
+    &__image--tablet {
+        @include mixins.media-tablet {
+            display: block;
+        }
     }
 }
 
@@ -81,6 +121,10 @@
     &__inner-container {
         @extend %inner-container;
         margin-top: 160px;
+
+        @include mixins.media-tablet {
+            margin-top: 120px;
+        }
     }
 
     &__title {
@@ -88,22 +132,45 @@
         font-size: vars.$h3-font-size;
         margin-bottom: 4rem;
         text-align: center;
+
+        @include mixins.media-tablet {
+            margin-bottom: 3.5rem;
+        }
     }
 
     &__wrapper {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.875rem;
+        @include mixins.flex($gap: 1.875rem, $items: center);
+
+        @include mixins.media-tablet {
+            gap: 0.75rem;
+        }
+
+        @include mixins.media-620 {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 3rem;
+        }
     }
 }
 
 .other-product {
-    text-align: center;
+    display: grid;
+    align-items: center;
+    gap: 2.5rem;
+
+    @include mixins.media-620 {
+        grid-template-rows: auto;
+        grid-template-columns: auto min-content;
+    }
+
+    &__info {
+        @include mixins.flex($gap: 2rem, $direction: column, $items: center);
+    }
 
     &__name {
         font-size: vars.$h5-font-size;
         font-weight: vars.$extra-bold-weight;
-        margin-top: 2.5rem;
+        white-space: nowrap;
     }
 
     &__thumb {
@@ -111,9 +178,9 @@
         height: 318px;
         object-fit: cover;
         border-radius: 0.5rem;
-    }
 
-    &__link {
-        margin: 2rem auto 0;
+        @include mixins.media-620 {
+            height: 180px;
+        }
     }
 }

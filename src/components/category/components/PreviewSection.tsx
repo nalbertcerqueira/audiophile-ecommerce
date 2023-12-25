@@ -18,7 +18,7 @@ export function PreviewSection({ products }: { products: ProductProps[] }) {
                             description={product.description}
                             images={staticProductImages[product.slug].preview}
                             type="preview"
-                            className={i % 2 !== 0 ? "product--reverse" : undefined}
+                            className={i % 2 !== 0 ? "preview--reverse" : undefined}
                         />
                     )
                 })}

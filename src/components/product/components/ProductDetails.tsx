@@ -42,11 +42,11 @@ export function ProductDetails({ features, accessories }: ProductDetailsProps) {
 
     return (
         <div className="product-details">
-            <div>
+            <div className="product-details__about">
                 <h3 className="product-details__title">FEATURES</h3>
-                {renderFeatures()}
+                <div>{renderFeatures()}</div>
             </div>
-            <div>
+            <div className="product-details__wrapper">
                 <h3 className="product-details__title">IN THE BOX</h3>
                 <ul className="product-details__accessories">{renderAccessories()}</ul>
             </div>
