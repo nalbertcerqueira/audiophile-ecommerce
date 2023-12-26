@@ -1,9 +1,12 @@
 import LargeSpeaker from "/public/imgs/home/large-speaker.png"
 import LargeSpeakerTablet from "/public/imgs/home/large-speaker-tablet.png"
+import LargeSpeakerMobile from "/public/imgs/home/large-speaker-mobile.png"
 import SpeakerBanner from "/public/imgs/home/speaker-banner.jpg"
 import SpeakerBannerTablet from "/public/imgs/home/speaker-banner-tablet.jpg"
+import SpeakerBannerMobile from "/public/imgs/home/speaker-banner-mobile.jpg"
 import EarphoneBanner from "/public/imgs/home/earphone-banner.jpg"
 import EarphoneBannerTablet from "/public/imgs/home/earphone-banner-tablet.jpg"
+import EarphoneBannerMobile from "/public/imgs/home/earphone-banner-mobile.jpg"
 
 import Link from "next/link"
 import { CirclePatterns } from "@/components/shared/CirclePattern"
@@ -30,6 +33,12 @@ export function ProductGridSection() {
                                         alt: "ZX9 speaker",
                                         className:
                                             "featured-product__img featured-product__img--tablet"
+                                    },
+                                    {
+                                        ...LargeSpeakerMobile,
+                                        alt: "ZX9 speaker",
+                                        className:
+                                            "featured-product__img featured-product__img--mobile"
                                     }
                                 ]}
                             />
@@ -67,6 +76,11 @@ export function ProductGridSection() {
                                     ...SpeakerBannerTablet,
                                     alt: "",
                                     className: "medium-banner__img medium-banner__img--tablet"
+                                },
+                                {
+                                    ...SpeakerBannerMobile,
+                                    alt: "",
+                                    className: "medium-banner__img medium-banner__img--mobile"
                                 }
                             ]}
                         />
@@ -95,6 +109,11 @@ export function ProductGridSection() {
                                     ...EarphoneBannerTablet,
                                     alt: "",
                                     className: "small-banner__img small-banner__img--tablet"
+                                },
+                                {
+                                    ...EarphoneBannerMobile,
+                                    alt: "",
+                                    className: "small-banner__img small-banner__img--mobile"
                                 }
                             ]}
                         />

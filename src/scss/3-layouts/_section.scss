@@ -22,10 +22,15 @@
         @extend %inner-container;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        column-gap: 1.875rem;
+        gap: 0 1.875rem;
 
         @include mixins.media-tablet {
-            column-gap: 0.75rem;
+            column: 0 0.75rem;
+        }
+
+        @include mixins.media-mobile {
+            grid-template-columns: auto;
+            gap: 4.25rem 0;
         }
     }
 }
@@ -40,6 +45,10 @@
         @include mixins.media-tablet {
             flex-direction: column-reverse;
             gap: 4rem;
+        }
+
+        @include mixins.media-mobile {
+            gap: 2.5rem;
         }
     }
 
@@ -59,6 +68,12 @@
 
         @include mixins.media-tablet {
             text-align: center;
+        }
+
+        @include mixins.media-mobile {
+            font-size: 1.75rem;
+            line-height: 2.3rem;
+            letter-spacing: 1px;
         }
     }
 
@@ -101,6 +116,15 @@
 
     &__img--tablet {
         @include mixins.media-tablet {
+            display: block;
+        }
+        @include mixins.media-mobile {
+            display: none;
+        }
+    }
+
+    &__img--mobile {
+        @include mixins.media-mobile {
             display: block;
         }
     }

@@ -12,6 +12,10 @@
         padding: 0 1rem 1.5rem;
     }
 
+    @include mixins.media-mobile {
+        padding: 0 1rem 1.5rem;
+    }
+
     &:hover {
         .category__thumb {
             transform: translateY(-12%);
@@ -29,6 +33,10 @@
         @include mixins.media-tablet {
             margin-top: 88px;
         }
+
+        @include mixins.media-mobile {
+            margin-top: 88px;
+        }
     }
 
     &__thumb-container {
@@ -42,7 +50,12 @@
 
         @include mixins.media-tablet {
             min-width: auto;
-            width: 80px;
+            width: 84px;
+        }
+
+        @include mixins.media-mobile {
+            min-width: auto;
+            width: 84px;
         }
 
         &::before {
@@ -77,6 +90,10 @@
         text-align: center;
 
         @include mixins.media-tablet {
+            font-size: vars.$text-font-size;
+        }
+
+        @include mixins.media-mobile {
             font-size: vars.$text-font-size;
         }
     }

@@ -1,5 +1,6 @@
 import BeastGearImage from "/public/imgs/home/best-gear.jpg"
 import BeastGearImageTablet from "/public/imgs/home/best-gear-tablet.jpg"
+import BeastGearImageMobile from "/public/imgs/home/best-gear-mobile.jpg"
 import { ResponsiveImages } from "../ResponsiveImages"
 
 export function AboutSection({ className }: { className?: string }) {
@@ -32,6 +33,11 @@ export function AboutSection({ className }: { className?: string }) {
                                 ...BeastGearImageTablet,
                                 alt: "",
                                 className: "about-us__img about-us__img--tablet"
+                            },
+                            {
+                                ...BeastGearImageMobile,
+                                alt: "",
+                                className: "about-us__img about-us__img--mobile"
                             }
                         ]}
                     />

@@ -11,6 +11,10 @@
         opacity 0.35s,
         transform 0.35s;
 
+    @include mixins.media-mobile {
+        width: 100%;
+    }
+
     &--hidden {
         transform: translateY(-25%);
         opacity: 0;
