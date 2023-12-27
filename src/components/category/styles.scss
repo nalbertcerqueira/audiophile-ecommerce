@@ -5,11 +5,21 @@
 .title-section {
     @extend %section-padding;
     background-color: vars.$black;
+    position: relative;
 
     &__inner-container {
         @extend %inner-container;
+        position: relative;
         padding: 98px 0;
-        border-top: 2px solid rgba(vars.$white, 0.2);
+
+        @include mixins.media-mobile {
+            padding: 32px 0;
+            position: static;
+        }
+    }
+
+    &__division {
+        @extend %division;
     }
 
     &__title {
@@ -17,6 +27,11 @@
         font-size: vars.$h2-font-size;
         line-height: 1em;
         text-align: center;
+
+        @include mixins.media-mobile {
+            font-size: 1.75rem;
+            line-height: 2.3rem;
+        }
     }
 }
 
@@ -31,6 +46,10 @@
         @include mixins.media-tablet {
             margin-top: 120px;
             gap: 120px;
+        }
+
+        @include mixins.media-mobile {
+            margin-top: 64px;
         }
     }
 }

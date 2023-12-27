@@ -27,6 +27,16 @@
         @include mixins.media-tablet {
             display: block;
         }
+
+        @include mixins.media-mobile {
+            display: none;
+        }
+    }
+
+    &__img--mobile {
+        @include mixins.media-mobile {
+            display: block;
+        }
     }
 
     &__info {
@@ -43,11 +53,19 @@
         margin-bottom: 1rem;
         display: block;
         color: vars.$default-orange;
+
+        @include mixins.media-mobile {
+            margin-bottom: 1.5rem;
+        }
     }
 
     &__description {
         @extend %grey-text;
         margin-top: 2rem;
+
+        @include mixins.media-mobile {
+            margin-top: 1.5rem;
+        }
     }
 }
 
@@ -59,8 +77,16 @@
         gap: 3rem;
     }
 
+    @include mixins.media-mobile {
+        gap: 2rem;
+    }
+
     &--reverse {
         grid-template-columns: auto minmax(280px, 540px);
+
+        @include mixins.media-tablet {
+            grid-template-columns: auto;
+        }
     }
 
     &--reverse > &__img-box {
@@ -68,7 +94,6 @@
 
         @include mixins.media-tablet {
             grid-column: 1/3;
-            grid-row: 1;
         }
     }
 
@@ -82,6 +107,12 @@
         }
     }
 
+    &__img-box {
+        @include mixins.media-tablet {
+            width: 100%;
+        }
+    }
+
     &__info {
         @include mixins.media-tablet {
             max-width: 570px;
@@ -91,6 +122,11 @@
     &__name {
         @include mixins.media-tablet {
             text-align: center;
+        }
+
+        @include mixins.media-mobile {
+            font-size: 1.75rem;
+            line-height: 2.3rem;
         }
     }
 
@@ -121,10 +157,10 @@
         gap: 3rem;
     }
 
-    &__img-box {
-        @include mixins.media-tablet {
-            height: 480px;
-        }
+    @include mixins.media-mobile {
+        grid-template-columns: auto;
+        grid-template-rows: 325px auto;
+        gap: 2rem;
     }
 
     &__info {
@@ -135,14 +171,18 @@
 
     &__name {
         @include mixins.media-tablet {
-            font-size: vars.$h4-font-size;
-            line-height: 2rem;
+            font-size: 1.75rem;
+            line-height: 2.3rem;
         }
     }
 
     &__label {
         @include mixins.media-tablet {
             font-size: 0.75rem;
+        }
+
+        @include mixins.media-mobile {
+            font-size: 0.875rem;
         }
     }
 
@@ -151,6 +191,10 @@
         letter-spacing: vars.$h6-letter-spacing;
         font-weight: vars.$extra-bold-weight;
         margin-top: 2rem;
+
+        @include mixins.media-mobile {
+            margin-top: 1.5rem;
+        }
     }
 
     &__cart-actions {

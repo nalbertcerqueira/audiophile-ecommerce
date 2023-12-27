@@ -13,6 +13,10 @@
         color vars.$transition-duration,
         background-color vars.$transition-duration;
 
+    @include mixins.media-mobile {
+        padding: 1.125rem 1.5rem;
+    }
+
     &--primary {
         color: vars.$white;
         background-color: vars.$default-orange;
