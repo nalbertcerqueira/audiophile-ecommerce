@@ -19,7 +19,7 @@
         @extend %inner-container;
         margin: 2.375rem auto 8.8125rem;
         display: grid;
-        grid-template-columns: 2.1fr 1fr;
+        grid-template-columns: 2fr 1fr;
         gap: 2rem;
 
         @include mixins.media-920 {
@@ -28,6 +28,10 @@
 
         @include mixins.media-tablet {
             margin: 1.5rem auto 7.25rem;
+        }
+
+        @include mixins.media-mobile {
+            margin: 1.5rem auto 6.125rem;
         }
     }
 }
@@ -42,14 +46,27 @@
         padding: 2.5rem 2rem 2rem;
     }
 
+    @include mixins.media-mobile {
+        padding: 1.5rem 1.5rem 2rem;
+    }
+
     &__title {
         font-size: vars.$h3-font-size;
         letter-spacing: vars.$h3-letter-spacing;
         font-weight: vars.$extra-bold-weight;
+
+        @include mixins.media-mobile {
+            font-size: 1.75rem;
+            line-height: 2.3rem;
+        }
     }
 
     &__form {
         margin-top: 2.5rem;
+
+        @include mixins.media-mobile {
+            margin-top: 2rem;
+        }
     }
 
     &__user-info {
@@ -63,9 +80,22 @@
         color: vars.$default-orange;
     }
 
+    &__billing-details,
+    &__shipping-details,
+    &__payment-details {
+        @include mixins.media-mobile {
+            grid-template-columns: auto;
+            grid-template-rows: auto;
+        }
+    }
+
     &__billing-details {
         @extend %checkout-fieldset;
         margin-bottom: 3.375rem;
+
+        @include mixins.media-mobile {
+            margin-bottom: 2rem;
+        }
     }
 
     &__shipping-details {
@@ -75,10 +105,36 @@
         & > *:nth-child(2) {
             grid-column: span 2;
         }
+
+        @include mixins.media-mobile {
+            margin-bottom: 2rem;
+
+            & > *:nth-child(2) {
+                grid-column: auto;
+            }
+        }
     }
 
     &__payment-details {
         @extend %checkout-fieldset;
+
+        @include mixins.media-mobile {
+            gap: 2rem;
+        }
+    }
+
+    &__payment-methods {
+        @include mixins.flex($gap: 1rem, $content: stretch);
+        grid-column: span 2;
+
+        & > * {
+            flex-grow: 1;
+        }
+
+        @include mixins.media-mobile {
+            flex-direction: column;
+            grid-column: auto;
+        }
     }
 
     &__cc-fields {
@@ -88,6 +144,14 @@
 
         & > *:first-child {
             grid-column: span 2;
+        }
+
+        @include mixins.media-mobile {
+            grid-column: auto;
+
+            & > * {
+                grid-column: span 2;
+            }
         }
     }
 
@@ -109,7 +173,11 @@
     &__cash-guidance {
         @extend %show-animation;
         @include mixins.flex($gap: 2rem, $items: center);
-        margin-top: 1.875rem;
+        margin-top: 1.5rem;
+
+        @include mixins.media-mobile {
+            margin-top: 2rem;
+        }
     }
 
     &__cash-icon {
@@ -128,10 +196,15 @@
     padding: 2rem;
     box-shadow: vars.$light-shadow;
 
+    @include mixins.media-mobile {
+        padding: 2rem 1.5rem;
+    }
+
     &__title {
         font-size: vars.$h6-font-size;
         font-weight: vars.$extra-bold-weight;
         letter-spacing: vars.$h6-letter-spacing;
+        line-height: vars.$h6-line-height;
         margin-bottom: 2rem;
     }
 
@@ -205,16 +278,30 @@
         padding: 3rem;
         background-color: vars.$white;
         border-radius: 0.5rem;
+
+        @include mixins.media-mobile {
+            padding: 2rem;
+        }
     }
 
     &__title {
         margin-top: 2rem;
         font-weight: vars.$extra-bold-weight;
+
+        @include mixins.media-mobile {
+            margin-top: 1.5rem;
+            font-size: 1.5rem;
+            line-height: 1.75rem;
+        }
     }
 
     &__message {
         @extend %grey-text;
         margin-top: 1.5rem;
+
+        @include mixins.media-mobile {
+            margin-top: 1rem;
+        }
     }
 
     &__details {
@@ -227,6 +314,10 @@
         @include mixins.media-620 {
             flex-direction: column;
         }
+
+        @include mixins.media-mobile {
+            margin-top: 1.5rem;
+        }
     }
 
     &__wrapper {
@@ -236,6 +327,14 @@
 
     &__items {
         @include mixins.flex($direction: column, $gap: 1rem);
+    }
+
+    & .cart-item__info {
+        gap: 2.625rem;
+
+        @include mixins.media-mobile {
+            gap: 0;
+        }
     }
 
     &__toggle-btn {
@@ -267,6 +366,10 @@
         width: 100%;
         margin-top: 2.875rem;
         text-align: center;
+
+        @include mixins.media-mobile {
+            margin-top: 1.5rem;
+        }
     }
 }
 
