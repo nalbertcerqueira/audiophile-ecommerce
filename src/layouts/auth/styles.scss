@@ -1,6 +1,11 @@
 @use "../../scss/1-base/variables" as vars;
+@use "../../scss/1-base/mixins" as mixins;
 
 .auth-page-container {
     background-color: vars.$very-light-grey;
     padding: 0 2.5rem;
+
+    @include mixins.media-mobile {
+        padding: 1.5rem;
+    }
 }
