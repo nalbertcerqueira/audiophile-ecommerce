@@ -40,6 +40,7 @@
 
 .hero {
     @extend %section-padding;
+    position: relative;
 
     &__inner-container {
         @extend %inner-container;
@@ -48,16 +49,12 @@
 
         @include mixins.media-tablet {
             justify-content: center;
+            position: static;
         }
     }
 
     &__division {
-        position: absolute;
-        width: 100%;
-        background-color: rgba(vars.$white, 0.2);
-        height: 2px;
-        z-index: 10;
-        top: 0;
+        @extend %division;
     }
 
     &__content-wrapper {

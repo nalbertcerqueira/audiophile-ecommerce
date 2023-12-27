@@ -1,6 +1,16 @@
 @use "./variables" as vars;
 @use "./mixins" as mixins;
 
+%division {
+    position: absolute;
+    width: 100%;
+    background-color: rgba(vars.$white, 0.2);
+    height: 2px;
+    z-index: 10;
+    top: 0;
+    left: 0;
+}
+
 %overline-text {
     font-size: 0.875rem;
     line-height: 1.5rem;
