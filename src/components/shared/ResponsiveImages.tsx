@@ -12,29 +12,31 @@ interface ImageInfo {
 }
 
 interface ReponsiveImagesProps {
-    images: ImageInfo[]
+    images: (ImageInfo | undefined)[]
 }
 
 export function ResponsiveImages({ images }: ReponsiveImagesProps) {
     return (
         <>
             {images.map((image, i) => {
-                return (
-                    <Image
-                        placeholder="blur"
-                        src={{
-                            src: image.src,
-                            width: image.width,
-                            height: image.height,
-                            blurDataURL: image.blurDataURL,
-                            blurHeight: image.blurHeight,
-                            blurWidth: image.blurWidth
-                        }}
-                        alt={image.alt}
-                        className={image.className}
-                        key={i}
-                    />
-                )
+                if (image) {
+                    return (
+                        <Image
+                            placeholder="blur"
+                            src={{
+                                src: image.src,
+                                width: image.width,
+                                height: image.height,
+                                blurDataURL: image.blurDataURL,
+                                blurHeight: image.blurHeight,
+                                blurWidth: image.blurWidth
+                            }}
+                            alt={image.alt}
+                            className={image.className}
+                            key={i}
+                        />
+                    )
+                }
             })}
         </>
     )

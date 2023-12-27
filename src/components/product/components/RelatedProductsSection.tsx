@@ -7,21 +7,32 @@ interface RelatedProductsSectionProps {
 }
 
 export function RelatedProductsSection({ otherProducts }: RelatedProductsSectionProps) {
+    function renderOtherProducts() {
+        return otherProducts.map((product) => {
+            const thumb = staticProductImages[product.slug].thumb
+            return (
+                thumb && (
+                    <OtherProduct
+                        key={product.slug}
+                        link={`/${product.category}/${product.slug}`}
+                        name={product.name.toUpperCase()}
+                        thumbs={{
+                            desktop: thumb.desktop,
+                            tablet: thumb.tablet,
+                            mobile: thumb.mobile
+                        }}
+                        thumbAlt={product.name}
+                    />
+                )
+            )
+        })
+    }
+
     return (
         <section className="related-products">
             <div className="related-products__inner-container">
                 <h2 className="related-products__title">YOU MAY ALSO LIKE</h2>
-                <div className="related-products__wrapper">
-                    {otherProducts.map((product, i) => (
-                        <OtherProduct
-                            key={i}
-                            link={`/${product.category}/${product.slug}`}
-                            name={product.name.toUpperCase()}
-                            thumb={staticProductImages[product.slug].thumb?.desktop}
-                            thumbAlt={product.name}
-                        />
-                    ))}
-                </div>
+                <div className="related-products__wrapper">{renderOtherProducts()}</div>
             </div>
         </section>
     )

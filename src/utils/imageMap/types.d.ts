@@ -1,12 +1,12 @@
 import { StaticImageData } from "next/image"
 
 export interface StaticGalleryImages {
-    first: StaticImages
-    second: StaticImages
-    third: StaticImages
+    first: ResponsiveImageSet
+    second: ResponsiveImageSet
+    third: ResponsiveImageSet
 }
 
-export interface StaticImages {
+export interface ResponsiveImageSet {
     desktop: StaticImageData
     tablet: StaticImageData
     mobile: StaticImageData
@@ -14,9 +14,9 @@ export interface StaticImages {
 
 export interface StaticImageMap {
     [key: string | symbol]: {
-        product: StaticImages
-        preview: StaticImages
-        thumb?: StaticImages
+        product: ResponsiveImageSet
+        preview: ResponsiveImageSet
+        thumb: ResponsiveImageSet | undefined
         cartThumb: StaticImageData
         gallery: StaticGalleryImages
     }

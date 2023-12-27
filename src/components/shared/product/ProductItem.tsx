@@ -1,5 +1,5 @@
 import { formatCurrency } from "@/utils/helpers"
-import { StaticImages } from "@/utils/imageMap/types"
+import { ResponsiveImageSet } from "@/utils/imageMap/types"
 import { AddProductAction, ProductLink } from "./ProductActions"
 import { ResponsiveImages } from "../ResponsiveImages"
 
@@ -7,7 +7,7 @@ interface CommonFields {
     id: string
     name: string
     slug: string
-    images: StaticImages
+    images: ResponsiveImageSet
     new: boolean
     description: string
     className?: string
@@ -42,6 +42,11 @@ export function ProductItem(props: ProductItemProps) {
                             ...images.tablet,
                             alt: name,
                             className: `${type}__img ${type}__img--tablet`
+                        },
+                        {
+                            ...images.mobile,
+                            alt: name,
+                            className: `${type}__img ${type}__img--mobile`
                         }
                     ]}
                 />
