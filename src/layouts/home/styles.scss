@@ -6,6 +6,7 @@
     position: relative;
     display: grid;
     min-height: 100vh;
+    min-width: 350px;
     grid-template-rows: min-content auto min-content;
     background-color: vars.$matte-white;
 
@@ -157,6 +158,10 @@
         @include mixins.media-tablet {
             position: static;
         }
+
+        @include mixins.media-mobile {
+            text-align: center;
+        }
     }
 
     &__github {
@@ -178,6 +183,10 @@
             grid-column: 1;
             grid-row: 2/3;
             align-self: flex-end;
+        }
+
+        @include mixins.media-mobile {
+            text-align: center;
         }
     }
 }
