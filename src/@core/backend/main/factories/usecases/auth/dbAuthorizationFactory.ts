@@ -1,5 +1,5 @@
 import { authenticatedJwtTokenService } from "../../services/tokenServiceFactory"
-import { DbAuthorizationUseCase } from "@/@core/backend/domain/usecases/auth/dbAuthorizationUseCase"
+import { DbAuthorizationUseCase } from "@/@core/backend/domain/usecases/auth/authenticatedUser/dbAuthorizationUseCase"
 import { mongoUserRepository } from "../../repositories/userRepositoryFactory"
 
 function createDbAuthorizationUseCase(): DbAuthorizationUseCase {

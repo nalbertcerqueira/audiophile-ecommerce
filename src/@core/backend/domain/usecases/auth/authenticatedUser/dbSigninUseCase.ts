@@ -1,7 +1,7 @@
 import { UserProps } from "@/@core/shared/entities/user/user"
-import { FindUserByEmailRepository } from "../../repositories/user/findUserByEmailRepository"
-import { HashComparerService } from "../../services/crypto/hashComparerService"
-import { TokenGeneratorService } from "../../services/token/tokenGeneratorService"
+import { FindUserByEmailRepository } from "../../../repositories/user/findUserByEmailRepository"
+import { HashComparerService } from "../../../services/crypto/hashComparerService"
+import { TokenGeneratorService } from "../../../services/token/tokenGeneratorService"
 
 type LoginData = Pick<UserProps, "email" | "password">
 

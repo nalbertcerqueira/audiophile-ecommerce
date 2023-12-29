@@ -1,4 +1,4 @@
-import { DbGuestAuthorizationUseCase } from "@/@core/backend/domain/usecases/auth/dbGuestAuthorizationUseCase"
+import { DbGuestAuthorizationUseCase } from "@/@core/backend/domain/usecases/auth/guestUser/dbGuestAuthorizationUseCase"
 import { guestJwtTokenService } from "../../services/tokenServiceFactory"
 
 function createDbGuestAuthorizationUseCase(): DbGuestAuthorizationUseCase {

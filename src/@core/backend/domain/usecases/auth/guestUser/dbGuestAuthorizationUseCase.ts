@@ -1,4 +1,4 @@
-import { TokenVerifierService } from "../../services/token/tokenVerifierService"
+import { TokenVerifierService } from "../../../services/token/tokenVerifierService"
 
 export class DbGuestAuthorizationUseCase {
     constructor(private readonly tokenVerifierService: TokenVerifierService) {}

@@ -1,5 +1,5 @@
-import { FindUserByIdRepository } from "../../repositories/user/findUserByIdRepository"
-import { TokenVerifierService } from "../../services/token/tokenVerifierService"
+import { FindUserByIdRepository } from "../../../repositories/user/findUserByIdRepository"
+import { TokenVerifierService } from "../../../services/token/tokenVerifierService"
 import { UserProps } from "@/@core/shared/entities/user/user"
 
 interface AuthorizationOutputDTO extends UserProps {

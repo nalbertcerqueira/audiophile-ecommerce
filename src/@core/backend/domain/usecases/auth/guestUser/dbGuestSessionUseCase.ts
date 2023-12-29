@@ -1,5 +1,5 @@
-import { IdGeneratorService } from "../../services/idGeneratorService"
-import { TokenGeneratorService } from "../../services/token/tokenGeneratorService"
+import { IdGeneratorService } from "../../../services/idGeneratorService"
+import { TokenGeneratorService } from "../../../services/token/tokenGeneratorService"
 
 interface GuestSessionOutputDTO {
     token: string
