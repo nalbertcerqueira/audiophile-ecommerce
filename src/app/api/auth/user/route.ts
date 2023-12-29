@@ -1,6 +1,6 @@
-import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbAuthorizationFactory"
-import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbGuestAuthorizationFactory"
-import { dbGuestSessionUseCase } from "@/@core/backend/main/factories/usecases/auth/dbGuestSessionUseCase"
+import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authenticatedUser/dbAuthorizationFactory"
+import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/guestUser/dbGuestAuthorizationFactory"
+import { dbGuestSessionUseCase } from "@/@core/backend/main/factories/usecases/auth/guestUser/dbGuestSessionUseCase"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest) {

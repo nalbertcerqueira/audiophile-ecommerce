@@ -1,6 +1,6 @@
-import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbGuestAuthorizationFactory"
+import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/guestUser/dbGuestAuthorizationFactory"
 import { generateCustomZodErrors } from "@/@core/shared/entities/helpers"
-import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/dbAuthorizationFactory"
+import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authenticatedUser/dbAuthorizationFactory"
 import { dbAddCartItemUseCase } from "@/@core/backend/main/factories/usecases/cart/dbAddCartItemFactory"
 import { CartItemInfo } from "@/@core/backend/domain/usecases/cart/protocols"
 import { Cart } from "@/@core/shared/entities/cart/cart"
