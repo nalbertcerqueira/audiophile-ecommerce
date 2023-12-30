@@ -15,7 +15,7 @@ interface HeaderProps {
 
 export function Header({ className }: HeaderProps) {
     const { user, isLoading, isLogged } = useContext(AuthContext)
-    const firstName = user?.name.split(" ")[0]
+    const firstName = user?.type === "authenticated" ? user.name.split(" ")[0] : undefined
 
     return (
         <header className={`header ${className || ""}`.trim()}>

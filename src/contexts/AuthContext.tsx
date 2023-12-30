@@ -2,12 +2,15 @@
 
 import { useSession } from "@/hooks/useSession"
 import { PropsWithChildren, createContext } from "react"
-import { UserProps } from "@/@core/shared/entities/user/user"
+import {
+    AuthenticatedUser,
+    GuestUser
+} from "@/@core/frontend/domain/gateways/user/getUserGateway"
 
 interface AuthContextProps {
     isLogged: boolean
     isLoading: boolean
-    user: Pick<UserProps, "name" | "email"> | null
+    user: AuthenticatedUser | GuestUser | null
 }
 
 export const AuthContext = createContext<AuthContextProps>({} as AuthContextProps)
