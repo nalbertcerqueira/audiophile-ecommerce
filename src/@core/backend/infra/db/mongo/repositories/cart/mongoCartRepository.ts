@@ -1,10 +1,11 @@
-import { CartProduct, CartProps, UserType } from "@/@core/shared/entities/cart/cart"
 import { AddManyCartItemsRepository } from "@/@core/backend/domain/repositories/cart/addManyCartItemsRepository"
+import { CartProduct, CartProps } from "@/@core/shared/entities/cart/cart"
 import { AddCartItemRepository } from "@/@core/backend/domain/repositories/cart/addCartItemRepository"
 import { ClearCartRepository } from "@/@core/backend/domain/repositories/cart/clearCartRepository"
 import { GetCartRepository } from "@/@core/backend/domain/repositories/cart/getCartRepository"
 import { MongoCartItem } from "../../models"
 import { mongoHelper } from "../../config/mongo-config"
+import { UserType } from "@/@core/shared/entities/user/user"
 import { Cart } from "@/@core/shared/entities/cart/cart"
 import {
     OperationDetails,

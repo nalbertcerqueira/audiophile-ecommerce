@@ -2,6 +2,8 @@ import { generateCustomZodErrors } from "../helpers"
 import { EntityValidationResult } from "../protocols"
 import { userZodSchema } from "./utils"
 
+export type UserType = "authenticated" | "guest"
+
 export interface UserProps {
     name: string
     email: string

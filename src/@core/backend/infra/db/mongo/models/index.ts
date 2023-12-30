@@ -1,6 +1,7 @@
 import { ProductProps } from "@/@core/shared/entities/product/product"
 import { UserProps } from "@/@core/shared/entities/user/user"
-import { CartProduct, UserType } from "@/@core/shared/entities/cart/cart"
+import { CartProduct } from "@/@core/shared/entities/cart/cart"
+import { UserType } from "@/@core/shared/entities/user/user"
 import { ObjectId } from "mongodb"
 
 export interface MongoProduct extends Omit<ProductProps, "id"> {

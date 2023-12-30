@@ -1,4 +1,5 @@
-import { Cart, UserType } from "@/@core/shared/entities/cart/cart"
+import { Cart } from "@/@core/shared/entities/cart/cart"
+import { UserType } from "@/@core/shared/entities/user/user"
 import { GetCartRepository } from "../../repositories/cart/getCartRepository"
 
 export class DbGetCartUseCase {
@@ -11,6 +12,6 @@ export class DbGetCartUseCase {
             return userCart
         }
 
-        return Cart.empty(userType, userId)
+        return Cart.empty()
     }
 }

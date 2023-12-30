@@ -1,4 +1,5 @@
-import { CartProduct, UserType } from "@/@core/shared/entities/cart/cart"
+import { CartProduct } from "@/@core/shared/entities/cart/cart"
+import { UserType } from "@/@core/shared/entities/user/user"
 import { Cart } from "@/@core/shared/entities/cart/cart"
 
 export interface AddManyCartItemsRepository {

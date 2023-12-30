@@ -1,4 +1,5 @@
-import { Cart, UserType } from "@/@core/shared/entities/cart/cart"
+import { Cart } from "@/@core/shared/entities/cart/cart"
+import { UserType } from "@/@core/shared/entities/user/user"
 import { ClearCartRepository } from "../../repositories/cart/clearCartRepository"
 
 export class DbClearCartUseCase {
@@ -7,6 +8,6 @@ export class DbClearCartUseCase {
     public async execute(userId: string, userType: UserType): Promise<Cart> {
         await this.clearCartRepository.clearCartById(userId, userType)
 
-        return Cart.empty(userType, userId)
+        return Cart.empty()
     }
 }

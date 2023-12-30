@@ -2,8 +2,6 @@ import { generateCustomZodErrors } from "../helpers"
 import { cartItemZodSchema, cartZodSchema } from "./util"
 import { EntityValidationResult } from "../protocols"
 
-export type UserType = "authenticated" | "guest"
-
 export interface CartProduct {
     readonly productId: string
     readonly slug: string
