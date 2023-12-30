@@ -14,8 +14,6 @@ export const cartItemZodSchema = schemaFromType<CartProduct>()(
 
 export const cartZodSchema = schemaFromType<CartProps>()(
     z.object({
-        userId: z.string().min(1),
-        userType: z.enum(["authenticated", "guest"]),
         totalSpent: z.number().gte(0).finite(),
         itemCount: z.number().int().gte(0).finite(),
         items: z.array(cartItemZodSchema).min(0)

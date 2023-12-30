@@ -150,8 +150,6 @@ export class MongoCartRepository
             },
             {
                 $project: {
-                    userId: "$_id",
-                    userType: { $literal: userType },
                     itemCount: 1,
                     totalSpent: 1,
                     items: 1,

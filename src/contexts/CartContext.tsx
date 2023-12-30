@@ -18,7 +18,7 @@ interface CartContextProps {
     clearCart: () => void
 }
 
-const cartInitialState = Cart.empty("guest", "0").toJSON()
+const cartInitialState = Cart.empty().toJSON()
 
 export const CartContext = createContext<CartContextProps>({} as CartContextProps)
 

@@ -13,8 +13,6 @@ export interface CartProduct {
 }
 
 export interface CartProps {
-    userId: string
-    userType: UserType
     totalSpent: number
     itemCount: number
     items: CartProduct[]
@@ -37,8 +35,8 @@ export class Cart {
             }
     }
 
-    public static empty(userType: UserType, userId: string): Cart {
-        return new Cart({ userId, userType, items: [], itemCount: 0, totalSpent: 0 })
+    public static empty(): Cart {
+        return new Cart({ items: [], itemCount: 0, totalSpent: 0 })
     }
 
     constructor(props: CartProps) {
