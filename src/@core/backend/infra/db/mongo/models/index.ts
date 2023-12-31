@@ -18,9 +18,8 @@ export interface MongoUser extends UserProps {
     updatedAt: Date
 }
 
-export interface MongoCartItem extends CartProduct {
+export interface MongoCartItem extends Pick<CartProduct, "productId" | "quantity"> {
     readonly _id: ObjectId
-    readonly productId: string
     readonly userId: string
     readonly userType: UserType
     createdAt: Date

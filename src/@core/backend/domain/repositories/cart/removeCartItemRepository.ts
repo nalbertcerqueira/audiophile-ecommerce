@@ -1,16 +1,11 @@
 import { Cart } from "@/@core/shared/entities/cart/cart"
 import { UserType } from "@/@core/shared/entities/user/user"
-
-export interface OperationDetails {
-    type: "delete" | "decrease"
-    readonly productId: string
-    quantity: number
-}
+import { RemovalDetails } from "./protocols"
 
 export interface RemoveCartItemRepository {
     removeItem(
         userId: string,
         userType: UserType,
-        operationInfo: OperationDetails
+        operationInfo: RemovalDetails
     ): Promise<Cart | null>
 }

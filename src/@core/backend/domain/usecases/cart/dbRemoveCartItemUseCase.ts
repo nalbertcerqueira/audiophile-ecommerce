@@ -2,7 +2,6 @@ import { RemoveCartItemRepository } from "../../repositories/cart/removeCartItem
 import { GetProductByIdRepository } from "../../repositories/product/getProductByIdRepository"
 import { GetCartItemRepository } from "../../repositories/cart/getCartItemRepository"
 import { CartItemInfo, UserInfo } from "./protocols"
-import { CartProduct } from "@/@core/shared/entities/cart/cart"
 import { Cart } from "@/@core/shared/entities/cart/cart"
 
 export class DbRemoveCartItemUseCase {
@@ -12,14 +11,14 @@ export class DbRemoveCartItemUseCase {
         private readonly removeCartItemRepository: RemoveCartItemRepository
     ) {}
 
-    public async execute(userInfo: UserInfo, itemInfo: CartItemInfo): Promise<Cart | null> {
-        const { productId, quantity } = itemInfo
+    public async execute(userInfo: UserInfo, product: CartItemInfo): Promise<Cart | null> {
+        const { productId, quantity } = product
         const { id, type } = userInfo
 
-        const foundProduct = (await this.getProductByIdRepository.getById(
+        const foundProduct = await this.getProductByIdRepository.getById(
             productId,
             "shortProduct"
-        )) as CartProduct
+        )
 
         if (foundProduct) {
             const foundCartItem = await this.getCartItemRepository.getItem(id, type, productId)
@@ -31,7 +30,7 @@ export class DbRemoveCartItemUseCase {
                     quantity
                 })
 
-                return cart || Cart.empty(type, id)
+                return cart || Cart.empty()
             }
         }
 

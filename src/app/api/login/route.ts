@@ -32,9 +32,15 @@ export async function POST(req: NextRequest) {
 
                 if (guestCart) {
                     const { id, sessionType } = payload
-                    const { items } = guestCart.toJSON()
+                    const itemsToAdd = guestCart.toJSON().items.map((item) => ({
+                        productId: item.productId,
+                        quantity: item.quantity
+                    }))
 
-                    await dbAddProductsToCartUseCase.execute({ id, type: sessionType }, items)
+                    await dbAddProductsToCartUseCase.execute(
+                        { id, type: sessionType },
+                        itemsToAdd
+                    )
                     await dbClearCartUseCase.execute(guestUser.id, "guest")
                 }
             }

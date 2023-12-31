@@ -144,25 +144,12 @@ export const cartItemMongoSchema: Document = {
     $jsonSchema: {
         bsonType: "object",
         additionalProperties: false,
-        required: [
-            "_id",
-            "userId",
-            "userType",
-            "productId",
-            "name",
-            "slug",
-            "price",
-            "quantity",
-            "createdAt"
-        ],
+        required: ["_id", "userId", "userType", "productId", "quantity", "createdAt"],
         properties: {
             _id: {},
             userId: { bsonType: "string" },
             userType: { bsonType: "string", enum: ["authenticated", "guest"] },
             productId: { bsonType: "string" },
-            name: { bsonType: "string" },
-            slug: { bsonType: "string" },
-            price: { bsonType: "double", minimum: 0.01 },
             quantity: { bsonType: "int", minimum: 1 },
             createdAt: { bsonType: "date" }
         }
