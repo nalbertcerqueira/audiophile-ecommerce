@@ -1,8 +1,4 @@
-import { ExternalUserProps } from "@/@core/shared/entities/user/externalUser"
-
-export interface ExternalUserWithId extends ExternalUserProps {
-    readonly id: string
-}
+import { ExternalUserWithId } from "./protocols"
 
 export interface FindExternalUserByEmailRepository {
     findByEmail(email: string): Promise<ExternalUserWithId | null>
