@@ -1,6 +1,6 @@
 "use client"
 
-import { AuthContext } from "@/contexts/AuthContext"
+import { SessionContext } from "@/contexts/SessionContext"
 import { useRouter } from "next/navigation"
 import { ReactNode, useContext, useEffect } from "react"
 
@@ -13,7 +13,7 @@ interface ProtectedRouteProps {
 
 export function AuthRedirectionRoute(props: ProtectedRouteProps) {
     const { fallback, routeToRedirect, routeType } = props
-    const { isLoading, isLogged } = useContext(AuthContext)
+    const { isLoading, isLogged } = useContext(SessionContext)
     const { replace } = useRouter()
 
     useEffect(() => {

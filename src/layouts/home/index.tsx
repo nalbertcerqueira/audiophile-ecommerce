@@ -3,14 +3,14 @@ import { CartModalProvider } from "@/contexts/CartModalContext"
 import { CartProvider } from "@/contexts/CartContext"
 import { Footer } from "./components/Footer"
 import { PropsWithChildren } from "react"
-import { AuthProvider } from "@/contexts/AuthContext"
+import { SessionProvider } from "@/contexts/SessionContext"
 import "./styles.scss"
 
 export function HomeContainer({ children }: PropsWithChildren) {
     return (
         <body>
             <div className="app-container">
-                <AuthProvider>
+                <SessionProvider>
                     <CartProvider>
                         <CartModalProvider>
                             {children}
@@ -18,7 +18,7 @@ export function HomeContainer({ children }: PropsWithChildren) {
                             <CartModal />
                         </CartModalProvider>
                     </CartProvider>
-                </AuthProvider>
+                </SessionProvider>
             </div>
         </body>
     )

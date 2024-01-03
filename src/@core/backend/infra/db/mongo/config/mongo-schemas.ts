@@ -21,7 +21,7 @@ const userImageMongoSchema: Document = {
     oneOf: [
         {
             bsonType: "string",
-            pattern: "^(https|http)://[a-zA-Z-0-9]{4,}.[a-zA-Z0-9]{2,}$"
+            pattern: "^(https|http)://"
         },
         {
             bsonType: "null"

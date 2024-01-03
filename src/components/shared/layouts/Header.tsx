@@ -2,7 +2,7 @@
 
 import { AudiophileLogo } from "../Logo"
 import { toCapitalized } from "@/utils/helpers"
-import { AuthContext } from "@/contexts/AuthContext"
+import { SessionContext } from "@/contexts/SessionContext"
 import { CartButton } from "../buttons/CartButton"
 import { Navbar } from "../Navbar"
 import { useContext } from "react"
@@ -14,7 +14,7 @@ interface HeaderProps {
 }
 
 export function Header({ className }: HeaderProps) {
-    const { user, isLoading, isLogged } = useContext(AuthContext)
+    const { user, isLoading, isLogged } = useContext(SessionContext)
     const firstName = user?.type === "authenticated" ? user.name.split(" ")[0] : undefined
 
     return (
