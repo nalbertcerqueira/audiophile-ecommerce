@@ -55,11 +55,9 @@ export function CartProvider({ children }: PropsWithChildren) {
         )
         try {
             const cart = await addCartItemUseCase.execute({ productId, quantity })
-            cart && setCart(cart.toJSON())
+            if (cart) setCart(cart.toJSON())
         } catch (error: any) {
-            if (error.name === "UnauthorizedError") {
-                location.reload()
-            }
+            if (error.name === "UnauthorizedError") location.reload()
         } finally {
             clearTimeout(timerRef)
             loadingDispatch({ type: "DISABLE", payload: { productId } })
@@ -75,11 +73,9 @@ export function CartProvider({ children }: PropsWithChildren) {
         )
         try {
             const cart = await removeCartItemUseCase.execute({ productId, quantity })
-            cart && setCart(cart.toJSON())
+            if (cart) setCart(cart.toJSON())
         } catch (error: any) {
-            if (error.name === "UnauthorizedError") {
-                location.reload()
-            }
+            if (error.name === "UnauthorizedError") location.reload()
         } finally {
             clearTimeout(timerRef)
             loadingDispatch({ type: "DISABLE", payload: { productId } })
@@ -88,17 +84,14 @@ export function CartProvider({ children }: PropsWithChildren) {
 
     async function clearCart(): Promise<void> {
         if (loadingState.isLoading) return
+        if (!cart.items.length) return
 
         loadingDispatch({ type: "CLEAR" })
         try {
-            if (cart.items.length) {
-                const cart = await clearCartUseCase.execute()
-                setCart(cart.toJSON())
-            }
+            const cart = await clearCartUseCase.execute()
+            setCart(cart.toJSON())
         } catch (error: any) {
-            if (error.name === "UnauthorizedError") {
-                location.reload()
-            }
+            if (error.name === "UnauthorizedError") location.reload()
         } finally {
             loadingDispatch({ type: "DISABLE" })
         }

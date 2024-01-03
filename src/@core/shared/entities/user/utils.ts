@@ -29,8 +29,7 @@ export const userZodSchema = schemaFromType<UserProps>()(
             .min(6, nameLengthMessage)
             .refine((name) => name.match(nameRegexp), { message: nameMessage, path: [""] }),
         images: z.object({
-            profile: z.string().trim().url().nullable(),
-            profileThumb: z.string().trim().url().nullable()
+            profile: z.string().trim().url().nullable()
         })
     })
 ).strict()

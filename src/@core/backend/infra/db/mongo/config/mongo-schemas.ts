@@ -124,10 +124,9 @@ export const userMongoSchema: Document = {
             images: {
                 bsonType: "object",
                 additionalProperties: false,
-                required: ["profile", "profileThumb"],
+                required: ["profile"],
                 properties: {
-                    profile: userImageMongoSchema,
-                    profileThumb: userImageMongoSchema
+                    profile: userImageMongoSchema
                 }
             },
             createdAt: {

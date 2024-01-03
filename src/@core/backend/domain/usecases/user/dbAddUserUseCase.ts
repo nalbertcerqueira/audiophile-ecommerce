@@ -21,7 +21,7 @@ export class DbAddUserUseCase {
                 name,
                 email,
                 password: hashedPassword,
-                images: { profile: null, profileThumb: null }
+                images: { profile: null }
             })
             await this.addUserRepository.add(newUser)
 

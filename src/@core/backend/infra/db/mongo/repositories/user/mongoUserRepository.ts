@@ -15,7 +15,7 @@ export class MongoUserRepository
     public async findByEmail(email: string): Promise<UserWithId | null> {
         await mongoHelper.connect()
 
-        const userCollection = mongoHelper.db.collection("users")
+        const userCollection = mongoHelper.db.collection<MongoUser>("users")
         const foundUser = await userCollection.findOne<MongoUser>({ email })
 
         if (foundUser) {

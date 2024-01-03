@@ -10,7 +10,6 @@ export interface UserProps {
     password: string
     images: {
         profile: string | null
-        profileThumb: string | null
     }
 }
 
