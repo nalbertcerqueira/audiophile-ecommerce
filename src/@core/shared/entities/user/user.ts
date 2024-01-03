@@ -17,7 +17,7 @@ export class User {
     private props: UserProps
     public static readonly userSchema = userZodSchema
 
-    public static validateUser(user: any): EntityValidationResult<UserProps> {
+    public static validate(user: any): EntityValidationResult<UserProps> {
         const validationResult = this.userSchema.safeParse(user)
 
         if (validationResult.success) {
@@ -30,7 +30,7 @@ export class User {
     }
 
     constructor(props: UserProps) {
-        const validationResult = User.validateUser(props)
+        const validationResult = User.validate(props)
 
         if (!validationResult.success) {
             const firstError = validationResult.errors[0]
