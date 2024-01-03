@@ -17,7 +17,7 @@ const productImageMongoSchema: Document = {
     }
 }
 
-const userImageMongoSchema = {
+const userImageMongoSchema: Document = {
     oneOf: [
         {
             bsonType: "string",
@@ -27,6 +27,22 @@ const userImageMongoSchema = {
             bsonType: "null"
         }
     ]
+}
+
+const userNameMongoSchema: Document = {
+    bsonType: "string",
+    minLength: 6,
+    pattern: `${nameRegexp.source}`
+}
+
+const userEmailMongoSchema: Document = {
+    bsonType: "string",
+    minLength: 6,
+    pattern: "^[a-zA-Z0-9._%+-]{1,}@[a-zA-Z0-9.-]{1,}\\.[a-zA-Z0-9]{2,}$"
+}
+
+const dateMongoSchema: Document = {
+    bsonType: "date"
 }
 
 export const productMongoSchema: Document = {
@@ -107,16 +123,10 @@ export const userMongoSchema: Document = {
         required: ["name", "email", "password", "images", "createdAt", "updatedAt"],
         properties: {
             _id: {},
-            name: {
-                bsonType: "string",
-                minLength: 6,
-                pattern: `${nameRegexp.source}`
-            },
-            email: {
-                bsonType: "string",
-                minLength: 6,
-                pattern: "^[a-zA-Z0-9._%+-]{1,}@[a-zA-Z0-9.-]{1,}\\.[a-zA-Z0-9]{2,}$"
-            },
+            createdAt: dateMongoSchema,
+            updatedAt: dateMongoSchema,
+            name: userNameMongoSchema,
+            email: userEmailMongoSchema,
             password: {
                 bsonType: "string",
                 minLength: 8
@@ -128,12 +138,29 @@ export const userMongoSchema: Document = {
                 properties: {
                     profile: userImageMongoSchema
                 }
-            },
-            createdAt: {
-                bsonType: "date"
-            },
-            updatedAt: {
-                bsonType: "date"
+            }
+        }
+    }
+}
+
+export const externalUserMongoSchema: Document = {
+    $jsonSchema: {
+        bsonType: "object",
+        aditionalProperties: false,
+        required: ["name", "email", "images", "createdAt", "updatedAt"],
+        properties: {
+            _id: {},
+            createdAt: dateMongoSchema,
+            updatedAt: dateMongoSchema,
+            name: userNameMongoSchema,
+            email: userEmailMongoSchema,
+            images: {
+                bsonType: "object",
+                aditionalProperties: false,
+                required: ["profile"],
+                properties: {
+                    profile: userImageMongoSchema
+                }
             }
         }
     }
@@ -150,7 +177,7 @@ export const cartItemMongoSchema: Document = {
             userType: { bsonType: "string", enum: ["authenticated", "guest"] },
             productId: { bsonType: "string" },
             quantity: { bsonType: "int", minimum: 1 },
-            createdAt: { bsonType: "date" }
+            createdAt: dateMongoSchema
         }
     }
 }
