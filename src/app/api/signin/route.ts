@@ -8,11 +8,11 @@ import { authenticatedJwtTokenService } from "@/@core/backend/main/factories/ser
 import { dbAddProductsToCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbAddProductsToCartFactory"
 import { dbClearCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbClearCartFactory"
 
-const loginValidator = User.userSchema.pick({ email: true, password: true })
+const signinValidator = User.userSchema.pick({ email: true, password: true })
 
 export async function POST(req: NextRequest) {
     const { email, password } = await req.json()
-    const validationResult = loginValidator.safeParse({ email, password })
+    const validationResult = signinValidator.safeParse({ email, password })
     const sessionToken = req.headers.get("authorization")?.split(" ")[1] as string
 
     try {

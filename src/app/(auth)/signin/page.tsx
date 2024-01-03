@@ -1,9 +1,9 @@
 import { AuthRedirectionRoute } from "@/components/shared/AuthRedirectionRoute"
 import { PageLoaderContainer } from "@/components/shared/loaders/PageLoaderContainer"
-import { LoginPageComponent } from "@/components/auth/LoginPage"
+import { SigninPageComponent } from "@/components/auth/SigninPage"
 import { BarLoader } from "@/components/shared/loaders/BarLoader"
 
-export default function LoginPage() {
+export default function SigninPage() {
     return (
         <AuthRedirectionRoute
             routeType="auth"
@@ -14,7 +14,7 @@ export default function LoginPage() {
                 </PageLoaderContainer>
             }
         >
-            <LoginPageComponent />
+            <SigninPageComponent />
         </AuthRedirectionRoute>
     )
 }

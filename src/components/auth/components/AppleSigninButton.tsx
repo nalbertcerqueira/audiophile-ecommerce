@@ -1,12 +1,12 @@
 import { AppleIcon } from "@/components/shared/icons/AppleIcon"
 import { ReactNode } from "react"
 
-interface AppleLoginButtonProps {
+interface AppleSigninButtonProps {
     isSubmitting: boolean
     children: ReactNode
 }
 
-export function AppleLoginButton({ isSubmitting, children }: AppleLoginButtonProps) {
+export function AppleSigninButton({ isSubmitting, children }: AppleSigninButtonProps) {
     return (
         <button
             disabled={isSubmitting}

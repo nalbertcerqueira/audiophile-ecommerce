@@ -1,10 +1,10 @@
 import { UserProps } from "@/@core/shared/entities/user/user"
 
-export type AuthFormFields<T extends "login" | "signup"> = T extends "login"
-    ? LoginFields
+export type AuthFormFields<T extends "signin" | "signup"> = T extends "signin"
+    ? SigninFields
     : SignupFields
 
-export interface LoginFields extends Pick<UserProps, "email" | "password"> {}
+export interface SigninFields extends Pick<UserProps, "email" | "password"> {}
 
 export interface SignupFields extends Pick<UserProps, "name" | "email" | "password"> {
     passwordConfirmation: string

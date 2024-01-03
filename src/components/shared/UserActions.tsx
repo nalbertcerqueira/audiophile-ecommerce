@@ -35,7 +35,7 @@ export function UserActions({ name, className, avatarUrl, isLogged }: UserAction
         return (
             <div className="user-actions__auth">
                 <div>
-                    <Link className="user-actions__auth-link" href="/login">
+                    <Link className="user-actions__auth-link" href="/signin">
                         Login
                     </Link>
                     <span> or</span>

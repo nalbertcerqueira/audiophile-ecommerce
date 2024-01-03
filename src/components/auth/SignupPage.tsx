@@ -32,7 +32,7 @@ export function SignupPageComponent() {
             if (!isUserCreated) {
                 return setError("email", { message: "This email is already registered" })
             }
-            setTimeout(() => location.assign("/login"), 1000)
+            setTimeout(() => location.assign("/signin"), 1000)
         } catch (error: any) {
             console.log(error)
         }
@@ -97,7 +97,7 @@ export function SignupPageComponent() {
             </AuthForm>
             <div className="form-container__alt-page">
                 <span>Have a account?</span>{" "}
-                <Link className="form-container__signup-link" href="/login">
+                <Link className="form-container__signup-link" href="/signin">
                     Sign in here
                 </Link>
             </div>

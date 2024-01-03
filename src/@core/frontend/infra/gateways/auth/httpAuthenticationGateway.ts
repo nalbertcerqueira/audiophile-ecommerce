@@ -8,7 +8,7 @@ export class HttpAuthenticationGateway implements AuthenticationGateway {
     constructor(private readonly baseApiUrl: string) {}
 
     public async authenticateUser(authData: AuthData): Promise<string | null> {
-        const fullUrl = `${this.baseApiUrl}/login`
+        const fullUrl = `${this.baseApiUrl}/signin`
         const guestSessionToken = localStorage.getItem("sessionToken")
 
         const response = await fetch(fullUrl, {

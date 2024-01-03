@@ -1,12 +1,12 @@
 import { GoogleIcon } from "@/components/shared/icons/GoogleIcon"
 import { ReactNode } from "react"
 
-interface GoogleLoginButtonProps {
+interface GoogleSigninButtonProps {
     isSubmitting: boolean
     children: ReactNode
 }
 
-export function GoogleLoginButton({ isSubmitting, children }: GoogleLoginButtonProps) {
+export function GoogleSigninButton({ isSubmitting, children }: GoogleSigninButtonProps) {
     return (
         <button
             disabled={isSubmitting}

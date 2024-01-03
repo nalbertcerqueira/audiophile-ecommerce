@@ -3,7 +3,7 @@ import { AuthFormFields } from "../types/types"
 import { User } from "@/@core/shared/entities/user/user"
 import z from "zod"
 
-export const loginSchema: z.ZodType<AuthFormFields<"login">> = User.userSchema.pick({
+export const signinSchema: z.ZodType<AuthFormFields<"signin">> = User.userSchema.pick({
     email: true,
     password: true
 })

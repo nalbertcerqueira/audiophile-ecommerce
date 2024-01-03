@@ -1,32 +1,32 @@
 "use client"
 
-import { GoogleLoginButton } from "./components/GoogleLoginButton"
+import { GoogleSigninButton } from "./components/GoogleSigninButton"
 import { customZodResolver } from "@/libs/zod/resolvers"
-import { AppleLoginButton } from "./components/AppleLoginButton"
+import { AppleSigninButton } from "./components/AppleSigninButton"
 import { AuthFormFields } from "./types/types"
 import { signinUseCase } from "@/@core/frontend/main/usecases/auth/signinFactory"
-import { loginSchema } from "./helpers/schemas"
+import { signinSchema } from "./helpers/schemas"
 import { AuthForm } from "./components/AuthForm"
 import { Input } from "../shared/Input"
 import { useForm, FieldErrors } from "react-hook-form"
 import Link from "next/link"
 import "./styles.scss"
 
-export function LoginPageComponent() {
+export function SigninPageComponent() {
     const {
         register,
         handleSubmit,
         setError,
         formState: { errors, isSubmitting, isSubmitSuccessful }
-    } = useForm<AuthFormFields<"login">>({
+    } = useForm<AuthFormFields<"signin">>({
         mode: "onSubmit",
         reValidateMode: "onSubmit",
-        resolver: customZodResolver(loginSchema)
+        resolver: customZodResolver(signinSchema)
     })
 
     const isFormBlocked = isSubmitting || isSubmitSuccessful
 
-    async function handleSuccessfulSubmit(data: AuthFormFields<"login">) {
+    async function handleSuccessfulSubmit(data: AuthFormFields<"signin">) {
         if (isFormBlocked) return
 
         try {
@@ -41,7 +41,7 @@ export function LoginPageComponent() {
         }
     }
 
-    async function handleFailedSubmit(errors: FieldErrors<AuthFormFields<"login">>) {
+    async function handleFailedSubmit(errors: FieldErrors<AuthFormFields<"signin">>) {
         if (!isFormBlocked) {
             console.log(errors)
         }
@@ -51,12 +51,12 @@ export function LoginPageComponent() {
         <div className="form-container">
             <h2 className="form-container__title">Sign-in</h2>
             <div className="form-container__third-party">
-                <GoogleLoginButton isSubmitting={isFormBlocked}>
+                <GoogleSigninButton isSubmitting={isFormBlocked}>
                     CONTINUE WITH GOOGLE
-                </GoogleLoginButton>
-                <AppleLoginButton isSubmitting={isFormBlocked}>
+                </GoogleSigninButton>
+                <AppleSigninButton isSubmitting={isFormBlocked}>
                     CONTINUE WITH APPLE
-                </AppleLoginButton>
+                </AppleSigninButton>
             </div>
             <div className="form-container__division">Or</div>
             <AuthForm
