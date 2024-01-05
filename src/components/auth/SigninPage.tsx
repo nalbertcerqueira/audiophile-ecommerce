@@ -9,6 +9,7 @@ import { signinSchema } from "./helpers/schemas"
 import { AuthForm } from "./components/AuthForm"
 import { Input } from "../shared/Input"
 import { useForm, FieldErrors } from "react-hook-form"
+import { signIn } from "next-auth/react"
 import Link from "next/link"
 import "./styles.scss"
 
@@ -51,7 +52,10 @@ export function SigninPageComponent() {
         <div className="form-container">
             <h2 className="form-container__title">Sign-in</h2>
             <div className="form-container__third-party">
-                <GoogleSigninButton isSubmitting={isFormBlocked}>
+                <GoogleSigninButton
+                    onClick={() => signIn("google", { callbackUrl: "/" })}
+                    isSubmitting={isFormBlocked}
+                >
                     CONTINUE WITH GOOGLE
                 </GoogleSigninButton>
                 <AppleSigninButton isSubmitting={isFormBlocked}>
