@@ -3,7 +3,7 @@ import { TokenVerifierService } from "../../../services/token/tokenVerifierServi
 import { UserProps } from "@/@core/shared/entities/user/user"
 
 interface AuthorizationOutputDTO extends UserProps {
-    id: string
+    readonly id: string
 }
 export class DbAuthorizationUseCase {
     constructor(

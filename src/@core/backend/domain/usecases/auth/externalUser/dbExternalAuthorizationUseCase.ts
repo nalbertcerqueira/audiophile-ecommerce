@@ -1,0 +1,29 @@
+import { ExternalUserProps } from "@/@core/shared/entities/user/externalUser"
+import { TokenVerifierService } from "../../../services/token/tokenVerifierService"
+import { FindExternalUserByIdRepository } from "../../../repositories/externalUser/findExternalUserByIdRepository"
+
+interface ExternalAuthorizationOutputDTO extends ExternalUserProps {
+    readonly id: string
+}
+
+export class DbExternalAuthorizationUseCase {
+    constructor(
+        private readonly tokenVerifierService: TokenVerifierService,
+        private readonly findExternalUserByIdRepository: FindExternalUserByIdRepository
+    ) {}
+
+    public async execute(token: string): Promise<ExternalAuthorizationOutputDTO | null> {
+        const payload = await this.tokenVerifierService.verify(token)
+
+        if (payload && payload.sessionType === "external") {
+            const { id } = payload
+            const foundExternalUser = await this.findExternalUserByIdRepository.findById(id)
+
+            if (foundExternalUser) {
+                return { id, ...foundExternalUser.toJSON() }
+            }
+        }
+
+        return null
+    }
+}
