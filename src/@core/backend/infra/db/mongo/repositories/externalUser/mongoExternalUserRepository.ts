@@ -4,9 +4,14 @@ import { mongoHelper } from "../../config/mongo-config"
 import { MongoExternalUser } from "../../models"
 import { AddExternalUserRepository } from "@/@core/backend/domain/repositories/externalUser/addExternalUserRepositry"
 import { ExternalUser } from "@/@core/shared/entities/user/externalUser"
+import { FindExternalUserByIdRepository } from "@/@core/backend/domain/repositories/externalUser/findExternalUserByIdRepository"
+import { ObjectId } from "mongodb"
 
 export class MongoExternalUserRepository
-    implements FindExternalUserByEmailRepository, AddExternalUserRepository
+    implements
+        FindExternalUserByEmailRepository,
+        AddExternalUserRepository,
+        FindExternalUserByIdRepository
 {
     public async findByEmail(email: string): Promise<ExternalUserWithId | null> {
         await mongoHelper.connect()
@@ -40,5 +45,27 @@ export class MongoExternalUserRepository
         })
 
         return { id: insertedId.toString(), name, email, images: { ...images } }
+    }
+
+    public async findById(userId: string): Promise<ExternalUser | null> {
+        await mongoHelper.connect()
+
+        try {
+            const id = new ObjectId(userId)
+
+            const externalUserCollection = mongoHelper.db.collection("externalUsers")
+            const foundExternalUser = await externalUserCollection.findOne<MongoExternalUser>({
+                _id: id
+            })
+
+            if (foundExternalUser) {
+                const { name, email, images } = foundExternalUser
+                return new ExternalUser({ name, email, images: images })
+            }
+
+            return null
+        } catch {
+            return null
+        }
     }
 }
