@@ -8,7 +8,15 @@ import { removeCartItemUseCase } from "@/@core/frontend/main/usecases/cart/remov
 import { CartLoadingState } from "@/store/cartLoading/types"
 import { cartLoadingReducer } from "@/store/cartLoading/reducer"
 import { cartLoadingInititalState } from "@/store/cartLoading/initialState"
-import { PropsWithChildren, createContext, useState, useEffect, useReducer } from "react"
+import {
+    PropsWithChildren,
+    createContext,
+    useState,
+    useEffect,
+    useReducer,
+    useContext
+} from "react"
+import { SessionContext } from "./SessionContext"
 
 interface CartContextProps {
     cart: CartProps
@@ -23,6 +31,7 @@ const cartInitialState = Cart.empty().toJSON()
 export const CartContext = createContext<CartContextProps>({} as CartContextProps)
 
 export function CartProvider({ children }: PropsWithChildren) {
+    const sessionState = useContext(SessionContext)
     const [cart, setCart] = useState<CartProps>(cartInitialState)
     const [loadingState, loadingDispatch] = useReducer(
         cartLoadingReducer,
@@ -30,21 +39,24 @@ export function CartProvider({ children }: PropsWithChildren) {
     )
 
     useEffect(() => {
-        getCart()
-        async function getCart() {
-            loadingDispatch({ type: "ENABLE" })
-            try {
-                const cart = await getCartUseCase.execute()
-                setCart(cart.toJSON())
-            } catch (error: any) {
-                if (error.name !== "UnauthorizedError") {
-                    return console.log(error)
-                }
-            } finally {
-                loadingDispatch({ type: "DISABLE" })
-            }
+        if (!sessionState.isLoading) {
+            getCart()
         }
-    }, [])
+    }, [sessionState.isLoading])
+
+    async function getCart() {
+        loadingDispatch({ type: "ENABLE" })
+        try {
+            const cart = await getCartUseCase.execute()
+            setCart(cart.toJSON())
+        } catch (error: any) {
+            if (error.name !== "UnauthorizedError") {
+                return console.log(error)
+            }
+        } finally {
+            loadingDispatch({ type: "DISABLE" })
+        }
+    }
 
     async function addItem(productId: string, quantity: number): Promise<void> {
         if (shouldBlockAction(productId)) return

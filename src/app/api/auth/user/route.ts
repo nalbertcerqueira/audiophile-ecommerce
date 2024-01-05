@@ -1,4 +1,5 @@
 import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authenticatedUser/dbAuthorizationFactory"
+import { dbExternalAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/externalUser/dbExternalAuthorizationFactory"
 import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/guestUser/dbGuestAuthorizationFactory"
 import { dbGuestSessionUseCase } from "@/@core/backend/main/factories/usecases/auth/guestUser/dbGuestSessionUseCase"
 import { NextRequest, NextResponse } from "next/server"
@@ -9,15 +10,24 @@ export async function GET(req: NextRequest) {
 
     try {
         if (sessionToken) {
-            const [authenticatedUser, guestUser] = await Promise.allSettled([
+            const [authenticatedUser, guestUser, externalUser] = await Promise.allSettled([
                 dbAuthorizationUseCase.execute(sessionToken),
-                dbGuestAuthorizationUseCase.execute(sessionToken)
+                dbGuestAuthorizationUseCase.execute(sessionToken),
+                dbExternalAuthorizationUseCase.execute(sessionToken)
             ])
 
             if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
                 const { id, email, name } = authenticatedUser.value
                 return NextResponse.json(
                     { data: { id, name, email, type: "authenticated" } },
+                    { status: 200 }
+                )
+            }
+
+            if (externalUser.status === "fulfilled" && externalUser.value) {
+                const { id, name, email } = externalUser.value
+                return NextResponse.json(
+                    { data: { id, name, email, type: "external" } },
                     { status: 200 }
                 )
             }

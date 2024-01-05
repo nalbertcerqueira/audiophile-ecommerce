@@ -6,6 +6,7 @@ import {
     AuthenticatedUser,
     GuestUser
 } from "@/@core/frontend/domain/gateways/user/getUserGateway"
+import { useSession } from "next-auth/react"
 
 type UserBasicInfo = AuthenticatedUser | GuestUser
 
@@ -23,14 +24,24 @@ interface SessionContextProps {
 export const SessionContext = createContext<SessionContextProps>({} as SessionContextProps)
 
 export function SessionProvider({ children }: PropsWithChildren) {
+    const nextAuthSession = useSession()
     const [status, setStatus] = useState<SessionStatus>({ isLoading: true, isLogged: false })
     const [user, setUser] = useState<UserBasicInfo | null>(null)
 
     useEffect(() => {
-        main()
-    }, [])
+        if (nextAuthSession.status === "authenticated") {
+            const token = nextAuthSession.data.accessToken
+            token && localStorage.setItem("sessionToken", token)
+        }
+    }, [nextAuthSession.status, nextAuthSession.data?.accessToken])
 
-    async function main() {
+    useEffect(() => {
+        if (nextAuthSession.status !== "loading") {
+            validateSession()
+        }
+    }, [nextAuthSession.status])
+
+    async function validateSession() {
         try {
             const data = await getUserUseCase.execute()
             if (typeof data === "string") {
@@ -41,7 +52,10 @@ export function SessionProvider({ children }: PropsWithChildren) {
             if (typeof data === "object") {
                 const { type } = data
                 setUser({ ...data })
-                return setStatus({ isLoading: false, isLogged: type === "authenticated" })
+                return setStatus({
+                    isLoading: false,
+                    isLogged: type === "authenticated" || type === "external"
+                })
             }
 
             throw new Error()

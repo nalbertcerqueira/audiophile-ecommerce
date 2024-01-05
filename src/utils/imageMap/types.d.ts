@@ -16,7 +16,7 @@ export interface StaticImageMap {
     [key: string | symbol]: {
         product: ResponsiveImageSet
         preview: ResponsiveImageSet
-        thumb: ResponsiveImageSet | undefined
+        thumb?: ResponsiveImageSet
         cartThumb: StaticImageData
         gallery: StaticGalleryImages
     }

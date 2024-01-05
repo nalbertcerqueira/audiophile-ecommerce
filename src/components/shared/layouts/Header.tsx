@@ -15,7 +15,13 @@ interface HeaderProps {
 
 export function Header({ className }: HeaderProps) {
     const { user, isLoading, isLogged } = useContext(SessionContext)
-    const firstName = user?.type === "authenticated" ? user.name.split(" ")[0] : undefined
+    const firstName = getFirstName()
+
+    function getFirstName() {
+        if (user?.type === "authenticated" || user?.type === "external") {
+            return toCapitalized(user.name.split(" ")[0])
+        }
+    }
 
     return (
         <header className={`header ${className || ""}`.trim()}>
@@ -26,7 +32,7 @@ export function Header({ className }: HeaderProps) {
                 <Navbar />
                 <div className="header__btn-wrapper">
                     <UserActions
-                        name={toCapitalized(firstName)}
+                        name={firstName}
                         isLogged={isLogged}
                         className={isLoading ? "user-actions--hidden" : ""}
                     />
