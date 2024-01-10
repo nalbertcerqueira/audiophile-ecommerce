@@ -9,11 +9,13 @@ import { signinSchema } from "./helpers/schemas"
 import { AuthForm } from "./components/AuthForm"
 import { Input } from "../shared/Input"
 import { useForm, FieldErrors } from "react-hook-form"
+import { useEffect, useState } from "react"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
 import "./styles.scss"
 
 export function SigninPageComponent() {
+    const [isFormBlocked, setIsFormBlocked] = useState(false)
     const {
         register,
         handleSubmit,
@@ -25,7 +27,10 @@ export function SigninPageComponent() {
         resolver: customZodResolver(signinSchema)
     })
 
-    const isFormBlocked = isSubmitting || isSubmitSuccessful
+    useEffect(
+        () => setIsFormBlocked(isSubmitting || isSubmitSuccessful),
+        [isSubmitting, isSubmitSuccessful]
+    )
 
     async function handleSuccessfulSubmit(data: AuthFormFields<"signin">) {
         if (isFormBlocked) return
@@ -49,6 +54,7 @@ export function SigninPageComponent() {
     }
 
     async function externalSignin() {
+        setIsFormBlocked(true)
         const oneDay = 1000 * 3600 * 24
         const expirationDate = new Date(Date.now() + oneDay).toUTCString()
         const guestAccessToken = localStorage.getItem("sessionToken")
