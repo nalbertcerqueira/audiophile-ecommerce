@@ -48,14 +48,19 @@ export function SigninPageComponent() {
         }
     }
 
+    async function externalSignin() {
+        const oneDay = 1000 * 3600 * 24
+        const expirationDate = new Date(Date.now() + oneDay).toUTCString()
+        const guestAccessToken = localStorage.getItem("sessionToken")
+        document.cookie = `guest-access-token=${guestAccessToken};path=/;expires=${expirationDate};sameSite=Lax`
+        await signIn("google", { callbackUrl: "/" })
+    }
+
     return (
         <div className="form-container">
             <h2 className="form-container__title">Sign-in</h2>
             <div className="form-container__third-party">
-                <GoogleSigninButton
-                    onClick={() => signIn("google", { callbackUrl: "/" })}
-                    isSubmitting={isFormBlocked}
-                >
+                <GoogleSigninButton onClick={externalSignin} isSubmitting={isFormBlocked}>
                     CONTINUE WITH GOOGLE
                 </GoogleSigninButton>
                 <AppleSigninButton isSubmitting={isFormBlocked}>

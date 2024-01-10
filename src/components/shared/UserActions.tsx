@@ -1,5 +1,8 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
+import { signOut } from "next-auth/react"
 
 interface UserActionsProps {
     isLogged: boolean
@@ -11,7 +14,7 @@ interface UserActionsProps {
 export function UserActions({ name, className, avatarUrl, isLogged }: UserActionsProps) {
     function logout() {
         localStorage.removeItem("sessionToken")
-        location.assign("/")
+        signOut({ callbackUrl: "/" })
     }
 
     function renderUserActions() {
