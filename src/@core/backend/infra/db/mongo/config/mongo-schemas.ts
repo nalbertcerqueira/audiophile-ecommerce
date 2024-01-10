@@ -174,7 +174,7 @@ export const cartItemMongoSchema: Document = {
         properties: {
             _id: {},
             userId: { bsonType: "string" },
-            userType: { bsonType: "string", enum: ["authenticated", "guest"] },
+            userType: { bsonType: "string", enum: ["authenticated", "external", "guest"] },
             productId: { bsonType: "string" },
             quantity: { bsonType: "int", minimum: 1 },
             createdAt: dateMongoSchema

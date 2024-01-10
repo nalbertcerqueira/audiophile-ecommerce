@@ -3,20 +3,28 @@ import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/
 import { dbClearCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbClearCartFactory"
 import { dbGetCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbGetCartFactory"
 import { NextRequest, NextResponse } from "next/server"
+import { dbExternalAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/externalUser/dbExternalAuthorizationFactory"
 
 export async function GET(req: NextRequest) {
     const sessionToken = req.headers.get("authorization")?.split(" ")[1]
 
     try {
         if (sessionToken) {
-            const [authenticatedUser, guestUser] = await Promise.allSettled([
+            const [authenticatedUser, guestUser, externalUser] = await Promise.allSettled([
                 dbAuthorizationUseCase.execute(sessionToken),
-                dbGuestAuthorizationUseCase.execute(sessionToken)
+                dbGuestAuthorizationUseCase.execute(sessionToken),
+                dbExternalAuthorizationUseCase.execute(sessionToken)
             ])
 
             if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
                 const { id } = authenticatedUser.value
                 const cart = await dbGetCartUseCase.execute(id, "authenticated")
+                return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
+            }
+
+            if (externalUser.status === "fulfilled" && externalUser.value) {
+                const { id } = externalUser.value
+                const cart = await dbGetCartUseCase.execute(id, "external")
                 return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
             }
 
@@ -45,14 +53,21 @@ export async function DELETE(req: NextRequest) {
 
     try {
         if (sessionToken) {
-            const [authenticatedUser, guestUser] = await Promise.allSettled([
+            const [authenticatedUser, guestUser, externalUser] = await Promise.allSettled([
                 dbAuthorizationUseCase.execute(sessionToken),
-                dbGuestAuthorizationUseCase.execute(sessionToken)
+                dbGuestAuthorizationUseCase.execute(sessionToken),
+                dbExternalAuthorizationUseCase.execute(sessionToken)
             ])
 
             if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
                 const { id } = authenticatedUser.value
                 const cart = await dbClearCartUseCase.execute(id, "authenticated")
+                return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
+            }
+
+            if (externalUser.status === "fulfilled" && externalUser.value) {
+                const { id } = externalUser.value
+                const cart = await dbClearCartUseCase.execute(id, "external")
                 return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
             }
 
