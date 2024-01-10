@@ -6,13 +6,13 @@ export class DbAddProductsToCartUseCase {
     constructor(private readonly addManyCartItemsRepository: AddManyCartItemsRepository) {}
 
     public async execute(userInfo: UserInfo, products: CartItemInfo[]): Promise<Cart | null> {
-        if (products.length) {
-            const { id, type } = userInfo
-            const cart = await this.addManyCartItemsRepository.addManyItems(id, type, products)
+        const { id, type } = userInfo
 
-            return cart
+        if (!products.length) {
+            return null
         }
 
-        return null
+        const cart = await this.addManyCartItemsRepository.addManyItems(id, type, products)
+        return cart
     }
 }

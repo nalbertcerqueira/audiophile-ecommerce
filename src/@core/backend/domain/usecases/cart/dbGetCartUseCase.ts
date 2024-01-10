@@ -8,10 +8,6 @@ export class DbGetCartUseCase {
     public async execute(userId: string, userType: UserType): Promise<Cart> {
         const userCart = await this.getCartRepository.getCartById(userId, userType)
 
-        if (userCart) {
-            return userCart
-        }
-
-        return Cart.empty()
+        return userCart ? userCart : Cart.empty()
     }
 }

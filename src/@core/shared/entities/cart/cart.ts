@@ -24,13 +24,14 @@ export class Cart {
     public static validateCart(cart: any): EntityValidationResult<CartProps> {
         const validationResult = Cart.cartSchema.safeParse(cart)
 
-        if (validationResult.success) {
-            return { success: true, data: validationResult.data }
-        } else
+        if (!validationResult.success) {
             return {
                 success: false,
                 errors: generateCustomZodErrors(validationResult.error, 1)
             }
+        }
+
+        return { success: true, data: validationResult.data }
     }
 
     public static empty(): Cart {

@@ -13,15 +13,17 @@ export class DbAuthorizationUseCase {
     public async execute(token: string): Promise<AuthorizationOutputDTO | null> {
         const payload = await this.tokenVerifierService.verify(token)
 
-        if (payload && payload.sessionType === "authenticated") {
-            const { id } = payload
-            const foundUser = await this.findUserByIdRepository.findById(id)
-
-            if (foundUser) {
-                return { id, ...foundUser.toJSON() }
-            }
+        if (!payload || payload.sessionType !== "authenticated") {
+            return null
         }
 
-        return null
+        const { id } = payload
+        const foundUser = await this.findUserByIdRepository.findById(id)
+
+        if (!foundUser) {
+            return null
+        }
+
+        return { id, ...foundUser.toJSON() }
     }
 }

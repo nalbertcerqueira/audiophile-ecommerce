@@ -15,15 +15,17 @@ export class DbExternalAuthorizationUseCase {
     public async execute(token: string): Promise<ExternalAuthorizationOutputDTO | null> {
         const payload = await this.tokenVerifierService.verify(token)
 
-        if (payload && payload.sessionType === "external") {
-            const { id } = payload
-            const foundExternalUser = await this.findExternalUserByIdRepository.findById(id)
-
-            if (foundExternalUser) {
-                return { id, ...foundExternalUser.toJSON() }
-            }
+        if (!payload || payload.sessionType !== "external") {
+            return null
         }
 
-        return null
+        const { id } = payload
+        const foundExternalUser = await this.findExternalUserByIdRepository.findById(id)
+
+        if (!foundExternalUser) {
+            return null
+        }
+
+        return { id, ...foundExternalUser.toJSON() }
     }
 }

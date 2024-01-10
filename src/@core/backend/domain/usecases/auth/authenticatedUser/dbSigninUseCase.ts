@@ -15,22 +15,21 @@ export class DbSigninUseCase {
         const { email, password } = signinData
         const foundUser = await this.findUserByEmailRepository.findByEmail(email)
 
-        if (foundUser) {
-            const isPasswordCorrect = await this.hashComparer.compare(
-                password,
-                foundUser.password
-            )
-
-            if (isPasswordCorrect) {
-                const sessionToken = await this.tokenGenerator.generate({
-                    id: foundUser.id,
-                    sessionType: "authenticated"
-                })
-
-                return sessionToken
-            }
+        if (!foundUser) {
+            return null
         }
 
-        return null
+        const isPasswordCorrect = await this.hashComparer.compare(password, foundUser.password)
+
+        if (!isPasswordCorrect) {
+            return null
+        }
+
+        const sessionToken = await this.tokenGenerator.generate({
+            id: foundUser.id,
+            sessionType: "authenticated"
+        })
+
+        return sessionToken
     }
 }

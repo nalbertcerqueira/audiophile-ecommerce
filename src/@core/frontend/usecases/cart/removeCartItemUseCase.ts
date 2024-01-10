@@ -9,11 +9,11 @@ export class RemoveCartItemUseCase {
     public async execute(item: ItemToRemove): Promise<Cart | null> {
         const { productId, quantity } = item
 
-        if (quantity >= 1) {
-            const cart = await this.removeCartItemGateway.removeItem(productId, quantity)
-            return cart
+        if (quantity < 1) {
+            return null
         }
 
-        return null
+        const cart = await this.removeCartItemGateway.removeItem(productId, quantity)
+        return cart
     }
 }

@@ -6,10 +6,10 @@ export class DbGuestAuthorizationUseCase {
     public async execute(token: string): Promise<{ id: string } | null> {
         const payload = await this.tokenVerifierService.verify(token)
 
-        if (payload && payload.sessionType === "guest") {
-            return { id: payload.id }
+        if (!payload || payload.sessionType !== "guest") {
+            return null
         }
 
-        return null
+        return { id: payload.id }
     }
 }

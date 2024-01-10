@@ -12,14 +12,14 @@ export class ExternalUser {
     public static validate(user: any): EntityValidationResult<ExternalUserProps> {
         const validationResult = ExternalUser.externalUserSchema.safeParse(user)
 
-        if (validationResult.success) {
-            return { success: true, data: validationResult.data }
+        if (!validationResult.success) {
+            return {
+                success: false,
+                errors: generateCustomZodErrors(validationResult.error, 1)
+            }
         }
 
-        return {
-            success: false,
-            errors: generateCustomZodErrors(validationResult.error, 1)
-        }
+        return { success: true, data: validationResult.data }
     }
 
     constructor(props: ExternalUserProps) {

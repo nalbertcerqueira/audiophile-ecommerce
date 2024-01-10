@@ -20,13 +20,14 @@ export class User {
     public static validate(user: any): EntityValidationResult<UserProps> {
         const validationResult = this.userSchema.safeParse(user)
 
-        if (validationResult.success) {
-            return { success: true, data: validationResult.data }
-        } else
+        if (!validationResult.success) {
             return {
                 success: false,
                 errors: generateCustomZodErrors(validationResult.error, 1)
             }
+        }
+
+        return { success: true, data: validationResult.data }
     }
 
     constructor(props: UserProps) {

@@ -9,11 +9,11 @@ export class AddCartItemUseCase {
     public async execute(item: ItemToAdd): Promise<Cart | null> {
         const { productId, quantity } = item
 
-        if (quantity >= 1) {
-            const cart = await this.addCartItemGateway.addItem(productId, quantity)
-            return cart
+        if (quantity < 1) {
+            return null
         }
 
-        return null
+        const cart = await this.addCartItemGateway.addItem(productId, quantity)
+        return cart
     }
 }

@@ -20,20 +20,22 @@ export class DbRemoveCartItemUseCase {
             "shortProduct"
         )
 
-        if (foundProduct) {
-            const foundCartItem = await this.getCartItemRepository.getItem(id, type, productId)
-
-            if (foundCartItem) {
-                const cart = await this.removeCartItemRepository.removeItem(id, type, {
-                    type: foundCartItem.quantity - quantity < 1 ? "delete" : "decrease",
-                    productId,
-                    quantity
-                })
-
-                return cart || Cart.empty()
-            }
+        if (!foundProduct) {
+            return null
         }
 
-        return null
+        const foundCartItem = await this.getCartItemRepository.getItem(id, type, productId)
+
+        if (!foundCartItem) {
+            return null
+        }
+
+        const cart = await this.removeCartItemRepository.removeItem(id, type, {
+            type: foundCartItem.quantity - quantity < 1 ? "delete" : "decrease",
+            productId,
+            quantity
+        })
+
+        return cart || Cart.empty()
     }
 }
