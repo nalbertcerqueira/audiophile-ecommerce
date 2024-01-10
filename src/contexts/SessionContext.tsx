@@ -42,6 +42,9 @@ export function SessionProvider({ children }: PropsWithChildren) {
     }, [nextAuthSession.status])
 
     async function validateSession() {
+        //Removendo o accessToken do usuário anônimo após obter os dados da sessão
+        document.cookie = `guest-access-token=0;path=/;expires=${new Date().toUTCString()};sameSite=Lax`
+
         try {
             const data = await getUserUseCase.execute()
             if (typeof data === "string") {

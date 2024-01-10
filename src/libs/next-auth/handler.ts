@@ -29,52 +29,41 @@ export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOption
         },
         callbacks: {
             jwt: async ({ token, account }) => {
+                if (!account) return token
+
                 //Gerando um accessToken após o login do usuário
-                if (account) {
-                    const clientAccessToken = await dbExternalSigninUseCase.execute({
-                        name: token.name as string,
-                        email: token.email as string,
-                        image: token.picture || null
-                    })
-                    const { sub, picture, ...tokenRest } = token
-                    const payload = externalJwtTokenService.decode(clientAccessToken)
-                    const guestUser =
-                        await dbGuestAuthorizationUseCase.execute(guestAccessToken)
+                const clientAccessToken = await dbExternalSigninUseCase.execute({
+                    name: token.name as string,
+                    email: token.email as string,
+                    image: token.picture || null
+                })
+                const { sub, picture, ...tokenRest } = token
+                const payload = externalJwtTokenService.decode(clientAccessToken)
+                const guestUser = await dbGuestAuthorizationUseCase.execute(guestAccessToken)
 
-                    const newSessionToken = {
-                        ...tokenRest,
-                        accessToken: clientAccessToken
-                    }
-
-                    if (!guestUser || !payload) {
-                        return newSessionToken
-                    }
-
-                    const guestCart = await mongoCartRepository.getCartById(
-                        guestUser.id,
-                        "guest"
-                    )
-
-                    if (!guestCart) {
-                        return newSessionToken
-                    }
-
-                    const itemsToAdd = guestCart.toJSON().items.map((item) => ({
-                        productId: item.productId,
-                        quantity: item.quantity
-                    }))
-
-                    await dbAddProductsToCartUseCase.execute(
-                        { id: payload.id, type: payload.sessionType },
-                        itemsToAdd
-                    )
-                    await dbClearCartUseCase.execute(guestUser.id, "guest")
-
-                    return newSessionToken
+                const newSessionToken = {
+                    ...tokenRest,
+                    accessToken: clientAccessToken
                 }
-                //Retornando o token anterior nas chamadas subsequentes, contendo o accessToken gerado
-                //anteriormente
-                return token
+
+                if (!guestUser || !payload) return newSessionToken
+
+                const guestCart = await mongoCartRepository.getCartById(guestUser.id, "guest")
+
+                if (!guestCart) return newSessionToken
+
+                const itemsToAdd = guestCart.toJSON().items.map((item) => ({
+                    productId: item.productId,
+                    quantity: item.quantity
+                }))
+
+                await dbAddProductsToCartUseCase.execute(
+                    { id: payload.id, type: payload.sessionType },
+                    itemsToAdd
+                )
+                await dbClearCartUseCase.execute(guestUser.id, "guest")
+
+                return newSessionToken
             },
             session: async ({ session, token }) => {
                 //Retornando apenas o acessToken para persistir no localStorage do usuário,
