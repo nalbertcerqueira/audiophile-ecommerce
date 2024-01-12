@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { AriaAttributes } from "react"
 
 interface ImageInfo {
     src: string
@@ -11,18 +12,18 @@ interface ImageInfo {
     blurHeight?: number
 }
 
-interface ReponsiveImagesProps {
+interface ReponsiveImagesProps extends AriaAttributes {
     images: (ImageInfo | undefined)[]
 }
 
-export function ResponsiveImages({ images }: ReponsiveImagesProps) {
+export function ResponsiveImages({ images, ...ariaProps }: ReponsiveImagesProps) {
     return (
         <>
             {images.map((image, i) => {
                 if (image) {
                     return (
                         <Image
-                            placeholder="blur"
+                            {...ariaProps}
                             src={{
                                 src: image.src,
                                 width: image.width,
@@ -31,6 +32,7 @@ export function ResponsiveImages({ images }: ReponsiveImagesProps) {
                                 blurHeight: image.blurHeight,
                                 blurWidth: image.blurWidth
                             }}
+                            placeholder="blur"
                             alt={image.alt}
                             className={image.className}
                             key={i}

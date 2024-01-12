@@ -66,6 +66,7 @@ export function ProductGridSection() {
                 <div className="product-grid__medium-item">
                     <div className="medium-banner">
                         <ResponsiveImages
+                            aria-hidden="true"
                             images={[
                                 {
                                     ...SpeakerBanner,
@@ -99,6 +100,7 @@ export function ProductGridSection() {
                 <div className="product-grid__small-item">
                     <div className="small-banner">
                         <ResponsiveImages
+                            aria-hidden="true"
                             images={[
                                 {
                                     ...EarphoneBanner,

@@ -9,6 +9,7 @@ export function GallerySection({ productSlug }: { productSlug: string }) {
             <div className="gallery__inner-container">
                 <div className="gallery__small-item">
                     <ResponsiveImages
+                        aria-hidden="true"
                         images={[
                             {
                                 ...images.first.desktop,
