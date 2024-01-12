@@ -52,7 +52,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
                 return setStatus({ isLoading: false, isLogged: false })
             }
 
-            if (typeof data === "object") {
+            if (data && typeof data === "object") {
                 const { type } = data
                 setUser({ ...data })
                 return setStatus({
