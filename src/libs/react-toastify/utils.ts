@@ -38,7 +38,8 @@ export function emitToast(
         case "loading":
             return toast.loading(message, {
                 closeOnClick: true,
-                closeButton: true
+                closeButton: true,
+                autoClose: false
             })
         default:
             throw new Error("Toast type not found")
