@@ -7,6 +7,7 @@ import { signupSchema } from "./helpers/schemas"
 import { AuthForm } from "./components/AuthForm"
 import { Input } from "../shared/Input"
 import { FieldErrors, useForm } from "react-hook-form"
+import { emitToast } from "@/libs/react-toastify/utils"
 import Link from "next/link"
 import "./styles.scss"
 
@@ -32,7 +33,8 @@ export function SignupPageComponent() {
             if (!isUserCreated) {
                 return setError("email", { message: "This email is already registered" })
             }
-            setTimeout(() => location.assign("/signin"), 1000)
+            emitToast("success", "Your account has been successfully created!")
+            setTimeout(() => location.assign("/signin"), 2000)
         } catch (error: any) {
             console.log(error)
         }

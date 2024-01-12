@@ -22,7 +22,7 @@ export function AddProductAction({ productId }: { productId: string }) {
             />
             <button
                 disabled={isLoading}
-                onClick={() => addItem(productId, count)}
+                onClick={() => addItem(productId, count, { emitToast: true })}
                 className="btn btn--primary"
                 type="button"
             >

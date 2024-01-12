@@ -13,6 +13,7 @@ import { useEffect, useState } from "react"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
 import "./styles.scss"
+import { emitToast } from "@/libs/react-toastify/utils"
 
 export function SigninPageComponent() {
     const [isFormBlocked, setIsFormBlocked] = useState(false)
@@ -39,6 +40,7 @@ export function SigninPageComponent() {
             const token = await signinUseCase.execute(data)
             if (token) {
                 localStorage.setItem("sessionToken", token)
+                emitToast("success", "You've successfully logged in!")
                 return setTimeout(() => location.reload(), 1000)
             }
             setError("password", { message: "Invalid email or password" })

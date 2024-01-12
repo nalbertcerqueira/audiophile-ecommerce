@@ -1,11 +1,13 @@
-import { CartModal } from "@/components/shared/cart/Overlay"
-import { CartModalProvider } from "@/contexts/CartModalContext"
-import { CartProvider } from "@/contexts/CartContext"
-import { Footer } from "./components/Footer"
-import { PropsWithChildren } from "react"
-import { SessionProvider } from "@/contexts/SessionContext"
-import "./styles.scss"
 import { NextAuthSessionProvider } from "@/contexts/NextAuthSessionProvider"
+import { PropsWithChildren } from "react"
+import { CartModalProvider } from "@/contexts/CartModalContext"
+import { SessionProvider } from "@/contexts/SessionContext"
+import { ToastContainer } from "react-toastify"
+import { CartProvider } from "@/contexts/CartContext"
+import { CartModal } from "@/components/shared/cart/Overlay"
+import { Footer } from "./components/Footer"
+import "react-toastify/dist/ReactToastify.css"
+import "./styles.scss"
 
 export function HomeContainer({ children }: PropsWithChildren) {
     return (
@@ -22,6 +24,7 @@ export function HomeContainer({ children }: PropsWithChildren) {
                         </CartProvider>
                     </SessionProvider>
                 </NextAuthSessionProvider>
+                <ToastContainer draggable={false} />
             </div>
         </body>
     )
