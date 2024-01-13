@@ -1,8 +1,9 @@
 import { SchemaValidatorService } from "@/@core/backend/domain/services/schemaValidator"
 import { HttpRequest, HttpResponse } from "../../protocols/http"
 import { DbAddUserUseCase } from "@/@core/backend/domain/usecases/user/dbAddUserUseCase"
+import { Controller } from "../../protocols/controller"
 
-export class SignupController {
+export class SignupController implements Controller {
     constructor(
         private readonly schemaValidator: SchemaValidatorService,
         private readonly addUserUseCase: DbAddUserUseCase

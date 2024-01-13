@@ -6,8 +6,9 @@ import { TokenDecoderService } from "@/@core/backend/domain/services/token/token
 import { DbAddProductsToCartUseCase } from "@/@core/backend/domain/usecases/cart/dbAddProductsToCartUseCase"
 import { DbClearCartUseCase } from "@/@core/backend/domain/usecases/cart/dbClearCartUseCase"
 import { DbGetCartUseCase } from "@/@core/backend/domain/usecases/cart/dbGetCartUseCase"
+import { Controller } from "../../protocols/controller"
 
-export class SigninController {
+export class SigninController implements Controller {
     constructor(
         private readonly schemaValidator: SchemaValidatorService,
         private readonly tokenDecorder: TokenDecoderService,

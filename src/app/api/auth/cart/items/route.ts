@@ -12,7 +12,9 @@ export async function POST(req: NextRequest) {
     try {
         if (!sessionToken) {
             return NextResponse.json(
-                { errors: ["Unauthorized"] },
+                {
+                    errors: ["Unauthorized. You need valid credentials to access this content"]
+                },
                 {
                     status: 401,
                     headers: {

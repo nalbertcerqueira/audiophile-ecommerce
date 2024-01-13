@@ -1,8 +1,9 @@
 import { SchemaValidatorService } from "@/@core/backend/domain/services/schemaValidator"
 import { HttpRequest, HttpResponse } from "../../protocols/http"
 import { DbAddCartItemUseCase } from "@/@core/backend/domain/usecases/cart/dbAddCartItemUseCase"
+import { Controller } from "../../protocols/controller"
 
-export class AddCartItemController {
+export class AddCartItemController implements Controller {
     constructor(
         private readonly schemaValidator: SchemaValidatorService,
         private readonly addCartItemUseCase: DbAddCartItemUseCase
