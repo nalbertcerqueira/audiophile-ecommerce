@@ -23,6 +23,9 @@ export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOption
             })
         ],
         secret: nextAuthSecretKey,
+        pages: {
+            signIn: "/signin"
+        },
         session: {
             strategy: "jwt",
             maxAge: 60
