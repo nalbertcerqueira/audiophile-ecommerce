@@ -1,5 +1,6 @@
+import { guestSessionController } from "@/@core/backend/main/factories/controllers/session/guestSessionControllerFactory"
 import { authorizationMiddleware } from "@/@core/backend/main/factories/middlewares/authorizationMiddlewareFactory"
-import { dbGuestSessionUseCase } from "@/@core/backend/main/factories/usecases/auth/guestUser/dbGuestSessionUseCase"
+
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest) {
@@ -9,8 +10,8 @@ export async function GET(req: NextRequest) {
     })
 
     if (authResponse.statusCode !== 200) {
-        const { token } = await dbGuestSessionUseCase.execute()
-        return NextResponse.json({ data: token }, { status: 200 })
+        const { statusCode, headers, ...responseRest } = await guestSessionController.handle()
+        return NextResponse.json(responseRest, { status: statusCode, headers })
     }
 
     return NextResponse.json({ data: authResponse.data }, { status: 200 })
