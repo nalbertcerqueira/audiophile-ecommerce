@@ -6,9 +6,14 @@ export interface HttpUser {
     type: UserType
 }
 
+interface HttpParams {
+    [key: string]: string
+}
+
 export interface HttpRequest {
-    body?: any
     headers?: IncomingHttpHeaders
+    body?: any
+    params?: HttpParams
     user?: HttpUser
 }
 
