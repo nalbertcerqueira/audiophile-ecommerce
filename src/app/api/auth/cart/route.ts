@@ -1,92 +1,32 @@
-import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/guestUser/dbGuestAuthorizationFactory"
-import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authenticatedUser/dbAuthorizationFactory"
+import { authorizationMiddleware } from "@/@core/backend/main/factories/middlewares/authorizationMiddlewareFactory"
 import { dbClearCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbClearCartFactory"
 import { dbGetCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbGetCartFactory"
 import { NextRequest, NextResponse } from "next/server"
-import { dbExternalAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/externalUser/dbExternalAuthorizationFactory"
 
 export async function GET(req: NextRequest) {
-    const sessionToken = req.headers.get("authorization")?.split(" ")[1]
+    const authorization = req.headers.get("authorization") as string
+    const authResponse = await authorizationMiddleware.handle({ headers: { authorization } })
 
-    try {
-        if (sessionToken) {
-            const [authenticatedUser, guestUser, externalUser] = await Promise.allSettled([
-                dbAuthorizationUseCase.execute(sessionToken),
-                dbGuestAuthorizationUseCase.execute(sessionToken),
-                dbExternalAuthorizationUseCase.execute(sessionToken)
-            ])
-
-            if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
-                const { id } = authenticatedUser.value
-                const cart = await dbGetCartUseCase.execute(id, "authenticated")
-                return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
-            }
-
-            if (externalUser.status === "fulfilled" && externalUser.value) {
-                const { id } = externalUser.value
-                const cart = await dbGetCartUseCase.execute(id, "external")
-                return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
-            }
-
-            if (guestUser.status === "fulfilled" && guestUser.value) {
-                const { id } = guestUser.value
-                const cart = await dbGetCartUseCase.execute(id, "guest")
-                return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
-            }
-        }
-
-        const unauthorizedMsg =
-            "Unauthorized. You need valid credentials to access this content"
-        const unauthorizedHeaders = { "WWW-Authenticate": 'Bearer realm="protected resource"' }
-
-        return NextResponse.json(
-            { errors: [unauthorizedMsg] },
-            { status: 401, headers: unauthorizedHeaders }
-        )
-    } catch (error: any) {
-        return NextResponse.json({ errors: [error.message] }, { status: 500 })
+    if (authResponse.statusCode !== 200) {
+        const { statusCode, headers, ...responseRest } = authResponse
+        return NextResponse.json(responseRest, { status: statusCode, headers })
     }
+
+    const cart = await dbGetCartUseCase.execute(authResponse.data.id, authResponse.data.type)
+    return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
 }
 
 export async function DELETE(req: NextRequest) {
-    const sessionToken = req.headers.get("authorization")?.split(" ")[1]
+    const authorization = req.headers.get("authorization") as string
+    const authResponse = await authorizationMiddleware.handle({
+        headers: { authorization }
+    })
 
-    try {
-        if (sessionToken) {
-            const [authenticatedUser, guestUser, externalUser] = await Promise.allSettled([
-                dbAuthorizationUseCase.execute(sessionToken),
-                dbGuestAuthorizationUseCase.execute(sessionToken),
-                dbExternalAuthorizationUseCase.execute(sessionToken)
-            ])
-
-            if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
-                const { id } = authenticatedUser.value
-                const cart = await dbClearCartUseCase.execute(id, "authenticated")
-                return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
-            }
-
-            if (externalUser.status === "fulfilled" && externalUser.value) {
-                const { id } = externalUser.value
-                const cart = await dbClearCartUseCase.execute(id, "external")
-                return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
-            }
-
-            if (guestUser.status === "fulfilled" && guestUser.value) {
-                const { id } = guestUser.value
-                const cart = await dbClearCartUseCase.execute(id, "guest")
-                return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
-            }
-        }
-
-        const unauthorizedHeaders = { "WWW-Authenticate": 'Bearer realm="protected resource"' }
-        const unauthorizedMsg =
-            "Unauthorized: you need valid credentials to access this conontent"
-
-        return NextResponse.json(
-            { errors: [unauthorizedMsg] },
-            { status: 401, headers: unauthorizedHeaders }
-        )
-    } catch (error: any) {
-        return NextResponse.json({ errors: [error.message] }, { status: 500 })
+    if (authResponse.statusCode !== 200) {
+        const { statusCode, headers, ...responseRest } = authResponse
+        return NextResponse.json(responseRest, { status: statusCode, headers })
     }
+
+    const cart = await dbClearCartUseCase.execute(authResponse.data.id, authResponse.data.type)
+    return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
 }
