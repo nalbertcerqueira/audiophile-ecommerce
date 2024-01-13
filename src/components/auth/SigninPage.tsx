@@ -42,8 +42,9 @@ export function SigninPageComponent() {
                 localStorage.setItem("sessionToken", token)
                 emitToast("success", "You've successfully logged in!")
                 return setTimeout(() => location.reload(), 1000)
+            } else {
+                return setError("password", { message: "Invalid email or password" })
             }
-            setError("password", { message: "Invalid email or password" })
         } catch (error: any) {
             console.log(error)
         }

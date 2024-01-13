@@ -33,10 +33,7 @@ export class SigninController {
             if (!token) {
                 return {
                     statusCode: 401,
-                    errors: ["Invalid email or password"],
-                    headers: {
-                        "WWW-Authenticate": 'Bearer realm="protected resource"'
-                    }
+                    errors: ["Invalid email or password"]
                 }
             }
 

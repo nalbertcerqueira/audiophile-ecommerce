@@ -32,9 +32,10 @@ export function SignupPageComponent() {
             const isUserCreated = await signupUseCase.execute(formData)
             if (!isUserCreated) {
                 return setError("email", { message: "This email is already registered" })
+            } else {
+                emitToast("success", "Your account has been successfully created!")
+                return setTimeout(() => location.assign("/signin"), 2000)
             }
-            emitToast("success", "Your account has been successfully created!")
-            setTimeout(() => location.assign("/signin"), 2000)
         } catch (error: any) {
             console.log(error)
         }

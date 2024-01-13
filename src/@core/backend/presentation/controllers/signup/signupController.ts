@@ -11,11 +11,11 @@ export class SignupController {
     public async handle(request: HttpRequest): Promise<HttpResponse> {
         const validationResult = await this.schemaValidator.validate(request.body)
 
-        try {
-            if (!validationResult.isValid) {
-                return { statusCode: 400, errors: validationResult.errors }
-            }
+        if (!validationResult.isValid) {
+            return { statusCode: 400, errors: validationResult.errors }
+        }
 
+        try {
             const { name, email, password } = validationResult.data
             const createdUser = await this.addUserUseCase.execute({ name, email, password })
             if (!createdUser) {
