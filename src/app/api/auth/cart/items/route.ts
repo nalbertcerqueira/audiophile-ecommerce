@@ -1,31 +1,27 @@
 import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/guestUser/dbGuestAuthorizationFactory"
-import { generateCustomZodErrors } from "@/@core/shared/entities/helpers"
 import { dbAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/authenticatedUser/dbAuthorizationFactory"
-import { dbAddCartItemUseCase } from "@/@core/backend/main/factories/usecases/cart/dbAddCartItemFactory"
-import { CartItemInfo } from "@/@core/backend/domain/usecases/cart/protocols"
-import { Cart } from "@/@core/shared/entities/cart/cart"
 import { NextRequest, NextResponse } from "next/server"
 import { dbExternalAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/externalUser/dbExternalAuthorizationFactory"
 import { UserType } from "@/@core/shared/entities/user/user"
+import { addCartItemController } from "@/@core/backend/main/factories/controllers/cart/addCartItemControllerFactory"
 
 export async function POST(req: NextRequest) {
-    const sessionToken = req.headers.get("authorization")?.split(" ")[1]
-    const body = (await req.json()) as CartItemInfo
-    const validationResult = Cart.itemSchema
-        .pick({ productId: true, quantity: true })
-        .safeParse(body)
+    const sessionToken = req.headers.get("authorization")?.split(" ")[0] as string
+    const body = await req.json()
 
     try {
-        if (!validationResult.success) {
-            const errors = generateCustomZodErrors(validationResult.error, 1)
-            return NextResponse.json({ errors }, { status: 400 })
-        }
-
         if (!sessionToken) {
-            return NextResponse.json({ errors: ["Unauthorized"] }, { status: 401 })
+            return NextResponse.json(
+                { errors: ["Unauthorized"] },
+                {
+                    status: 401,
+                    headers: {
+                        "WWW-Authenticate": 'Bearer realm="protected resource"'
+                    }
+                }
+            )
         }
 
-        const { productId, quantity } = body
         const [authenticatedUser, guestUser, externalUser] = await Promise.allSettled([
             dbAuthorizationUseCase.execute(sessionToken),
             dbGuestAuthorizationUseCase.execute(sessionToken),
@@ -51,18 +47,15 @@ export async function POST(req: NextRequest) {
         }
 
         if (selectedUser.value && selectedUser.type) {
-            const cart = await dbAddCartItemUseCase.execute(
-                { id: selectedUser.value.id, type: selectedUser.type },
-                { productId, quantity }
-            )
-
-            if (cart) {
-                return NextResponse.json({ data: cart.toJSON() }, { status: 200 })
-            }
+            const response = await addCartItemController.handle({
+                body,
+                user: { id: selectedUser.value.id, type: selectedUser.type }
+            })
+            const { statusCode, headers, ...responseRest } = response
 
             return NextResponse.json(
-                { errors: [`Product with id '${productId}' not found`] },
-                { status: 404 }
+                { ...responseRest },
+                { status: statusCode, headers: headers }
             )
         }
 
