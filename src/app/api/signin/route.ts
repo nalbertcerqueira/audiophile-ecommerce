@@ -1,59 +1,13 @@
-import { generateCustomZodErrors } from "@/@core/shared/entities/helpers"
-import { dbSigninUseCase } from "@/@core/backend/main/factories/usecases/auth/authenticatedUser/dbSigninFactory"
-import { User } from "@/@core/shared/entities/user/user"
+import { singinController } from "@/@core/backend/main/factories/controllers/signin/signinControllerFactory"
 import { NextRequest, NextResponse } from "next/server"
-import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/guestUser/dbGuestAuthorizationFactory"
-import { mongoCartRepository } from "@/@core/backend/main/factories/repositories/cartRepositoryFactory"
-import { authenticatedJwtTokenService } from "@/@core/backend/main/factories/services/tokenServiceFactory"
-import { dbAddProductsToCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbAddProductsToCartFactory"
-import { dbClearCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbClearCartFactory"
-
-const signinValidator = User.userSchema.pick({ email: true, password: true })
 
 export async function POST(req: NextRequest) {
-    const { email, password } = await req.json()
-    const validationResult = signinValidator.safeParse({ email, password })
-    const sessionToken = req.headers.get("authorization")?.split(" ")[1] as string
+    const authorization = req.headers.get("authorization") as string
+    const response = await singinController.handle({
+        body: await req.json(),
+        headers: { authorization }
+    })
+    const { statusCode, headers, ...responseRest } = response
 
-    try {
-        if (!validationResult.success) {
-            const errors = generateCustomZodErrors(validationResult.error, 1)
-            return NextResponse.json({ errors }, { status: 400 })
-        }
-
-        const token = await dbSigninUseCase.execute(validationResult.data)
-
-        if (token) {
-            const payload = authenticatedJwtTokenService.decode(token)
-            const guestUser = await dbGuestAuthorizationUseCase.execute(sessionToken)
-
-            if (payload && guestUser) {
-                const guestCart = await mongoCartRepository.getCartById(guestUser.id, "guest")
-
-                if (guestCart) {
-                    const { id, sessionType } = payload
-                    const itemsToAdd = guestCart.toJSON().items.map((item) => ({
-                        productId: item.productId,
-                        quantity: item.quantity
-                    }))
-
-                    await dbAddProductsToCartUseCase.execute(
-                        { id, type: sessionType },
-                        itemsToAdd
-                    )
-                    await dbClearCartUseCase.execute(guestUser.id, "guest")
-                }
-            }
-
-            return NextResponse.json({ data: token }, { status: 200 })
-        }
-
-        const unauthorizedHeaders = { "WWW-Authenticate": 'Bearer realm="protected resource"' }
-        return NextResponse.json(
-            { errors: ["Invalid email or password"] },
-            { status: 401, headers: unauthorizedHeaders }
-        )
-    } catch (error: any) {
-        return NextResponse.json({ errors: [error.message] }, { status: 500 })
-    }
+    return NextResponse.json(responseRest, { status: statusCode, headers: headers })
 }
