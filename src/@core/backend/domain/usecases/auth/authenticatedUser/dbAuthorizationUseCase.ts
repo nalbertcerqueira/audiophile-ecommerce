@@ -2,7 +2,7 @@ import { FindUserByIdRepository } from "../../../repositories/user/findUserByIdR
 import { TokenVerifierService } from "../../../services/token/tokenVerifierService"
 import { UserProps } from "@/@core/shared/entities/user/user"
 
-interface AuthorizationOutputDTO extends UserProps {
+interface AuthorizationOutputDTO extends Omit<UserProps, "password"> {
     readonly id: string
 }
 export class DbAuthorizationUseCase {
@@ -24,6 +24,7 @@ export class DbAuthorizationUseCase {
             return null
         }
 
-        return { id, ...foundUser.toJSON() }
+        const { name, email, images } = foundUser.toJSON()
+        return { id, name, email, images }
     }
 }

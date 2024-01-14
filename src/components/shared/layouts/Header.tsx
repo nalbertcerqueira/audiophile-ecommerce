@@ -15,6 +15,7 @@ interface HeaderProps {
 
 export function Header({ className }: HeaderProps) {
     const { user, isLoading, isLogged } = useContext(SessionContext)
+    const profileImage = user?.type !== "guest" ? user?.images.profile : null
     const firstName = getFirstName()
 
     function getFirstName() {
@@ -34,6 +35,7 @@ export function Header({ className }: HeaderProps) {
                     <UserActions
                         name={firstName}
                         isLogged={isLogged}
+                        avatarUrl={profileImage}
                         className={isLoading ? "user-actions--hidden" : ""}
                     />
                     <CartButton />

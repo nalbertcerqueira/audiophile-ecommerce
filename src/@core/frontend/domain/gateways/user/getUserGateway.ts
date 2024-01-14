@@ -5,7 +5,7 @@ export interface GuestUser {
     type: "guest"
 }
 
-export interface AuthenticatedUser extends Pick<UserProps, "name" | "email"> {
+export interface AuthenticatedUser extends Pick<UserProps, "name" | "email" | "images"> {
     id: string
     type: "authenticated" | "external"
 }
