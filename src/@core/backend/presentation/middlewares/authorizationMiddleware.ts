@@ -13,20 +13,20 @@ export class AuthorizationMiddleware implements Controller {
     ) {}
 
     public async handle(request: HttpRequest): Promise<HttpResponse> {
-        const sessionToken = request.headers?.authorization?.split(" ")[1] as string
+        const accessToken = request.headers?.authorization?.split(" ")[1] as string
         const unauthorizedHeaders = { "WWW-Authenticate": 'Bearer realm="protected resource"' }
         const unauthorizedMsg =
             "Unauthorized. You need valid credentials to access this content"
 
-        if (!sessionToken) {
+        if (!accessToken) {
             return { statusCode: 401, errors: [unauthorizedMsg], headers: unauthorizedHeaders }
         }
 
         try {
             const [authenticatedUser, guestUser, externalUser] = await Promise.allSettled([
-                this.authorizationUseCase.execute(sessionToken),
-                this.guestAuthorizationUseCase.execute(sessionToken),
-                this.externalAuthorizationUseCase.execute(sessionToken)
+                this.authorizationUseCase.execute(accessToken),
+                this.guestAuthorizationUseCase.execute(accessToken),
+                this.externalAuthorizationUseCase.execute(accessToken)
             ])
 
             const selectedUser: { value: any; type: UserType | null } = {

@@ -31,7 +31,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
     useEffect(() => {
         if (nextAuthSession.status === "authenticated") {
             const token = nextAuthSession.data.accessToken
-            token && localStorage.setItem("sessionToken", token)
+            token && localStorage.setItem("accessToken", token)
         }
     }, [nextAuthSession.status, nextAuthSession.data?.accessToken])
 
@@ -48,7 +48,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
         try {
             const data = await getUserUseCase.execute()
             if (typeof data === "string") {
-                localStorage.setItem("sessionToken", data)
+                localStorage.setItem("accessToken", data)
                 return setStatus({ isLoading: false, isLogged: false })
             }
 

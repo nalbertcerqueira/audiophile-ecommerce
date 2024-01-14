@@ -39,7 +39,7 @@ export function SigninPageComponent() {
         try {
             const token = await signinUseCase.execute(data)
             if (token) {
-                localStorage.setItem("sessionToken", token)
+                localStorage.setItem("accessToken", token)
                 emitToast("success", "You've successfully logged in!")
                 return setTimeout(() => location.reload(), 1000)
             } else {
@@ -60,7 +60,7 @@ export function SigninPageComponent() {
         setIsFormBlocked(true)
         const oneDay = 1000 * 3600 * 24
         const expirationDate = new Date(Date.now() + oneDay).toUTCString()
-        const guestAccessToken = localStorage.getItem("sessionToken")
+        const guestAccessToken = localStorage.getItem("accessToken")
         document.cookie = `guest-access-token=${guestAccessToken};path=/;expires=${expirationDate};sameSite=Lax`
         await signIn("google", { callbackUrl: "/" })
     }

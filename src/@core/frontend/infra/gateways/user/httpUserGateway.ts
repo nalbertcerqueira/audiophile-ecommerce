@@ -32,10 +32,10 @@ export class HttpUserGateway implements CreateUserGateway, GetUserGateway {
     }
 
     public async getUser(): Promise<UserOrGuestToken> {
-        const sessionToken = localStorage.getItem("sessionToken") as string
+        const accessToken = localStorage.getItem("accessToken") as string
 
         const response = await fetch("/api/auth/user", {
-            headers: { Authorization: `Bearer ${sessionToken}` }
+            headers: { Authorization: `Bearer ${accessToken}` }
         })
 
         const responseData = await response.json()

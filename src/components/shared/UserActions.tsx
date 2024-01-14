@@ -14,7 +14,7 @@ interface UserActionsProps {
 
 export function UserActions({ name, className, avatarUrl, isLogged }: UserActionsProps) {
     function logout() {
-        localStorage.removeItem("sessionToken")
+        localStorage.removeItem("accessToken")
         signOut({ callbackUrl: "/" })
     }
 

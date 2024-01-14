@@ -25,11 +25,11 @@ export class DbSigninUseCase {
             return null
         }
 
-        const sessionToken = await this.tokenGenerator.generate({
+        const accessToken = await this.tokenGenerator.generate({
             id: foundUser.id,
             sessionType: "authenticated"
         })
 
-        return sessionToken
+        return accessToken
     }
 }

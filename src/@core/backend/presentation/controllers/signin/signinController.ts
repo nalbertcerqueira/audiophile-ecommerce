@@ -20,7 +20,7 @@ export class SigninController implements Controller {
     ) {}
 
     public async handle(request: HttpRequest): Promise<HttpResponse> {
-        const sessionToken = request.headers?.authorization?.split(" ")[1] as string
+        const accessToken = request.headers?.authorization?.split(" ")[1] as string
         const validationResult = await this.schemaValidator.validate(request.body)
 
         if (!validationResult.isValid) {
@@ -39,7 +39,7 @@ export class SigninController implements Controller {
             }
 
             const user = this.tokenDecorder.decode(token)
-            const guestUser = await this.guestAuthorizationUseCase.execute(sessionToken)
+            const guestUser = await this.guestAuthorizationUseCase.execute(accessToken)
 
             if (user && guestUser) {
                 const guestCart = await this.getCartUseCase.execute(guestUser.id, "guest")

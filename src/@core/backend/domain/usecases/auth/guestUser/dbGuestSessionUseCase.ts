@@ -14,11 +14,11 @@ export class DbGuestSessionUseCase {
     public async execute(): Promise<GuestSessionOutputDTO> {
         const guestId = this.idGeneratorService.generate()
 
-        const sessionToken = await this.tokenGeneratorService.generate({
+        const accessToken = await this.tokenGeneratorService.generate({
             id: guestId,
             sessionType: "guest"
         })
 
-        return { token: sessionToken }
+        return { token: accessToken }
     }
 }
