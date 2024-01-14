@@ -9,6 +9,7 @@ import { dbClearCartUseCase } from "@/@core/backend/main/factories/usecases/cart
 import { NextApiRequest } from "next"
 import { AuthOptions } from "next-auth"
 import GoogleProvivder from "next-auth/providers/google"
+import GithubProvider from "next-auth/providers/github"
 
 const nextAuthSecretKey = process.env.EXTERNAL_SESSION_SECRET_KEY
 
@@ -20,6 +21,10 @@ export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOption
             GoogleProvivder({
                 clientId: process.env.GOOGLE_CLIENT_ID ?? "",
                 clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? ""
+            }),
+            GithubProvider({
+                clientId: process.env.GITHUB_CLIENT_ID ?? "",
+                clientSecret: process.env.GITHUB_CLIENT_SECRET ?? ""
             })
         ],
         secret: nextAuthSecretKey,

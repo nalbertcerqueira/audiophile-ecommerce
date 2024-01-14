@@ -1,11 +1,16 @@
 "use client"
 
-import { GoogleSigninButton } from "./components/GoogleSigninButton"
+import { BuiltInProviderType } from "next-auth/providers/index"
+import { GithubIcon } from "../shared/icons/GithubIcon"
+// import { GoogleSigninButton } from "./components/GoogleSigninButton"
+import { SocialSigninButton } from "./components/SocialSigninButton"
+// import { GithubSigninButton } from "./components/GithubSigninButton"
 import { customZodResolver } from "@/libs/zod/resolvers"
-import { AppleSigninButton } from "./components/AppleSigninButton"
 import { AuthFormFields } from "./types/types"
 import { signinUseCase } from "@/@core/frontend/main/usecases/auth/signinFactory"
 import { signinSchema } from "./helpers/schemas"
+import { GoogleIcon } from "../shared/icons/GoogleIcon"
+import { emitToast } from "@/libs/react-toastify/utils"
 import { AuthForm } from "./components/AuthForm"
 import { Input } from "../shared/Input"
 import { useForm, FieldErrors } from "react-hook-form"
@@ -13,7 +18,6 @@ import { useEffect, useState } from "react"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
 import "./styles.scss"
-import { emitToast } from "@/libs/react-toastify/utils"
 
 export function SigninPageComponent() {
     const [isFormBlocked, setIsFormBlocked] = useState(false)
@@ -56,25 +60,35 @@ export function SigninPageComponent() {
         }
     }
 
-    async function externalSignin() {
+    async function externalSignin(provider: BuiltInProviderType) {
         setIsFormBlocked(true)
         const oneDay = 1000 * 3600 * 24
         const expirationDate = new Date(Date.now() + oneDay).toUTCString()
         const guestAccessToken = localStorage.getItem("accessToken")
         document.cookie = `guest-access-token=${guestAccessToken};path=/;expires=${expirationDate};sameSite=Lax`
-        await signIn("google", { callbackUrl: "/" })
+        await signIn(provider, { callbackUrl: "/" })
     }
 
     return (
         <div className="form-container">
             <h2 className="form-container__title">Sign-in</h2>
             <div className="form-container__third-party">
-                <GoogleSigninButton onClick={externalSignin} isSubmitting={isFormBlocked}>
+                <SocialSigninButton
+                    provider="google"
+                    onClick={() => externalSignin("google")}
+                    isSubmitting={isFormBlocked}
+                >
+                    <GoogleIcon className="third-party-btn__icon" />
                     CONTINUE WITH GOOGLE
-                </GoogleSigninButton>
-                <AppleSigninButton isSubmitting={isFormBlocked}>
-                    CONTINUE WITH APPLE
-                </AppleSigninButton>
+                </SocialSigninButton>
+                <SocialSigninButton
+                    provider="github"
+                    onClick={() => externalSignin("github")}
+                    isSubmitting={isFormBlocked}
+                >
+                    <GithubIcon className="third-party-btn__icon" />
+                    CONTINUE WITH GITHUB
+                </SocialSigninButton>
             </div>
             <div className="form-container__division">Or</div>
             <AuthForm

@@ -94,6 +94,14 @@
     border: 1px solid #afafaf;
     padding: 0.75rem 1rem;
 
+    &--google:hover {
+        background-color: #4081ec;
+    }
+
+    &--github:hover {
+        background-color: vars.$matte-black;
+    }
+
     &__icon {
         width: 1.5rem;
         height: 1.5rem;
@@ -102,14 +110,6 @@
         & > path {
             transition: fill vars.$transition-duration;
         }
-    }
-
-    &--google:hover {
-        background-color: #4081ec;
-    }
-
-    &--apple:hover {
-        background-color: vars.$matte-black;
     }
 
     &:hover {
