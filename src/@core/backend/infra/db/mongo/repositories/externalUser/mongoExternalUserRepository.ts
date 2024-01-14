@@ -2,7 +2,7 @@ import { FindExternalUserByEmailRepository } from "@/@core/backend/domain/reposi
 import { ExternalUserWithId } from "@/@core/backend/domain/repositories/externalUser/protocols"
 import { mongoHelper } from "../../config/mongo-config"
 import { MongoExternalUser } from "../../models"
-import { AddExternalUserRepository } from "@/@core/backend/domain/repositories/externalUser/addExternalUserRepositry"
+import { UpsertExternalUserRepository } from "@/@core/backend/domain/repositories/externalUser/upsertExternalUserRepositry"
 import { ExternalUser } from "@/@core/shared/entities/user/externalUser"
 import { FindExternalUserByIdRepository } from "@/@core/backend/domain/repositories/externalUser/findExternalUserByIdRepository"
 import { ObjectId } from "mongodb"
@@ -10,7 +10,7 @@ import { ObjectId } from "mongodb"
 export class MongoExternalUserRepository
     implements
         FindExternalUserByEmailRepository,
-        AddExternalUserRepository,
+        UpsertExternalUserRepository,
         FindExternalUserByIdRepository
 {
     public async findByEmail(email: string): Promise<ExternalUserWithId | null> {
@@ -27,7 +27,7 @@ export class MongoExternalUserRepository
         return null
     }
 
-    public async add(user: ExternalUser): Promise<ExternalUserWithId> {
+    public async upsert(user: ExternalUser): Promise<ExternalUserWithId> {
         await mongoHelper.connect()
 
         const creationDate = new Date()
@@ -36,15 +36,23 @@ export class MongoExternalUserRepository
         const userCollection =
             mongoHelper.db.collection<Omit<MongoExternalUser, "_id">>("externalUsers")
 
-        const { insertedId } = await userCollection.insertOne({
-            name,
-            email,
-            images: { ...images },
-            createdAt: creationDate,
-            updatedAt: creationDate
-        })
+        const updatedUser = await userCollection.findOneAndUpdate(
+            { email },
+            {
+                $set: { name, images: { ...images } },
+                $setOnInsert: { email, createdAt: creationDate, updatedAt: creationDate }
+            },
+            { upsert: true, returnDocument: "after" }
+        )
 
-        return { id: insertedId.toString(), name, email, images: { ...images } }
+        if (!updatedUser) throw new Error("findOneAndUpdate operation failed")
+
+        return {
+            id: updatedUser._id.toString(),
+            name: updatedUser.name,
+            email: updatedUser.email,
+            images: { ...updatedUser.images }
+        }
     }
 
     public async findById(userId: string): Promise<ExternalUser | null> {

@@ -3,11 +3,7 @@ import { mongoExternalUserRepository } from "../../../repositories/externalUserR
 import { externalJwtTokenService } from "../../../services/tokenServiceFactory"
 
 export function createDbExternalSigninUseCase() {
-    return new DbExternalSigninUseCase(
-        mongoExternalUserRepository,
-        mongoExternalUserRepository,
-        externalJwtTokenService
-    )
+    return new DbExternalSigninUseCase(mongoExternalUserRepository, externalJwtTokenService)
 }
 
 export const dbExternalSigninUseCase = createDbExternalSigninUseCase()

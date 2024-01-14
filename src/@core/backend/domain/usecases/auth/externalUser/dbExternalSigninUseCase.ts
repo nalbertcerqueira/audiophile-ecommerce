@@ -1,6 +1,5 @@
 import { ExternalUserProps } from "@/@core/shared/entities/user/externalUser"
-import { FindExternalUserByEmailRepository } from "../../../repositories/externalUser/findExternalUserByEmailRepository"
-import { AddExternalUserRepository } from "../../../repositories/externalUser/addExternalUserRepositry"
+import { UpsertExternalUserRepository } from "../../../repositories/externalUser/upsertExternalUserRepositry"
 import { ExternalUser } from "@/@core/shared/entities/user/externalUser"
 import { TokenGeneratorService } from "../../../services/token/tokenGeneratorService"
 
@@ -10,31 +9,22 @@ interface ExternalSigninInputDTO extends Pick<ExternalUserProps, "name" | "email
 
 export class DbExternalSigninUseCase {
     constructor(
-        private readonly findExternalUserByEmailRepository: FindExternalUserByEmailRepository,
-        private readonly addExternalUserRepository: AddExternalUserRepository,
+        private readonly upsertExternalUserRepository: UpsertExternalUserRepository,
         private readonly tokenGeneratorService: TokenGeneratorService
     ) {}
 
     public async execute(signinData: ExternalSigninInputDTO): Promise<string> {
         const { name, email, image } = signinData
-        let currentId = null
 
-        const foundUser = await this.findExternalUserByEmailRepository.findByEmail(email)
+        const newUser = new ExternalUser({
+            name,
+            email,
+            images: { profile: image }
+        })
 
-        if (!foundUser) {
-            const newUser = new ExternalUser({
-                name,
-                email,
-                images: { profile: image }
-            })
-            const { id } = await this.addExternalUserRepository.add(newUser)
-            currentId = id
-        } else {
-            currentId = foundUser.id
-        }
-
+        const { id } = await this.upsertExternalUserRepository.upsert(newUser)
         return await this.tokenGeneratorService.generate({
-            id: currentId,
+            id: id,
             sessionType: "external"
         })
     }

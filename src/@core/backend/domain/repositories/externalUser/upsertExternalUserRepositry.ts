@@ -1,6 +1,6 @@
 import { ExternalUser } from "@/@core/shared/entities/user/externalUser"
 import { ExternalUserWithId } from "./protocols"
 
-export interface AddExternalUserRepository {
-    add(user: ExternalUser): Promise<ExternalUserWithId>
+export interface UpsertExternalUserRepository {
+    upsert(user: ExternalUser): Promise<ExternalUserWithId>
 }
