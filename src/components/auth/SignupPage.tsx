@@ -6,7 +6,7 @@ import { AuthFormFields } from "./types/types"
 import { signupSchema } from "./helpers/schemas"
 import { AuthForm } from "./components/AuthForm"
 import { Input } from "../shared/Input"
-import { FieldErrors, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { emitToast } from "@/libs/react-toastify/utils"
 import Link from "next/link"
 import "./styles.scss"
@@ -25,26 +25,22 @@ export function SignupPageComponent() {
 
     const isFormBlocked = isSubmitting || isSubmitSuccessful
 
+    function handleSignup(success: boolean) {
+        if (!success) {
+            return setError("email", { message: "This email is already registered" })
+        }
+
+        emitToast("success", "Your account has been successfully created!")
+        return setTimeout(() => location.assign("/signin"), 2000)
+    }
+
     async function handleSuccessfulSubmit(formData: AuthFormFields<"signup">) {
         if (isFormBlocked) return
 
-        try {
-            const isUserCreated = await signupUseCase.execute(formData)
-            if (!isUserCreated) {
-                return setError("email", { message: "This email is already registered" })
-            } else {
-                emitToast("success", "Your account has been successfully created!")
-                return setTimeout(() => location.assign("/signin"), 2000)
-            }
-        } catch (error: any) {
-            console.log(error)
-        }
-    }
-
-    async function handleFailedSubmit(errors: FieldErrors<AuthFormFields<"signup">>) {
-        if (!isFormBlocked) {
-            console.log(errors)
-        }
+        return signupUseCase
+            .execute(formData)
+            .then((success) => handleSignup(success))
+            .catch((error) => emitToast("error", error.message))
     }
 
     return (
@@ -53,7 +49,7 @@ export function SignupPageComponent() {
             <AuthForm
                 submitBtn="SIGN UP"
                 isSubmitting={isFormBlocked}
-                submitHandler={handleSubmit(handleSuccessfulSubmit, handleFailedSubmit)}
+                submitHandler={handleSubmit(handleSuccessfulSubmit)}
             >
                 <Input
                     {...register("name")}

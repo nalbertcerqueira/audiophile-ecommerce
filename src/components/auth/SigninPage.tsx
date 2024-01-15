@@ -2,9 +2,7 @@
 
 import { BuiltInProviderType } from "next-auth/providers/index"
 import { GithubIcon } from "../shared/icons/GithubIcon"
-// import { GoogleSigninButton } from "./components/GoogleSigninButton"
 import { SocialSigninButton } from "./components/SocialSigninButton"
-// import { GithubSigninButton } from "./components/GithubSigninButton"
 import { customZodResolver } from "@/libs/zod/resolvers"
 import { AuthFormFields } from "./types/types"
 import { signinUseCase } from "@/@core/frontend/main/usecases/auth/signinFactory"
@@ -13,7 +11,7 @@ import { GoogleIcon } from "../shared/icons/GoogleIcon"
 import { emitToast } from "@/libs/react-toastify/utils"
 import { AuthForm } from "./components/AuthForm"
 import { Input } from "../shared/Input"
-import { useForm, FieldErrors } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
@@ -37,27 +35,14 @@ export function SigninPageComponent() {
         [isSubmitting, isSubmitSuccessful]
     )
 
-    async function handleSuccessfulSubmit(data: AuthFormFields<"signin">) {
-        if (isFormBlocked) return
-
-        try {
-            const token = await signinUseCase.execute(data)
-            if (token) {
-                localStorage.setItem("accessToken", token)
-                emitToast("success", "You've successfully logged in!")
-                return setTimeout(() => location.reload(), 1000)
-            } else {
-                return setError("password", { message: "Invalid email or password" })
-            }
-        } catch (error: any) {
-            console.log(error)
+    function handleSignin(accessToken: string | null) {
+        if (!accessToken) {
+            return setError("password", { message: "Invalid email or password" })
         }
-    }
 
-    async function handleFailedSubmit(errors: FieldErrors<AuthFormFields<"signin">>) {
-        if (!isFormBlocked) {
-            console.log(errors)
-        }
+        localStorage.setItem("accessToken", accessToken)
+        emitToast("success", "You've successfully logged in!")
+        return setTimeout(() => location.reload(), 1000)
     }
 
     async function externalSignin(provider: BuiltInProviderType) {
@@ -67,6 +52,15 @@ export function SigninPageComponent() {
         const guestAccessToken = localStorage.getItem("accessToken")
         document.cookie = `guest-access-token=${guestAccessToken};path=/;expires=${expirationDate};sameSite=Lax`
         await signIn(provider, { callbackUrl: "/" })
+    }
+
+    async function handleSuccessfulSubmit(data: AuthFormFields<"signin">) {
+        if (isFormBlocked) return
+
+        return signinUseCase
+            .execute(data)
+            .then((token) => handleSignin(token))
+            .catch((error) => emitToast("error", error.message))
     }
 
     return (
@@ -94,7 +88,7 @@ export function SigninPageComponent() {
             <AuthForm
                 submitBtn="LOGIN"
                 isSubmitting={isFormBlocked}
-                submitHandler={handleSubmit(handleSuccessfulSubmit, handleFailedSubmit)}
+                submitHandler={handleSubmit(handleSuccessfulSubmit)}
             >
                 <Input
                     {...register("email")}

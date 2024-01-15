@@ -11,7 +11,7 @@ export function CartButton() {
     const { cart } = useContext(CartContext)
     const pathname = usePathname()
 
-    //Fechando o modal sempre que mudarmos de rota
+    //Fechando o modal quando a rota for alterada
     useEffect(() => closeCart, [closeCart, pathname])
 
     return (
