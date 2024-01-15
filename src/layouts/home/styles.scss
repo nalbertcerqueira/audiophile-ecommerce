@@ -10,7 +10,7 @@
     grid-template-rows: min-content auto min-content;
     background-color: vars.$matte-white;
 
-    & > *:last-child {
+    & .footer {
         align-self: flex-end;
     }
 }
@@ -189,4 +189,8 @@
             text-align: center;
         }
     }
+}
+
+.Toastify {
+    position: absolute;
 }
