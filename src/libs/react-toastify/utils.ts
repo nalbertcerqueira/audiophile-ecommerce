@@ -4,12 +4,12 @@ import { Id, toast } from "react-toastify"
 type ToastType = "success" | "error" | "loading"
 
 interface ToastOptions {
-    update?: boolean
+    update: boolean
     id: Id
 }
 
 export function emitToast(type: ToastType, message: ReactNode): Id
-export function emitToast(type: ToastType, message: ReactNode, options: ToastOptions): void
+export function emitToast(type: ToastType, message: ReactNode, options?: ToastOptions): void
 export function emitToast(
     type: ToastType,
     message: ReactNode,

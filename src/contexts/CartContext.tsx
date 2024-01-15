@@ -1,16 +1,5 @@
 "use client"
 
-import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
-import { getCartUseCase } from "@/@core/frontend/main/usecases/cart/getCartFactory"
-import { clearCartUseCase } from "@/@core/frontend/main/usecases/cart/clearCartFactory"
-import { addCartItemUseCase } from "@/@core/frontend/main/usecases/cart/addCartItemFactory"
-import { removeCartItemUseCase } from "@/@core/frontend/main/usecases/cart/removeCartItemFactory"
-import { CartLoadingState } from "@/store/cartLoading/types"
-import { cartLoadingReducer } from "@/store/cartLoading/reducer"
-import { cartLoadingInititalState } from "@/store/cartLoading/initialState"
-import { SessionContext } from "./SessionContext"
-import { emitToast } from "@/libs/react-toastify/utils"
-import { Id } from "react-toastify"
 import {
     PropsWithChildren,
     createContext,
@@ -23,6 +12,17 @@ import {
     CartAwaitingMessage,
     SuccessAdditionMessage
 } from "@/libs/react-toastify/components/CartMessages"
+import { Id } from "react-toastify"
+import { removeCartItemUseCase } from "@/@core/frontend/main/usecases/cart/removeCartItemFactory"
+import { addCartItemUseCase } from "@/@core/frontend/main/usecases/cart/addCartItemFactory"
+import { clearCartUseCase } from "@/@core/frontend/main/usecases/cart/clearCartFactory"
+import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
+import { getCartUseCase } from "@/@core/frontend/main/usecases/cart/getCartFactory"
+import { cartLoadingInititalState } from "@/store/cartLoading/initialState"
+import { cartLoadingReducer } from "@/store/cartLoading/reducer"
+import { CartLoadingState } from "@/store/cartLoading/types"
+import { SessionContext } from "./SessionContext"
+import { emitToast } from "@/libs/react-toastify/utils"
 
 interface CartContextProps {
     cart: CartProps
@@ -49,25 +49,21 @@ export function CartProvider({ children }: PropsWithChildren) {
     )
 
     useEffect(() => {
-        if (!sessionState.isLoading) {
-            getCart()
-        }
+        ;(() => {
+            if (sessionState.isLoading) return
+
+            loadingDispatch({ type: "ENABLE" })
+
+            return getCartUseCase
+                .execute()
+                .then((cart) => setCart(cart.toJSON()))
+                .catch((error) => handleCartErrors(error, true))
+                .finally(() => loadingDispatch({ type: "DISABLE" }))
+        })()
     }, [sessionState.isLoading])
 
-    async function getCart(): Promise<void> {
-        loadingDispatch({ type: "ENABLE" })
-
-        return getCartUseCase
-            .execute()
-            .then((cart) => setCart(cart.toJSON()))
-            .catch((error) => {
-                if (error.name !== "UnauthorizedError") emitToast("error", error.message)
-            })
-            .finally(() => loadingDispatch({ type: "DISABLE" }))
-    }
-
     async function removeItem(productId: string, quantity: number): Promise<void> {
-        if (shouldBlockAction(productId)) return
+        if (shouldBlockAction(productId) || quantity <= 0) return
 
         const timerRef = setTimeout(
             () => loadingDispatch({ type: "ENABLE", payload: { productId } }),
@@ -76,13 +72,8 @@ export function CartProvider({ children }: PropsWithChildren) {
 
         return removeCartItemUseCase
             .execute({ productId, quantity })
-            .then((cart) => {
-                if (cart) setCart(cart.toJSON())
-            })
-            .catch((error) => {
-                if (error.name === "UnauthorizedError") location.reload()
-                else emitToast("error", error.message)
-            })
+            .then((cart) => handleCartUpdate(cart))
+            .catch((error) => handleCartErrors(error, true))
             .finally(() => {
                 clearTimeout(timerRef)
                 loadingDispatch({ type: "DISABLE", payload: { productId } })
@@ -96,11 +87,8 @@ export function CartProvider({ children }: PropsWithChildren) {
 
         return clearCartUseCase
             .execute()
-            .then((cart) => setCart(cart.toJSON()))
-            .catch((error) => {
-                if (error.name === "UnauthorizedError") location.reload()
-                else emitToast("error", error.messsage)
-            })
+            .then((cart) => handleCartUpdate(cart))
+            .catch((error) => handleCartErrors(error, true))
             .finally(() => loadingDispatch({ type: "DISABLE" }))
     }
 
@@ -109,9 +97,9 @@ export function CartProvider({ children }: PropsWithChildren) {
         quantity: number,
         options?: ActionOptions
     ): Promise<void> {
-        if (shouldBlockAction(productId)) return
+        if (shouldBlockAction(productId) || quantity <= 0) return
 
-        let toastId: Id = 0
+        let toastId: Id | null = null
         const timerRef = setTimeout(
             () => loadingDispatch({ type: "ENABLE", payload: { productId } }),
             200
@@ -123,34 +111,8 @@ export function CartProvider({ children }: PropsWithChildren) {
 
         addCartItemUseCase
             .execute({ productId, quantity })
-            .then((cart) => {
-                if (cart) {
-                    const cartData = cart.toJSON()
-                    const addedItem = cartData.items.find(
-                        (item) => item.productId === productId
-                    )
-                    setCart(cart.toJSON())
-                    emitToast(
-                        "success",
-                        <SuccessAdditionMessage
-                            quantity={quantity}
-                            productName={addedItem?.name}
-                        />,
-                        { id: toastId, update: true }
-                    )
-                }
-            })
-            .catch((error) => {
-                if (error.name === "UnauthorizedError") {
-                    return location.reload()
-                }
-
-                if (options?.emitToast) {
-                    return emitToast("error", error.message, { id: toastId, update: true })
-                } else {
-                    return emitToast("error", error.message)
-                }
-            })
+            .then((cart) => handleCartAddition(cart, productId, quantity, toastId))
+            .catch((error) => handleCartErrors(error, true, toastId))
             .finally(() => {
                 clearTimeout(timerRef)
                 loadingDispatch({ type: "DISABLE", payload: { productId } })
@@ -162,6 +124,49 @@ export function CartProvider({ children }: PropsWithChildren) {
         const isCleaning = loadingState.isLoading && !loadingState.currentProductIds.length
 
         return isProductAction || isCleaning
+    }
+
+    function handleCartErrors(error: Error, showToast: boolean, toastId?: Id | null): void {
+        if (error.name === "UnauthorizedError") {
+            return location.reload()
+        }
+
+        if (showToast) {
+            if (toastId) {
+                emitToast("error", error.message, { id: toastId, update: true })
+            } else {
+                emitToast("error", error.message)
+            }
+        }
+    }
+
+    function handleCartAddition(
+        updatedCart: Cart | null,
+        productId: string,
+        quantity: number,
+        toastId?: Id | null
+    ): void {
+        if (updatedCart) {
+            const cartData = updatedCart.toJSON()
+            const addedItem = cartData.items.find((item) => item.productId === productId)
+            setCart(updatedCart.toJSON())
+            if (toastId) {
+                emitToast(
+                    "success",
+                    <SuccessAdditionMessage
+                        quantity={quantity}
+                        productName={addedItem?.name}
+                    />,
+                    { id: toastId, update: true }
+                )
+            }
+        }
+    }
+
+    function handleCartUpdate(cart: Cart | null) {
+        if (cart) {
+            setCart(cart.toJSON())
+        }
     }
 
     return (
