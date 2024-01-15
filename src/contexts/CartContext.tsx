@@ -54,18 +54,54 @@ export function CartProvider({ children }: PropsWithChildren) {
         }
     }, [sessionState.isLoading])
 
-    async function getCart() {
+    async function getCart(): Promise<void> {
         loadingDispatch({ type: "ENABLE" })
-        try {
-            const cart = await getCartUseCase.execute()
-            setCart(cart.toJSON())
-        } catch (error: any) {
-            if (error.name !== "UnauthorizedError") {
-                return console.log(error)
-            }
-        } finally {
-            loadingDispatch({ type: "DISABLE" })
-        }
+
+        return getCartUseCase
+            .execute()
+            .then((cart) => setCart(cart.toJSON()))
+            .catch((error) => {
+                if (error.name !== "UnauthorizedError") emitToast("error", error.message)
+            })
+            .finally(() => loadingDispatch({ type: "DISABLE" }))
+    }
+
+    async function removeItem(productId: string, quantity: number): Promise<void> {
+        if (shouldBlockAction(productId)) return
+
+        const timerRef = setTimeout(
+            () => loadingDispatch({ type: "ENABLE", payload: { productId } }),
+            200
+        )
+
+        return removeCartItemUseCase
+            .execute({ productId, quantity })
+            .then((cart) => {
+                if (cart) setCart(cart.toJSON())
+            })
+            .catch((error) => {
+                if (error.name === "UnauthorizedError") location.reload()
+                else emitToast("error", error.message)
+            })
+            .finally(() => {
+                clearTimeout(timerRef)
+                loadingDispatch({ type: "DISABLE", payload: { productId } })
+            })
+    }
+
+    async function clearCart(): Promise<void> {
+        if (loadingState.isLoading || !cart.items.length) return
+
+        loadingDispatch({ type: "CLEAR" })
+
+        return clearCartUseCase
+            .execute()
+            .then((cart) => setCart(cart.toJSON()))
+            .catch((error) => {
+                if (error.name === "UnauthorizedError") location.reload()
+                else emitToast("error", error.messsage)
+            })
+            .finally(() => loadingDispatch({ type: "DISABLE" }))
     }
 
     async function addItem(
@@ -85,70 +121,40 @@ export function CartProvider({ children }: PropsWithChildren) {
             toastId = emitToast("loading", <CartAwaitingMessage />)
         }
 
-        try {
-            const cart = await addCartItemUseCase.execute({ productId, quantity })
-            if (cart) {
-                const cartData = cart.toJSON()
-                const addedItem = cartData.items.find((item) => item.productId === productId)
-                setCart(cart.toJSON())
-                emitToast(
-                    "success",
-                    <SuccessAdditionMessage
-                        quantity={quantity}
-                        productName={addedItem?.name}
-                    />,
-                    { id: toastId, update: true }
-                )
-            }
-        } catch (error: any) {
-            if (error.name === "UnauthorizedError") {
-                location.reload()
-            } else {
-                if (options?.emitToast) {
-                    emitToast("error", error.message, { id: toastId, update: true })
-                } else {
-                    emitToast("error", error.message)
+        addCartItemUseCase
+            .execute({ productId, quantity })
+            .then((cart) => {
+                if (cart) {
+                    const cartData = cart.toJSON()
+                    const addedItem = cartData.items.find(
+                        (item) => item.productId === productId
+                    )
+                    setCart(cart.toJSON())
+                    emitToast(
+                        "success",
+                        <SuccessAdditionMessage
+                            quantity={quantity}
+                            productName={addedItem?.name}
+                        />,
+                        { id: toastId, update: true }
+                    )
                 }
-            }
-        } finally {
-            clearTimeout(timerRef)
-            loadingDispatch({ type: "DISABLE", payload: { productId } })
-        }
-    }
+            })
+            .catch((error) => {
+                if (error.name === "UnauthorizedError") {
+                    return location.reload()
+                }
 
-    async function removeItem(productId: string, quantity: number): Promise<void> {
-        if (shouldBlockAction(productId)) return
-
-        const timerRef = setTimeout(
-            () => loadingDispatch({ type: "ENABLE", payload: { productId } }),
-            200
-        )
-        try {
-            const cart = await removeCartItemUseCase.execute({ productId, quantity })
-            if (cart) setCart(cart.toJSON())
-        } catch (error: any) {
-            if (error.name === "UnauthorizedError") location.reload()
-            else emitToast("error", error.message)
-        } finally {
-            clearTimeout(timerRef)
-            loadingDispatch({ type: "DISABLE", payload: { productId } })
-        }
-    }
-
-    async function clearCart(): Promise<void> {
-        if (loadingState.isLoading) return
-        if (!cart.items.length) return
-
-        loadingDispatch({ type: "CLEAR" })
-        try {
-            const cart = await clearCartUseCase.execute()
-            setCart(cart.toJSON())
-        } catch (error: any) {
-            if (error.name === "UnauthorizedError") location.reload()
-            else emitToast("error", error.messsage)
-        } finally {
-            loadingDispatch({ type: "DISABLE" })
-        }
+                if (options?.emitToast) {
+                    return emitToast("error", error.message, { id: toastId, update: true })
+                } else {
+                    return emitToast("error", error.message)
+                }
+            })
+            .finally(() => {
+                clearTimeout(timerRef)
+                loadingDispatch({ type: "DISABLE", payload: { productId } })
+            })
     }
 
     function shouldBlockAction(productId: string): boolean {
