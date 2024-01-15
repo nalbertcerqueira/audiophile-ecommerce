@@ -1,6 +1,6 @@
 import { JwtTokenService } from "@/@core/backend/infra/services/jwtTokenService"
 
-const duration = 3600 * 24
+const duration = 3600 * 24 * 7
 const authenticatedSessionSecretKey = process.env.AUTHENTICATED_SESSION_SECRET_KEY as string
 const externalSessionSecretKey = process.env.EXTERNAL_SESSION_SECRET_KEY as string
 const guestSessionSecretKey = process.env.GUEST_SESSION_SECRET_KEY as string
