@@ -152,8 +152,8 @@ export const externalUserMongoSchema: Document = {
             _id: {},
             createdAt: dateMongoSchema,
             updatedAt: dateMongoSchema,
-            name: userNameMongoSchema,
             email: userEmailMongoSchema,
+            name: { bsonType: "string", minLength: 1 },
             images: {
                 bsonType: "object",
                 aditionalProperties: false,

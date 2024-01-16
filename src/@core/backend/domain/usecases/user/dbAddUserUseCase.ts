@@ -4,7 +4,7 @@ import { FindUserByEmailRepository } from "../../repositories/user/findUserByEma
 import { HashService } from "../../services/crypto/hashService"
 import { FindExternalUserByEmailRepository } from "../../repositories/externalUser/findExternalUserByEmailRepository"
 
-type UserToAdd = Pick<UserProps, "email" | "name" | "password">
+type AddUserInputDTO = Pick<UserProps, "email" | "name" | "password">
 
 export class DbAddUserUseCase {
     constructor(
@@ -13,7 +13,7 @@ export class DbAddUserUseCase {
         private readonly addUserRepository: AddUserRepository,
         private readonly hashService: HashService
     ) {}
-    public async execute(user: UserToAdd): Promise<boolean> {
+    public async execute(user: AddUserInputDTO): Promise<boolean> {
         const { email, name, password } = user
 
         const [foundUser, foundExternalUser] = await Promise.all([

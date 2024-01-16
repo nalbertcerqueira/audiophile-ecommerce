@@ -3,7 +3,7 @@ import { FindUserByEmailRepository } from "../../../repositories/user/findUserBy
 import { HashComparerService } from "../../../services/crypto/hashComparerService"
 import { TokenGeneratorService } from "../../../services/token/tokenGeneratorService"
 
-type SinginData = Pick<UserProps, "email" | "password">
+type DbSigninInputDTO = Pick<UserProps, "email" | "password">
 
 export class DbSigninUseCase {
     constructor(
@@ -11,7 +11,7 @@ export class DbSigninUseCase {
         private readonly hashComparer: HashComparerService,
         private readonly tokenGenerator: TokenGeneratorService
     ) {}
-    public async execute(signinData: SinginData): Promise<string | null> {
+    public async execute(signinData: DbSigninInputDTO): Promise<string | null> {
         const { email, password } = signinData
         const foundUser = await this.findUserByEmailRepository.findByEmail(email)
 

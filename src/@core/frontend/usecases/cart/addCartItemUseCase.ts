@@ -1,12 +1,12 @@
 import { Cart, CartProduct } from "../../../shared/entities/cart/cart"
 import { AddCartItemGateway } from "../../domain/gateways/cart/addCartItemGateway"
 
-type ItemToAdd = Pick<CartProduct, "productId" | "quantity">
+type AddItemInputDTO = Pick<CartProduct, "productId" | "quantity">
 
 export class AddCartItemUseCase {
     constructor(private readonly addCartItemGateway: AddCartItemGateway) {}
 
-    public async execute(item: ItemToAdd): Promise<Cart | null> {
+    public async execute(item: AddItemInputDTO): Promise<Cart | null> {
         const { productId, quantity } = item
 
         if (quantity < 1) {
