@@ -1,13 +1,13 @@
 import { generateCustomZodErrors } from "../helpers"
 import { EntityValidationResult } from "../protocols"
 import { UserProps } from "./user"
-import { userZodSchema } from "./utils"
+import { externalUserZodSchema } from "./utils"
 
 export type ExternalUserProps = Omit<UserProps, "password">
 
 export class ExternalUser {
     private props: ExternalUserProps
-    public static readonly externalUserSchema = userZodSchema.omit({ password: true })
+    public static readonly externalUserSchema = externalUserZodSchema
 
     public static validate(user: any): EntityValidationResult<ExternalUserProps> {
         const validationResult = ExternalUser.externalUserSchema.safeParse(user)
