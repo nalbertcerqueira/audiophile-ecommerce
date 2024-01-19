@@ -1,5 +1,10 @@
 import { ProductProps } from "../../../../../shared/entities/product/product"
-import { cartItemMongoSchema, productMongoSchema, userMongoSchema } from "./mongo-schemas"
+import {
+    cartItemMongoSchema,
+    mongoCheckoutOrderSchema,
+    productMongoSchema,
+    userMongoSchema
+} from "./mongo-schemas"
 import { mongoHelper } from "./mongo-config"
 import { readFile } from "fs/promises"
 import { resolve } from "path"
@@ -38,6 +43,9 @@ export class Migration {
                 mongoHelper.db.createCollection("users", { validator: userMongoSchema }),
                 mongoHelper.db.createCollection("cartItems", {
                     validator: cartItemMongoSchema
+                }),
+                mongoHelper.db.createCollection("checkoutOrders", {
+                    validator: mongoCheckoutOrderSchema
                 })
             ])
         } catch {

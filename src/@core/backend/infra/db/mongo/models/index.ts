@@ -4,6 +4,7 @@ import { CartProduct } from "@/@core/shared/entities/cart/cart"
 import { UserType } from "@/@core/shared/entities/user/user"
 import { ObjectId } from "mongodb"
 import { ExternalUserProps } from "@/@core/shared/entities/user/externalUser"
+import { CheckoutOrderProps } from "@/@core/shared/entities/order/checkoutOrder"
 
 export interface MongoProduct extends Omit<ProductProps, "id"> {
     readonly _id: ObjectId
@@ -30,4 +31,12 @@ export interface MongoCartItem extends Pick<CartProduct, "productId" | "quantity
     readonly userId: string
     readonly userType: UserType
     createdAt: Date
+}
+
+export interface MongoCheckoutOrder extends CheckoutOrderProps {
+    readonly _id: ObjectId
+    readonly userId: string
+    readonly userType: UserType
+    createdAt: Date
+    updatedAt: Date
 }

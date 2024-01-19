@@ -181,3 +181,26 @@ export const cartItemMongoSchema: Document = {
         }
     }
 }
+
+export const mongoCheckoutOrderSchema: Document = {
+    $jsonSchema: {
+        bsonType: "object",
+        required: ["orderId", "costumer", "cartItems", "totalSpent"],
+        additionalProperties: false,
+        properties: {
+            _id: {},
+            orderId: { bsonType: "string", minLength: 1 },
+            costumer: {
+                bsonType: "object",
+                required: ["name", "email"],
+                additionalProperties: false,
+                properties: {
+                    name: userNameMongoSchema,
+                    email: userEmailMongoSchema
+                }
+            },
+            cartItems: cartItemMongoSchema["$jsonSchema"],
+            totalSpent: { bsonType: ["int", "double"], minimum: 0.01 }
+        }
+    }
+}
