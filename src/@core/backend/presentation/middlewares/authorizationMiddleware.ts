@@ -13,7 +13,7 @@ export class AuthorizationMiddleware implements Controller {
     ) {}
 
     public async handle(request: HttpRequest): Promise<HttpResponse> {
-        const accessToken = request.headers?.authorization?.split(" ")[1] as string
+        const accessToken = request.headers?.authorization?.split(" ")[1]
         const unauthorizedHeaders = { "WWW-Authenticate": 'Bearer realm="protected resource"' }
         const unauthorizedMsg =
             "Unauthorized. You need valid credentials to access this content"
