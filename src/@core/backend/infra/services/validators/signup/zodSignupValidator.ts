@@ -3,7 +3,7 @@ import {
     ValidationResult
 } from "@/@core/backend/domain/services/schemaValidator"
 import { generateCustomZodErrors } from "@/@core/shared/entities/helpers"
-import { passwordZodValidator } from "@/@core/shared/entities/user/utils"
+import { passwordZodSchema } from "@/@core/shared/entities/user/utils"
 import { User, UserProps } from "@/@core/shared/entities/user/user"
 import { ZodSchema } from "zod"
 
@@ -16,7 +16,7 @@ export class ZodSignupValidator implements SchemaValidatorService {
     constructor() {
         this.signupSchema = User.userSchema
             .pick({ name: true, email: true, password: true })
-            .extend({ passwordConfirmation: passwordZodValidator })
+            .extend({ passwordConfirmation: passwordZodSchema })
             .refine((data) => data.password === data.passwordConfirmation, {
                 message: "Passwords don't match",
                 path: ["passwordConfirmation"]

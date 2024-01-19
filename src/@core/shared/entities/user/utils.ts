@@ -12,15 +12,15 @@ export const nameLengthMessage = "must have at least 5 character(s)"
 export const passwordLengthMessage = "must have at least 8 character(s)"
 export const passwordMessage = "must contain letters, numbers and 1 especial character"
 
-export const zodEmailSchema = z.string().trim().email("is invalid")
+export const emailZodSchema = z.string().trim().email("is invalid")
 
-export const zodUserNameSchema = z
+export const userNameZodSchema = z
     .string()
     .trim()
     .min(6, nameLengthMessage)
     .refine((name) => name.match(nameRegexp), { message: nameMessage, path: [""] })
 
-export const passwordZodValidator = z
+export const passwordZodSchema = z
     .string()
     .min(8, passwordLengthMessage)
     .refine((password) => password.match(passwordRegexp), {
@@ -30,9 +30,9 @@ export const passwordZodValidator = z
 
 export const userZodSchema = schemaFromType<UserProps>()(
     z.object({
-        email: zodEmailSchema,
-        password: passwordZodValidator,
-        name: zodUserNameSchema,
+        email: emailZodSchema,
+        password: passwordZodSchema,
+        name: userNameZodSchema,
         images: z.object({
             profile: z.string().trim().url().nullable()
         })

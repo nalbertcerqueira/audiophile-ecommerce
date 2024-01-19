@@ -2,12 +2,12 @@ import { z } from "zod"
 import { schemaFromType } from "../helpers"
 import { CheckoutOrderProps, Costumer } from "./checkoutOrder"
 import { cartItemZodSchema } from "../cart/util"
-import { zodEmailSchema, zodUserNameSchema } from "../user/utils"
+import { emailZodSchema, userNameZodSchema } from "../user/utils"
 
 export const zodCostumerSchema = schemaFromType<Costumer>()(
     z.object({
-        name: zodUserNameSchema,
-        email: zodEmailSchema
+        name: userNameZodSchema,
+        email: emailZodSchema
     })
 ).strict()
 

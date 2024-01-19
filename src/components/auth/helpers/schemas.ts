@@ -1,4 +1,4 @@
-import { passwordZodValidator } from "@/@core/shared/entities/user/utils"
+import { passwordZodSchema } from "@/@core/shared/entities/user/utils"
 import { AuthFormFields } from "../types/types"
 import { User } from "@/@core/shared/entities/user/user"
 import z from "zod"
@@ -14,7 +14,7 @@ export const signupSchema: z.ZodType<AuthFormFields<"signup">> = User.userSchema
         email: true,
         password: true
     })
-    .extend({ passwordConfirmation: passwordZodValidator })
+    .extend({ passwordConfirmation: passwordZodSchema })
     .strict()
     .refine(
         (values) => {
