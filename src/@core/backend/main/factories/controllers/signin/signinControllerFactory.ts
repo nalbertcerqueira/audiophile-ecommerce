@@ -1,4 +1,4 @@
-import { ZodSigninValidator } from "@/@core/backend/infra/services/validators/signin/zpdSigninValidator"
+import { ZodSigninValidator } from "@/@core/backend/infra/services/validators/signin/zodSigninValidator"
 import { SigninController } from "@/@core/backend/presentation/controllers/signin/signinController"
 import { authenticatedJwtTokenService } from "../../services/tokenServiceFactory"
 import { DbSigninUseCase } from "@/@core/backend/domain/usecases/auth/authenticatedUser/dbSigninUseCase"
