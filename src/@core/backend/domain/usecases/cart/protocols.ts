@@ -1,11 +1,6 @@
-import { UserType } from "@/@core/shared/entities/user/user"
+export type { UserInfo } from "../protocols"
 
 export interface CartItemInfo {
     readonly productId: string
     quantity: number
-}
-
-export interface UserInfo {
-    id: string
-    type: UserType
 }
