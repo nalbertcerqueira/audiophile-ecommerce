@@ -2,7 +2,7 @@ import { dbExternalAuthorizationUseCase } from "../usecases/auth/externalUser/db
 import { AuthenticatedAuthMiddleware } from "@/@core/backend/presentation/middlewares/authenticatedAuthMiddleware"
 import { dbAuthorizationUseCase } from "../usecases/auth/authenticatedUser/dbAuthorizationFactory"
 
-function createAuthenticatedAuthMiddleware() {
+function createAuthenticatedAuthMiddleware(): AuthenticatedAuthMiddleware {
     return new AuthenticatedAuthMiddleware(
         dbAuthorizationUseCase,
         dbExternalAuthorizationUseCase

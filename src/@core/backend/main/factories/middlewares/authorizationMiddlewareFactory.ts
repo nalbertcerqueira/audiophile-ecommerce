@@ -3,7 +3,7 @@ import { dbGuestAuthorizationUseCase } from "../usecases/auth/guestUser/dbGuestA
 import { AuthorizationMiddleware } from "@/@core/backend/presentation/middlewares/authorizationMiddleware"
 import { dbAuthorizationUseCase } from "../usecases/auth/authenticatedUser/dbAuthorizationFactory"
 
-function createAuthorizationMiddleware() {
+function createAuthorizationMiddleware(): AuthorizationMiddleware {
     return new AuthorizationMiddleware(
         dbAuthorizationUseCase,
         dbGuestAuthorizationUseCase,

@@ -1,6 +1,6 @@
 import { HttpCartGateway } from "../../infra/gateways/cart/httpCartGateway"
 
-function createHttpCartGateway(apiUrl: string) {
+function createHttpCartGateway(apiUrl: string): HttpCartGateway {
     return new HttpCartGateway(apiUrl)
 }
 

@@ -1,7 +1,7 @@
 import { httpCartGateway } from "../../gateways/cartGatewayFactory"
 import { RemoveCartItemUseCase } from "../../../usecases/cart/removeCartItemUseCase"
 
-function createRemoveCartItemUseCase() {
+function createRemoveCartItemUseCase(): RemoveCartItemUseCase {
     return new RemoveCartItemUseCase(httpCartGateway)
 }
 

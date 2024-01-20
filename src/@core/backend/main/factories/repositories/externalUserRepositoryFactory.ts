@@ -1,6 +1,6 @@
 import { MongoExternalUserRepository } from "@/@core/backend/infra/db/mongo/repositories/externalUser/mongoExternalUserRepository"
 
-function createMongoExternalUserRepository() {
+function createMongoExternalUserRepository(): MongoExternalUserRepository {
     return new MongoExternalUserRepository()
 }
 
