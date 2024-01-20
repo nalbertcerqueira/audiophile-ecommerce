@@ -45,6 +45,11 @@ const dateMongoSchema: Document = {
     bsonType: "date"
 }
 
+const userTypeMongoSchema: Document = {
+    bsonType: "string",
+    enum: ["authenticated", "external", "guest"]
+}
+
 export const productMongoSchema: Document = {
     $jsonSchema: {
         bsonType: "object",
@@ -174,7 +179,7 @@ export const cartItemMongoSchema: Document = {
         properties: {
             _id: {},
             userId: { bsonType: "string" },
-            userType: { bsonType: "string", enum: ["authenticated", "external", "guest"] },
+            userType: userTypeMongoSchema,
             productId: { bsonType: "string" },
             quantity: { bsonType: "int", minimum: 1 },
             createdAt: dateMongoSchema
@@ -185,10 +190,12 @@ export const cartItemMongoSchema: Document = {
 export const mongoCheckoutOrderSchema: Document = {
     $jsonSchema: {
         bsonType: "object",
-        required: ["orderId", "costumer", "cartItems", "totalSpent"],
+        required: ["userId", "userType", "orderId", "costumer", "cartItems", "createdAt"],
         additionalProperties: false,
         properties: {
             _id: {},
+            userId: { bsonType: "string" },
+            userType: userTypeMongoSchema,
             orderId: { bsonType: "string", minLength: 1 },
             costumer: {
                 bsonType: "object",
@@ -199,8 +206,20 @@ export const mongoCheckoutOrderSchema: Document = {
                     email: userEmailMongoSchema
                 }
             },
-            cartItems: cartItemMongoSchema["$jsonSchema"],
-            totalSpent: { bsonType: ["int", "double"], minimum: 0.01 }
+            cartItems: {
+                bsonType: "array",
+                minItems: 1,
+                items: {
+                    bsonType: "object",
+                    additionalProperties: false,
+                    required: ["productId", "quantity"],
+                    properties: {
+                        productId: { bsonType: "string" },
+                        quantity: { bsonType: "int", minimum: 1 }
+                    }
+                }
+            },
+            createdAt: dateMongoSchema
         }
     }
 }

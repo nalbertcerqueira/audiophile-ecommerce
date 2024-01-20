@@ -5,20 +5,27 @@ import { mongoHelper } from "../../config/mongo-config"
 import { MongoCheckoutOrder } from "../../models"
 
 export class MongoCheckoutOrderRepository implements AddCheckoutOrderRepository {
-    public async add(userId: string, userType: UserType, order: CheckoutOrder): Promise<void> {
+    public async add(
+        userId: string,
+        userType: UserType,
+        order: CheckoutOrder
+    ): Promise<boolean> {
         await mongoHelper.connect()
 
         const creationDate = new Date()
+        const { cartItems, ...orderRest } = order.toJSON()
 
         const checkoutOrderCollection =
             mongoHelper.db.collection<Omit<MongoCheckoutOrder, "_id">>("checkoutOrders")
 
-        await checkoutOrderCollection.insertOne({
+        const response = await checkoutOrderCollection.insertOne({
             userId,
             userType,
-            ...order.toJSON(),
-            createdAt: creationDate,
-            updatedAt: creationDate
+            ...orderRest,
+            cartItems: cartItems.map(({ productId, quantity }) => ({ productId, quantity })),
+            createdAt: creationDate
         })
+
+        return !!response.insertedId
     }
 }
