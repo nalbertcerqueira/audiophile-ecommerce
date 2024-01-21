@@ -9,6 +9,11 @@ export interface Costumer {
     email: string
 }
 
+export interface Taxes {
+    vat: number
+    shipping: number
+}
+
 export interface CheckoutOrderProps {
     orderId: string
     costumer: Costumer
@@ -64,18 +69,18 @@ export class CheckoutOrder {
         return parseFloat(vat.toFixed(2))
     }
 
-    public calculateShipping(): number {
+    public calculateShipping(): Taxes["shipping"] {
         return 50
     }
 
-    public calculateCartTotal() {
+    public calculateCartTotal(): number {
         return this.props.cartItems.reduce(
             (acc, item) => (acc += item.quantity * item.price),
             0
         )
     }
 
-    public calculateGrandTotal() {
+    public calculateGrandTotal(): number {
         return this.calculateCartTotal() + this.calculateShipping() + this.calculateVAT()
     }
 }
