@@ -1,17 +1,10 @@
 import { GetCartGateway } from "@/@core/frontend/domain/gateways/cart/getCartGateway"
 import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
-import { HttpGatewayResponse } from "../protocols"
+import { HttpGatewayResponse, RequestDetails } from "../protocols"
 import { AddCartItemGateway } from "@/@core/frontend/domain/gateways/cart/addCartItemGateway"
 import { RemoveCartItemGateway } from "@/@core/frontend/domain/gateways/cart/removeCartItemGateway"
 import { ClearCartGateway } from "@/@core/frontend/domain/gateways/cart/clearCartGateway"
 import { UnauthorizedError } from "@/@core/backend/presentation/errors"
-
-export interface RequestDetails {
-    routeUrl: string
-    method: "GET" | "POST" | "PUT" | "DELETE"
-    body?: Record<string, any>
-    headers?: HeadersInit
-}
 
 export class HttpCartGateway
     implements GetCartGateway, AddCartItemGateway, RemoveCartItemGateway, ClearCartGateway
@@ -24,7 +17,7 @@ export class HttpCartGateway
 
         const cartData = await this.submitRequest({
             method: "GET",
-            routeUrl: fullUrl,
+            url: fullUrl,
             headers: { Authorization: `Bearer ${accessToken}` }
         })
 
@@ -37,7 +30,7 @@ export class HttpCartGateway
 
         const cartData = await this.submitRequest({
             method: "DELETE",
-            routeUrl: fullUrl,
+            url: fullUrl,
             headers: { Authorization: `Bearer ${accessToken}` }
         })
 
@@ -51,7 +44,7 @@ export class HttpCartGateway
 
         const cartData = await this.submitRequest({
             method: "POST",
-            routeUrl: fullUrl,
+            url: fullUrl,
             body: body,
             headers: {
                 "Content-Type": "application/json",
@@ -69,7 +62,7 @@ export class HttpCartGateway
 
         const cartData = await this.submitRequest({
             method: "DELETE",
-            routeUrl: fullUrl,
+            url: fullUrl,
             body: body,
             headers: {
                 "Content-Type": "application/json",
@@ -81,9 +74,9 @@ export class HttpCartGateway
     }
 
     private async submitRequest(request: RequestDetails): Promise<CartProps> {
-        const { routeUrl, method, headers, body } = request
+        const { url, method, headers, body } = request
 
-        const response = await fetch(routeUrl, {
+        const response = await fetch(url, {
             method: method,
             body: body && JSON.stringify(body),
             headers: headers
