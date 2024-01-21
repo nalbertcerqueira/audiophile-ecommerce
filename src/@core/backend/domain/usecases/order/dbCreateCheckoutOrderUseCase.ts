@@ -4,7 +4,7 @@ import { UserInfo } from "../protocols"
 import { GetCartRepository } from "../../repositories/cart/getCartRepository"
 import { ClearCartRepository } from "../../repositories/cart/clearCartRepository"
 
-export class CreateCheckoutOrderUseCase {
+export class DbCreateCheckoutOrderUseCase {
     constructor(
         private readonly getCartRepository: GetCartRepository,
         private readonly clearCartRepository: ClearCartRepository,

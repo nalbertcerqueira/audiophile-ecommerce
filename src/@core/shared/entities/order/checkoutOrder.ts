@@ -16,7 +16,7 @@ export interface Taxes {
 
 export interface CheckoutOrderProps {
     orderId: string
-    costumer: Costumer
+    costumer: Costumer | null
     cartItems: CartProduct[]
 }
 
@@ -51,7 +51,7 @@ export class CheckoutOrder {
         const { data } = validationResult
         this.props = {
             orderId: data.orderId,
-            costumer: { ...data.costumer },
+            costumer: data.costumer ? { ...data.costumer } : null,
             cartItems: data.cartItems.map((item) => ({ ...item }))
         }
     }
@@ -59,7 +59,7 @@ export class CheckoutOrder {
     public toJSON(): CheckoutOrderProps {
         return {
             ...this.props,
-            costumer: { ...this.props.costumer },
+            costumer: this.props.costumer ? { ...this.props.costumer } : null,
             cartItems: this.props.cartItems.map((item) => ({ ...item }))
         }
     }

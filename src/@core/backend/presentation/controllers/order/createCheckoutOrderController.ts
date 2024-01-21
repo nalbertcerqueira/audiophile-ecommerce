@@ -1,9 +1,9 @@
-import { CreateCheckoutOrderUseCase } from "@/@core/backend/domain/usecases/order/dbCreateCheckoutOrderUseCase"
+import { DbCreateCheckoutOrderUseCase } from "@/@core/backend/domain/usecases/order/dbCreateCheckoutOrderUseCase"
 import { Controller } from "../../protocols/controller"
 import { HttpRequest, HttpResponse } from "../../protocols/http"
 
 export class CreateCheckoutOrderController implements Controller {
-    constructor(private readonly createCheckoutOrderUseCase: CreateCheckoutOrderUseCase) {}
+    constructor(private readonly createCheckoutOrderUseCase: DbCreateCheckoutOrderUseCase) {}
 
     public async handle(request: HttpRequest): Promise<HttpResponse> {
         try {

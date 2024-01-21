@@ -1,9 +1,9 @@
-import { CreateCheckoutOrderUseCase } from "@/@core/backend/domain/usecases/order/dbCreateCheckoutOrderUseCase"
+import { DbCreateCheckoutOrderUseCase } from "@/@core/backend/domain/usecases/order/dbCreateCheckoutOrderUseCase"
 import { mongoCheckoutOrderRepository } from "../../repositories/checkoutOrderRepositoryFactory"
 import { mongoCartRepository } from "../../repositories/cartRepositoryFactory"
 
-function createDbCreateCheckoutOrderUseCase(): CreateCheckoutOrderUseCase {
-    return new CreateCheckoutOrderUseCase(
+function createDbCreateCheckoutOrderUseCase(): DbCreateCheckoutOrderUseCase {
+    return new DbCreateCheckoutOrderUseCase(
         mongoCartRepository,
         mongoCartRepository,
         mongoCheckoutOrderRepository

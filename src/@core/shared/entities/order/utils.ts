@@ -14,7 +14,7 @@ export const zodCostumerSchema = schemaFromType<Costumer>()(
 export const zodCheckoutOrderSchema = schemaFromType<CheckoutOrderProps>()(
     z.object({
         orderId: z.string().min(1),
-        costumer: zodCostumerSchema,
+        costumer: zodCostumerSchema.nullable(),
         cartItems: z.array(cartItemZodSchema).min(1)
     })
 ).strict()
