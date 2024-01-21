@@ -1,10 +1,8 @@
-import { HttpCheckoutOrderGateway } from "@/@core/frontend/infra/gateways/order/httpCheckoutOrderGateway"
 import { CreateCheckoutOrderUseCase } from "@/@core/frontend/usecases/order/createCheckoutOrderUseCase"
+import { httpCheckoutOrderGateway } from "../../gateways/checkoutOrderGatewayFactory"
 
-function createCheckoutOrderCreationUseCase(apiUrl: string) {
-    const httpCheckoutOrderGateway = new HttpCheckoutOrderGateway(apiUrl)
-
+function createCheckoutOrderCreationUseCase() {
     return new CreateCheckoutOrderUseCase(httpCheckoutOrderGateway)
 }
 
-export const createCheckoutOrderUseCase = createCheckoutOrderCreationUseCase("/api/auth")
+export const createCheckoutOrderUseCase = createCheckoutOrderCreationUseCase()
