@@ -5,22 +5,34 @@ import { SummaryField } from "@/components/shared/cart/SummaryField"
 import { CartItemSkeleton } from "@/components/shared/loaders/skeletons/CartItemSkeleton"
 import { SummarySkeleton } from "@/components/shared/loaders/skeletons/SummarySkeleton"
 import { CartContext } from "@/contexts/CartContext"
+import { CheckoutContext } from "@/contexts/CheckoutContext"
+import { RingLoader } from "@/components/shared/loaders/RingLoader"
 import { formatCurrency } from "@/utils/helpers"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 
 interface CheckoutSummaryProps {
     formId: string
 }
 
 export function CheckoutSummary({ formId }: CheckoutSummaryProps) {
-    const { cart, loadingState } = useContext(CartContext)
-    const shipping = 50
-    const vat = 1079
-    const grandTotal = shipping + vat + cart.totalSpent
-    const isLoading = loadingState.isLoading && !loadingState.currentProductIds.length
+    const { loadingState: cartLoadingState, cart } = useContext(CartContext)
+    const { status: checkoutStatus, taxes, updateTaxes } = useContext(CheckoutContext)
+
+    useEffect(() => updateTaxes(), [updateTaxes, cart.totalSpent])
+
+    function shouldPreventSubmit() {
+        const { isCheckingOut, isLoadingTaxes } = checkoutStatus
+        const isCartEmpty = !cart.items.length
+        const isCartBusy = cartLoadingState.isLoading
+
+        return isCartEmpty || isCartBusy || isCheckingOut || isLoadingTaxes
+    }
 
     function renderItems() {
-        if (isLoading) {
+        const isClearing = !cartLoadingState.currentProductIds.length
+        const isCartBusy = cartLoadingState.isLoading
+
+        if (isCartBusy && isClearing) {
             return (
                 <>
                     <CartItemSkeleton />
@@ -42,15 +54,17 @@ export function CheckoutSummary({ formId }: CheckoutSummaryProps) {
     }
 
     function renderSummaryFields() {
-        if (isLoading) {
+        const grandTotal = taxes.vat + taxes.shipping + cart.totalSpent
+
+        if (cartLoadingState.isLoading || checkoutStatus.isLoadingTaxes) {
             return <SummarySkeleton />
         }
         return (
             <>
                 <div className="summary__total-fields">
                     <SummaryField name="TOTAL" value={formatCurrency(cart.totalSpent)} />
-                    <SummaryField name="SHIPPING" value={formatCurrency(shipping)} />
-                    <SummaryField name="VAT (INCLUDED)" value={formatCurrency(vat)} />
+                    <SummaryField name="SHIPPING" value={formatCurrency(taxes.shipping)} />
+                    <SummaryField name="VAT (INCLUDED)" value={formatCurrency(taxes.vat)} />
                 </div>
                 <div className="summary__grand-total">
                     <SummaryField name="GRAND TOTAL" value={formatCurrency(grandTotal)} />
@@ -65,10 +79,16 @@ export function CheckoutSummary({ formId }: CheckoutSummaryProps) {
             <div className="summary__items">{renderItems()}</div>
             <div className="summary__fields">{renderSummaryFields()}</div>
             <button
+                disabled={shouldPreventSubmit()}
                 form={formId}
                 type="submit"
                 className="btn btn--primary summary__submit-btn"
             >
+                {checkoutStatus.isCheckingOut && (
+                    <div className="btn-loading-overlay">
+                        <RingLoader />
+                    </div>
+                )}
                 CONTINUE & PAY
             </button>
         </div>

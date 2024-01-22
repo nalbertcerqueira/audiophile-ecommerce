@@ -6,9 +6,16 @@ import { SummaryField } from "./SummaryField"
 import { CartItem } from "./CartItem"
 import { useContext } from "react"
 import Link from "next/link"
+import { CheckoutContext } from "@/contexts/CheckoutContext"
 
 export function MiniCart({ isOpen }: { isOpen: boolean }) {
     const { cart, clearCart } = useContext(CartContext)
+    const { updateStatus } = useContext(CheckoutContext)
+
+    function handleClearCart() {
+        updateStatus((prevState) => ({ ...prevState, isLoadingTaxes: true }))
+        clearCart()
+    }
 
     return (
         <div className={`mini-cart ${isOpen ? "" : "mini-cart--hidden"}`.trim()}>
@@ -17,7 +24,7 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
                     CART <span className="mini-cart__count">({cart.itemCount})</span>
                 </h3>
                 <button
-                    onClick={clearCart}
+                    onClick={handleClearCart}
                     aria-label="clear cart"
                     className="mini-cart__clear-btn"
                     type="button"

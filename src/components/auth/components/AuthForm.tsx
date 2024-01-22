@@ -19,7 +19,7 @@ export function AuthForm({ children, isSubmitting, submitBtn, submitHandler }: A
             >
                 {submitBtn}
                 {isSubmitting && (
-                    <div className="auth-form__loading-overlay">
+                    <div className="btn-loading-overlay">
                         <RingLoader />
                     </div>
                 )}

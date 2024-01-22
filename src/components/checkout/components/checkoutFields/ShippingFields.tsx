@@ -40,7 +40,7 @@ export function ShippingFields(props: BaseCheckoutFieldProps) {
                 label="City"
                 id="city"
                 type="text"
-                autocomplete="home-city"
+                autocomplete="home city"
                 placeholder="New York"
             />
             <Input
