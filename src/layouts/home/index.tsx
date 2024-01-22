@@ -1,4 +1,4 @@
-import { NextAuthSessionProvider } from "@/contexts/NextAuthSessionProvider"
+import { NextAuthSessionProvider } from "@/contexts/NextAuthSessionContext"
 import { PropsWithChildren } from "react"
 import { CartModalProvider } from "@/contexts/CartModalContext"
 import { SessionProvider } from "@/contexts/SessionContext"
@@ -8,6 +8,7 @@ import { CartModal } from "@/components/shared/cart/Overlay"
 import { Footer } from "./components/Footer"
 import "react-toastify/dist/ReactToastify.css"
 import "./styles.scss"
+import { CheckoutProvider } from "@/contexts/CheckoutContext"
 
 export function HomeContainer({ children }: PropsWithChildren) {
     return (
@@ -17,9 +18,11 @@ export function HomeContainer({ children }: PropsWithChildren) {
                     <SessionProvider>
                         <CartProvider>
                             <CartModalProvider>
-                                {children}
-                                <Footer />
-                                <CartModal />
+                                <CheckoutProvider>
+                                    {children}
+                                    <Footer />
+                                    <CartModal />
+                                </CheckoutProvider>
                             </CartModalProvider>
                         </CartProvider>
                     </SessionProvider>

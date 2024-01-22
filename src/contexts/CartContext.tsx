@@ -63,7 +63,7 @@ export function CartProvider({ children }: PropsWithChildren) {
     }, [sessionState.isLoading])
 
     async function removeItem(productId: string, quantity: number): Promise<void> {
-        if (shouldBlockAction(productId) || quantity <= 0) return
+        if (shouldBlockAction(productId, quantity)) return
 
         const timerRef = setTimeout(
             () => loadingDispatch({ type: "ENABLE", payload: { productId } }),
@@ -97,7 +97,7 @@ export function CartProvider({ children }: PropsWithChildren) {
         quantity: number,
         options?: ActionOptions
     ): Promise<void> {
-        if (shouldBlockAction(productId) || quantity <= 0) return
+        if (shouldBlockAction(productId, quantity)) return
 
         let toastId: Id | null = null
         const timerRef = setTimeout(
@@ -119,11 +119,11 @@ export function CartProvider({ children }: PropsWithChildren) {
             })
     }
 
-    function shouldBlockAction(productId: string): boolean {
+    function shouldBlockAction(productId: string, quantity: number): boolean {
         const isProductAction = loadingState.currentProductIds.includes(productId)
         const isCleaning = loadingState.isLoading && !loadingState.currentProductIds.length
 
-        return isProductAction || isCleaning
+        return isProductAction || isCleaning || quantity <= 0
     }
 
     function handleCartErrors(error: Error, showToast: boolean, toastId?: Id | null): void {
