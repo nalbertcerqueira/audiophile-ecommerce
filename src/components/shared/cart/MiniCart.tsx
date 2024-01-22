@@ -9,12 +9,21 @@ import Link from "next/link"
 import { CheckoutContext } from "@/contexts/CheckoutContext"
 
 export function MiniCart({ isOpen }: { isOpen: boolean }) {
-    const { cart, clearCart } = useContext(CartContext)
-    const { updateStatus } = useContext(CheckoutContext)
+    const { cart, clearCart, updateCartStatus } = useContext(CartContext)
+    const { updateTaxes, updateCheckoutStatus } = useContext(CheckoutContext)
 
     function handleClearCart() {
-        updateStatus((prevState) => ({ ...prevState, isLoadingTaxes: true }))
+        updateCartStatus({ type: "CLEAR" })
+        updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: true })
+
         clearCart()
+            .then((res) => {
+                updateCartStatus({ type: "DISABLE" })
+                return res ? updateTaxes() : null
+            })
+            .then(() => {
+                updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
+            })
     }
 
     return (

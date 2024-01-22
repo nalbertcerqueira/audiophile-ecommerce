@@ -255,6 +255,7 @@
 }
 
 .order-confirmation {
+    @extend %show-animation;
     @extend %section-padding;
     background-color: rgba(vars.$black, 0.4);
     min-width: 100%;
@@ -263,6 +264,7 @@
     z-index: 20;
     top: 0;
     visibility: hidden;
+    opacity: 0;
 
     hr {
         border-color: rgba(vars.$black, 0.1);
@@ -270,15 +272,17 @@
 
     &__inner-container {
         @extend %inner-container;
-        margin-top: 220px;
+        margin-top: 200px;
     }
 
     &__modal {
-        width: fit-content;
+        transform: scale(0.5) translateY(20%);
+        max-width: 540px;
         margin: 0 auto;
         padding: 3rem;
         background-color: vars.$white;
         border-radius: 0.5rem;
+        animation: grow forwards ease-in-out 0.3s;
 
         @include mixins.media-mobile {
             padding: 2rem;
@@ -306,23 +310,21 @@
     }
 
     &__details {
-        display: flex;
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
         background-color: vars.$very-light-grey;
         border-radius: 0.5rem;
         margin-top: 2rem;
         overflow: hidden;
-
-        @include mixins.media-620 {
-            flex-direction: column;
-        }
-
+        
         @include mixins.media-mobile {
+            grid-template-columns: 1fr;
             margin-top: 1.5rem;
         }
     }
 
     &__wrapper {
-        @include mixins.flex($direction: column, $content: flex-end, $gap: 0.75rem);
+        @include mixins.flex($direction: column, $content: flex-end, $gap: 0.5rem);
         padding: 1.5rem;
     }
 
@@ -408,4 +410,11 @@
 
 .react-international-phone--error {
     border: 0.125rem solid vars.$red;
+}
+
+
+@keyframes grow {
+    100%{
+        transform: scale(1) translateX(0);
+    }
 }

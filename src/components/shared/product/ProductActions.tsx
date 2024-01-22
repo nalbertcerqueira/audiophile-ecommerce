@@ -4,16 +4,38 @@ import Link from "next/link"
 import { Counter } from "../Counter"
 import { useContext, useState } from "react"
 import { CartContext } from "@/contexts/CartContext"
+import { CheckoutContext } from "@/contexts/CheckoutContext"
 
 export function AddProductAction({ productId }: { productId: string }) {
     const [count, setCount] = useState<number>(0)
-    const { loadingState, addItem } = useContext(CartContext)
-    const isLoading = loadingState.currentProductIds.includes(productId)
+    const { loadingState, addItem, updateCartStatus } = useContext(CartContext)
+    const { updateTaxes, updateCheckoutStatus } = useContext(CheckoutContext)
+
+    function handleAddItem() {
+        updateCartStatus({ type: "ENABLE", payload: { productId } })
+        updateCheckoutStatus((prevState) => ({ ...prevState, isLoadingTaxes: true }))
+
+        addItem(productId, count, { emitToast: true })
+            .then((res) => {
+                return res ? updateTaxes() : null
+            })
+            .then(() => {
+                updateCartStatus({ type: "DISABLE", payload: { productId } })
+                updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
+            })
+    }
+
+    function shouldDisableCounter() {
+        const isLoading = loadingState.currentProductIds.includes(productId)
+        const isCleaning = loadingState.isLoading && !loadingState.currentProductIds.length
+
+        return isLoading || isCleaning
+    }
 
     return (
         <div className="product__cart-actions">
             <Counter
-                disabled={isLoading}
+                disabled={shouldDisableCounter()}
                 count={count}
                 increment={() => setCount((prevCount) => prevCount + 1)}
                 decrement={() =>
@@ -21,8 +43,8 @@ export function AddProductAction({ productId }: { productId: string }) {
                 }
             />
             <button
-                disabled={isLoading}
-                onClick={() => addItem(productId, count, { emitToast: true })}
+                disabled={shouldDisableCounter()}
+                onClick={handleAddItem}
                 className="btn btn--primary"
                 type="button"
             >

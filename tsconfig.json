@@ -3,6 +3,7 @@
         "compilerOptions": { "module": "CommonJS" }
     },
     "compilerOptions": {
+        "strictPropertyInitialization": false,
         "target": "ES2015",
         "lib": ["dom", "dom.iterable", "esnext"],
         "allowJs": true,

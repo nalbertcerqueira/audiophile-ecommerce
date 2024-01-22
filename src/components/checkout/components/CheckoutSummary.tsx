@@ -8,7 +8,7 @@ import { CartContext } from "@/contexts/CartContext"
 import { CheckoutContext } from "@/contexts/CheckoutContext"
 import { RingLoader } from "@/components/shared/loaders/RingLoader"
 import { formatCurrency } from "@/utils/helpers"
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 
 interface CheckoutSummaryProps {
     formId: string
@@ -16,16 +16,14 @@ interface CheckoutSummaryProps {
 
 export function CheckoutSummary({ formId }: CheckoutSummaryProps) {
     const { loadingState: cartLoadingState, cart } = useContext(CartContext)
-    const { status: checkoutStatus, taxes, updateTaxes } = useContext(CheckoutContext)
-
-    useEffect(() => updateTaxes(), [updateTaxes, cart.totalSpent])
+    const { status: checkoutStatus, taxes } = useContext(CheckoutContext)
 
     function shouldPreventSubmit() {
         const { isCheckingOut, isLoadingTaxes } = checkoutStatus
         const isCartEmpty = !cart.items.length
         const isCartBusy = cartLoadingState.isLoading
 
-        return isCartEmpty || isCartBusy || isCheckingOut || isLoadingTaxes
+        return isCartEmpty || isCartBusy || isLoadingTaxes || isCheckingOut
     }
 
     function renderItems() {
@@ -56,9 +54,10 @@ export function CheckoutSummary({ formId }: CheckoutSummaryProps) {
     function renderSummaryFields() {
         const grandTotal = taxes.vat + taxes.shipping + cart.totalSpent
 
-        if (cartLoadingState.isLoading || checkoutStatus.isLoadingTaxes) {
+        if (checkoutStatus.isLoadingTaxes || cartLoadingState.isLoading) {
             return <SummarySkeleton />
         }
+
         return (
             <>
                 <div className="summary__total-fields">

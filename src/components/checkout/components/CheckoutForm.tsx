@@ -15,6 +15,8 @@ import { FormEvent, useContext, useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Id } from "react-toastify"
 import { useForm } from "react-hook-form"
+import { CheckoutOrder } from "@/@core/shared/entities/order/checkoutOrder"
+import { successCheckoutMessage } from "@/libs/react-toastify/components/CheckoutMessages"
 
 export const checkoutFormInitialState: CheckoutFields = {
     name: "",
@@ -30,13 +32,13 @@ export const checkoutFormInitialState: CheckoutFields = {
 export function CheckoutForm({ formId }: { formId: string }) {
     const { cart, loadingState: cartLoadingState } = useContext(CartContext)
     const { isLogged } = useContext(SessionContext)
-    const { status, updateStatus } = useContext(CheckoutContext)
+    const { status, updateCheckoutStatus, updateOrder } = useContext(CheckoutContext)
     const {
         watch,
         setValue,
         register,
-        resetField,
         handleSubmit,
+        unregister,
         control,
         formState: { errors, isSubmitting }
     } = useForm<CheckoutFields>({
@@ -50,12 +52,12 @@ export function CheckoutForm({ formId }: { formId: string }) {
     useEffect(() => setValue("paymentMethod", "cash"), [setValue])
 
     useEffect(() => {
-        if (paymentMethod === "creditCard") {
-            resetField("cardNumber")
-            resetField("expDate")
-            resetField("cvv")
+        if (paymentMethod === "cash") {
+            unregister("cardNumber", { keepValue: false })
+            unregister("expDate", { keepValue: false })
+            unregister("cvv", { keepValue: false })
         }
-    }, [paymentMethod, resetField])
+    }, [paymentMethod, unregister])
 
     async function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -81,28 +83,33 @@ export function CheckoutForm({ formId }: { formId: string }) {
             toastId = emitToast("loading", "Processing your order. Please wait a moment...")
         }
 
-        updateStatus((prevState) => ({ ...prevState, isCheckingOut: true }))
+        updateCheckoutStatus((prevState) => ({ ...prevState, isCheckingOut: true }))
 
         await createCheckoutOrderUseCase
             .execute()
-            .then(() => handleCheckout(toastId))
+            .then((order) => handleCheckout(order, toastId))
             .catch((error) => handleError(error, toastId))
             .finally(() =>
-                updateStatus((prevState) => ({ ...prevState, isCheckingOut: false }))
+                updateCheckoutStatus((prevState) => ({ ...prevState, isCheckingOut: false }))
             )
     }
 
-    function handleCheckout(toastId?: Id) {
+    function handleCheckout(order: CheckoutOrder, toastId?: Id) {
+        const { orderId, cartItems } = order.toJSON()
+
         if (toastId) {
-            emitToast(
-                "success",
-                "Success! 🎉 Your order was confirmed. Order id: a1df2e1d3a",
-                { id: toastId, update: true }
-            )
+            const successMsg = successCheckoutMessage(orderId)
+            emitToast("success", successMsg, { id: toastId, update: true })
+            updateOrder({
+                orderId,
+                cartItems,
+                grandTotal: order.calculateGrandTotal()
+            })
         }
     }
 
     function handleError(error: Error, toastId?: Id) {
+        updateOrder(null)
         if (error.name === "UnauthorizedError") {
             return location.assign("/signin")
         } else {

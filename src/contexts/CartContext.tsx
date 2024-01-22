@@ -19,6 +19,7 @@ import { clearCartUseCase } from "@/@core/frontend/main/usecases/cart/clearCartF
 import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
 import { getCartUseCase } from "@/@core/frontend/main/usecases/cart/getCartFactory"
 import { cartLoadingInititalState } from "@/store/cartLoading/initialState"
+import { CartLoadingActions } from "@/store/cartLoading/types"
 import { cartLoadingReducer } from "@/store/cartLoading/reducer"
 import { CartLoadingState } from "@/store/cartLoading/types"
 import { SessionContext } from "./SessionContext"
@@ -27,9 +28,10 @@ import { emitToast } from "@/libs/react-toastify/utils"
 interface CartContextProps {
     cart: CartProps
     loadingState: CartLoadingState
-    addItem: (productId: string, quantity: number, options?: ActionOptions) => void
-    removeItem: (productId: string, quantity: number) => void
-    clearCart: () => void
+    addItem: (productId: string, quantity: number, options?: ActionOptions) => Promise<boolean>
+    clearCart: () => Promise<boolean>
+    removeItem: (productId: string, quantity: number) => Promise<boolean>
+    updateCartStatus: (action: CartLoadingActions, delay?: number) => NodeJS.Timeout | void
 }
 
 interface ActionOptions {
@@ -49,74 +51,76 @@ export function CartProvider({ children }: PropsWithChildren) {
     )
 
     useEffect(() => {
-        ;(() => {
-            if (sessionState.isLoading) return
-
+        if (!sessionState.isLoading) {
             loadingDispatch({ type: "ENABLE" })
 
-            return getCartUseCase
+            getCartUseCase
                 .execute()
                 .then((cart) => setCart(cart.toJSON()))
                 .catch((error) => handleCartErrors(error, true))
                 .finally(() => loadingDispatch({ type: "DISABLE" }))
-        })()
+        }
     }, [sessionState.isLoading])
 
-    async function removeItem(productId: string, quantity: number): Promise<void> {
-        if (shouldBlockAction(productId, quantity)) return
+    async function clearCart(): Promise<boolean> {
+        if (loadingState.isLoading || !cart.items.length) {
+            return false
+        }
 
-        const timerRef = setTimeout(
-            () => loadingDispatch({ type: "ENABLE", payload: { productId } }),
-            200
-        )
-
-        return removeCartItemUseCase
-            .execute({ productId, quantity })
-            .then((cart) => handleCartUpdate(cart))
-            .catch((error) => handleCartErrors(error, true))
-            .finally(() => {
-                clearTimeout(timerRef)
-                loadingDispatch({ type: "DISABLE", payload: { productId } })
-            })
-    }
-
-    async function clearCart(): Promise<void> {
-        if (loadingState.isLoading || !cart.items.length) return
-
-        loadingDispatch({ type: "CLEAR" })
-
-        return clearCartUseCase
+        await clearCartUseCase
             .execute()
-            .then((cart) => handleCartUpdate(cart))
+            .then((cart) => (cart ? setCart(cart.toJSON()) : null))
             .catch((error) => handleCartErrors(error, true))
             .finally(() => loadingDispatch({ type: "DISABLE" }))
+
+        return true
+    }
+
+    async function removeItem(productId: string, quantity: number): Promise<boolean> {
+        if (shouldBlockAction(productId, quantity)) {
+            return false
+        }
+
+        await removeCartItemUseCase
+            .execute({ productId, quantity })
+            .then((cart) => (cart ? setCart(cart.toJSON()) : null))
+            .catch((error) => handleCartErrors(error, true))
+
+        return true
     }
 
     async function addItem(
         productId: string,
         quantity: number,
         options?: ActionOptions
-    ): Promise<void> {
-        if (shouldBlockAction(productId, quantity)) return
+    ): Promise<boolean> {
+        if (shouldBlockAction(productId, quantity)) {
+            return false
+        }
 
         let toastId: Id | null = null
-        const timerRef = setTimeout(
-            () => loadingDispatch({ type: "ENABLE", payload: { productId } }),
-            200
-        )
-
         if (options?.emitToast) {
             toastId = emitToast("loading", <CartAwaitingMessage />)
         }
 
-        addCartItemUseCase
+        await addCartItemUseCase
             .execute({ productId, quantity })
             .then((cart) => handleCartAddition(cart, productId, quantity, toastId))
             .catch((error) => handleCartErrors(error, true, toastId))
-            .finally(() => {
-                clearTimeout(timerRef)
-                loadingDispatch({ type: "DISABLE", payload: { productId } })
-            })
+
+        return true
+    }
+
+    function updateCartStatus(
+        action: CartLoadingActions,
+        delay?: number
+    ): NodeJS.Timeout | void {
+        if (delay) {
+            const timerRef = setTimeout(() => loadingDispatch(action), delay)
+            return timerRef
+        }
+
+        return loadingDispatch(action)
     }
 
     function shouldBlockAction(productId: string, quantity: number): boolean {
@@ -163,14 +167,17 @@ export function CartProvider({ children }: PropsWithChildren) {
         }
     }
 
-    function handleCartUpdate(cart: Cart | null) {
-        if (cart) {
-            setCart(cart.toJSON())
-        }
-    }
-
     return (
-        <CartContext.Provider value={{ loadingState, cart, addItem, removeItem, clearCart }}>
+        <CartContext.Provider
+            value={{
+                loadingState,
+                cart,
+                addItem,
+                removeItem,
+                clearCart,
+                updateCartStatus
+            }}
+        >
             {children}
         </CartContext.Provider>
     )

@@ -1,14 +1,17 @@
 "use client"
 
 import { ConfirmationIcon } from "@/components/shared/icons/ConfirmationIcon"
-import { CartItem } from "@/components/shared/cart/CartItem"
-import { CartContext } from "@/contexts/CartContext"
+import { CheckoutContext } from "@/contexts/CheckoutContext"
 import { formatCurrency } from "@/utils/helpers"
+import { CartItem } from "@/components/shared/cart/CartItem"
 import { useContext } from "react"
-import Link from "next/link"
 
 export function ConfirmationModal() {
-    const { cart } = useContext(CartContext)
+    const { order } = useContext(CheckoutContext)
+
+    if (!order) {
+        return null
+    }
 
     return (
         <div className="order-confirmation">
@@ -26,7 +29,7 @@ export function ConfirmationModal() {
                     <div className="order-confirmation__details">
                         <div className="order-confirmation__wrapper">
                             <div className="order-confirmation__items">
-                                {cart.items.map((item) => (
+                                {order?.cartItems.map((item) => (
                                     <CartItem
                                         key={item.productId}
                                         name={item.name}
@@ -40,23 +43,23 @@ export function ConfirmationModal() {
                             </div>
                             <hr />
                             <button className="order-confirmation__toggle-btn">
-                                and 2 other item(s)
+                                {"and 2 other item(s)"}
                             </button>
                         </div>
                         <div className="order-confirmation__total">
                             <p className="order-confirmation__total-label">GRAND TOTAL</p>
                             <p className="order-confirmation__total-value">
-                                <b>{formatCurrency(cart.totalSpent)}</b>
+                                <b>{formatCurrency(order.grandTotal)}</b>
                             </p>
                         </div>
                     </div>
-                    <Link
+                    <a
                         role="button"
                         href="/"
                         className="btn btn--primary order-confirmation__exit-btn"
                     >
                         BACK TO HOME
-                    </Link>
+                    </a>
                 </div>
             </div>
         </div>
