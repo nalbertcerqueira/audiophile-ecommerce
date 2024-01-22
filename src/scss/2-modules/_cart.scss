@@ -87,6 +87,7 @@
 
     &__price {
         font-size: 0.875rem;
+        white-space: nowrap;
         font-weight: vars.$extra-bold-weight;
         color: rgba(vars.$black, 0.5);
     }

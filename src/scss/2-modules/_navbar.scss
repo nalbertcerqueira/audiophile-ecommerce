@@ -1,5 +1,6 @@
 @use "../1-base/mixins" as mixins;
 @use "../1-base/variables" as vars;
+@use "../1-base/placeholders";
 
 .navbar {
     &__link-list {
@@ -39,6 +40,7 @@
     }
 
     &__marker {
+        @extend %show-animation;
         position: absolute;
         top: 100%;
         display: block;
@@ -47,6 +49,5 @@
         background-color: vars.$default-orange;
         border-radius: 1rem;
         opacity: 0;
-        animation: show 0.3s forwards;
     }
 }
