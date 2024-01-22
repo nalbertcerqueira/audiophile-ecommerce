@@ -11,17 +11,21 @@ export class CreateCheckoutOrderController implements Controller {
             const userId = request.user?.id
             const userType = request.user?.type
 
-            await this.createCheckoutOrderUseCase.execute(
+            const order = await this.createCheckoutOrderUseCase.execute(
                 { id: userId!, type: userType! },
                 { ...costumer }
             )
 
-            return { statusCode: 201, data: null }
+            if (!order) {
+                throw new Error()
+            }
+
+            return { statusCode: 200, data: order.toJSON() }
         } catch (error: any) {
             return {
                 statusCode: 500,
                 errors: [
-                    "Sorry! 🚫 but we couldn't process your order at the moment.  Please try again later"
+                    "Sorry! but we couldn't process your order at the moment. Please try again later"
                 ]
             }
         }

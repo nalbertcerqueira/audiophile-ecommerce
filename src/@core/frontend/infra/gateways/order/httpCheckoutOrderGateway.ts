@@ -2,18 +2,18 @@ import { UnauthorizedError } from "@/@core/backend/presentation/errors"
 import { createCheckoutOrderGateway } from "@/@core/frontend/domain/gateways/order/createCheckoutOrderGateway"
 import { HttpGatewayResponse, RequestDetails } from "../protocols"
 import { GetOrderTaxesGateway } from "@/@core/frontend/domain/gateways/order/getOrderTaxesGateway"
-import { Taxes } from "@/@core/shared/entities/order/checkoutOrder"
+import { CheckoutOrder, Taxes } from "@/@core/shared/entities/order/checkoutOrder"
 
 export class HttpCheckoutOrderGateway
     implements createCheckoutOrderGateway, GetOrderTaxesGateway
 {
     constructor(private readonly baseApiUrl: string) {}
 
-    public async create(): Promise<void> {
+    public async create(): Promise<CheckoutOrder> {
         const accessToken = localStorage.getItem("accessToken") as string
         const fullUrl = `${this.baseApiUrl}/checkout`
 
-        await this.submitRequest({
+        const data = await this.submitRequest({
             url: fullUrl,
             method: "POST",
             headers: {
@@ -21,13 +21,15 @@ export class HttpCheckoutOrderGateway
                 Authorization: `Bearer ${accessToken}`
             }
         })
+
+        return new CheckoutOrder(data)
     }
 
     public async getTaxes(): Promise<Taxes> {
         const accessToken = localStorage.getItem("accessToken") as string
         const fullUrl = `${this.baseApiUrl}/checkout/taxes`
 
-        const responseData = await this.submitRequest({
+        const data = await this.submitRequest({
             url: fullUrl,
             method: "GET",
             headers: {
@@ -35,7 +37,6 @@ export class HttpCheckoutOrderGateway
             }
         })
 
-        const { data } = responseData as HttpGatewayResponse<"success">
         return data
     }
 
@@ -59,6 +60,7 @@ export class HttpCheckoutOrderGateway
             throw new Error(errors.join(","))
         }
 
-        return responseData
+        const { data } = responseData as HttpGatewayResponse<"success">
+        return data
     }
 }

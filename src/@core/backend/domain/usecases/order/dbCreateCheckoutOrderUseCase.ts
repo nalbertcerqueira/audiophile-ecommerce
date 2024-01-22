@@ -11,20 +11,26 @@ export class DbCreateCheckoutOrderUseCase {
         private readonly addCheckoutOrderRepository: AddCheckoutOrderRepository
     ) {}
 
-    public async execute(userInfo: UserInfo, costumer: Costumer): Promise<void> {
+    public async execute(
+        userInfo: UserInfo,
+        costumer: Costumer
+    ): Promise<CheckoutOrder | null> {
         const { id, type } = userInfo
         const foundCart = await this.getCartRepository.getCartById(id, type)
         const cartProps = foundCart?.toJSON()
 
         if (!foundCart || !cartProps?.items) {
-            return
+            return null
         }
 
         const order = new CheckoutOrder({ cartItems: cartProps.items, costumer: costumer })
         const isCheckoutCreated = await this.addCheckoutOrderRepository.add(id, type, order)
 
-        if (isCheckoutCreated) {
-            await this.clearCartRepository.clearCartById(id, type)
+        if (!isCheckoutCreated) {
+            return null
         }
+
+        await this.clearCartRepository.clearCartById(id, type)
+        return order
     }
 }
