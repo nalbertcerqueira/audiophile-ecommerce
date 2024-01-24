@@ -39,6 +39,7 @@ export function CheckoutForm({ formId }: { formId: string }) {
         register,
         handleSubmit,
         unregister,
+        reset,
         control,
         formState: { errors, isSubmitting }
     } = useForm<CheckoutFields>({
@@ -106,6 +107,8 @@ export function CheckoutForm({ formId }: { formId: string }) {
                 grandTotal: order.calculateGrandTotal()
             })
         }
+
+        reset({ ...checkoutFormInitialState })
     }
 
     function handleError(error: Error, toastId?: Id) {
