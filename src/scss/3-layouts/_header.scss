@@ -21,7 +21,7 @@
         gap: 2rem;
         padding: 1.75rem 0;
 
-        @include mixins.media-920 {
+        @include mixins.media-960 {
             grid-template-columns: 1fr auto;
         }
     }

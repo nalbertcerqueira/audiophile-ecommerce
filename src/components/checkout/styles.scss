@@ -22,7 +22,7 @@
         grid-template-columns: 2fr 1fr;
         gap: 2rem;
 
-        @include mixins.media-920 {
+        @include mixins.media-960 {
             grid-template-columns: auto;
         }
 
@@ -324,7 +324,7 @@
     }
 
     &__wrapper {
-        @include mixins.flex($direction: column, $content: flex-end, $gap: 0.5rem);
+        @include mixins.flex($direction: column, $content: center, $gap: 0.5rem);
         padding: 1.5rem;
     }
 
