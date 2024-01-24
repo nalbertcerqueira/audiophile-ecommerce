@@ -33,9 +33,11 @@ export const userZodSchema = schemaFromType<UserProps>()(
         email: emailZodSchema,
         password: passwordZodSchema,
         name: userNameZodSchema,
-        images: z.object({
-            profile: z.string().trim().url().nullable()
-        })
+        images: z
+            .object({
+                profile: z.string().trim().url().nullable()
+            })
+            .strict()
     })
 ).strict()
 

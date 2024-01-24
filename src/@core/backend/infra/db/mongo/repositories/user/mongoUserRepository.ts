@@ -6,7 +6,10 @@ import {
 } from "@/@core/backend/domain/repositories/user/findUserByEmailRepository"
 import { mongoHelper } from "../../config/mongo-config"
 import { MongoUser } from "../../models"
-import { FindUserByIdRepository } from "@/@core/backend/domain/repositories/user/findUserByIdRepository"
+import {
+    BasicUserInfo,
+    FindUserByIdRepository
+} from "@/@core/backend/domain/repositories/user/findUserByIdRepository"
 import { ObjectId } from "mongodb"
 
 export class MongoUserRepository
@@ -40,21 +43,24 @@ export class MongoUserRepository
         })
     }
 
-    public async findById(userId: string): Promise<User | null> {
+    public async findById(userId: string): Promise<BasicUserInfo | null> {
         await mongoHelper.connect()
 
         try {
-            const _id = new ObjectId(userId)
+            const id = new ObjectId(userId)
 
-            const userCollection = mongoHelper.db.collection("users")
-            const foundUser = await userCollection.findOne<MongoUser>({ _id })
+            const userCollection = mongoHelper.db.collection<MongoUser>("users")
+            const foundUser = await userCollection.findOne<Omit<MongoUser, "password">>(
+                { _id: id },
+                { projection: { password: 0 } }
+            )
 
-            if (foundUser) {
-                const { name, email, password, images } = foundUser
-                return new User({ name, email, password, images })
+            if (!foundUser) {
+                return null
             }
 
-            return null
+            const { _id, name, email, images } = foundUser
+            return { id: _id.toString(), name, email, images }
         } catch {
             return null
         }
