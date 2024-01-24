@@ -25,6 +25,12 @@ import { CartLoadingState } from "@/store/cartLoading/types"
 import { SessionContext } from "./SessionContext"
 import { emitToast } from "@/libs/react-toastify/utils"
 
+interface CartAdditionParams {
+    cart: Cart | null
+    productId: string
+    quantity: number
+}
+
 interface CartContextProps {
     cart: CartProps
     loadingState: CartLoadingState
@@ -105,7 +111,7 @@ export function CartProvider({ children }: PropsWithChildren) {
 
         await addCartItemUseCase
             .execute({ productId, quantity })
-            .then((cart) => handleCartAddition(cart, productId, quantity, toastId))
+            .then((cart) => handleCartAddition({ cart, productId, quantity }, toastId))
             .catch((error) => handleCartErrors(error, true, toastId))
 
         return true
@@ -144,16 +150,13 @@ export function CartProvider({ children }: PropsWithChildren) {
         }
     }
 
-    function handleCartAddition(
-        updatedCart: Cart | null,
-        productId: string,
-        quantity: number,
-        toastId?: Id | null
-    ): void {
-        if (updatedCart) {
-            const cartData = updatedCart.toJSON()
-            const addedItem = cartData.items.find((item) => item.productId === productId)
-            setCart(updatedCart.toJSON())
+    function handleCartAddition(params: CartAdditionParams, toastId?: Id | null): void {
+        const { cart, productId, quantity } = params
+
+        if (cart) {
+            const cartProps = cart.toJSON()
+            const addedItem = cartProps.items.find((item) => item.productId === productId)
+            setCart(cart.toJSON())
             if (toastId) {
                 emitToast(
                     "success",

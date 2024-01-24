@@ -2,21 +2,21 @@
 
 import { CartIcon } from "../icons/CartIcon"
 import { useContext, useEffect } from "react"
-import { CartModalContext } from "@/contexts/CartModalContext"
+import { ModalContext } from "@/contexts/ModalContext"
 import { usePathname } from "next/navigation"
 import { CartContext } from "@/contexts/CartContext"
 
 export function CartButton() {
-    const { toggleCart, closeCart } = useContext(CartModalContext)
+    const { cartModal } = useContext(ModalContext)
     const { cart } = useContext(CartContext)
     const pathname = usePathname()
 
     //Fechando o modal quando a rota for alterada
-    useEffect(() => closeCart, [closeCart, pathname])
+    useEffect(() => cartModal.close, [cartModal.close, pathname])
 
     return (
         <button
-            onClick={toggleCart}
+            onClick={cartModal.toggle}
             className="cart-btn"
             type="button"
             aria-label="toggle cart"

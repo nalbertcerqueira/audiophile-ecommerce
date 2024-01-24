@@ -9,6 +9,7 @@
     width: 378px;
     transition:
         opacity 0.35s,
+        visibility 0.35s,
         transform 0.35s;
 
     @include mixins.media-mobile {
@@ -19,6 +20,7 @@
     &--hidden {
         transform: translateY(-25%);
         opacity: 0;
+        visibility: hidden;
     }
 
     &__header {

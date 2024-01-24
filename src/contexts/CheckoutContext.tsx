@@ -13,6 +13,7 @@ import {
     useEffect,
     useContext
 } from "react"
+import { emitToast } from "@/libs/react-toastify/utils"
 
 interface CheckoutStatus {
     isLoadingTaxes: boolean
@@ -47,10 +48,10 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
     })
 
     const updateTaxes = useCallback(async () => {
-        return getOrderTaxesUseCase
+        await getOrderTaxesUseCase
             .execute()
             .then((data) => setTaxes(data))
-            .catch((error) => console.log(error))
+            .catch((error) => handleErrors(error))
     }, [])
 
     function updateCheckoutStatus(
@@ -63,6 +64,14 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
         }
 
         return setStatus(state)
+    }
+
+    function handleErrors(error: Error) {
+        console.log(error)
+        emitToast(
+            "error",
+            "Sorry, we're having some issues to update the taxes. Please try again later"
+        )
     }
 
     useEffect(() => {
