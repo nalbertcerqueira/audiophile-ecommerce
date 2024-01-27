@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { Counter } from "../Counter"
 import { useContext, useState } from "react"
 import { CartContext } from "@/contexts/CartContext"
@@ -55,13 +54,5 @@ export function AddProductAction({ productId }: { productId: string }) {
                 ADD TO CART
             </button>
         </div>
-    )
-}
-
-export function ProductLink({ href }: { href: string }) {
-    return (
-        <Link role="button" href={href} className="btn btn--primary preview__product-link">
-            SEE PRODUCT
-        </Link>
     )
 }

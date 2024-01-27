@@ -1,7 +1,8 @@
 import { formatCurrency } from "@/utils/helpers"
 import { ResponsiveImageSet } from "@/utils/imageMap/types"
-import { AddProductAction, ProductLink } from "./ProductActions"
+import { AddProductAction } from "./ProductAction"
 import { ResponsiveImages } from "../ResponsiveImages"
+import { ProductLink } from "./ProductLink"
 
 interface CommonFields {
     id: string
