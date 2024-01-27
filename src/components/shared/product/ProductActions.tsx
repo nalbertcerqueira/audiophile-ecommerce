@@ -12,6 +12,10 @@ export function AddProductAction({ productId }: { productId: string }) {
     const { updateTaxes, updateCheckoutStatus } = useContext(CheckoutContext)
 
     function handleAddItem() {
+        if (loadingState.isLoading) {
+            return
+        }
+
         updateCartStatus({ type: "ENABLE", payload: { productId } })
         updateCheckoutStatus((prevState) => ({ ...prevState, isLoadingTaxes: true }))
 

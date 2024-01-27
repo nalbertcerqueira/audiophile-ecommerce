@@ -9,10 +9,14 @@ import Link from "next/link"
 import { CheckoutContext } from "@/contexts/CheckoutContext"
 
 export function MiniCart({ isOpen }: { isOpen: boolean }) {
-    const { cart, clearCart, updateCartStatus } = useContext(CartContext)
+    const { cart, loadingState, clearCart, updateCartStatus } = useContext(CartContext)
     const { updateTaxes, updateCheckoutStatus } = useContext(CheckoutContext)
 
     function handleClearCart() {
+        if (loadingState.isLoading) {
+            return
+        }
+
         updateCartStatus({ type: "CLEAR" })
         updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: true })
 
