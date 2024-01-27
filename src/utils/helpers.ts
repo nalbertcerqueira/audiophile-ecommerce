@@ -10,3 +10,16 @@ export function formatCurrency(value: number): string {
 export function toCapitalized(input?: string): string | undefined {
     return input ? `${input[0].toUpperCase()}${input.slice(1).toLowerCase()}` : undefined
 }
+
+export function matchUrlPathname(currentPathname: string | null, target: string) {
+    if (!currentPathname) {
+        return false
+    }
+
+    if (currentPathname === "/" && target === "home") {
+        return true
+    }
+
+    const pathLlist = currentPathname?.split("/")
+    return pathLlist?.includes(target)
+}

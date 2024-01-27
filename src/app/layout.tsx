@@ -17,6 +17,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
                     href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap"
                     rel="stylesheet"
                 />
+                <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
             </head>
             <HomeContainer>{children}</HomeContainer>
         </html>

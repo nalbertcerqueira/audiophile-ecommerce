@@ -1,11 +1,11 @@
+import { FooterNavLinks } from "./FooterNavLinks"
 import { AudiophileLogo } from "@/components/shared/Logo"
-import { NavLink } from "@/components/shared/NavLink"
-import { FacebookIcon } from "@/components/shared/icons/FacebookIcon"
 import { InstagramIcon } from "@/components/shared/icons/InstagramIcon"
+import { FacebookIcon } from "@/components/shared/icons/FacebookIcon"
 import { TwitterIcon } from "@/components/shared/icons/TwitterIcon"
+import Link from "next/link"
 
 export function Footer() {
-    const pathnames: string[] = ["/home", "/headphones", "/speakers", "/earphones"]
     const externalLinks = [
         { ariaLabel: "go to audiophile oficial page on facebook", icon: FacebookIcon },
         { ariaLabel: "go to audiophile oficial page on instagram", icon: InstagramIcon },
@@ -16,18 +16,11 @@ export function Footer() {
         <footer className="footer">
             <div className="footer__inner-container">
                 <div className="footer__inner-links">
-                    <AudiophileLogo />
-                    <ul className="footer__nav-links">
-                        {pathnames.map((path) => (
-                            <li key={path}>
-                                <NavLink path={`${path === "/home" ? "/" : path}`}>
-                                    {path.slice(1).toUpperCase()}
-                                </NavLink>
-                            </li>
-                        ))}
-                    </ul>
+                    <Link aria-label="Audiophile homepage" href="/">
+                        <AudiophileLogo />
+                    </Link>
+                    <FooterNavLinks />
                 </div>
-
                 <div className="footer__wrapper">
                     <p className="footer__about-brand">
                         Audiophile is an all in one stop to fulfill your audio needs.
