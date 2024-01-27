@@ -12,13 +12,12 @@ import { emitToast } from "@/libs/react-toastify/utils"
 import { AuthForm } from "./components/AuthForm"
 import { Input } from "../shared/Input"
 import { useForm } from "react-hook-form"
-import { useEffect, useState } from "react"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
 import "./styles.scss"
+import { useState } from "react"
 
 export function SigninPageComponent() {
-    const [isFormBlocked, setIsFormBlocked] = useState(false)
     const {
         register,
         handleSubmit,
@@ -29,11 +28,8 @@ export function SigninPageComponent() {
         reValidateMode: "onSubmit",
         resolver: customZodResolver(signinSchema)
     })
-
-    useEffect(
-        () => setIsFormBlocked(isSubmitting || isSubmitSuccessful),
-        [isSubmitting, isSubmitSuccessful]
-    )
+    const [isExternalProvider, setisExternalProvider] = useState(false)
+    const isFormBlocked = isSubmitting || isSubmitSuccessful || isExternalProvider
 
     function handleSignin(accessToken: string | null) {
         if (!accessToken) {
@@ -46,12 +42,13 @@ export function SigninPageComponent() {
     }
 
     async function externalSignin(provider: BuiltInProviderType) {
-        setIsFormBlocked(true)
+        setisExternalProvider(true)
         const oneDay = 1000 * 3600 * 24
         const expirationDate = new Date(Date.now() + oneDay).toUTCString()
         const guestAccessToken = localStorage.getItem("accessToken")
         document.cookie = `guest-access-token=${guestAccessToken};path=/;expires=${expirationDate};sameSite=Lax`
         await signIn(provider, { callbackUrl: "/" })
+        setisExternalProvider(false)
     }
 
     async function handleSuccessfulSubmit(data: AuthFormFields<"signin">) {
