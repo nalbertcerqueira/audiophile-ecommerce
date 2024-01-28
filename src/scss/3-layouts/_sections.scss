@@ -133,33 +133,3 @@
         }
     }
 }
-
-.not-found {
-    @include mixins.flex($items: center, $content: center, $direction: column, $gap: 1rem);
-    width: 100%;
-    min-height: 85vh;
-
-    &__title {
-        font-size: 3.75rem;
-        color: vars.$matte-black;
-    }
-
-    &__text {
-        font-size: 1.125rem;
-        color: #383838;
-        font-weight: vars.$medium-weight;
-        max-width: 450px;
-        text-align: center;
-    }
-
-    &__homepage-link {
-        display: inline-block;
-        text-decoration: underline;
-        text-decoration-color: transparent;
-        color: vars.$default-orange;
-
-        &:hover {
-            text-decoration-color: vars.$default-orange;
-        }
-    }
-}

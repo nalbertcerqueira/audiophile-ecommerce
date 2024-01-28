@@ -47,6 +47,10 @@
         }
     }
 
+    &--thin {
+        padding-block: 0.85rem;
+    }
+
     &:disabled {
         pointer-events: none;
         opacity: 0.75;
