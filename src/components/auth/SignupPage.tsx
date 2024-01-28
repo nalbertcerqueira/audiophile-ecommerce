@@ -1,13 +1,14 @@
 "use client"
 
-import { signupUseCase } from "@/@core/frontend/main/usecases/auth/signupFactory"
 import { customZodResolver } from "@/libs/zod/resolvers"
 import { AuthFormFields } from "./types/types"
+import { signupUseCase } from "@/@core/frontend/main/usecases/auth/signupFactory"
+import { PasswordInput } from "../shared/PasswordInput"
 import { signupSchema } from "./helpers/schemas"
+import { emitToast } from "@/libs/react-toastify/utils"
 import { AuthForm } from "./components/AuthForm"
 import { Input } from "../shared/Input"
 import { useForm } from "react-hook-form"
-import { emitToast } from "@/libs/react-toastify/utils"
 import Link from "next/link"
 import "./styles.scss"
 
@@ -71,26 +72,22 @@ export function SignupPageComponent() {
                     placeholder="youremail@mail.com"
                     error={errors.email?.message}
                 />
-                <Input
+                <PasswordInput
                     {...register("password")}
                     disabled={isFormBlocked}
                     name="password"
-                    type="password"
                     autocomplete="new-password"
                     id="password"
                     label="Password"
-                    placeholder="* * * * * * * * * *"
                     error={errors.password?.message}
                 />
-                <Input
+                <PasswordInput
                     {...register("passwordConfirmation")}
                     disabled={isFormBlocked}
                     name="passwordConfirmation"
-                    type="password"
                     autocomplete="new-password"
                     id="password-confirmation"
                     label="Confirm Password"
-                    placeholder="* * * * * * * * * *"
                     error={errors.passwordConfirmation?.message}
                 />
             </AuthForm>

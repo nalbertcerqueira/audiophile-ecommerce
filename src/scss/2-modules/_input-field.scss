@@ -40,3 +40,53 @@
         margin-top: 0.5rem;
     }
 }
+
+.password-field {
+    $icon-size: 1.35rem;
+    $icon-right-position: 1.5rem;
+
+    &__label-wrapper {
+        @extend .field__label-wrapper;
+    }
+
+    &__label {
+        @extend .field__label;
+
+        &--error {
+            @extend .field__label--error;
+        }
+    }
+
+    &__input-wrapper {
+        position: relative;
+    }
+
+    &__input {
+        @extend .field__input;
+        $padding-right: 1rem + $icon-size + $icon-right-position;
+        padding: 1.125rem $padding-right 1.125rem 1.5rem;
+
+        &--error {
+            @extend .field__input--error;
+        }
+    }
+
+    &__toggle-btn {
+        display: flex;
+        position: absolute;
+        right: $icon-right-position;
+        top: 50%;
+        padding: 0.25rem;
+        transform: translateY(-50%);
+    }
+
+    &__icon {
+        width: $icon-size;
+        height: $icon-size;
+        stroke: #444444;
+    }
+
+    &__error-msg {
+        @extend .field__error-msg;
+    }
+}

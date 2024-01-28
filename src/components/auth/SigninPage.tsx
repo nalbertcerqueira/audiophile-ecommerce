@@ -1,13 +1,14 @@
 "use client"
 
 import { BuiltInProviderType } from "next-auth/providers/index"
-import { GithubIcon } from "../shared/icons/GithubIcon"
 import { SocialSigninButton } from "./components/SocialSigninButton"
 import { customZodResolver } from "@/libs/zod/resolvers"
 import { AuthFormFields } from "./types/types"
 import { signinUseCase } from "@/@core/frontend/main/usecases/auth/signinFactory"
+import { PasswordInput } from "../shared/PasswordInput"
 import { signinSchema } from "./helpers/schemas"
 import { GoogleIcon } from "../shared/icons/GoogleIcon"
+import { GithubIcon } from "../shared/icons/GithubIcon"
 import { emitToast } from "@/libs/react-toastify/utils"
 import { AuthForm } from "./components/AuthForm"
 import { Input } from "../shared/Input"
@@ -97,15 +98,13 @@ export function SigninPageComponent() {
                     placeholder="youremail@mail.com"
                     error={errors.email?.message}
                 />
-                <Input
+                <PasswordInput
                     {...register("password")}
                     disabled={isFormBlocked}
                     name="password"
-                    type="password"
                     autocomplete="current-password"
                     id="password"
                     label="Password"
-                    placeholder="* * * * * * * * * *"
                     error={errors.password?.message}
                 />
             </AuthForm>
