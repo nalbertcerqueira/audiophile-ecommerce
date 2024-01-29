@@ -1,3 +1,4 @@
+import { MobileMenuModal } from "@/components/shared/mobileMenu/MobileMenuModal"
 import { ToastContainer } from "react-toastify"
 import { AppProvider } from "@/contexts"
 import { CartModal } from "@/components/shared/cart/CartModal"
@@ -14,6 +15,7 @@ export function HomeContainer({ children }: PropsWithChildren) {
                     {children}
                     <Footer />
                     <CartModal />
+                    <MobileMenuModal />
                 </AppProvider>
                 <ToastContainer draggable={false} />
             </div>

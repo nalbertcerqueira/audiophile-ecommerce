@@ -9,7 +9,9 @@
     padding-top: calc(98px + 2rem);
     position: absolute;
     background-color: rgba(vars.$black, 0.4);
-    transition: 0.35s;
+    transition:
+        opacity 0.35s,
+        visibility 0.35s;
     top: 0;
     z-index: 10;
 

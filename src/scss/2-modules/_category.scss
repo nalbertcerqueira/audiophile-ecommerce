@@ -92,10 +92,6 @@
         @include mixins.media-tablet {
             font-size: vars.$text-font-size;
         }
-
-        @include mixins.media-mobile {
-            font-size: vars.$text-font-size;
-        }
     }
 
     &__link {

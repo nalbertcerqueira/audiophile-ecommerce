@@ -19,13 +19,19 @@ export function CategoryItem({ name, link, thumb, thumbAlt }: CategoryProps) {
             </div>
             <div className="category__info">
                 <h3 className="category__name">{name.toUpperCase()}</h3>
-                <Link className="category__link" href={link}>
-                    SHOP
-                    <span>
-                        <ArrowRightIcon className="category__arrow-icon" />
-                    </span>
-                </Link>
+                <CategoryLink link={link} />
             </div>
         </div>
+    )
+}
+
+export function CategoryLink({ link }: { link: string }) {
+    return (
+        <Link className="category__link" href={link}>
+            SHOP
+            <span>
+                <ArrowRightIcon className="category__arrow-icon" />
+            </span>
+        </Link>
     )
 }
