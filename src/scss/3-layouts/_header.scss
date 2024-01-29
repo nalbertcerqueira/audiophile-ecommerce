@@ -16,13 +16,14 @@
     &__inner-container {
         @extend %inner-container;
         display: grid;
-        align-items: center;
         grid-template-columns: repeat(3, 1fr);
+        align-items: center;
+        justify-items: center;
         gap: 2rem;
         padding: 1.75rem 0;
 
         @include mixins.media-960 {
-            grid-template-columns: 1fr auto;
+            grid-template-columns: auto 1fr auto;
         }
     }
 

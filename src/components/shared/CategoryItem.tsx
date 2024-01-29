@@ -27,10 +27,10 @@ export function CategoryItem({ name, link, thumb, thumbAlt }: CategoryProps) {
 
 export function CategoryLink({ link }: { link: string }) {
     return (
-        <Link className="category__link" href={link}>
+        <Link className="category-link" href={link}>
             SHOP
             <span>
-                <ArrowRightIcon className="category__arrow-icon" />
+                <ArrowRightIcon className="category-link__arrow-icon" />
             </span>
         </Link>
     )

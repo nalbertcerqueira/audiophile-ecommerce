@@ -11,22 +11,12 @@
 .user-actions {
     @include mixins.flex($gap: 0.5rem, $items: flex-start);
 
+    @include mixins.media-960 {
+        display: none;
+    }
+
     &--hidden {
         visibility: hidden;
-    }
-
-    &__avatar {
-        flex-shrink: 0;
-        width: 42px;
-        height: 42px;
-        border: 2px solid rgba($color: vars.$white, $alpha: 0.5);
-        border-radius: 50%;
-        overflow: hidden;
-    }
-
-    &__avatar-img {
-        @extend %full-width-height;
-        object-fit: cover;
     }
 
     &__name {
@@ -70,5 +60,25 @@
 
     &__auth-link {
         display: inline-block;
+    }
+}
+
+.avatar-circle {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border: 2px solid rgba($color: vars.$white, $alpha: 0.5);
+    border-radius: 50%;
+    overflow: hidden;
+
+    &--mobile {
+        width: 3.5rem;
+        height: 3.5rem;
+        border-color: darken(vars.$very-light-grey, $amount: 30);
+    }
+
+    &__img {
+        @extend %full-width-height;
+        object-fit: cover;
     }
 }

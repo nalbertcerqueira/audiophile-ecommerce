@@ -4,8 +4,9 @@
 
 .btn {
     @extend %subtitle;
+    @include mixins.flex($gap: 0.5rem, $content: center, $items: center);
     overflow: hidden;
-    line-height: calc(1em);
+    line-height: 1em;
     padding: 1.125rem 2rem;
     white-space: nowrap;
     outline: none;
@@ -21,6 +22,10 @@
         color: vars.$white;
         background-color: vars.$default-orange;
 
+        * {
+            stroke: vars.$white;
+        }
+
         &:hover {
             background-color: vars.$light-orange;
         }
@@ -31,9 +36,18 @@
         background-color: transparent;
         border: 1px solid vars.$black;
 
+        * {
+            stroke: vars.$black;
+            transition: 0.1s;
+        }
+
         &:hover {
             color: vars.$white;
             background-color: vars.$black;
+
+            * {
+                stroke: vars.$white;
+            }
         }
     }
 
@@ -48,7 +62,15 @@
     }
 
     &--thin {
-        padding-block: 0.85rem;
+        padding-block: 1rem;
+    }
+
+    &--super-thin {
+        padding: 0.5rem 1rem;
+    }
+
+    &--rounded {
+        border-radius: 0.25rem;
     }
 
     &:disabled {
@@ -88,6 +110,10 @@
     padding: 0.25rem;
     display: flex;
 
+    * {
+        pointer-events: none;
+    }
+
     &__counter {
         @include mixins.flex($content: center, $items: center);
         position: absolute;
@@ -103,6 +129,19 @@
     &__item-qty {
         font-size: 0.8rem;
         font-weight: 500;
+    }
+}
+
+.menu-btn {
+    padding: 0.25rem;
+    display: none;
+
+    * {
+        pointer-events: none;
+    }
+
+    @include mixins.media-960 {
+        display: flex;
     }
 }
 

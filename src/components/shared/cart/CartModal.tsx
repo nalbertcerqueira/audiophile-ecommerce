@@ -1,23 +1,30 @@
 "use client"
 
 import { ModalContext } from "@/contexts/ModalContext"
-import { useContext, MouseEvent } from "react"
+import { useContext, useEffect } from "react"
 import { MiniCart } from "./MiniCart"
 import { Overlay } from "../Overlay"
 
 export function CartModal() {
     const { cartModal } = useContext(ModalContext)
+    const { close } = cartModal
 
-    function handleCloseCart(e: MouseEvent<HTMLDivElement>): void {
-        const target = e.target as HTMLElement
+    useEffect(() => {
+        function handleOutsideClick(e: globalThis.MouseEvent) {
+            const target = e.target as HTMLElement
+            const isCartButton = target.classList.contains("cart-btn")
 
-        if (!target.closest(".mini-cart")) {
-            cartModal.close()
+            if (!target.closest(".mini-cart") && !isCartButton) {
+                close()
+            }
         }
-    }
+
+        document.addEventListener("click", handleOutsideClick)
+        return () => window.removeEventListener("click", handleOutsideClick)
+    }, [close])
 
     return (
-        <Overlay isHidden={!cartModal.isOpen} onClick={handleCloseCart}>
+        <Overlay isHidden={!cartModal.isOpen}>
             <MiniCart isOpen={cartModal.isOpen} />
         </Overlay>
     )

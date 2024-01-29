@@ -1,27 +1,37 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
 
-import Link from "next/link"
-import { signOut } from "next-auth/react"
 import GenricProfileImage from "/public/imgs/profile.jpg"
+import { SessionContext } from "@/contexts/SessionContext"
+import { useContext } from "react"
+import Link from "next/link"
 
-interface UserActionsProps {
-    isLogged: boolean
-    name?: string
+interface AvatarCircleProps {
     className?: string
     avatarUrl?: string | null
 }
 
-export function UserActions({ name, className, avatarUrl, isLogged }: UserActionsProps) {
-    function logout() {
-        localStorage.removeItem("accessToken")
-        signOut({ callbackUrl: "/" })
-    }
+export function AvatarCircle({ avatarUrl, className }: AvatarCircleProps) {
+    return (
+        <div className={`avatar-circle ${className || ""}`.trim()} aria-hidden="true">
+            <img
+                alt=""
+                src={avatarUrl || GenricProfileImage.src}
+                className="avatar-circle__img"
+            />
+        </div>
+    )
+}
+
+export function UserActions() {
+    const { user, isLoading, isLogged, logout, getFirstName } = useContext(SessionContext)
+    const profileImage = user?.type !== "guest" ? user?.images.profile : null
+    const firstName = getFirstName()
 
     function renderUserActions() {
         return (
             <div>
-                <span className="user-actions__name">Hi, {name}</span>
+                <span className="user-actions__name">Hi, {firstName}</span>
                 <div className="user-actions__wrapper">
                     <Link className="user-actions__action" href="/">
                         Account
@@ -52,14 +62,8 @@ export function UserActions({ name, className, avatarUrl, isLogged }: UserAction
     }
 
     return (
-        <div className={`user-actions ${className || ""}`.trim()}>
-            <div className="user-actions__avatar" aria-hidden="true">
-                <img
-                    alt=""
-                    src={avatarUrl || GenricProfileImage.src}
-                    className="user-actions__avatar-img"
-                />
-            </div>
+        <div className={`user-actions ${isLoading ? "user-actions--hidden" : ""}`.trim()}>
+            <AvatarCircle avatarUrl={profileImage} />
             {isLogged ? renderUserActions() : renderAuthActions()}
         </div>
     )

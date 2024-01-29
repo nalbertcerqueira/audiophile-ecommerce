@@ -1,23 +1,34 @@
 "use client"
 
 import { Overlay } from "../Overlay"
-import { useState, MouseEvent } from "react"
+import { useContext, useEffect } from "react"
 import { MobileMenu } from "./MobileMenu"
+import { ModalContext } from "@/contexts/ModalContext"
 
 export function MobileMenuModal() {
-    const [isOpen, setIsOpen] = useState(true)
+    const { menuMobileModal } = useContext(ModalContext)
+    const { close } = menuMobileModal
 
-    function handleCloseCart(e: MouseEvent<HTMLDivElement>): void {
-        const target = e.target as HTMLElement
+    useEffect(() => {
+        function handleOutsideClick(e: globalThis.MouseEvent) {
+            const target = e.target as HTMLElement
+            const isMenuButton = target.classList.contains("menu-btn")
 
-        if (!target.closest(".mobile-menu")) {
-            setIsOpen(false)
+            if (!target.closest(".mobile-menu") && !isMenuButton) {
+                close()
+            }
         }
-    }
+
+        document.addEventListener("click", handleOutsideClick)
+        return () => window.removeEventListener("click", handleOutsideClick)
+    }, [close])
 
     return (
-        <Overlay className="mobile-menu-overlay" isHidden={!isOpen} onClick={handleCloseCart}>
-            <MobileMenu />
+        <Overlay
+            className={`mobile-menu-overlay ${!menuMobileModal.isOpen ? "mobile-menu-overlay--hidden" : ""}`.trim()}
+            isHidden={!menuMobileModal.isOpen}
+        >
+            <MobileMenu isOpen={menuMobileModal.isOpen} />
         </Overlay>
     )
 }

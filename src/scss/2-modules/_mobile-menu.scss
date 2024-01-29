@@ -1,10 +1,31 @@
 @use "../1-base/variables" as vars;
 @use "../1-base/mixins" as mixins;
+@use "../1-base/placeholders";
+
+%common-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+    transition: vars.$transition-duration;
+}
 
 .mobile-menu-overlay {
+    display: none;
+    transition:
+        opacity 0.35s,
+        visibility 0.35s;
+
+    @include mixins.media-960 {
+        display: block;
+    }
+
     @include mixins.media-mobile {
         padding-inline: 0;
         padding-top: 91px;
+    }
+
+    &--hidden {
+        visibility: hidden;
+        opacity: 0;
     }
 
     > .overlay__inner {
@@ -13,11 +34,24 @@
 }
 
 .mobile-menu {
+    display: none;
     max-width: 400px;
     flex-grow: 1;
     padding: 2rem;
     background-color: vars.$matte-white;
     border-radius: 0.5rem;
+    max-height: 600px;
+    overflow: hidden;
+
+    transition:
+        opacity 0.35s,
+        visibility 0.35s,
+        transform 0.35s,
+        max-height 0.35s;
+
+    @include mixins.media-960 {
+        display: block;
+    }
 
     @include mixins.media-mobile {
         border-radius: 0 0 0.5rem 0.5rem;
@@ -25,8 +59,66 @@
         padding: 2rem 1.5rem;
     }
 
+    &--hidden {
+        opacity: 0;
+        visibility: hidden;
+        max-height: 0;
+        transform: scale(0.7);
+    }
+
     &__categories {
         @include mixins.flex($gap: 2rem, $direction: column);
+    }
+
+    &__separator {
+        width: 100%;
+        height: 1px;
+        display: block;
+        background-color: darken(vars.$very-light-grey, $amount: 10);
+        margin: 1.5rem 0 2rem;
+    }
+
+    &__user-actions {
+        @include mixins.flex($gap: 1.25rem, $items: center);
+    }
+
+    &__title {
+        line-height: calc(1em + 0.5rem);
+        letter-spacing: 0;
+        font-size: 1.125rem;
+        color: lighten(vars.$matte-black, 5);
+    }
+
+    &__links {
+        @include mixins.flex($gap: 0.75rem);
+        margin-top: 0.25rem;
+    }
+
+    &__user-link {
+        @include mixins.flex($items: center, $gap: 0.25rem);
+        position: relative;
+        color: lighten(vars.$matte-black, 5);
+        font-size: 1rem;
+        font-weight: 400;
+        transition: color vars.$transition-duration;
+
+        &:hover {
+            color: vars.$default-orange;
+
+            .mobile-menu__auth-icon {
+                stroke: vars.$default-orange;
+            }
+        }
+    }
+
+    &__auth-icon {
+        @extend %common-icon;
+        stroke: lighten(vars.$matte-black, 5);
+        stroke-width: 1.65;
+    }
+
+    &__user-icon {
+        @extend %common-icon;
     }
 }
 

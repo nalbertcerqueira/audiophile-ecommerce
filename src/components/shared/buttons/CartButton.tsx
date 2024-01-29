@@ -16,7 +16,7 @@ export function CartButton() {
 
     return (
         <button
-            onClick={cartModal.toggle}
+            onClick={() => cartModal.toggle()}
             className="cart-btn"
             type="button"
             aria-label="toggle cart"
