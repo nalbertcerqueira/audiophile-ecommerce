@@ -82,7 +82,7 @@ export function SigninPageComponent() {
                     CONTINUE WITH GITHUB
                 </SocialSigninButton>
             </div>
-            <div className="form-container__division">Or</div>
+            <div className="form-container__separator">Or</div>
             <AuthForm
                 submitBtn="LOGIN"
                 isSubmitting={isFormBlocked}

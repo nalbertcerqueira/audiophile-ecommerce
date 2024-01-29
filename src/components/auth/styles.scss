@@ -31,7 +31,7 @@
         @include mixins.flex($gap: 1rem, $direction: column);
     }
 
-    &__division {
+    &__separator {
         @include mixins.flex($gap: 1.5rem, $content: center, $items: center);
         margin: 1rem 0;
         font-size: 16px;

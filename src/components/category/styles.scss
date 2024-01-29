@@ -18,8 +18,8 @@
         }
     }
 
-    &__division {
-        @extend %division;
+    &__separator {
+        @extend %separator;
     }
 
     &__title {

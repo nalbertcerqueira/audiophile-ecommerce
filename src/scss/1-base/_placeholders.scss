@@ -1,7 +1,7 @@
 @use "./variables" as vars;
 @use "./mixins" as mixins;
 
-%division {
+%separator {
     position: absolute;
     width: 100%;
     background-color: rgba(vars.$white, 0.2);

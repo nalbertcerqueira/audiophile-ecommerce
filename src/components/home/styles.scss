@@ -53,8 +53,8 @@
         }
     }
 
-    &__division {
-        @extend %division;
+    &__separator {
+        @extend %separator;
     }
 
     &__content-wrapper {
