@@ -1,12 +1,13 @@
 "use client"
 
-import { getUserUseCase } from "@/@core/frontend/main/usecases/user/getUserFactory"
-import { PropsWithChildren, createContext, useState, useEffect } from "react"
 import {
     AuthenticatedUser,
     GuestUser
 } from "@/@core/frontend/domain/gateways/user/getUserGateway"
-import { useSession } from "next-auth/react"
+import { getUserUseCase } from "@/@core/frontend/main/usecases/user/getUserFactory"
+import { toCapitalized } from "@/utils/helpers"
+import { PropsWithChildren, createContext, useState, useEffect } from "react"
+import { useSession, signOut } from "next-auth/react"
 
 type UserBasicInfo = AuthenticatedUser | GuestUser
 
@@ -19,6 +20,8 @@ interface SessionContextProps {
     isLogged: boolean
     isLoading: boolean
     user: AuthenticatedUser | GuestUser | null
+    logout: () => void
+    getFirstName: () => string | null
 }
 
 export const SessionContext = createContext<SessionContextProps>({} as SessionContextProps)
@@ -36,9 +39,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
     }, [nextAuthSession.status, nextAuthSession.data?.accessToken])
 
     useEffect(() => {
-        if (nextAuthSession.status !== "loading") {
-            validateSession()
-        }
+        nextAuthSession.status !== "loading" && validateSession()
     }, [nextAuthSession.status])
 
     async function validateSession() {
@@ -68,8 +69,21 @@ export function SessionProvider({ children }: PropsWithChildren) {
         }
     }
 
+    function logout() {
+        localStorage.removeItem("accessToken")
+        signOut({ callbackUrl: "/" })
+    }
+
+    function getFirstName(): string | null {
+        if (user?.type === "authenticated" || user?.type === "external") {
+            return toCapitalized(user.name.split(" ")[0]) || null
+        }
+
+        return null
+    }
+
     return (
-        <SessionContext.Provider value={{ ...status, user }}>
+        <SessionContext.Provider value={{ ...status, user, logout, getFirstName }}>
             {children}
         </SessionContext.Provider>
     )
