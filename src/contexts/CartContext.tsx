@@ -6,7 +6,9 @@ import {
     useState,
     useEffect,
     useReducer,
-    useContext
+    useContext,
+    useRef,
+    MutableRefObject
 } from "react"
 import {
     CartAwaitingMessage,
@@ -34,6 +36,7 @@ interface CartAdditionParams {
 interface CartContextProps {
     cart: CartProps
     loadingState: CartLoadingState
+    requestCount: MutableRefObject<number>
     addItem: (productId: string, quantity: number, options?: ActionOptions) => Promise<boolean>
     clearCart: () => Promise<boolean>
     removeItem: (productId: string, quantity: number) => Promise<boolean>
@@ -49,6 +52,7 @@ const cartInitialState = Cart.empty().toJSON()
 export const CartContext = createContext<CartContextProps>({} as CartContextProps)
 
 export function CartProvider({ children }: PropsWithChildren) {
+    const requestCount = useRef(0)
     const sessionState = useContext(SessionContext)
     const [cart, setCart] = useState<CartProps>(cartInitialState)
     const [loadingState, loadingDispatch] = useReducer(
@@ -75,7 +79,7 @@ export function CartProvider({ children }: PropsWithChildren) {
 
         await clearCartUseCase
             .execute()
-            .then((cart) => (cart ? setCart(cart.toJSON()) : null))
+            .then((cart) => handleCartUpdate(cart))
             .catch((error) => handleCartErrors(error, true))
             .finally(() => loadingDispatch({ type: "DISABLE" }))
 
@@ -89,7 +93,7 @@ export function CartProvider({ children }: PropsWithChildren) {
 
         await removeCartItemUseCase
             .execute({ productId, quantity })
-            .then((cart) => (cart ? setCart(cart.toJSON()) : null))
+            .then((cart) => handleCartUpdate(cart))
             .catch((error) => handleCartErrors(error, true))
 
         return true
@@ -150,13 +154,19 @@ export function CartProvider({ children }: PropsWithChildren) {
         }
     }
 
-    function handleCartAddition(params: CartAdditionParams, toastId?: Id | null): void {
+    function handleCartUpdate(cart: Cart | null) {
+        if (cart) {
+            setCart(cart.toJSON())
+        }
+    }
+
+    function handleCartAddition(params: CartAdditionParams, toastId: Id | null): void {
         const { cart, productId, quantity } = params
 
         if (cart) {
             const cartProps = cart.toJSON()
             const addedItem = cartProps.items.find((item) => item.productId === productId)
-            setCart(cart.toJSON())
+            handleCartUpdate(cart)
             if (toastId) {
                 emitToast(
                     "success",
@@ -173,6 +183,7 @@ export function CartProvider({ children }: PropsWithChildren) {
     return (
         <CartContext.Provider
             value={{
+                requestCount,
                 loadingState,
                 cart,
                 addItem,

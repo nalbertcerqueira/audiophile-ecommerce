@@ -20,10 +20,10 @@ export function AddProductAction({ productId }: { productId: string }) {
 
         addItem(productId, count, { emitToast: true })
             .then((res) => {
+                updateCartStatus({ type: "DISABLE", payload: { productId } })
                 return res ? updateTaxes() : null
             })
             .then(() => {
-                updateCartStatus({ type: "DISABLE", payload: { productId } })
                 updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
             })
     }

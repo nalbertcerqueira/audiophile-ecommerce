@@ -18,10 +18,12 @@ interface CartItemProps {
 }
 
 export function CartItem({ readOnly, name, productId, slug, quantity, price }: CartItemProps) {
-    const { addItem, removeItem, updateCartStatus, loadingState } = useContext(CartContext)
-    const { updateTaxes, updateCheckoutStatus, status } = useContext(CheckoutContext)
+    const { updateTaxes, updateCheckoutStatus } = useContext(CheckoutContext)
+    const { addItem, removeItem, updateCartStatus, loadingState, requestCount } =
+        useContext(CartContext)
 
     async function handleRemoveItem() {
+        const requestId = (requestCount.current += 1)
         const cartTimer = updateCartStatus({ type: "ENABLE", payload: { productId } }, 250)
         const checkoutTimer = updateCheckoutStatus(
             { isCheckingOut: false, isLoadingTaxes: true },
@@ -32,21 +34,18 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
             .then((res) => {
                 cartTimer && clearTimeout(cartTimer)
                 updateCartStatus({ type: "DISABLE", payload: { productId } })
-
-                if (res) {
-                    if (status.isLoadingTaxes) {
-                        updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: true })
-                    }
-                    return updateTaxes()
-                }
+                return res ? updateTaxes() : null
             })
             .then(() => {
                 checkoutTimer && clearTimeout(checkoutTimer)
-                updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
+                if (requestCount.current === requestId) {
+                    updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
+                }
             })
     }
 
     async function handleAddItem() {
+        const requestId = (requestCount.current += 1)
         const cartTimer = updateCartStatus({ type: "ENABLE", payload: { productId } }, 250)
         const checkoutTimer = updateCheckoutStatus(
             { isCheckingOut: false, isLoadingTaxes: true },
@@ -57,17 +56,13 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
             .then((res) => {
                 cartTimer && clearTimeout(cartTimer)
                 updateCartStatus({ type: "DISABLE", payload: { productId } })
-
-                if (res) {
-                    if (status.isLoadingTaxes) {
-                        updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: true })
-                    }
-                    return updateTaxes()
-                }
+                return res ? updateTaxes() : null
             })
             .then(() => {
                 checkoutTimer && clearTimeout(checkoutTimer)
-                updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
+                if (requestCount.current === requestId) {
+                    updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
+                }
             })
     }
 
