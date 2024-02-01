@@ -9,13 +9,14 @@ import Link from "next/link"
 interface AvatarCircleProps {
     className?: string
     avatarUrl?: string | null
+    alt?: string
 }
 
-export function AvatarCircle({ avatarUrl, className }: AvatarCircleProps) {
+export function AvatarCircle({ avatarUrl, alt, className }: AvatarCircleProps) {
     return (
-        <div className={`avatar-circle ${className || ""}`.trim()} aria-hidden="true">
+        <div className={`avatar-circle ${className || ""}`.trim()}>
             <img
-                alt=""
+                alt={alt}
                 src={avatarUrl || GenricProfileImage.src}
                 className="avatar-circle__img"
             />
@@ -50,7 +51,7 @@ export function UserActions() {
             <div className="user-actions__auth">
                 <div>
                     <Link className="user-actions__auth-link" href="/signin">
-                        Login
+                        Signin
                     </Link>
                     <span> or</span>
                 </div>
@@ -63,7 +64,10 @@ export function UserActions() {
 
     return (
         <div className={`user-actions ${isLoading ? "user-actions--hidden" : ""}`.trim()}>
-            <AvatarCircle avatarUrl={profileImage} />
+            <AvatarCircle
+                alt={isLogged && firstName ? `${firstName}'s profile image` : ""}
+                avatarUrl={profileImage}
+            />
             {isLogged ? renderUserActions() : renderAuthActions()}
         </div>
     )

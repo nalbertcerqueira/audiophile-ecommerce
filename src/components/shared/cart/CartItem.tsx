@@ -7,6 +7,7 @@ import { CartContext } from "@/contexts/CartContext"
 import { staticProductImages } from "@/utils/imageMap"
 import Image from "next/image"
 import { CheckoutContext } from "@/contexts/CheckoutContext"
+import { ModalContext } from "@/contexts/ModalContext"
 
 interface CartItemProps {
     readOnly?: boolean
@@ -18,6 +19,7 @@ interface CartItemProps {
 }
 
 export function CartItem({ readOnly, name, productId, slug, quantity, price }: CartItemProps) {
+    const { cartModal } = useContext(ModalContext)
     const { updateTaxes, updateCheckoutStatus } = useContext(CheckoutContext)
     const { addItem, removeItem, updateCartStatus, loadingState, requestCount } =
         useContext(CartContext)
@@ -74,18 +76,29 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
     }
 
     return (
-        <div className="cart-item">
+        <div
+            aria-label={`${quantity} items of ${name} with ${price} dollars per unit`}
+            className="cart-item"
+        >
             <Image
+                aria-hidden="true"
                 className="cart-item__thumb"
                 src={staticProductImages[slug].cartThumb}
-                alt={slug.split("-").join(" ")}
+                alt=""
             />
             <div className="cart-item__info">
                 <div>
                     <p className="cart-item__name">{name.toUpperCase()}</p>
-                    <p className="cart-item__price">{formatCurrency(price)}</p>
+                    <p aria-label={`${price} dollars`} className="cart-item__price">
+                        {formatCurrency(price)}
+                    </p>
                 </div>
-                {readOnly && <p className="cart-item__qty">{`x${quantity}`}</p>}
+                {readOnly && (
+                    <p
+                        aria-label={`${quantity} item${quantity > 1 ? "s" : ""}`.trim()}
+                        className="cart-item__qty"
+                    >{`x${quantity}`}</p>
+                )}
             </div>
             {!readOnly && (
                 <Counter
@@ -94,6 +107,7 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
                     decrement={handleRemoveItem}
                     increment={handleAddItem}
                     className="cart-item__counter"
+                    ariaLive={!readOnly ? (cartModal.isOpen ? "polite" : "off") : undefined}
                 />
             )}
         </div>

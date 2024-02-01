@@ -1,7 +1,6 @@
 "use client"
 
 import { CartContext } from "@/contexts/CartContext"
-import { formatCurrency } from "@/utils/helpers"
 import { SummaryField } from "./SummaryField"
 import { CartItem } from "./CartItem"
 import { useContext } from "react"
@@ -31,10 +30,26 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
     }
 
     return (
-        <div className={`mini-cart ${isOpen ? "" : "mini-cart--hidden"}`.trim()}>
+        <div
+            aria-hidden={isOpen ? "false" : "true"}
+            id="shopping-cart"
+            className={`mini-cart ${isOpen ? "" : "mini-cart--hidden"}`.trim()}
+        >
+            {isOpen && (
+                <span className="screen-reader" aria-live="polite">
+                    shopping cart is open
+                </span>
+            )}
+
             <div className="mini-cart__header">
-                <h3 className="mini-cart__title">
-                    CART <span className="mini-cart__count">({cart.itemCount})</span>
+                <h3
+                    aria-label={`cart with ${cart.itemCount} items`}
+                    className="mini-cart__title"
+                >
+                    CART{" "}
+                    <span aria-label={`${cart.itemCount} items`} className="mini-cart__count">
+                        ({cart.itemCount})
+                    </span>
                 </h3>
                 <button
                     onClick={handleClearCart}
@@ -58,11 +73,14 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
                 ))}
             </div>
             <div className="mini-cart__total">
-                <SummaryField name="TOTAL" value={formatCurrency(cart.totalSpent)} />
+                <SummaryField
+                    ariaLabel={`total of: ${cart.totalSpent} dollars`}
+                    name="TOTAL"
+                    value={cart.totalSpent}
+                />
             </div>
             <Link
                 href="/checkout"
-                role="button"
                 className="btn btn--primary mini-cart__checkout-btn"
                 type="button"
             >

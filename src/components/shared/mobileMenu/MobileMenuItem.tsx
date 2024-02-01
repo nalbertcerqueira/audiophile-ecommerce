@@ -6,18 +6,19 @@ export interface MobileMenuItem {
     name: string
     link: string
     thumb: string | StaticImageData
-    thumbAlt: string
 }
 
-export function MobileMenuItem({ name, thumb, thumbAlt, link }: MobileMenuItem) {
+export function MobileMenuItem({ name, thumb, link }: MobileMenuItem) {
     return (
         <div key={name} className="mobile-category">
-            <div className="mobile-category__thumb-box">
-                <Image src={thumb} className="mobile-category__thumb" alt={thumbAlt} />
+            <div aria-hidden="true" className="mobile-category__thumb-box">
+                <Image src={thumb} className="mobile-category__thumb" alt="" />
             </div>
             <div className="mobile-category__info">
-                <h3 className="mobile-category__name">{name.toUpperCase()}</h3>
-                <CategoryLink link={link} />
+                <p aria-hidden="true" className="mobile-category__name">
+                    {name.toUpperCase()}
+                </p>
+                <CategoryLink ariaLabel={name} link={link} />
             </div>
         </div>
     )

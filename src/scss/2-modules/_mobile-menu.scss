@@ -34,6 +34,7 @@
 }
 
 .mobile-menu {
+    position: relative;
     display: none;
     max-width: 400px;
     flex-grow: 1;
@@ -90,8 +91,8 @@
     }
 
     &__links {
-        @include mixins.flex($gap: 0.75rem);
-        margin-top: 0.25rem;
+        @include mixins.flex($gap: 1rem);
+        margin-top: 0.5rem;
     }
 
     &__user-link {
@@ -153,6 +154,7 @@
         font-size: vars.$text-font-size;
         line-height: 1em;
         font-weight: 700;
+        letter-spacing: 1px;
         text-align: center;
     }
 }

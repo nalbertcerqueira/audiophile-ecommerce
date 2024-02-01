@@ -124,9 +124,6 @@
         width: 1.5rem;
         height: 1.5rem;
         color: vars.$white;
-    }
-
-    &__item-qty {
         font-size: 0.8rem;
         font-weight: 500;
     }
@@ -135,10 +132,6 @@
 .menu-btn {
     padding: 0.25rem;
     display: none;
-
-    * {
-        pointer-events: none;
-    }
 
     @include mixins.media-960 {
         display: flex;

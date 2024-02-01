@@ -13,7 +13,13 @@ export function MobileMenuButton() {
     useEffect(() => menuMobileModal.close, [menuMobileModal.close, pathname])
 
     return (
-        <button onClick={() => menuMobileModal.toggle()} className="menu-btn" type="button">
+        <button
+            type="button"
+            className="menu-btn"
+            onClick={() => menuMobileModal.toggle()}
+            aria-label="toggle navigation menu"
+            aria-controls="mobile-menu"
+        >
             <MenuIcon />
         </button>
     )

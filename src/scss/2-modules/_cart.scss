@@ -3,6 +3,7 @@
 @use "../1-base/placeholders";
 
 .mini-cart {
+    position: relative;
     padding: 2rem;
     background-color: vars.$white;
     border-radius: 0.5rem;

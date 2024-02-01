@@ -19,14 +19,13 @@ export function CartButton() {
             onClick={() => cartModal.toggle()}
             className="cart-btn"
             type="button"
-            aria-label="toggle cart"
+            aria-label="toggle shopping cart"
+            aria-controls="shopping-cart"
         >
             <CartIcon />
             {cart.itemCount > 0 && (
-                <span className="cart-btn__counter">
-                    <p className="cart-btn__item-qty">
-                        {cart.itemCount > 99 ? 99 : cart.itemCount}
-                    </p>
+                <span aria-hidden="false" className="cart-btn__counter">
+                    {cart.itemCount > 99 ? 99 : cart.itemCount}
                 </span>
             )}
         </button>

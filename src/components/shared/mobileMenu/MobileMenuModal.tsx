@@ -1,9 +1,9 @@
 "use client"
 
+import { ModalContext } from "@/contexts/ModalContext"
+import { MobileMenu } from "./MobileMenu"
 import { Overlay } from "../Overlay"
 import { useContext, useEffect } from "react"
-import { MobileMenu } from "./MobileMenu"
-import { ModalContext } from "@/contexts/ModalContext"
 
 export function MobileMenuModal() {
     const { menuMobileModal } = useContext(ModalContext)

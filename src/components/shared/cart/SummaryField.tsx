@@ -1,13 +1,18 @@
+import { formatCurrency } from "@/utils/helpers"
+
 interface SummaryFieldProps {
     name: string
-    value: string
+    value: number
+    ariaLabel?: string
 }
 
-export function SummaryField({ name, value }: SummaryFieldProps) {
+export function SummaryField({ name, value, ariaLabel }: SummaryFieldProps) {
     return (
-        <p className="summary-field">
+        <p aria-label={ariaLabel} className="summary-field">
             <span className="summary-field__name">{name}</span>
-            <span className="summary-field__value">{value}</span>
+            <span aria-label={`${value} dollars`} className="summary-field__value">
+                {formatCurrency(value)}
+            </span>
         </p>
     )
 }
