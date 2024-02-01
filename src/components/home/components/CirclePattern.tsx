@@ -1,4 +1,4 @@
-export function CirclePatterns({ className }: { className?: string }) {
+export function CirclePattern({ className }: { className?: string }) {
     return (
         <svg
             className={className}

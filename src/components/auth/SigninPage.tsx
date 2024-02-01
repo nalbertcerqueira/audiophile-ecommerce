@@ -84,6 +84,7 @@ export function SigninPageComponent() {
             </div>
             <div className="form-container__separator">Or</div>
             <AuthForm
+                ariaLabel={"signin with your own credentials"}
                 submitBtn="LOGIN"
                 isSubmitting={isFormBlocked}
                 submitHandler={handleSubmit(handleSuccessfulSubmit)}
@@ -102,7 +103,7 @@ export function SigninPageComponent() {
                     {...register("password")}
                     disabled={isFormBlocked}
                     name="password"
-                    autocomplete="current-password"
+                    autocomplete="new-password"
                     id="password"
                     label="Password"
                     error={errors.password?.message}

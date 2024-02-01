@@ -9,34 +9,34 @@ import EarphoneBannerTablet from "/public/imgs/home/earphone-banner-tablet.jpg"
 import EarphoneBannerMobile from "/public/imgs/home/earphone-banner-mobile.jpg"
 
 import Link from "next/link"
-import { CirclePatterns } from "@/components/shared/CirclePattern"
+import { CirclePattern } from "@/components/home/components/CirclePattern"
 import { ResponsiveImages } from "@/components/shared/ResponsiveImages"
 
 export function ProductGridSection() {
     return (
-        <section className="product-grid">
+        <section aria-label="Some of Audiophile best products" className="product-grid">
             <div className="product-grid__inner-container">
                 <div className="product-grid__large-item">
                     <div className="featured-product">
                         <div className="featured-product__img-box">
-                            <CirclePatterns className="featured-product__circle-patterns" />
+                            <CirclePattern className="featured-product__circle-patterns" />
                             <ResponsiveImages
                                 images={[
                                     {
                                         ...LargeSpeaker,
-                                        alt: "ZX9 speaker",
+                                        alt: "an image of ZX9 speaker",
                                         className:
                                             "featured-product__img featured-product__img--desktop"
                                     },
                                     {
                                         ...LargeSpeakerTablet,
-                                        alt: "ZX9 speaker",
+                                        alt: "an image of ZX9 speaker",
                                         className:
                                             "featured-product__img featured-product__img--tablet"
                                     },
                                     {
                                         ...LargeSpeakerMobile,
-                                        alt: "ZX9 speaker",
+                                        alt: "an image of ZX9 speaker",
                                         className:
                                             "featured-product__img featured-product__img--mobile"
                                     }
@@ -54,7 +54,6 @@ export function ProductGridSection() {
                                 sound.
                             </p>
                             <Link
-                                role="button"
                                 className="btn btn--normal featured-product__link"
                                 href="/speakers/zx9-speaker"
                             >
@@ -66,7 +65,6 @@ export function ProductGridSection() {
                 <div className="product-grid__medium-item">
                     <div className="medium-banner">
                         <ResponsiveImages
-                            aria-hidden="true"
                             images={[
                                 {
                                     ...SpeakerBanner,
@@ -86,12 +84,8 @@ export function ProductGridSection() {
                             ]}
                         />
                         <div className="info-wrapper">
-                            <h3 className="info-wrapper__name">ZX7 SPEAKER</h3>
-                            <Link
-                                className="btn btn--empty"
-                                role="button"
-                                href="/speakers/zx7-speaker"
-                            >
+                            <h2 className="info-wrapper__name">ZX7 SPEAKER</h2>
+                            <Link className="btn btn--empty" href="/speakers/zx7-speaker">
                                 SEE PRODUCT
                             </Link>
                         </div>
@@ -100,7 +94,6 @@ export function ProductGridSection() {
                 <div className="product-grid__small-item">
                     <div className="small-banner">
                         <ResponsiveImages
-                            aria-hidden="true"
                             images={[
                                 {
                                     ...EarphoneBanner,
@@ -124,12 +117,8 @@ export function ProductGridSection() {
                 <div className="product-grid__small-item">
                     <div className="small-info">
                         <div className="info-wrapper">
-                            <h3 className="info-wrapper__name">YX1 EARPHONES</h3>
-                            <Link
-                                className="btn btn--empty"
-                                role="button"
-                                href="/earphones/yx1-earphones"
-                            >
+                            <h2 className="info-wrapper__name">YX1 EARPHONES</h2>
+                            <Link className="btn btn--empty" href="/earphones/yx1-earphones">
                                 SEE PRODUCT
                             </Link>
                         </div>

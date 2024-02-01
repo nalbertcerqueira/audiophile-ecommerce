@@ -1,3 +1,5 @@
+"use client"
+
 import { RingLoader } from "@/components/shared/loaders/RingLoader"
 import { FormEvent, ReactNode } from "react"
 
@@ -5,12 +7,15 @@ interface AuthFormProps {
     children: ReactNode
     isSubmitting: boolean
     submitBtn: ReactNode
+    ariaLabel?: string
     submitHandler: (e: FormEvent<HTMLFormElement>) => void
 }
 
-export function AuthForm({ children, isSubmitting, submitBtn, submitHandler }: AuthFormProps) {
+export function AuthForm(props: AuthFormProps) {
+    const { children, isSubmitting, submitBtn, ariaLabel, submitHandler } = props
+
     return (
-        <form onSubmit={submitHandler} className="auth-form">
+        <form aria-label={ariaLabel} onSubmit={submitHandler} className="auth-form">
             <div className="auth-form__input-wrapper">{children}</div>
             <button
                 disabled={isSubmitting}

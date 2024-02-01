@@ -86,10 +86,19 @@ button {
     border: none;
 }
 
+button:focus-visible {
+    outline: 1px solid white;
+    border-radius: 0.125rem;
+}
+
 input {
     outline: none;
 }
 
 fieldset {
     border: none;
+}
+
+svg {
+    pointer-events: none;
 }

@@ -9,6 +9,7 @@ import {
 interface InputProps {
     name: string
     type: HTMLInputTypeAttribute
+    ariaLabel?: string
     disabled?: boolean
     label?: string
     id?: string
@@ -28,6 +29,7 @@ export const Input = forwardRef(function Input(
         return (
             <div className="field__label-wrapper">
                 <label
+                    aria-label={props.ariaLabel}
                     htmlFor={props.id}
                     className={`field__label ${
                         props.error ? "field__label--error" : ""
@@ -43,6 +45,8 @@ export const Input = forwardRef(function Input(
         <div className="field">
             {props.label && renderLabel()}
             <input
+                aria-invalid={props.error ? "true" : "false"}
+                aria-describedby={`${props.name}-error`}
                 disabled={props.disabled}
                 value={props.value}
                 ref={ref}
@@ -55,7 +59,15 @@ export const Input = forwardRef(function Input(
                 placeholder={props.placeholder}
                 autoComplete={props.autocomplete}
             />
-            {props.error && <p className="field__error-msg">{props.error}</p>}
+            {props.error && (
+                <p
+                    id={`${props.name}-error`}
+                    aria-live="assertive"
+                    className="field__error-msg"
+                >
+                    {props.error}
+                </p>
+            )}
         </div>
     )
 })

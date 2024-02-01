@@ -254,7 +254,6 @@
         left: 50%;
         top: -20%;
         transform: translateX(-50%);
-        pointer-events: none;
 
         @include mixins.media-tablet {
             top: 0;

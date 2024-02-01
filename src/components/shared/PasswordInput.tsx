@@ -41,9 +41,11 @@ export const PasswordInput = forwardRef(function PasswordInput(
             {props.label && renderLabel()}
             <div className="password-field__input-wrapper">
                 <input
+                    aria-invalid={props.error ? "true" : "false"}
+                    aria-describedby={`${props.name}-error`}
+                    ref={ref}
                     disabled={props.disabled}
                     value={props.value}
-                    ref={ref}
                     onBlur={props.onBlur}
                     onChange={props.onChange}
                     className={`password-field__input ${props.error ? "password-field__input--error" : ""}`.trim()}
@@ -54,6 +56,7 @@ export const PasswordInput = forwardRef(function PasswordInput(
                     autoComplete={props.autocomplete}
                 />
                 <button
+                    aria-label="hide, or reveal password"
                     onClick={() => setIsVisible((prevState) => !prevState)}
                     type="button"
                     className="password-field__toggle-btn"
@@ -65,7 +68,15 @@ export const PasswordInput = forwardRef(function PasswordInput(
                     )}
                 </button>
             </div>
-            {props.error && <p className="password-field__error-msg">{props.error}</p>}
+            {props.error && (
+                <p
+                    id={`${props.name}-error`}
+                    aria-live="assertive"
+                    className="password-field__error-msg"
+                >
+                    {props.error}
+                </p>
+            )}
         </div>
     )
 })

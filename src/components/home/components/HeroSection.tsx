@@ -22,7 +22,6 @@ export function HeroSection() {
                         </div>
                         <Link
                             className="btn btn--primary hero__btn"
-                            role="button"
                             href="/headphones/xx99-mark-two-headphones"
                         >
                             SEE PRODUCT
@@ -34,12 +33,12 @@ export function HeroSection() {
                 images={[
                     {
                         ...HeroImage,
-                        alt: "XX99 Mark II black headset",
+                        alt: "XX99 Mark II black headphones",
                         className: "hero-banner hero-banner--desktop"
                     },
                     {
                         ...HeroImageTablet,
-                        alt: "XX99 Mark II black headset",
+                        alt: "XX99 Mark II black headphones",
                         className: "hero-banner hero-banner--tablet"
                     }
                 ]}

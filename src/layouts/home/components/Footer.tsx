@@ -7,9 +7,9 @@ import Link from "next/link"
 
 export function Footer() {
     const externalLinks = [
-        { ariaLabel: "go to audiophile oficial page on facebook", icon: FacebookIcon },
-        { ariaLabel: "go to audiophile oficial page on instagram", icon: InstagramIcon },
-        { ariaLabel: "go to audiophile oficial page on twitter", icon: TwitterIcon }
+        { ariaLabel: "go to audiophile page on facebook", icon: FacebookIcon },
+        { ariaLabel: "go to audiophile page on instagram", icon: InstagramIcon },
+        { ariaLabel: "go to audiophile page on twitter", icon: TwitterIcon }
     ]
 
     return (
@@ -48,7 +48,8 @@ export function Footer() {
                             <a
                                 target="_blank"
                                 rel="noreferrer noopener"
-                                aria-label="nalbert cerqueira's github"
+                                aria-label="nalbert cerqueira. Access my github page"
+                                aria-describedby="link-description"
                                 className="footer__github"
                                 href="https://github.com/nalbertcerqueira"
                             >
@@ -56,7 +57,7 @@ export function Footer() {
                             </a>
                         </p>
                     </div>
-                    <p className="footer__copyright">Copyright 2021. All Rights Reserved</p>
+                    <p className="footer__copyright">Copyright 2024. All Rights Reserved</p>
                 </div>
             </div>
         </footer>
