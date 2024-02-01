@@ -58,11 +58,15 @@
     }
 
     &__title {
-        white-space: nowrap;
+        font-size: vars.$h3-font-size;
+        line-height: vars.$h3-line-height;
         font-weight: vars.$extra-bold-weight;
+        letter-spacing: vars.$h3-letter-spacing;
+        white-space: nowrap;
 
         @include mixins.media-mobile {
             font-size: 1.5rem;
+            letter-spacing: 1px;
         }
     }
 

@@ -15,7 +15,12 @@ export function ProductDetails({ features, accessories }: ProductDetailsProps) {
         if (accessories) {
             return accessories.map((accessory, i) => (
                 <li key={i} className="product-details__accessory">
-                    <span className="product-details__qty">{accessory.quantity}x</span>
+                    <span
+                        aria-label={`${accessory.quantity}`}
+                        className="product-details__qty"
+                    >
+                        {accessory.quantity}x
+                    </span>
                     {accessory.item}
                 </li>
             ))
@@ -43,11 +48,11 @@ export function ProductDetails({ features, accessories }: ProductDetailsProps) {
     return (
         <div className="product-details">
             <div className="product-details__about">
-                <h3 className="product-details__title">FEATURES</h3>
+                <h2 className="product-details__title">FEATURES</h2>
                 <div>{renderFeatures()}</div>
             </div>
             <div className="product-details__wrapper">
-                <h3 className="product-details__title">IN THE BOX</h3>
+                <h2 className="product-details__title">IN THE BOX</h2>
                 <ul className="product-details__accessories">{renderAccessories()}</ul>
             </div>
         </div>

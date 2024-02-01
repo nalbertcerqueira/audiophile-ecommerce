@@ -91,6 +91,7 @@
 
         @include mixins.media-tablet {
             font-size: vars.$text-font-size;
+            letter-spacing: 1px;
         }
     }
 }

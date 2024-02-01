@@ -6,27 +6,26 @@ interface ProductCardProps {
     thumbs: ResponsiveImageSet
     name: string
     link: string
-    thumbAlt: string
 }
 
-export function OtherProduct({ thumbs, name, link, thumbAlt }: ProductCardProps) {
+export function OtherProduct({ thumbs, name, link }: ProductCardProps) {
     return (
         <div className="other-product">
             <ResponsiveImages
                 images={[
                     {
                         ...thumbs.desktop,
-                        alt: thumbAlt,
+                        alt: "",
                         className: "other-product__thumb other-product__thumb--desktop"
                     },
                     {
                         ...thumbs.tablet,
-                        alt: thumbAlt,
+                        alt: "",
                         className: "other-product__thumb other-product__thumb--tablet"
                     },
                     {
                         ...thumbs.mobile,
-                        alt: thumbAlt,
+                        alt: "",
                         className: "other-product__thumb other-product__thumb--mobile"
                     }
                 ]}

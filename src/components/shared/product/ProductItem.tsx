@@ -29,6 +29,34 @@ type ProductItemProps = PreviewProps | ProductProps
 export function ProductItem(props: ProductItemProps) {
     const { id, name, slug, description, images, type, className } = props
 
+    function renderProductLabel() {
+        if (!props.new) {
+            return null
+        }
+        return <span className={`${type}__label`}>NEW PRODUCT</span>
+    }
+
+    function renderTitle() {
+        if (type === "preview") {
+            return <h2 className={`${type}__name`}>{name.toUpperCase()}</h2>
+        }
+        return <h1 className={`${type}__name`}>{name.toUpperCase()}</h1>
+    }
+
+    function renderLinkOrAction() {
+        if (type === "product") {
+            return <AddProductAction productId={id} />
+        }
+        return <ProductLink href={`/${props.category}/${slug}`} />
+    }
+
+    function renderPrice() {
+        if (type === "preview") {
+            return null
+        }
+        return <p className="product__price">{formatCurrency(props.price)}</p>
+    }
+
     return (
         <div className={`${type} ${className || ""}`.trim()}>
             <div className={`${type}__img-box`}>
@@ -36,34 +64,28 @@ export function ProductItem(props: ProductItemProps) {
                     images={[
                         {
                             ...images.desktop,
-                            alt: name,
+                            alt: `a detailed image of ${name}`,
                             className: `${type}__img ${type}__img--desktop`
                         },
                         {
                             ...images.tablet,
-                            alt: name,
+                            alt: `a detailed image of ${name}`,
                             className: `${type}__img ${type}__img--tablet`
                         },
                         {
                             ...images.mobile,
-                            alt: name,
+                            alt: `a detailed image of ${name}`,
                             className: `${type}__img ${type}__img--mobile`
                         }
                     ]}
                 />
             </div>
             <div className={`${type}__info`}>
-                {props.new ? <span className={`${type}__label`}>NEW PRODUCT</span> : null}
-                <h2 className={`${type}__name`}>{name.toUpperCase()}</h2>
+                {renderProductLabel()}
+                {renderTitle()}
                 <p className={`${type}__description`}>{description}</p>
-                {type === "product" && (
-                    <p className="product__price">{formatCurrency(props.price)}</p>
-                )}
-                {type === "product" ? (
-                    <AddProductAction productId={id} />
-                ) : (
-                    <ProductLink href={`/${props.category}/${slug}`} />
-                )}
+                {renderPrice()}
+                {renderLinkOrAction()}
             </div>
         </div>
     )

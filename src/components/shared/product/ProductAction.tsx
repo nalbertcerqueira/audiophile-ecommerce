@@ -49,6 +49,7 @@ export function AddProductAction({ productId }: { productId: string }) {
                 disabled={shouldDisableCounter()}
                 onClick={handleAddItem}
                 className="btn btn--primary"
+                aria-label={count ? `add ${count} products to cart` : "can't add 0 products"}
                 type="button"
             >
                 ADD TO CART

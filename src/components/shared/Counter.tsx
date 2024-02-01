@@ -1,12 +1,17 @@
+import { AriaAttributes } from "react"
+
 interface CounterProps {
     disabled?: boolean
     className?: string
     count: number
+    ariaLive?: AriaAttributes["aria-live"]
     increment: () => void
     decrement: () => void
 }
 
-export function Counter({ className, count, disabled, increment, decrement }: CounterProps) {
+export function Counter(props: CounterProps) {
+    const { className, count, disabled, ariaLive, increment, decrement } = props
+
     return (
         <div
             className={`counter ${className || ""} ${
@@ -18,17 +23,25 @@ export function Counter({ className, count, disabled, increment, decrement }: Co
                 onClick={decrement}
                 className="counter__action-btn"
                 type="button"
-                aria-label="decrement count"
+                aria-controls="counter-display"
+                aria-label="decrement quantity"
             >
                 -
             </button>
-            <p className="counter__display">{count}</p>
+            <p
+                aria-live={ariaLive || "polite"}
+                id="counter-display"
+                className="counter__display"
+            >
+                {count}
+            </p>
             <button
                 disabled={disabled}
                 onClick={increment}
                 className="counter__action-btn"
                 type="button"
-                aria-label="increment count"
+                aria-controls="counter-display"
+                aria-label="increment quantity"
             >
                 +
             </button>

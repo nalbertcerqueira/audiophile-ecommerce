@@ -21,7 +21,6 @@ export function RelatedProductsSection({ otherProducts }: RelatedProductsSection
                             tablet: thumb.tablet,
                             mobile: thumb.mobile
                         }}
-                        thumbAlt={product.name}
                     />
                 )
             )

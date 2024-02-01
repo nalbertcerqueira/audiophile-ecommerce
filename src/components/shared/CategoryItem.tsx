@@ -7,27 +7,28 @@ export interface CategoryProps {
     name: string
     link: string
     thumb: string | StaticImageData
-    thumbAlt: string
 }
 
-export function CategoryItem({ name, link, thumb, thumbAlt }: CategoryProps) {
+export function CategoryItem({ name, link, thumb }: CategoryProps) {
     return (
         <div key={name} className="category">
             <div className="category__thumb-container">
-                <Image src={thumb} className="category__thumb" alt={thumbAlt} />
+                <Image src={thumb} className="category__thumb" alt="" />
                 <div className="category__thumb-shadow" />
             </div>
             <div className="category__info">
-                <h3 className="category__name">{name.toUpperCase()}</h3>
-                <CategoryLink link={link} />
+                <p aria-hidden="true" className="category__name">
+                    {name.toUpperCase()}
+                </p>
+                <CategoryLink ariaLabel={`shop ${name}`} link={link} />
             </div>
         </div>
     )
 }
 
-export function CategoryLink({ link }: { link: string }) {
+export function CategoryLink({ link, ariaLabel }: { link: string; ariaLabel?: string }) {
     return (
-        <Link className="category-link" href={link}>
+        <Link aria-label={ariaLabel} className="category-link" href={link}>
             SHOP
             <span>
                 <ArrowRightIcon className="category-link__arrow-icon" />

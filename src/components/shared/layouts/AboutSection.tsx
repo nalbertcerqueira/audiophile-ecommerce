@@ -5,7 +5,7 @@ import { ResponsiveImages } from "../ResponsiveImages"
 
 export function AboutSection({ className }: { className?: string }) {
     return (
-        <section className="about-us">
+        <section aria-label="A little bit about Audiophile" className="about-us">
             <div className={`about-us__inner-container ${className}`.trim()}>
                 <div className="about-us__content">
                     <h2 className="about-us__title">
@@ -26,17 +26,17 @@ export function AboutSection({ className }: { className?: string }) {
                         images={[
                             {
                                 ...BeastGearImage,
-                                alt: "A man using a headset",
+                                alt: "A man using Audiophile headphones",
                                 className: "about-us__img about-us__img--desktop"
                             },
                             {
                                 ...BeastGearImageTablet,
-                                alt: "A man using a headset",
+                                alt: "A man using Audiophile headphones",
                                 className: "about-us__img about-us__img--tablet"
                             },
                             {
                                 ...BeastGearImageMobile,
-                                alt: "A man using a headset",
+                                alt: "A man using Audiophile headphones",
                                 className: "about-us__img about-us__img--mobile"
                             }
                         ]}

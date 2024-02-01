@@ -46,6 +46,9 @@
 
     &__name {
         font-weight: vars.$extra-bold-weight;
+        font-size: vars.$h2-font-size;
+        line-height: vars.$h2-line-height;
+        letter-spacing: vars.$h2-letter-spacing;
     }
 
     &__label {
@@ -127,6 +130,7 @@
         @include mixins.media-mobile {
             font-size: 1.75rem;
             line-height: 2.3rem;
+            letter-spacing: 1px;
         }
     }
 
@@ -172,7 +176,8 @@
     &__name {
         @include mixins.media-tablet {
             font-size: 1.75rem;
-            line-height: 2.3rem;
+            line-height: 2rem;
+            letter-spacing: 1px;
         }
     }
 
