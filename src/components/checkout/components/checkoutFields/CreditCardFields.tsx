@@ -97,6 +97,7 @@ export function CreditCardFields(props: CreditCardDetailProps) {
                         onChange={handleNumericField(field, 3)}
                         error={creditCardErrors.cvv?.message}
                         label="CVV"
+                        ariaLabel="CVV code"
                         id="cvv"
                         type="tel"
                         autocomplete="off"

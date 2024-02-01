@@ -53,11 +53,12 @@
     &__title {
         font-size: vars.$h3-font-size;
         letter-spacing: vars.$h3-letter-spacing;
+        line-height: vars.$h3-line-height;
         font-weight: vars.$extra-bold-weight;
 
         @include mixins.media-mobile {
             font-size: 1.75rem;
-            line-height: 2.3rem;
+            line-height: 2rem;
         }
     }
 
@@ -291,12 +292,16 @@
 
     &__title {
         margin-top: 2rem;
+        font-size: vars.$h3-font-size;
+        line-height: vars.$h3-line-height;
         font-weight: vars.$extra-bold-weight;
+        letter-spacing: vars.$h3-letter-spacing;
 
         @include mixins.media-mobile {
             margin-top: 1.5rem;
             font-size: 1.5rem;
             line-height: 1.75rem;
+            letter-spacing: 1px;
         }
     }
 

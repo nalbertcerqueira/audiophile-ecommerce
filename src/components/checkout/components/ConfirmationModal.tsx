@@ -40,6 +40,9 @@ export function ConfirmationModal() {
         if (order && order.cartItems.length > 1) {
             return (
                 <button
+                    aria-expanded={isOpen ? "true" : "false"}
+                    aria-controls="order-confirmation-items"
+                    aria-label="expand or collapse items"
                     onClick={() => setIsOpen((prevState) => !prevState)}
                     className="order-confirmation__toggle-btn"
                 >
@@ -57,21 +60,28 @@ export function ConfirmationModal() {
     return (
         <div className="order-confirmation">
             <div className="order-confirmation__inner-container">
-                <div className="order-confirmation__modal">
+                <div
+                    aria-live="polite"
+                    aria-label="you can check here the details of your order. Thank you"
+                    className="order-confirmation__modal"
+                >
                     <ConfirmationIcon />
-                    <h3 className="order-confirmation__title">
+                    <h2 className="order-confirmation__title">
                         THANK YOU
                         <br />
                         FOR YOUR ORDER
-                    </h3>
+                    </h2>
                     <p className="order-confirmation__message">
                         You will receive an email confirmation shortly.
                     </p>
                     <div className="order-confirmation__details">
                         <div className="order-confirmation__wrapper">
                             <div
+                                aria-atomic="true"
+                                aria-live="assertive"
                                 style={{ gap: `${gap}px`, transition: `${transitionTime}ms` }}
                                 className="order-confirmation__items"
+                                id="order-confirmation-items"
                             >
                                 {order.cartItems.map((item) => (
                                     <CartItem
@@ -88,18 +98,19 @@ export function ConfirmationModal() {
                             <hr />
                             {renderToggleButton()}
                         </div>
-                        <div className="order-confirmation__total">
+                        <div
+                            aria-label={`grand total of ${order.grandTotal} dollars`}
+                            className="order-confirmation__total"
+                        >
                             <p className="order-confirmation__total-label">GRAND TOTAL</p>
                             <p className="order-confirmation__total-value">
-                                <b>{formatCurrency(order.grandTotal)}</b>
+                                <b aria-label={`${order.grandTotal} dollars`}>
+                                    {formatCurrency(order.grandTotal)}
+                                </b>
                             </p>
                         </div>
                     </div>
-                    <a
-                        role="button"
-                        href="/"
-                        className="btn btn--primary order-confirmation__exit-btn"
-                    >
+                    <a href="/" className="btn btn--primary order-confirmation__exit-btn">
                         BACK TO HOME
                     </a>
                 </div>

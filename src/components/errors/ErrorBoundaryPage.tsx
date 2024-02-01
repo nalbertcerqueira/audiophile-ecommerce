@@ -1,5 +1,4 @@
 import { PageError } from "@/components/errors/components/PageError"
-import Link from "next/link"
 import "./styles.scss"
 
 export function ErrorBoundaryPage({ reset }: { reset: () => void }) {
@@ -13,8 +12,10 @@ export function ErrorBoundaryPage({ reset }: { reset: () => void }) {
             }
         >
             <span>
-                Sorry, we couldn&apos;t proceed with this operation, but you can try again or
-                go back to our <Link href="/">homepage</Link>.
+                {
+                    "Sorry, we couldn't proceed with this operation, but you can try again or go back to our"
+                }{" "}
+                <a href="/">homepage</a>.
             </span>
             <div className="error-boundary__buttons">
                 <button

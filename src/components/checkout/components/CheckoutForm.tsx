@@ -124,7 +124,7 @@ export function CheckoutForm({ formId }: { formId: string }) {
 
     return (
         <div className="checkout">
-            <h2 className="checkout__title">CHECKOUT</h2>
+            <h1 className="checkout__title">CHECKOUT</h1>
             <form id={formId} className="checkout__form" onSubmit={handleFormSubmit}>
                 <BillingDetailFields
                     fieldsetTitle="BILLING DETAILS"
@@ -150,9 +150,9 @@ export function CheckoutForm({ formId }: { formId: string }) {
                 <div className="checkout__cash-guidance">
                     <CashIcon className="checkout__cash-icon" />
                     <p className="checkout__cash-info">
-                        The &#8216;Cash on Delivery&#8217; option enables you to pay in cash
-                        when our delivery courier arrives at your residence. Just make sure
-                        your address is correct so that your order will not be cancelled.
+                        {
+                            "The 'Cash on Delivery' option enables you to pay in cash when our delivery courier arrives at your residence. Just make sure your address is correct so that your order will not be cancelled."
+                        }
                     </p>
                 </div>
             )}

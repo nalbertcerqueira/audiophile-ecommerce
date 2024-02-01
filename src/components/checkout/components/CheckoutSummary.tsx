@@ -7,7 +7,6 @@ import { SummarySkeleton } from "@/components/shared/loaders/skeletons/SummarySk
 import { CartContext } from "@/contexts/CartContext"
 import { CheckoutContext } from "@/contexts/CheckoutContext"
 import { RingLoader } from "@/components/shared/loaders/RingLoader"
-import { formatCurrency } from "@/utils/helpers"
 import { useContext } from "react"
 
 interface CheckoutSummaryProps {
@@ -61,12 +60,28 @@ export function CheckoutSummary({ formId }: CheckoutSummaryProps) {
         return (
             <>
                 <div className="summary__total-fields">
-                    <SummaryField name="TOTAL" value={formatCurrency(cart.totalSpent)} />
-                    <SummaryField name="SHIPPING" value={formatCurrency(taxes.shipping)} />
-                    <SummaryField name="VAT (INCLUDED)" value={formatCurrency(taxes.vat)} />
+                    <SummaryField
+                        ariaLabel={`total of: ${cart.totalSpent} dollars`}
+                        name="TOTAL"
+                        value={cart.totalSpent}
+                    />
+                    <SummaryField
+                        ariaLabel={`shipping tax of: ${taxes.shipping} dollars`}
+                        name="SHIPPING"
+                        value={taxes.shipping}
+                    />
+                    <SummaryField
+                        ariaLabel={`vat tax of: ${taxes.vat} dollars`}
+                        name="VAT (INCLUDED)"
+                        value={taxes.vat}
+                    />
                 </div>
                 <div className="summary__grand-total">
-                    <SummaryField name="GRAND TOTAL" value={formatCurrency(grandTotal)} />
+                    <SummaryField
+                        ariaLabel={`grand total of: ${taxes.vat} dollars`}
+                        name="GRAND TOTAL"
+                        value={grandTotal}
+                    />
                 </div>
             </>
         )
@@ -74,10 +89,11 @@ export function CheckoutSummary({ formId }: CheckoutSummaryProps) {
 
     return (
         <div className="summary">
-            <h3 className="summary__title">SUMMARY</h3>
+            <h2 className="summary__title">SUMMARY</h2>
             <div className="summary__items">{renderItems()}</div>
             <div className="summary__fields">{renderSummaryFields()}</div>
             <button
+                aria-label="continue and pay"
                 disabled={shouldPreventSubmit()}
                 form={formId}
                 type="submit"
