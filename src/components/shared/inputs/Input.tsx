@@ -3,7 +3,8 @@ import {
     FocusEvent,
     forwardRef,
     ForwardedRef,
-    ChangeEvent
+    ChangeEvent,
+    ReactNode
 } from "react"
 
 interface InputProps {
@@ -17,6 +18,8 @@ interface InputProps {
     autocomplete?: string
     placeholder?: string
     error?: string | boolean
+    className?: string
+    children?: ReactNode
     onBlur?: (e: FocusEvent<HTMLInputElement>) => void
     onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 }
@@ -44,21 +47,25 @@ export const Input = forwardRef(function Input(
     return (
         <div className="field">
             {props.label && renderLabel()}
-            <input
-                aria-invalid={props.error ? "true" : "false"}
-                aria-describedby={`${props.name}-error`}
-                disabled={props.disabled}
-                value={props.value}
-                ref={ref}
-                onBlur={props.onBlur}
-                onChange={props.onChange}
-                className={`field__input ${props.error ? "field__input--error" : ""}`.trim()}
-                id={props.id}
-                type={props.type}
-                name={props.name}
-                placeholder={props.placeholder}
-                autoComplete={props.autocomplete}
-            />
+            <div className="field__input-wrapper">
+                <input
+                    aria-invalid={props.error ? "true" : "false"}
+                    aria-describedby={`${props.name}-error`}
+                    disabled={props.disabled}
+                    value={props.value}
+                    ref={ref}
+                    onBlur={props.onBlur}
+                    onChange={props.onChange}
+                    className={`field__input ${props.className || ""} ${props.error ? "field__input--error" : ""}`.trim()}
+                    id={props.id}
+                    type={props.type}
+                    name={props.name}
+                    placeholder={props.placeholder}
+                    autoComplete={props.autocomplete}
+                />
+                {props.children}
+            </div>
+
             {props.error && (
                 <p
                     id={`${props.name}-error`}

@@ -1,4 +1,4 @@
-import { Input } from "../../../shared/Input"
+import { Input } from "../../../shared/inputs/Input"
 import { Controller, FieldErrors } from "react-hook-form"
 import { CheckoutWithCreditCard } from "../../types/types"
 import {

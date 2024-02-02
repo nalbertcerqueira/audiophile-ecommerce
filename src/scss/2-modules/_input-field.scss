@@ -2,6 +2,9 @@
 @use "../1-base/placeholders";
 
 .field {
+    $icon-size: 1.35rem;
+    $icon-right-position: 1.5rem;
+
     &__label-wrapper {
         margin-bottom: 0.5rem;
     }
@@ -17,6 +20,10 @@
         }
     }
 
+    &__input-wrapper {
+        position: relative;
+    }
+
     &__input {
         @extend %input-field;
         border: 1px solid #cfcfcf;
@@ -26,52 +33,24 @@
         transition: border-color vars.$transition-duration;
         caret-color: vars.$default-orange;
 
+        &--password {
+            $padding-right: 1rem + $icon-size + $icon-right-position;
+            padding: 1.125rem $padding-right 1.125rem 1.5rem;
+        }
+
         &--error {
             border-color: vars.$red;
             border-width: 0.125rem;
         }
     }
 
-    &__error-msg {
-        @extend %show-animation;
-        color: vars.$red;
-        font-size: 0.75rem;
-        font-weight: vars.$bold-weight;
-        margin-top: 0.5rem;
-    }
-}
-
-.password-field {
-    $icon-size: 1.35rem;
-    $icon-right-position: 1.5rem;
-
-    &__label-wrapper {
-        @extend .field__label-wrapper;
+    &__input-icon {
+        width: $icon-size;
+        height: $icon-size;
+        stroke: #444444;
     }
 
-    &__label {
-        @extend .field__label;
-
-        &--error {
-            @extend .field__label--error;
-        }
-    }
-
-    &__input-wrapper {
-        position: relative;
-    }
-
-    &__input {
-        @extend .field__input;
-        $padding-right: 1rem + $icon-size + $icon-right-position;
-        padding: 1.125rem $padding-right 1.125rem 1.5rem;
-
-        &--error {
-            @extend .field__input--error;
-        }
-    }
-
-    &__toggle-btn {
+    &__action-btn {
         display: flex;
         position: absolute;
         right: $icon-right-position;
@@ -80,13 +59,11 @@
         transform: translateY(-50%);
     }
 
-    &__icon {
-        width: $icon-size;
-        height: $icon-size;
-        stroke: #444444;
-    }
-
     &__error-msg {
-        @extend .field__error-msg;
+        @extend %show-animation;
+        color: vars.$red;
+        font-size: 0.75rem;
+        font-weight: vars.$bold-weight;
+        margin-top: 0.5rem;
     }
 }
