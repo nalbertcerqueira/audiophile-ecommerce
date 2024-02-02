@@ -40,9 +40,10 @@
         @extend %grey-text;
         text-decoration: underline;
         font-size: 15px;
-        transition: vars.$transition-duration;
+        transition: color vars.$transition-duration;
 
-        &:hover {
+        &:hover,
+        &:focus-visible {
             color: vars.$default-orange;
         }
     }

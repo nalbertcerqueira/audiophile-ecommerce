@@ -25,6 +25,7 @@ export const RadioInput = forwardRef(function RadioInput(
                 }`.trim()}
             >
                 <input
+                    tabIndex={0}
                     ref={ref}
                     onChange={props.onChange}
                     onBlur={props.onBlur}

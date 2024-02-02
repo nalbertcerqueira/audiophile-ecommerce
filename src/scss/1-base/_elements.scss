@@ -86,9 +86,11 @@ button {
     border: none;
 }
 
-button:focus-visible {
-    outline: 1px solid white;
+button:focus-visible,
+a:focus-visible {
+    outline: 2px dashed $matte-black;
     border-radius: 0.125rem;
+    outline-offset: 0.25rem;
 }
 
 input {

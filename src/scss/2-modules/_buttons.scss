@@ -88,7 +88,7 @@
     color: rgba(vars.$black, 0.75);
     padding: 0.25rem 0.5rem;
     font-weight: vars.$medium-weight;
-    transition: vars.$transition-duration;
+    transition: color vars.$transition-duration;
 
     &__icon {
         transform: rotate(180deg);
@@ -96,8 +96,10 @@
         transition: vars.$transition-duration;
     }
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
         color: vars.$default-orange;
+
         .back-btn__icon {
             stroke: vars.$default-orange;
             transform: rotate(180deg) translateX(0.5rem);
@@ -109,6 +111,10 @@
     position: relative;
     padding: 0.25rem;
     display: flex;
+
+    &:focus-visible {
+        outline-color: vars.$very-light-grey;
+    }
 
     * {
         pointer-events: none;
@@ -132,6 +138,10 @@
 .menu-btn {
     padding: 0.25rem;
     display: none;
+
+    &:focus-visible {
+        outline-color: vars.$very-light-grey;
+    }
 
     @include mixins.media-960 {
         display: flex;

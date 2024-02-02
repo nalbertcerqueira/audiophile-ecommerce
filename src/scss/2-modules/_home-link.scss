@@ -1,0 +1,11 @@
+@use "../1-base/variables" as vars;
+
+.home-link {
+    &:focus-visible {
+        outline-color: vars.$very-light-grey;
+    }
+
+    &__logo {
+        display: flex;
+    }
+}

@@ -1,9 +1,8 @@
 import { FooterNavLinks } from "./FooterNavLinks"
-import { AudiophileLogo } from "@/components/shared/Logo"
+import { HomepageLink } from "@/components/shared/HomepageLink"
 import { InstagramIcon } from "@/components/shared/icons/InstagramIcon"
 import { FacebookIcon } from "@/components/shared/icons/FacebookIcon"
 import { TwitterIcon } from "@/components/shared/icons/TwitterIcon"
-import Link from "next/link"
 
 export function Footer() {
     const externalLinks = [
@@ -16,9 +15,7 @@ export function Footer() {
         <footer className="footer">
             <div className="footer__inner-container">
                 <div className="footer__inner-links">
-                    <Link aria-label="Audiophile homepage" href="/">
-                        <AudiophileLogo />
-                    </Link>
+                    <HomepageLink />
                     <FooterNavLinks />
                 </div>
                 <div className="footer__wrapper">

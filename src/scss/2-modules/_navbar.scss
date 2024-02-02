@@ -35,7 +35,12 @@
     color: vars.$white;
     transition: color vars.$transition-duration;
 
-    &:hover {
+    &:focus-visible {
+        outline-color: vars.$very-light-grey;
+    }
+
+    &:hover,
+    &:focus-visible {
         color: vars.$default-orange;
     }
 

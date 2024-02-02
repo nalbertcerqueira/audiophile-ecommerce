@@ -1,7 +1,6 @@
-import { AudiophileLogo } from "../Logo"
+import { HomepageLink } from "../HomepageLink"
 import { CartButton } from "../buttons/CartButton"
 import { Navbar } from "../Navbar"
-import Link from "next/link"
 import { UserActions } from "../UserActions"
 import { MobileMenuButton } from "../buttons/MenuButton"
 
@@ -14,9 +13,7 @@ export function Header({ className }: HeaderProps) {
         <header className={`header ${className || ""}`.trim()}>
             <div className="header__inner-container">
                 <MobileMenuButton />
-                <Link aria-label="Audiophile homepage" href="/">
-                    <AudiophileLogo />
-                </Link>
+                <HomepageLink />
                 <Navbar />
                 <div className="header__btn-wrapper">
                     <UserActions />

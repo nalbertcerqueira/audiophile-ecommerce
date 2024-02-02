@@ -123,6 +123,10 @@
     &__btn {
         margin: 2.5rem 0 0;
 
+        &:focus-visible {
+            outline-color: vars.$very-light-grey;
+        }
+
         @include mixins.media-tablet {
             margin: 2.5rem auto 0;
         }

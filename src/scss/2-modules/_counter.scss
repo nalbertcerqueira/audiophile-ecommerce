@@ -22,7 +22,8 @@
         color: rgba(vars.$black, 0.5);
         transition: color vars.$transition-duration;
 
-        &:hover {
+        &:hover,
+        &:focus-visible {
             color: vars.$default-orange;
         }
     }

@@ -82,12 +82,18 @@
     border: 1px solid #afafaf;
     padding: 0.75rem 1rem;
 
-    &--google:hover {
-        background-color: #4081ec;
+    &--google {
+        &:hover,
+        &:focus-visible {
+            background-color: #4081ec;
+        }
     }
 
-    &--github:hover {
-        background-color: vars.$matte-black;
+    &--github {
+        &:hover,
+        &:focus-visible {
+            background-color: vars.$matte-black;
+        }
     }
 
     &__icon {
@@ -100,7 +106,8 @@
         }
     }
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
         color: vars.$white;
 
         path {

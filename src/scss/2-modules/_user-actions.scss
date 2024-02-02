@@ -32,19 +32,24 @@
 
         & > span {
             @extend %text-default-styles;
-            font-weight: vars.$light-weight;
         }
     }
 
     &__action,
     &__auth-link {
         @extend %text-default-styles;
-        font-weight: vars.$light-weight;
         text-decoration: underline;
         text-decoration-color: transparent;
-        transition: 0.1s;
+        transition:
+            text-decoration-color 0.1s,
+            color 0.1s;
 
-        &:hover {
+        &:focus-visible {
+            outline-color: vars.$very-light-grey;
+        }
+
+        &:hover,
+        &:focus-visible {
             text-decoration-color: vars.$white;
             color: #ffffff;
         }

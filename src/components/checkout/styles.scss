@@ -236,6 +236,11 @@
 .radio-field {
     &__input {
         accent-color: vars.$default-orange;
+
+        &:focus-visible {
+            outline: 2px dashed vars.$matte-black;
+            outline-offset: 0.25rem;
+        }
     }
 
     &__label {
