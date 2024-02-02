@@ -9,4 +9,6 @@ function createAuthenticatedAuthMiddleware(): AuthenticatedAuthMiddleware {
     )
 }
 
+//Middleware para verificar se o usuário possui permissão para acessar o conteúdo.
+//Nesse caso, o usuário convidado (ou anônimo) não possui permissão
 export const authenticatedAuthMiddleware = createAuthenticatedAuthMiddleware()

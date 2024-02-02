@@ -17,6 +17,7 @@ export class Migration {
         await mongoHelper.close()
     }
 
+    //Populando o banco de dados com as informações dos produtos caso o mesmo esteja vazio
     private async updloadInitialData(): Promise<void> {
         await mongoHelper.connect()
         const productCollection = mongoHelper.db.collection("products")
@@ -36,6 +37,7 @@ export class Migration {
         }
     }
 
+    //Criando as coleções juntamente com sua respectivas validações de schemas
     private async createCollections(): Promise<void> {
         try {
             await Promise.allSettled([

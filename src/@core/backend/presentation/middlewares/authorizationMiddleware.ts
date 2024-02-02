@@ -23,6 +23,8 @@ export class AuthorizationMiddleware implements Controller {
         }
 
         try {
+            //Verificando se o usuário em questão passa em alguma das validações (de usuário
+            //comum, externo ou convidado)
             const [authenticatedUser, guestUser, externalUser] = await Promise.allSettled([
                 this.authorizationUseCase.execute(accessToken),
                 this.guestAuthorizationUseCase.execute(accessToken),
@@ -37,12 +39,10 @@ export class AuthorizationMiddleware implements Controller {
             if (authenticatedUser.status === "fulfilled" && authenticatedUser.value) {
                 selectedUser.value = authenticatedUser.value
                 selectedUser.type = "authenticated"
-            }
-            if (externalUser.status === "fulfilled" && externalUser.value) {
+            } else if (externalUser.status === "fulfilled" && externalUser.value) {
                 selectedUser.value = externalUser.value
                 selectedUser.type = "external"
-            }
-            if (guestUser.status === "fulfilled" && guestUser.value) {
+            } else if (guestUser.status === "fulfilled" && guestUser.value) {
                 selectedUser.value = guestUser.value
                 selectedUser.type = "guest"
             }

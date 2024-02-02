@@ -5,6 +5,7 @@ interface GuestSessionOutputDTO {
     token: string
 }
 
+//Caso de uso utilizado para gerar uma sessão anônima
 export class DbGuestSessionUseCase {
     constructor(
         private readonly idGeneratorService: IdGeneratorService,

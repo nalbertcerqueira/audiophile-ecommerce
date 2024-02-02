@@ -20,6 +20,7 @@ export class SigninController implements Controller {
     ) {}
 
     public async handle(request: HttpRequest): Promise<HttpResponse> {
+        //Access token do usuário convidado
         const accessToken = request.headers?.authorization?.split(" ")[1] as string
         const validationResult = await this.schemaValidator.validate(request.body)
 
@@ -38,15 +39,17 @@ export class SigninController implements Controller {
                 }
             }
 
-            const user = this.tokenDecorder.decode(token)
+            const payload = this.tokenDecorder.decode(token)
             const guestUser = await this.guestAuthorizationUseCase.execute(accessToken)
 
-            if (user && guestUser) {
+            if (payload && guestUser) {
+                //Obtendo o carrinho de compras do usuário convidado (sessão anônima)
+                //para transferir para o usuário comum ou externo após o login
                 const guestCart = await this.getCartUseCase.execute(guestUser.id, "guest")
                 const guestCartItems = guestCart.toJSON().items
 
                 if (guestCartItems.length) {
-                    const { id, sessionType } = user
+                    const { id, sessionType } = payload
                     const itemsToAdd = guestCartItems.map((item) => ({
                         productId: item.productId,
                         quantity: item.quantity

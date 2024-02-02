@@ -20,6 +20,7 @@ export interface CheckoutOrderProps {
     cartItems: CartProduct[]
 }
 
+//Entidade utilizada para representar o pedido de compras do usuário após o checkout
 export class CheckoutOrder {
     private props: CheckoutOrderProps
     public static readonly orderSchema = zodCheckoutOrderSchema

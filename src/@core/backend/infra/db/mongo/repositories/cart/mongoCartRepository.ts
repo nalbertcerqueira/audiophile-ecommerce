@@ -146,6 +146,8 @@ export class MongoCartRepository
     }
 
     private async retrieveCart(userId: string, userType: UserType): Promise<Cart | null> {
+        //Pipeline de agregação para obter o carrinho de compras no formato
+        //aceito pela aplicação
         const queryPipeline = [
             { $match: { userId, userType } },
             { $set: { productId: { $toObjectId: "$productId" } } },

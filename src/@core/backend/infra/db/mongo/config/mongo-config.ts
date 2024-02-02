@@ -14,7 +14,9 @@ export class MongoHelper {
     }
 
     public async connect(): Promise<void> {
-        if (this.isConnected) return
+        //Reaproveitando a conexão existente para não sobrecarregar o servidor
+        //com conexões desnecessárias ao banco
+        if (this.isConnected) return //
 
         this.clearListeners()
         this.addListeners()

@@ -16,6 +16,7 @@ export interface CartProps {
     items: CartProduct[]
 }
 
+//Entidade responsável por representar o carrinho de compras do usuário
 export class Cart {
     private props: CartProps
     public static readonly cartSchema = cartZodSchema

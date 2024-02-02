@@ -1,9 +1,11 @@
 import z from "zod"
 
+//Gerando um schema do zod a partir de um tipo genérico <T>
 export function schemaFromType<T>() {
     return <S extends z.ZodType<T, any, any>>(arg: S) => arg
 }
 
+//Gerando um array de erros a partir do error recebido pelo zod
 export function generateCustomZodErrors<T extends z.ZodError<any>>(
     error: T,
     errorsPerField: number

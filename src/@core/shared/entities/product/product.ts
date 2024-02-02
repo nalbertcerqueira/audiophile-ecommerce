@@ -22,6 +22,7 @@ export interface RelatedProduct {
     image: ImageMap
 }
 
+//Interface de um Produto
 export interface ProductProps {
     id: string
     slug: string

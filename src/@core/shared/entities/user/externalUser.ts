@@ -5,6 +5,8 @@ import { externalUserZodSchema } from "./utils"
 
 export type ExternalUserProps = Omit<UserProps, "password">
 
+//Entidade que representa um usuário que se autenticou através de um servidor
+//de autenticação de terceiros, como google e github por exemplo.
 export class ExternalUser {
     private props: ExternalUserProps
     public static readonly externalUserSchema = externalUserZodSchema

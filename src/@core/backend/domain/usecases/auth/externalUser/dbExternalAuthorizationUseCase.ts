@@ -6,6 +6,7 @@ interface ExternalAuthorizationOutputDTO extends ExternalUserProps {
     readonly id: string
 }
 
+//Caso de uso para validar um usuário externo (que se autenticou através do google por exemplo)
 export class DbExternalAuthorizationUseCase {
     constructor(
         private readonly tokenVerifierService: TokenVerifierService,

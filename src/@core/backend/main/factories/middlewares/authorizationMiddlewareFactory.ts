@@ -11,4 +11,6 @@ function createAuthorizationMiddleware(): AuthorizationMiddleware {
     )
 }
 
+//Middleware para verificar se o usuário possui permissão para acessar o conteúdo.
+//O middleware também dá acesso a usuários convidados (ou anônimos) que passarem na validação
 export const authorizationMiddleware = createAuthorizationMiddleware()

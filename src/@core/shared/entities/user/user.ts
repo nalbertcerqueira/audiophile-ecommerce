@@ -13,6 +13,7 @@ export interface UserProps {
     }
 }
 
+//Representação de um usuário comum
 export class User {
     private props: UserProps
     public static readonly userSchema = userZodSchema

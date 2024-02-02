@@ -6,6 +6,7 @@ interface AuthorizationOutputDTO extends Pick<UserProps, "name" | "email" | "ima
     readonly id: string
 }
 
+//Caso de uso para validar um usuário comum com base no token recebido
 export class DbAuthorizationUseCase {
     constructor(
         private readonly tokenVerifierService: TokenVerifierService,
