@@ -83,6 +83,7 @@
     }
 }
 
+//Botão de retornar a página anterior
 .back-btn {
     @include mixins.flex($gap: 1rem, $items: center);
     color: rgba(vars.$black, 0.75);
@@ -107,6 +108,7 @@
     }
 }
 
+//Botão de exibir/esconder o carrinho de compras
 .cart-btn {
     position: relative;
     padding: 0.25rem;
@@ -135,6 +137,7 @@
     }
 }
 
+//Botão de exibir/esconder o menu de navegação para dispositivos móveis
 .menu-btn {
     padding: 0.25rem;
     display: none;

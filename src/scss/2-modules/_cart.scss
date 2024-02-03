@@ -2,6 +2,7 @@
 @use "../1-base/mixins" as mixins;
 @use "../1-base/placeholders";
 
+//Carrinho de compras como um modal
 .mini-cart {
     position: relative;
     padding: 2rem;
@@ -63,6 +64,7 @@
     }
 }
 
+//Item que representa cada produto presente no carrinho de compras
 .cart-item {
     @include mixins.flex($items: center, $gap: 1rem);
     @extend %show-animation;

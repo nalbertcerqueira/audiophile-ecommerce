@@ -24,10 +24,7 @@ export function MobileMenuModal() {
     }, [close])
 
     return (
-        <Overlay
-            className={`mobile-menu-overlay ${!menuMobileModal.isOpen ? "mobile-menu-overlay--hidden" : ""}`.trim()}
-            isHidden={!menuMobileModal.isOpen}
-        >
+        <Overlay className={`mobile-menu-overlay`} isHidden={!menuMobileModal.isOpen}>
             <MobileMenu isOpen={menuMobileModal.isOpen} />
         </Overlay>
     )

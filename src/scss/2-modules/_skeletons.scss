@@ -28,6 +28,7 @@
     animation: shimmer 1.25s infinite linear;
 }
 
+//Loadings do tipo skeleton
 .cart-item-skeleton {
     @include mixins.flex($gap: 1.25rem, $items: center);
 

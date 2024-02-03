@@ -2,6 +2,7 @@
 @use "../1-base/mixins" as mixins;
 @use "../1-base/placeholders";
 
+//Item de categoria de produto
 .category {
     position: relative;
     background-color: vars.$very-light-grey;
@@ -96,6 +97,7 @@
     }
 }
 
+//Link de uma categoria de produto
 .category-link {
     @extend %subtitle;
     @include mixins.flex($gap: 0.8125rem);

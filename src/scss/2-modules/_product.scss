@@ -2,6 +2,7 @@
 @use "../1-base/mixins" as mixins;
 @use "../1-base/placeholders";
 
+//Estilos dos itens que representam o produto e o preview do produto
 .product,
 .preview {
     display: grid;

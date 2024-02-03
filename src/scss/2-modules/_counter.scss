@@ -2,6 +2,7 @@
 @use "../1-base/mixins" as mixins;
 @use "../1-base/placeholders";
 
+//Contador utilizado no carrinho de compras e página de produto
 .counter {
     display: flex;
     align-items: center;

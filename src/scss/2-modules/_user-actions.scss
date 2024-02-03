@@ -8,6 +8,7 @@
     white-space: nowrap;
 }
 
+//Ações do usuário na barra de navegação
 .user-actions {
     @include mixins.flex($gap: 0.5rem, $items: flex-start);
 

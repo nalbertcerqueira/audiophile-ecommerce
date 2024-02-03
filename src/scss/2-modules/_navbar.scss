@@ -2,6 +2,7 @@
 @use "../1-base/variables" as vars;
 @use "../1-base/placeholders";
 
+//Barra de navegação principal
 .navbar {
     &__link-list {
         @include mixins.flex($gap: 2.125rem);
@@ -26,6 +27,7 @@
     }
 }
 
+//Links da barra de navegação
 .nav-link {
     position: relative;
     font-size: 0.8125rem;

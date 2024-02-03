@@ -8,11 +8,9 @@
     transition: vars.$transition-duration;
 }
 
+//Overlay do modal do menu para dispositivos móveis
 .mobile-menu-overlay {
     display: none;
-    transition:
-        opacity 0.35s,
-        visibility 0.35s;
 
     @include mixins.media-960 {
         display: block;
@@ -23,16 +21,12 @@
         padding-top: 91px;
     }
 
-    &--hidden {
-        visibility: hidden;
-        opacity: 0;
-    }
-
     > .overlay__inner {
         justify-content: center;
     }
 }
 
+//Menu de navegação para dispositivos móveis
 .mobile-menu {
     position: relative;
     display: none;
@@ -123,6 +117,7 @@
     }
 }
 
+//Link de categoria de produto
 .mobile-category {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

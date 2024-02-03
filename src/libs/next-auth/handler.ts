@@ -39,7 +39,7 @@ export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOption
             jwt: async ({ token, account }) => {
                 if (!account) return token
 
-                //Gerando um accessToken após o login do usuário
+                //Gerando um accessToken após o login bem sucedido do usuário
                 const clientAccessToken = await dbExternalSigninUseCase.execute({
                     name: token.name as string,
                     email: token.email as string,
@@ -54,27 +54,31 @@ export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOption
                     accessToken: clientAccessToken
                 }
 
-                if (!guestUser || !payload) return newSessionToken
+                if (guestUser && payload) {
+                    //Buscando o carrinho do usuário convidado (usuário anônimo)
+                    const guestCart = await mongoCartRepository.getCartById(
+                        guestUser.id,
+                        "guest"
+                    )
 
-                const guestCart = await mongoCartRepository.getCartById(guestUser.id, "guest")
+                    if (guestCart) {
+                        const itemsToAdd = guestCart.toJSON().items.map((item) => ({
+                            productId: item.productId,
+                            quantity: item.quantity
+                        }))
 
-                if (!guestCart) return newSessionToken
-
-                const itemsToAdd = guestCart.toJSON().items.map((item) => ({
-                    productId: item.productId,
-                    quantity: item.quantity
-                }))
-
-                await dbAddProductsToCartUseCase.execute(
-                    { id: payload.id, type: payload.sessionType },
-                    itemsToAdd
-                )
-                await dbClearCartUseCase.execute(guestUser.id, "guest")
-
+                        //Transferindo o carrinho do usuário convidado para o usuário recem autenticado
+                        await dbAddProductsToCartUseCase.execute(
+                            { id: payload.id, type: payload.sessionType },
+                            itemsToAdd
+                        )
+                        await dbClearCartUseCase.execute(guestUser.id, "guest")
+                    }
+                }
                 return newSessionToken
             },
             session: async ({ session, token }) => {
-                //Retornando apenas o acessToken para persistir no localStorage do usuário,
+                //Retornando apenas o acessToken que será persistido no localStorage do usuário,
                 //juntamente com o expires, pois é obrigatório
                 return {
                     expires: session.expires,
