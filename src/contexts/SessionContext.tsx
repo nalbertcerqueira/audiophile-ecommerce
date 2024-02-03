@@ -31,19 +31,24 @@ export function SessionProvider({ children }: PropsWithChildren) {
     const [status, setStatus] = useState<SessionStatus>({ isLoading: true, isLogged: false })
     const [user, setUser] = useState<UserBasicInfo | null>(null)
 
+    //Persistindo o accessToken no localStorage caso o usuário tenha se autenticado
+    //com auxilio do next-auth
     useEffect(() => {
         if (nextAuthSession.status === "authenticated") {
             const token = nextAuthSession.data.accessToken
             token && localStorage.setItem("accessToken", token)
+            console.log("antes")
         }
     }, [nextAuthSession.status, nextAuthSession.data?.accessToken])
 
+    //Buscando os dados do usuário no banco de dados após
     useEffect(() => {
         nextAuthSession.status !== "loading" && validateSession()
     }, [nextAuthSession.status])
 
     async function validateSession() {
-        //Removendo o accessToken do usuário anônimo após obter os dados da sessão
+        //Removendo o accessToken do usuário convidado caso o mesmo tenha
+        //sido autenticado com auxilio do next-auth
         document.cookie = `guest-access-token=0;path=/;expires=${new Date().toUTCString()};sameSite=Lax`
 
         try {
@@ -78,7 +83,6 @@ export function SessionProvider({ children }: PropsWithChildren) {
         if (user?.type === "authenticated" || user?.type === "external") {
             return toCapitalized(user.name.split(" ")[0]) || null
         }
-
         return null
     }
 

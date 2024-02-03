@@ -8,24 +8,26 @@ import Link from "next/link"
 import { CheckoutContext } from "@/contexts/CheckoutContext"
 
 export function MiniCart({ isOpen }: { isOpen: boolean }) {
-    const { cart, loadingState, clearCart, updateCartStatus } = useContext(CartContext)
-    const { updateTaxes, updateCheckoutStatus } = useContext(CheckoutContext)
+    const { cart, loadingState, clearCart, setCartLoadingStatus } = useContext(CartContext)
+    const { updateTaxes, setCheckoutLoadingStatus } = useContext(CheckoutContext)
 
     function handleClearCart() {
         if (loadingState.isLoading) {
             return
         }
 
-        updateCartStatus({ type: "CLEAR" })
-        updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: true })
+        //O loading da taxa também é ativado para dar a impressão de que ambas, a taxa
+        //e a ação de adicionar items ao carrinho, são iniciadas ao mesmo tempo
+        setCartLoadingStatus({ type: "CLEAR" })
+        setCheckoutLoadingStatus({ isCheckingOut: false, isLoadingTaxes: true })
 
         clearCart()
             .then((res) => {
-                updateCartStatus({ type: "DISABLE" })
+                setCartLoadingStatus({ type: "DISABLE" })
                 return res ? updateTaxes() : null
             })
             .then(() => {
-                updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
+                setCheckoutLoadingStatus({ isCheckingOut: false, isLoadingTaxes: false })
             })
     }
 

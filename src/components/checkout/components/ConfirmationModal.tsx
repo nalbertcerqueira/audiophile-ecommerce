@@ -13,6 +13,7 @@ export function ConfirmationModal() {
 
     const { order } = useContext(CheckoutContext)
 
+    //Alterando dinamicamente a altura do container de items para criar o efeito accordion
     useEffect(() => {
         if (order?.cartItems) {
             const { item, itemsWrapper } = getElements()

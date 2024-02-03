@@ -29,7 +29,7 @@ export function SigninPageComponent() {
         reValidateMode: "onSubmit",
         resolver: customZodResolver(signinSchema)
     })
-    const [isExternalProvider, setisExternalProvider] = useState(false)
+    const [isExternalProvider, setIsExternalProvider] = useState(false)
     const isFormBlocked = isSubmitting || isSubmitSuccessful || isExternalProvider
 
     function handleSignin(accessToken: string | null) {
@@ -43,13 +43,17 @@ export function SigninPageComponent() {
     }
 
     async function externalSignin(provider: BuiltInProviderType) {
-        setisExternalProvider(true)
+        setIsExternalProvider(true)
+
         const oneDay = 1000 * 3600 * 24
         const expirationDate = new Date(Date.now() + oneDay).toUTCString()
         const guestAccessToken = localStorage.getItem("accessToken")
+
+        //Passando o accessToken do usuário convidado para um cookie, o qual será enviado
+        //na requsição do next-auth, e posteriormente capturado pelo handler da api.
         document.cookie = `guest-access-token=${guestAccessToken};path=/;expires=${expirationDate};sameSite=Lax`
-        await signIn(provider, { callbackUrl: "/" })
-        setisExternalProvider(false)
+
+        return signIn(provider, { callbackUrl: "/" }).then(() => setIsExternalProvider(false))
     }
 
     async function handleSuccessfulSubmit(data: AuthFormFields<"signin">) {

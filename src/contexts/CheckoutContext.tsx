@@ -30,7 +30,7 @@ interface CheckoutContextProps {
     order: Order | null
     updateTaxes: () => Promise<void>
     updateOrder: Dispatch<SetStateAction<Order | null>>
-    updateCheckoutStatus: (
+    setCheckoutLoadingStatus: (
         state: SetStateAction<CheckoutStatus>,
         delay?: number
     ) => NodeJS.Timeout | void
@@ -54,7 +54,7 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
             .catch((error) => handleErrors(error))
     }, [])
 
-    function updateCheckoutStatus(
+    function setCheckoutLoadingStatus(
         state: SetStateAction<CheckoutStatus>,
         delay?: number
     ): NodeJS.Timeout | void {
@@ -74,6 +74,7 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
         )
     }
 
+    //Buscando as taxas do carrinho após a sessão ser validada
     useEffect(() => {
         if (!sessionState.isLoading) {
             updateTaxes().then(() => {
@@ -89,7 +90,7 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
                 taxes,
                 order,
                 updateTaxes,
-                updateCheckoutStatus,
+                setCheckoutLoadingStatus: setCheckoutLoadingStatus,
                 updateOrder: setOrder
             }}
         >

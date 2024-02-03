@@ -11,7 +11,7 @@ import { AuthOptions } from "next-auth"
 import GoogleProvivder from "next-auth/providers/google"
 import GithubProvider from "next-auth/providers/github"
 
-const nextAuthSecretKey = process.env.EXTERNAL_SESSION_SECRET_KEY
+const nextAuthSecretKey = process.env.NEXTAUTH_SECRET
 
 export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOptions {
     const guestAccessToken = httpRequest.cookies["guest-access-token"] as string

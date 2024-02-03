@@ -44,8 +44,11 @@ export const PasswordInput = forwardRef(function PasswordInput(
                 type="button"
                 className="field__action-btn"
             >
-                {isVisible && <ClosedEyeIcon className="field__input-icon" />}
-                {!isVisible && <OpenEyeIcon className="field__input-icon" />}
+                {isVisible ? (
+                    <OpenEyeIcon className="field__input-icon" />
+                ) : (
+                    <ClosedEyeIcon className="field__input-icon" />
+                )}
             </button>
         </Input>
     )

@@ -16,7 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Id } from "react-toastify"
 import { useForm } from "react-hook-form"
 import { CheckoutOrder } from "@/@core/shared/entities/order/checkoutOrder"
-import { successCheckoutMessage } from "@/libs/react-toastify/components/CheckoutMessages"
+import { SuccessCheckoutMessage } from "@/libs/react-toastify/components/CheckoutMessages"
 
 export const checkoutFormInitialState: CheckoutFields = {
     name: "",
@@ -32,7 +32,11 @@ export const checkoutFormInitialState: CheckoutFields = {
 export function CheckoutForm({ formId }: { formId: string }) {
     const { cart, loadingState: cartLoadingState } = useContext(CartContext)
     const { isLogged } = useContext(SessionContext)
-    const { status, updateCheckoutStatus, updateOrder } = useContext(CheckoutContext)
+    const {
+        status,
+        setCheckoutLoadingStatus: updateCheckoutStatus,
+        updateOrder
+    } = useContext(CheckoutContext)
     const {
         watch,
         setValue,
@@ -99,7 +103,7 @@ export function CheckoutForm({ formId }: { formId: string }) {
         const { orderId, cartItems } = order.toJSON()
 
         if (toastId) {
-            const successMsg = successCheckoutMessage(orderId)
+            const successMsg = SuccessCheckoutMessage(orderId)
             emitToast("success", successMsg, { id: toastId, update: true })
             updateOrder({
                 orderId,

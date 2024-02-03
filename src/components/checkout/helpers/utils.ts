@@ -4,10 +4,12 @@ import { CheckoutFields } from "../types/types"
 
 import { creditCardRegexp, textMatchRegexp, zipCodeRegexp } from "./constants"
 
+//Máscara dei nput para CEP
 export function maskZipCode(rawInput: string): string {
     return rawInput.replace(textMatchRegexp, "").slice(0, 8).replace(zipCodeRegexp, "$1-$2")
 }
 
+//Máscara de input para nº de cartão de cŕedito
 export function maskCreditCardNumber(rawInput: string): string {
     return rawInput
         .replace(textMatchRegexp, "")
@@ -16,6 +18,7 @@ export function maskCreditCardNumber(rawInput: string): string {
         .trim()
 }
 
+//Máscara para o mês de expiração do cartão
 export function maskExpirationMonth(rawInput: string): string {
     const month = parseInt(rawInput.replace(textMatchRegexp, "")) || 0
 
@@ -25,19 +28,23 @@ export function maskExpirationMonth(rawInput: string): string {
     return `${month}`.slice(0, 2)
 }
 
+//Máscara para o ano de expiração do cartão
 export function maskExpirationYear(rawInput: string): string {
     const month = parseInt(rawInput.replace(textMatchRegexp, "")) || ""
     return `${month}`.slice(0, 2)
 }
 
+//Máscara para o código CVV do carto
 export function maskCvv(rawInput: string): string {
     return rawInput.replace(textMatchRegexp, "").slice(0, 3)
 }
 
+//Sanitizando entradas númericas em strings
 export function sanitizeNumericField(input: string, maxLength: number) {
     return input.replace(textMatchRegexp, "").slice(0, maxLength)
 }
 
+//Adapter para manipular inputs númericos
 export function handleNumericField(
     field: ControllerRenderProps<CheckoutFields, any>,
     maxLength: number
@@ -50,6 +57,7 @@ export function handleNumericField(
     }
 }
 
+//Adapter para manipular a data de expiração do cartão
 export function handleExpirationDate(
     field: ControllerRenderProps<CheckoutFields, any>,
     type: "month" | "year"

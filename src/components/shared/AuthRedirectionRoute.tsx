@@ -11,6 +11,7 @@ interface ProtectedRouteProps {
     fallback: ReactNode
 }
 
+//Redirecionando o usuário com base no tipo de rota e status da sessão
 export function AuthRedirectionRoute(props: ProtectedRouteProps) {
     const { fallback, routeToRedirect, routeType } = props
     const { isLoading, isLogged } = useContext(SessionContext)

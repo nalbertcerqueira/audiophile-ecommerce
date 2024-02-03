@@ -40,7 +40,7 @@ interface CartContextProps {
     addItem: (productId: string, quantity: number, options?: ActionOptions) => Promise<boolean>
     clearCart: () => Promise<boolean>
     removeItem: (productId: string, quantity: number) => Promise<boolean>
-    updateCartStatus: (action: CartLoadingActions, delay?: number) => NodeJS.Timeout | void
+    setCartLoadingStatus: (action: CartLoadingActions, delay?: number) => NodeJS.Timeout | void
 }
 
 interface ActionOptions {
@@ -60,6 +60,7 @@ export function CartProvider({ children }: PropsWithChildren) {
         cartLoadingInititalState
     )
 
+    //Buscando o carrinho de compras após a sessão ser validada
     useEffect(() => {
         if (!sessionState.isLoading) {
             loadingDispatch({ type: "ENABLE" })
@@ -81,7 +82,6 @@ export function CartProvider({ children }: PropsWithChildren) {
             .execute()
             .then((cart) => handleCartUpdate(cart))
             .catch((error) => handleCartErrors(error, true))
-            .finally(() => loadingDispatch({ type: "DISABLE" }))
 
         return true
     }
@@ -121,7 +121,7 @@ export function CartProvider({ children }: PropsWithChildren) {
         return true
     }
 
-    function updateCartStatus(
+    function setCartLoadingStatus(
         action: CartLoadingActions,
         delay?: number
     ): NodeJS.Timeout | void {
@@ -189,7 +189,7 @@ export function CartProvider({ children }: PropsWithChildren) {
                 addItem,
                 removeItem,
                 clearCart,
-                updateCartStatus
+                setCartLoadingStatus
             }}
         >
             {children}
