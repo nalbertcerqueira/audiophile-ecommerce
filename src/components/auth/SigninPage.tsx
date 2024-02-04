@@ -43,7 +43,8 @@ export function SigninPageComponent() {
     }
 
     async function externalSignin(provider: BuiltInProviderType) {
-        setIsExternalProvider(true)
+        if (isExternalProvider) return
+        else setIsExternalProvider(true)
 
         const oneDay = 1000 * 3600 * 24
         const expirationDate = new Date(Date.now() + oneDay).toUTCString()
@@ -53,7 +54,7 @@ export function SigninPageComponent() {
         //na requsição do next-auth, e posteriormente capturado pelo handler da api.
         document.cookie = `guest-access-token=${guestAccessToken};path=/;expires=${expirationDate};sameSite=Lax`
 
-        return signIn(provider, { callbackUrl: "/" }).then(() => setIsExternalProvider(false))
+        return signIn(provider, { callbackUrl: "/" })
     }
 
     async function handleSuccessfulSubmit(data: AuthFormFields<"signin">) {

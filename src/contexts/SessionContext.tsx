@@ -76,7 +76,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
 
     function logout() {
         localStorage.removeItem("accessToken")
-        signOut({ callbackUrl: "/" })
+        signOut({ callbackUrl: "/signin" })
     }
 
     function getFirstName(): string | null {
