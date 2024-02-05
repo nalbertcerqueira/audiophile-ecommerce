@@ -32,7 +32,7 @@ Audiophile ecommerce se trata de um projeto desenvolvido a partir de um dos desa
 | POST       | `/api/auth/cart/items`     | Adiciona um item ao carrinho              |
 | DELETE     | `/api/auth/cart/items/:id` | Remove o item cujo id = ':id' do carrinho |
 | POST       | `/api/auth/checkout`       | Efetua o checkout da compra               |
-| POST       | `/api/auth/checkout/taxes` | Obtém as taxas relacionadas a compra      |
+| GET       | `/api/auth/checkout/taxes` | Obtém as taxas relacionadas a compra      |
 
 #### Rotas públicas 🛤️
 
