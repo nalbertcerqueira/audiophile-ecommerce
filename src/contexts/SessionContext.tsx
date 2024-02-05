@@ -37,7 +37,6 @@ export function SessionProvider({ children }: PropsWithChildren) {
         if (nextAuthSession.status === "authenticated") {
             const token = nextAuthSession.data.accessToken
             token && localStorage.setItem("accessToken", token)
-            console.log("antes")
         }
     }, [nextAuthSession.status, nextAuthSession.data?.accessToken])
 
