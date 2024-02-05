@@ -1,6 +1,7 @@
 import { DbCreateCheckoutOrderUseCase } from "@/@core/backend/domain/usecases/order/dbCreateCheckoutOrderUseCase"
 import { Controller } from "../../protocols/controller"
 import { HttpRequest, HttpResponse } from "../../protocols/http"
+import { serverError } from "../../helpers/errors"
 
 export class CreateCheckoutOrderController implements Controller {
     constructor(private readonly createCheckoutOrderUseCase: DbCreateCheckoutOrderUseCase) {}
@@ -22,12 +23,9 @@ export class CreateCheckoutOrderController implements Controller {
 
             return { statusCode: 200, data: order.toJSON() }
         } catch (error: any) {
-            return {
-                statusCode: 500,
-                errors: [
-                    "Sorry! but we couldn't process your order at the moment. Please try again later"
-                ]
-            }
+            return serverError(
+                "Sorry! but we couldn't process your order at the moment. Please try again later"
+            )
         }
     }
 }

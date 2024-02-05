@@ -1,6 +1,7 @@
-import { SchemaValidatorService } from "@/@core/backend/domain/services/schemaValidator"
 import { HttpRequest, HttpResponse } from "../../protocols/http"
+import { SchemaValidatorService } from "@/@core/backend/domain/services/schemaValidator"
 import { DbAddCartItemUseCase } from "@/@core/backend/domain/usecases/cart/dbAddCartItemUseCase"
+import { serverError } from "../../helpers/errors"
 import { Controller } from "../../protocols/controller"
 
 export class AddCartItemController implements Controller {
@@ -34,7 +35,7 @@ export class AddCartItemController implements Controller {
 
             return { statusCode: 200, data: cart.toJSON() }
         } catch (error: any) {
-            return { statusCode: 500, errors: [error.message] }
+            return serverError()
         }
     }
 }

@@ -1,6 +1,7 @@
-import { DbClearCartUseCase } from "@/@core/backend/domain/usecases/cart/dbClearCartUseCase"
-import { Controller } from "../../protocols/controller"
 import { HttpRequest, HttpResponse } from "../../protocols/http"
+import { DbClearCartUseCase } from "@/@core/backend/domain/usecases/cart/dbClearCartUseCase"
+import { serverError } from "../../helpers/errors"
+import { Controller } from "../../protocols/controller"
 
 export class ClearCartController implements Controller {
     constructor(private readonly clearCartUseCase: DbClearCartUseCase) {}
@@ -13,7 +14,7 @@ export class ClearCartController implements Controller {
             const cart = await this.clearCartUseCase.execute(userId!, userType!)
             return { statusCode: 200, data: cart.toJSON() }
         } catch (error: any) {
-            return { statusCode: 500, errors: [error.message] }
+            return serverError()
         }
     }
 }

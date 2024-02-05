@@ -4,7 +4,7 @@ import { HttpGatewayResponse, RequestDetails } from "../protocols"
 import { AddCartItemGateway } from "@/@core/frontend/domain/gateways/cart/addCartItemGateway"
 import { RemoveCartItemGateway } from "@/@core/frontend/domain/gateways/cart/removeCartItemGateway"
 import { ClearCartGateway } from "@/@core/frontend/domain/gateways/cart/clearCartGateway"
-import { UnauthorizedError } from "@/@core/backend/presentation/errors"
+import { UnauthorizedError } from "@/@core/frontend/infra/errors"
 
 export class HttpCartGateway
     implements GetCartGateway, AddCartItemGateway, RemoveCartItemGateway, ClearCartGateway

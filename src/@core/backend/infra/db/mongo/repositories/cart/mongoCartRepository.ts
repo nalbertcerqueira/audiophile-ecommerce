@@ -139,7 +139,7 @@ export class MongoCartRepository
             const updatedAt = new Date()
             await cartItemCollection.findOneAndUpdate(
                 { userId, userType, productId },
-                { $set: updatedAt, $inc: { quantity: quantity * -1 } }
+                { $set: { updatedAt }, $inc: { quantity: quantity * -1 } }
             )
         }
 

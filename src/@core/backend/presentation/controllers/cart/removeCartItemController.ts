@@ -1,7 +1,8 @@
-import { DbRemoveCartItemUseCase } from "@/@core/backend/domain/usecases/cart/dbRemoveCartItemUseCase"
-import { Controller } from "../../protocols/controller"
 import { HttpRequest, HttpResponse } from "../../protocols/http"
+import { DbRemoveCartItemUseCase } from "@/@core/backend/domain/usecases/cart/dbRemoveCartItemUseCase"
 import { SchemaValidatorService } from "@/@core/backend/domain/services/schemaValidator"
+import { Controller } from "../../protocols/controller"
+import { serverError } from "../../helpers/errors"
 
 export class RemoveCartItemController implements Controller {
     constructor(
@@ -34,7 +35,7 @@ export class RemoveCartItemController implements Controller {
 
             return { statusCode: 200, data: cart.toJSON() }
         } catch (error: any) {
-            return { statusCode: 500, errors: [error.message] }
+            return serverError()
         }
     }
 }

@@ -2,6 +2,7 @@ import { SchemaValidatorService } from "@/@core/backend/domain/services/schemaVa
 import { HttpRequest, HttpResponse } from "../../protocols/http"
 import { DbAddUserUseCase } from "@/@core/backend/domain/usecases/user/dbAddUserUseCase"
 import { Controller } from "../../protocols/controller"
+import { serverError } from "../../helpers/errors"
 
 export class SignupController implements Controller {
     constructor(
@@ -28,10 +29,7 @@ export class SignupController implements Controller {
 
             return { statusCode: 201, data: null }
         } catch (error: any) {
-            return {
-                statusCode: 500,
-                errors: [error.message]
-            }
+            return serverError()
         }
     }
 }

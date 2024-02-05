@@ -1,4 +1,4 @@
-import { UnauthorizedError } from "@/@core/backend/presentation/errors"
+import { UnauthorizedError } from "@/@core/frontend/infra/errors"
 import { createCheckoutOrderGateway } from "@/@core/frontend/domain/gateways/order/createCheckoutOrderGateway"
 import { HttpGatewayResponse, RequestDetails } from "../protocols"
 import { GetOrderTaxesGateway } from "@/@core/frontend/domain/gateways/order/getOrderTaxesGateway"

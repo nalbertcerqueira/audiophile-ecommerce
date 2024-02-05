@@ -1,7 +1,8 @@
-import { DbAuthorizationUseCase } from "../../domain/usecases/auth/authenticatedUser/dbAuthorizationUseCase"
 import { DbExternalAuthorizationUseCase } from "../../domain/usecases/auth/externalUser/dbExternalAuthorizationUseCase"
-import { Controller } from "../protocols/controller"
+import { serverError, unauthorizedError } from "../helpers/errors"
 import { HttpRequest, HttpResponse } from "../protocols/http"
+import { DbAuthorizationUseCase } from "../../domain/usecases/auth/authenticatedUser/dbAuthorizationUseCase"
+import { Controller } from "../protocols/controller"
 import { UserType } from "@/@core/shared/entities/user/user"
 
 export class AuthenticatedAuthMiddleware implements Controller {
@@ -12,12 +13,8 @@ export class AuthenticatedAuthMiddleware implements Controller {
 
     public async handle(request: HttpRequest): Promise<HttpResponse> {
         const accessToken = request.headers?.authorization?.split(" ")[1]
-        const unauthorizedHeaders = { "WWW-Authenticate": 'Bearer realm="protected resource"' }
-        const unauthorizedMsg =
-            "Unauthorized. You need valid credentials to access this content"
-
         if (!accessToken) {
-            return { statusCode: 401, errors: [unauthorizedMsg], headers: unauthorizedHeaders }
+            return unauthorizedError()
         }
 
         try {
@@ -42,11 +39,7 @@ export class AuthenticatedAuthMiddleware implements Controller {
             }
 
             if (!selectedUser.type || !selectedUser.value) {
-                return {
-                    statusCode: 401,
-                    errors: [unauthorizedMsg],
-                    headers: unauthorizedHeaders
-                }
+                return unauthorizedError()
             }
 
             return {
@@ -54,7 +47,7 @@ export class AuthenticatedAuthMiddleware implements Controller {
                 data: { ...selectedUser.value, type: selectedUser.type }
             }
         } catch (error: any) {
-            return { statusCode: 500, errors: [error.message] }
+            return serverError()
         }
     }
 }

@@ -1,12 +1,13 @@
-import { SchemaValidatorService } from "@/@core/backend/domain/services/schemaValidator"
-import { HttpRequest, HttpResponse } from "../../protocols/http"
-import { DbSigninUseCase } from "@/@core/backend/domain/usecases/auth/authenticatedUser/dbSigninUseCase"
 import { DbGuestAuthorizationUseCase } from "@/@core/backend/domain/usecases/auth/guestUser/dbGuestAuthorizationUseCase"
-import { TokenDecoderService } from "@/@core/backend/domain/services/token/tokenDecoderService"
 import { DbAddProductsToCartUseCase } from "@/@core/backend/domain/usecases/cart/dbAddProductsToCartUseCase"
+import { HttpRequest, HttpResponse } from "../../protocols/http"
+import { SchemaValidatorService } from "@/@core/backend/domain/services/schemaValidator"
+import { TokenDecoderService } from "@/@core/backend/domain/services/token/tokenDecoderService"
 import { DbClearCartUseCase } from "@/@core/backend/domain/usecases/cart/dbClearCartUseCase"
 import { DbGetCartUseCase } from "@/@core/backend/domain/usecases/cart/dbGetCartUseCase"
+import { DbSigninUseCase } from "@/@core/backend/domain/usecases/auth/authenticatedUser/dbSigninUseCase"
 import { Controller } from "../../protocols/controller"
+import { serverError } from "../../helpers/errors"
 
 export class SigninController implements Controller {
     constructor(
@@ -65,7 +66,7 @@ export class SigninController implements Controller {
 
             return { statusCode: 200, data: token }
         } catch (error: any) {
-            return { statusCode: 500, errors: [error.message] }
+            return serverError()
         }
     }
 }

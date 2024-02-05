@@ -1,6 +1,7 @@
+import { HttpRequest, HttpResponse } from "../../protocols/http"
 import { DbGetOrderTaxesUseCase } from "@/@core/backend/domain/usecases/order/dbGetOrderTaxesUseCase"
 import { Controller } from "../../protocols/controller"
-import { HttpRequest, HttpResponse } from "../../protocols/http"
+import { serverError } from "../../helpers/errors"
 
 export class GetOrderTaxesController implements Controller {
     constructor(private readonly getOrderTaxesUseCase: DbGetOrderTaxesUseCase) {}
@@ -17,10 +18,7 @@ export class GetOrderTaxesController implements Controller {
 
             return { statusCode: 200, data: taxes }
         } catch (error: any) {
-            return {
-                statusCode: 500,
-                errors: ["Something went wrong unexpectedly! Please try again later."]
-            }
+            return serverError()
         }
     }
 }

@@ -1,6 +1,7 @@
-import { DbGetCartUseCase } from "@/@core/backend/domain/usecases/cart/dbGetCartUseCase"
 import { HttpRequest, HttpResponse } from "../../protocols/http"
+import { DbGetCartUseCase } from "@/@core/backend/domain/usecases/cart/dbGetCartUseCase"
 import { Controller } from "../../protocols/controller"
+import { serverError } from "../../helpers/errors"
 
 export class GetCartController implements Controller {
     constructor(private readonly getCartUseCase: DbGetCartUseCase) {}
@@ -13,7 +14,7 @@ export class GetCartController implements Controller {
             const cart = await this.getCartUseCase.execute(userId!, userType!)
             return { statusCode: 200, data: cart.toJSON() }
         } catch (error: any) {
-            return { statusCode: 500, errors: [error.message] }
+            return serverError()
         }
     }
 }
