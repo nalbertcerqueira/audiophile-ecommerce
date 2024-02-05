@@ -75,9 +75,15 @@ export class MongoCartRepository
         const { productId, quantity } = operationInfo
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
 
+        const now = new Date()
+
         await cartItemCollection.findOneAndUpdate(
             { userId, userType, productId },
-            { $inc: { quantity }, $setOnInsert: { createdAt: new Date() } },
+            {
+                $set: { updatedAt: now },
+                $inc: { quantity },
+                $setOnInsert: { createdAt: now }
+            },
             { upsert: true }
         )
 
@@ -95,13 +101,15 @@ export class MongoCartRepository
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
         const bulkOperations: AnyBulkWriteOperation<MongoCartItem>[] = products.map((item) => {
             const { productId, quantity } = item
+            const now = new Date()
             return {
                 updateOne: {
                     upsert: true,
                     filter: { userId, userType, productId },
                     update: {
                         $inc: { quantity },
-                        $setOnInsert: { createdAt: new Date() }
+                        $set: { updatedAt: now },
+                        $setOnInsert: { createdAt: now }
                     }
                 }
             }
@@ -128,9 +136,10 @@ export class MongoCartRepository
         }
 
         if (type === "decrease") {
+            const updatedAt = new Date()
             await cartItemCollection.findOneAndUpdate(
                 { userId, userType, productId },
-                { $inc: { quantity: quantity * -1 } }
+                { $set: updatedAt, $inc: { quantity: quantity * -1 } }
             )
         }
 

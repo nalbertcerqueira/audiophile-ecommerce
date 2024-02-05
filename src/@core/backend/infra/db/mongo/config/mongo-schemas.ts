@@ -182,7 +182,8 @@ export const cartItemMongoSchema: Document = {
             userType: userTypeMongoSchema,
             productId: { bsonType: "string" },
             quantity: { bsonType: "int", minimum: 1 },
-            createdAt: dateMongoSchema
+            createdAt: dateMongoSchema,
+            updatedAt: dateMongoSchema
         }
     }
 }
