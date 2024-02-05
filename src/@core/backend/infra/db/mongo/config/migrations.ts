@@ -13,12 +13,12 @@ import { cwd } from "process"
 export class Migration {
     public async run(): Promise<void> {
         await this.createCollections()
-        await this.updloadInitialData()
+        await this.uploadInitialData()
         await mongoHelper.close()
     }
 
     //Populando o banco de dados com as informações dos produtos caso o mesmo esteja vazio
-    private async updloadInitialData(): Promise<void> {
+    private async uploadInitialData(): Promise<void> {
         await mongoHelper.connect()
         const productCollection = mongoHelper.db.collection("products")
 
@@ -30,7 +30,7 @@ export class Migration {
 
         if (emptyCollection) {
             const { insertedCount } = await productCollection.insertMany(products)
-            console.log(`Inserted ${insertedCount} items with sucess!`)
+            console.log(`Inserted ${insertedCount} items with success!`)
             console.log("Migration finished.")
         } else {
             console.log("Current database is already populated. No need to populate again.")

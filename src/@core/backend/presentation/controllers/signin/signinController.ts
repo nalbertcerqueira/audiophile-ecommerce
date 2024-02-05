@@ -11,8 +11,8 @@ import { Controller } from "../../protocols/controller"
 export class SigninController implements Controller {
     constructor(
         private readonly schemaValidator: SchemaValidatorService,
-        private readonly tokenDecorder: TokenDecoderService,
-        private readonly singinUseCase: DbSigninUseCase,
+        private readonly tokenDecoder: TokenDecoderService,
+        private readonly signinUseCase: DbSigninUseCase,
         private readonly guestAuthorizationUseCase: DbGuestAuthorizationUseCase,
         private readonly getCartUseCase: DbGetCartUseCase,
         private readonly addProductsUseCase: DbAddProductsToCartUseCase,
@@ -30,7 +30,7 @@ export class SigninController implements Controller {
 
         try {
             const { email, password } = validationResult.data
-            const token = await this.singinUseCase.execute({ email, password })
+            const token = await this.signinUseCase.execute({ email, password })
 
             if (!token) {
                 return {
@@ -39,7 +39,7 @@ export class SigninController implements Controller {
                 }
             }
 
-            const payload = this.tokenDecorder.decode(token)
+            const payload = this.tokenDecoder.decode(token)
             const guestUser = await this.guestAuthorizationUseCase.execute(accessToken)
 
             if (payload && guestUser) {

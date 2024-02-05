@@ -1,5 +1,5 @@
 import { ExternalUserProps } from "@/@core/shared/entities/user/externalUser"
-import { UpsertExternalUserRepository } from "../../../repositories/externalUser/upsertExternalUserRepositry"
+import { UpsertExternalUserRepository } from "../../../repositories/externalUser/upsertExternalUserRepository"
 import { ExternalUser } from "@/@core/shared/entities/user/externalUser"
 import { TokenGeneratorService } from "../../../services/token/tokenGeneratorService"
 

@@ -51,7 +51,7 @@ export function SigninPageComponent() {
         const guestAccessToken = localStorage.getItem("accessToken")
 
         //Passando o accessToken do usuário convidado para um cookie, o qual será enviado
-        //na requsição do next-auth, e posteriormente capturado pelo handler da api.
+        //na requisição do next-auth, e posteriormente capturado pelo handler da api.
         document.cookie = `guest-access-token=${guestAccessToken};path=/;expires=${expirationDate};sameSite=Lax`
 
         return signIn(provider, { callbackUrl: "/" })

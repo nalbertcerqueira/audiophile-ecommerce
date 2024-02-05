@@ -6,7 +6,7 @@ interface StaticParams {
     category: string
 }
 
-interface PoductPageProps {
+interface ProductPageProps {
     params: {
         category: string
         product: string
@@ -23,7 +23,7 @@ export async function generateStaticParams({ params }: { params: StaticParams })
     }))
 }
 
-export default async function ProductPage({ params }: PoductPageProps) {
+export default async function ProductPage({ params }: ProductPageProps) {
     const products = await dbGetProductsByCategoryUseCase.execute(params.category)
     const foundProduct = products.find((product) => product.slug === params.product)
 

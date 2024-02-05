@@ -33,7 +33,7 @@ export class JwtTokenService
             const encodedKey = new TextEncoder().encode(this.secretKey)
             const { payload } = await jwtVerify<TokenPayload>(token, encodedKey, {
                 algorithms: ["HS256"]
-                //O algorítmo é definido como uma precaução para evitar ataques de remoção de assinatura
+                //O algoritmo é definido como uma precaução para evitar ataques de remoção de assinatura
             })
 
             return { id: payload.id, sessionType: payload.sessionType }

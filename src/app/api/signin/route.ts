@@ -1,9 +1,9 @@
-import { singinController } from "@/@core/backend/main/factories/controllers/signin/signinControllerFactory"
+import { signinController } from "@/@core/backend/main/factories/controllers/signin/signinControllerFactory"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest) {
     const authorization = req.headers.get("authorization") as string
-    const response = await singinController.handle({
+    const response = await signinController.handle({
         body: await req.json(),
         headers: { authorization }
     })

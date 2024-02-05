@@ -4,12 +4,12 @@ import { CheckoutFields } from "../types/types"
 
 import { creditCardRegexp, textMatchRegexp, zipCodeRegexp } from "./constants"
 
-//Máscara dei nput para CEP
+//Máscara de input para CEP
 export function maskZipCode(rawInput: string): string {
     return rawInput.replace(textMatchRegexp, "").slice(0, 8).replace(zipCodeRegexp, "$1-$2")
 }
 
-//Máscara de input para nº de cartão de cŕedito
+//Máscara de input para nº de cartão de crédito
 export function maskCreditCardNumber(rawInput: string): string {
     return rawInput
         .replace(textMatchRegexp, "")
@@ -39,12 +39,12 @@ export function maskCvv(rawInput: string): string {
     return rawInput.replace(textMatchRegexp, "").slice(0, 3)
 }
 
-//Sanitizando entradas númericas em strings
+//Sanitizando entradas numéricas em strings
 export function sanitizeNumericField(input: string, maxLength: number) {
     return input.replace(textMatchRegexp, "").slice(0, maxLength)
 }
 
-//Adapter para manipular inputs númericos
+//Adapter para manipular inputs numéricos
 export function handleNumericField(
     field: ControllerRenderProps<CheckoutFields, any>,
     maxLength: number

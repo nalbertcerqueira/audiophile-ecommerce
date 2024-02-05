@@ -13,7 +13,7 @@ export function toCapitalized(input?: string): string | undefined {
     return input ? `${input[0].toUpperCase()}${input.slice(1).toLowerCase()}` : undefined
 }
 
-//Verificando se o caminho de url passado como parametro faz parte da url alvo (atual url da página)
+//Verificando se o caminho de url passado como parâmetro faz parte da url alvo (atual url da página)
 export function matchUrlPathname(currentPathname: string | null, target: string) {
     if (!currentPathname) {
         return false
@@ -23,6 +23,6 @@ export function matchUrlPathname(currentPathname: string | null, target: string)
         return true
     }
 
-    const pathLlist = currentPathname?.split("/")
-    return pathLlist?.includes(target)
+    const pathList = currentPathname?.split("/")
+    return pathList?.includes(target)
 }

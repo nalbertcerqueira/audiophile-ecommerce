@@ -29,4 +29,4 @@ function createSigninController() {
     )
 }
 
-export const singinController = createSigninController()
+export const signinController = createSigninController()

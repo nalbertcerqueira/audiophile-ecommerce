@@ -12,11 +12,11 @@ interface ImageInfo {
     blurHeight?: number
 }
 
-interface ReponsiveImagesProps extends AriaAttributes {
+interface ResponsiveImagesProps extends AriaAttributes {
     images: (ImageInfo | undefined)[]
 }
 
-export function ResponsiveImages({ images, ...ariaProps }: ReponsiveImagesProps) {
+export function ResponsiveImages({ images, ...ariaProps }: ResponsiveImagesProps) {
     return (
         <>
             {images.map((image, i) => {

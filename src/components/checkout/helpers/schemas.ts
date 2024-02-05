@@ -8,7 +8,7 @@ const checkoutBaseSchema = z.object({
         .min(6, lengthErrorMessage("Name", "min", 6)),
     email: z
         .string({ required_error: requiredErrorMessage("Email") })
-        .email("Invalid email formart"),
+        .email("Invalid email format"),
     phone: z
         .string({ required_error: requiredErrorMessage("Phone") })
         .refine((phone) => phone.split(" ").slice(1).join("").replace(/\D/g, "").length >= 9, {

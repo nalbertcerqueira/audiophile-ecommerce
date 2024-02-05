@@ -8,7 +8,7 @@ import { dbAddProductsToCartUseCase } from "@/@core/backend/main/factories/useca
 import { dbClearCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbClearCartFactory"
 import { NextApiRequest } from "next"
 import { AuthOptions } from "next-auth"
-import GoogleProvivder from "next-auth/providers/google"
+import GoogleProvider from "next-auth/providers/google"
 import GithubProvider from "next-auth/providers/github"
 
 const nextAuthSecretKey = process.env.NEXTAUTH_SECRET
@@ -18,7 +18,7 @@ export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOption
 
     const nextAuthHandlerOptions: AuthOptions = {
         providers: [
-            GoogleProvivder({
+            GoogleProvider({
                 clientId: process.env.GOOGLE_CLIENT_ID ?? "",
                 clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? ""
             }),
@@ -78,7 +78,7 @@ export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOption
                 return newSessionToken
             },
             session: async ({ session, token }) => {
-                //Retornando apenas o acessToken que será persistido no localStorage do usuário,
+                //Retornando apenas o accessToken que será persistido no localStorage do usuário,
                 //juntamente com o expires, pois é obrigatório
                 return {
                     expires: session.expires,

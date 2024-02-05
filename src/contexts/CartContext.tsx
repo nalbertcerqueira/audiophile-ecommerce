@@ -20,7 +20,7 @@ import { addCartItemUseCase } from "@/@core/frontend/main/usecases/cart/addCartI
 import { clearCartUseCase } from "@/@core/frontend/main/usecases/cart/clearCartFactory"
 import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
 import { getCartUseCase } from "@/@core/frontend/main/usecases/cart/getCartFactory"
-import { cartLoadingInititalState } from "@/store/cartLoading/initialState"
+import { cartLoadingInitialState } from "@/store/cartLoading/initialState"
 import { CartLoadingActions } from "@/store/cartLoading/types"
 import { cartLoadingReducer } from "@/store/cartLoading/reducer"
 import { CartLoadingState } from "@/store/cartLoading/types"
@@ -57,7 +57,7 @@ export function CartProvider({ children }: PropsWithChildren) {
     const [cart, setCart] = useState<CartProps>(cartInitialState)
     const [loadingState, loadingDispatch] = useReducer(
         cartLoadingReducer,
-        cartLoadingInititalState
+        cartLoadingInitialState
     )
 
     //Buscando o carrinho de compras após a sessão ser validada

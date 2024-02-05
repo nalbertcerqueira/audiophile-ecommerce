@@ -77,7 +77,7 @@ export class MongoProductRepository
         return null
     }
 
-    //Pipeline de agregação para retirar apenas as propriedades nescessárias
+    //Pipeline de agregação para retirar apenas as propriedades necessárias
     //caso o tipo do produto seja 'short'
     private getShortProductQuery() {
         return {

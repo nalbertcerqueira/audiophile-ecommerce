@@ -20,7 +20,7 @@ export function generateCustomZodErrors<T extends z.ZodError<any>>(
             return null
         }
 
-        const formatedPath = error.path.reduce((acc, value, i) => {
+        const formattedPath = error.path.reduce((acc, value, i) => {
             if (typeof value === "number") {
                 acc += `[${value}].`
             } else if (pathLength > 1 && i === pathLength - 1 && typeof value === "string") {
@@ -34,7 +34,7 @@ export function generateCustomZodErrors<T extends z.ZodError<any>>(
         if (typeof errorCountMap[joinedPath] === "number") errorCountMap[joinedPath] += 1
         else errorCountMap[joinedPath] = 1
 
-        return `${formatedPath || ""} ${error.message.toLocaleLowerCase()}`.trim()
+        return `${formattedPath || ""} ${error.message.toLocaleLowerCase()}`.trim()
     })
 
     return errors.filter((error) => !!error) as string[]

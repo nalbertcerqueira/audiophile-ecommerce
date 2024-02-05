@@ -10,7 +10,7 @@
 
 ## 📋 Descrição
 
-Audiophile ecommerce se trata de um projeto desenvolvido a partir de um dos desafios encontrados na página da [Frontend Metor](https://www.frontendmentor.io), tendo como principal objetivo o desenvolvimento de uma aplicação fullstack em Next.js, como também, consolidar conceitos relacionados a autenticação e autorização pelo protocolo OAuth e o uso de sessões anônimas. O projeto conta com as seguintes funcionalidades:
+Audiophile ecommerce se trata de um projeto desenvolvido a partir de um dos desafios encontrados na página da [Frontend Mentor](https://www.frontendmentor.io), tendo como principal objetivo o desenvolvimento de uma aplicação fullstack em Next.js, como também, consolidar conceitos relacionados a autenticação e autorização pelo protocolo OAuth e o uso de sessões anônimas. O projeto conta com as seguintes funcionalidades:
 
 -   🟢 Login tradicional
 -   🟢 Cadastro de usuários
@@ -26,13 +26,13 @@ Audiophile ecommerce se trata de um projeto desenvolvido a partir de um dos desa
 
 | **Método** | **Rota**                   | **Descrição**                             |
 | ---------- | -------------------------- | ----------------------------------------- |
-| GET        | `/api/auth/user`           | Obtem dados usuário para inciar a sessão  |
-| GET        | `/api/auth/cart`           | Obtem o carrinho de compras do usuário    |
+| GET        | `/api/auth/user`           | Obtém dados usuário para inciar a sessão  |
+| GET        | `/api/auth/cart`           | Obtém o carrinho de compras do usuário    |
 | DELETE     | `/api/auth/cart`           | Remove todos os produtos do carrinho      |
 | POST       | `/api/auth/cart/items`     | Adiciona um item ao carrinho              |
 | DELETE     | `/api/auth/cart/items/:id` | Remove o item cujo id = ':id' do carrinho |
 | POST       | `/api/auth/checkout`       | Efetua o checkout da compra               |
-| POST       | `/api/auth/checkout/taxes` | Obtem as taxas relacionadas a compra      |
+| POST       | `/api/auth/checkout/taxes` | Obtém as taxas relacionadas a compra      |
 
 #### Rotas públicas 🛤️
 

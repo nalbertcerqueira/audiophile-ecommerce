@@ -151,7 +151,7 @@ export const userMongoSchema: Document = {
 export const externalUserMongoSchema: Document = {
     $jsonSchema: {
         bsonType: "object",
-        aditionalProperties: false,
+        additionalProperties: false,
         required: ["name", "email", "images", "createdAt", "updatedAt"],
         properties: {
             _id: {},
@@ -161,7 +161,7 @@ export const externalUserMongoSchema: Document = {
             name: { bsonType: "string", minLength: 1 },
             images: {
                 bsonType: "object",
-                aditionalProperties: false,
+                additionalProperties: false,
                 required: ["profile"],
                 properties: {
                     profile: userImageMongoSchema

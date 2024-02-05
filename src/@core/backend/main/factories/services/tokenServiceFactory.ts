@@ -1,7 +1,7 @@
 import { JwtTokenService } from "@/@core/backend/infra/services/jwtTokenService"
 
 //Cada tipo de usuário, comum, externo e convidado (ou anônimo se você preferir),
-//têm o seu token assinado por uma chave específica para evitar ataques de escalação de privilégios
+//tem o seu token assinado por uma chave específica para evitar ataques de escalação de privilégios
 const duration = 3600 * 24 * 7
 const authenticatedSessionSecretKey = process.env.AUTHENTICATED_SESSION_SECRET_KEY as string
 const externalSessionSecretKey = process.env.EXTERNAL_SESSION_SECRET_KEY as string

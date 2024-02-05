@@ -6,14 +6,14 @@ import { mongoUserRepository } from "../../repositories/userRepositoryFactory"
 import { bcryptEncrypterService } from "../../services/encrypterServiceFactory"
 
 function createSignupController() {
-    const zodSignupValitor = new ZodSignupValidator()
+    const zodSignupValidator = new ZodSignupValidator()
     const dbAddUserUseCase = new DbAddUserUseCase(
         mongoExternalUserRepository,
         mongoUserRepository,
         mongoUserRepository,
         bcryptEncrypterService
     )
-    return new SignupController(zodSignupValitor, dbAddUserUseCase)
+    return new SignupController(zodSignupValidator, dbAddUserUseCase)
 }
 
 export const signupController = createSignupController()
