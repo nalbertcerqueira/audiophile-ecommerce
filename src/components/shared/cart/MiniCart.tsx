@@ -1,13 +1,16 @@
 "use client"
 
-import { CartContext } from "@/contexts/CartContext"
+import { CheckoutContext } from "@/contexts/CheckoutContext"
+import { SessionContext } from "@/contexts/SessionContext"
 import { SummaryField } from "./SummaryField"
+import { CartContext } from "@/contexts/CartContext"
 import { CartItem } from "./CartItem"
 import { useContext } from "react"
-import Link from "next/link"
-import { CheckoutContext } from "@/contexts/CheckoutContext"
+import { useRouter } from "next/navigation"
 
 export function MiniCart({ isOpen }: { isOpen: boolean }) {
+    const router = useRouter()
+    const { isLogged } = useContext(SessionContext)
     const { cart, loadingState, clearCart, setCartLoadingStatus } = useContext(CartContext)
     const { updateTaxes, setCheckoutLoadingStatus } = useContext(CheckoutContext)
 
@@ -29,6 +32,13 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
             .then(() => {
                 setCheckoutLoadingStatus({ isCheckingOut: false, isLoadingTaxes: false })
             })
+    }
+
+    function shouldCheckout() {
+        if (!isLogged) {
+            return window.location.assign("/signin")
+        }
+        return router.push("/checkout")
     }
 
     return (
@@ -81,13 +91,13 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
                     value={cart.totalSpent}
                 />
             </div>
-            <Link
-                href="/checkout"
+            <button
+                onClick={() => shouldCheckout()}
                 className="btn btn--primary mini-cart__checkout-btn"
                 type="button"
             >
                 CHECKOUT
-            </Link>
+            </button>
         </div>
     )
 }
