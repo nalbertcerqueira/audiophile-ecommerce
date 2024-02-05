@@ -1,13 +1,14 @@
 "use client"
 
+import { staticProductImages } from "@/utils/imageMap"
+import { CheckoutContext } from "@/contexts/CheckoutContext"
 import { formatCurrency } from "@/utils/helpers"
+import { ModalContext } from "@/contexts/ModalContext"
+import { CartContext } from "@/contexts/CartContext"
+import { RingLoader } from "../loaders/RingLoader"
 import { Counter } from "../Counter"
 import { useContext } from "react"
-import { CartContext } from "@/contexts/CartContext"
-import { staticProductImages } from "@/utils/imageMap"
 import Image from "next/image"
-import { CheckoutContext } from "@/contexts/CheckoutContext"
-import { ModalContext } from "@/contexts/ModalContext"
 
 interface CartItemProps {
     readOnly?: boolean
@@ -20,15 +21,14 @@ interface CartItemProps {
 
 export function CartItem({ readOnly, name, productId, slug, quantity, price }: CartItemProps) {
     const { cartModal } = useContext(ModalContext)
-    const { updateTaxes, setCheckoutLoadingStatus: updateCheckoutStatus } =
-        useContext(CheckoutContext)
+    const { updateTaxes, setCheckoutLoadingStatus } = useContext(CheckoutContext)
     const { addItem, removeItem, setCartLoadingStatus, loadingState, requestCount } =
         useContext(CartContext)
 
     async function handleRemoveItem() {
         const requestId = (requestCount.current += 1)
         const cartTimer = setCartLoadingStatus({ type: "ENABLE", payload: { productId } }, 250)
-        const checkoutTimer = updateCheckoutStatus(
+        const checkoutTimer = setCheckoutLoadingStatus(
             { isCheckingOut: false, isLoadingTaxes: true },
             500
         )
@@ -44,7 +44,7 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
                 if (requestCount.current === requestId) {
                     //Verificando se essa é a ultima (ou a única) requisição de remover items ao carrinho,
                     //para não interromper o loading antes da ultima requisição acabar.
-                    updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
+                    setCheckoutLoadingStatus({ isCheckingOut: false, isLoadingTaxes: false })
                 }
             })
     }
@@ -52,7 +52,7 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
     async function handleAddItem() {
         const requestId = (requestCount.current += 1)
         const cartTimer = setCartLoadingStatus({ type: "ENABLE", payload: { productId } }, 250)
-        const checkoutTimer = updateCheckoutStatus(
+        const checkoutTimer = setCheckoutLoadingStatus(
             { isCheckingOut: false, isLoadingTaxes: true },
             500
         )
@@ -68,12 +68,12 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
                 //Verificando se essa é a ultima (ou a única) requisição de adicionar items ao carrinho,
                 //para não interromper o loading antes da ultima requisição acabar.
                 if (requestCount.current === requestId) {
-                    updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
+                    setCheckoutLoadingStatus({ isCheckingOut: false, isLoadingTaxes: false })
                 }
             })
     }
 
-    function shouldDisableCounter() {
+    function isCartBusy() {
         const isLoading = loadingState.currentProductIds.includes(productId)
         const isCleaning = loadingState.isLoading && !loadingState.currentProductIds.length
 
@@ -107,13 +107,18 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
             </div>
             {!readOnly && (
                 <Counter
-                    disabled={shouldDisableCounter()}
+                    disabled={isCartBusy()}
                     count={quantity}
                     decrement={handleRemoveItem}
                     increment={handleAddItem}
                     className="cart-item__counter"
                     ariaLive={!readOnly ? (cartModal.isOpen ? "polite" : "off") : undefined}
                 />
+            )}
+            {isCartBusy() && (
+                <div className="btn-overlay btn-overlay--right">
+                    <RingLoader className="ring-loader--cart-item" />
+                </div>
             )}
         </div>
     )

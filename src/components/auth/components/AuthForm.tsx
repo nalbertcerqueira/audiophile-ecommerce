@@ -24,7 +24,7 @@ export function AuthForm(props: AuthFormProps) {
             >
                 {submitBtn}
                 {isSubmitting && (
-                    <div className="btn-loading-overlay">
+                    <div className="btn-overlay">
                         <RingLoader />
                     </div>
                 )}

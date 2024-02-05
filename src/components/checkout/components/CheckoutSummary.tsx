@@ -100,7 +100,7 @@ export function CheckoutSummary({ formId }: CheckoutSummaryProps) {
                 className="btn btn--primary summary__submit-btn"
             >
                 {checkoutStatus.isCheckingOut && (
-                    <div className="btn-loading-overlay">
+                    <div className="btn-overlay">
                         <RingLoader />
                     </div>
                 )}

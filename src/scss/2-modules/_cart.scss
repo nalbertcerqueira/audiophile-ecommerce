@@ -68,6 +68,7 @@
 .cart-item {
     @include mixins.flex($items: center, $gap: 1rem);
     @extend %show-animation;
+    position: relative;
 
     &__thumb {
         width: 4rem;

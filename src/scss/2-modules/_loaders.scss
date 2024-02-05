@@ -14,6 +14,13 @@
     width: 32px;
     height: 32px;
 
+    &--cart-item {
+        transform: translateX(-2.125rem);
+        span {
+            border-color: vars.$light-orange transparent transparent transparent;
+        }
+    }
+
     &__slice {
         @extend %full-width-height;
         display: block;
