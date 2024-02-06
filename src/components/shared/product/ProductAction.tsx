@@ -22,13 +22,13 @@ export function AddProductAction({ productId }: { productId: string }) {
 
         addItem(productId, count, { emitToast: true })
             .then((res) => {
+                setCount(0)
                 setCartStatus({ type: "DISABLE", payload: { productId } })
                 return res ? updateTaxes() : null
             })
             .then(() => {
                 setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
             })
-            .finally(() => setCount(0))
     }
 
     function shouldDisableCounter() {
