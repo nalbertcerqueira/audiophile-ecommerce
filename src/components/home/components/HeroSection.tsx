@@ -1,5 +1,3 @@
-"use client"
-
 import Link from "next/link"
 import HeroImage from "/public/imgs/home/image-hero.jpg"
 import HeroImageTablet from "/public/imgs/home/image-hero-tablet.jpg"
