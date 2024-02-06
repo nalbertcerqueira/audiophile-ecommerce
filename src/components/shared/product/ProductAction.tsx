@@ -7,33 +7,32 @@ import { CheckoutContext } from "@/contexts/CheckoutContext"
 
 export function AddProductAction({ productId }: { productId: string }) {
     const [count, setCount] = useState<number>(0)
-    const { loadingState, addItem, setCartLoadingStatus } = useContext(CartContext)
-    const { updateTaxes, setCheckoutLoadingStatus: updateCheckoutStatus } =
-        useContext(CheckoutContext)
+    const { cartStatus, addItem, setCartStatus } = useContext(CartContext)
+    const { updateTaxes, setCheckoutStatus } = useContext(CheckoutContext)
 
     function handleAddItem() {
-        if (loadingState.isLoading) {
+        if (cartStatus.isLoading) {
             return
         }
 
         //O loading da taxa também é ativado para dar a impressão de que ambas, a taxa
         //e a ação de adicionar items ao carrinho, são iniciadas ao mesmo tempo
-        setCartLoadingStatus({ type: "ENABLE", payload: { productId } })
-        updateCheckoutStatus((prevState) => ({ ...prevState, isLoadingTaxes: true }))
+        setCartStatus({ type: "ENABLE", payload: { productId } })
+        setCheckoutStatus((prevState) => ({ ...prevState, isLoadingTaxes: true }))
 
         addItem(productId, count, { emitToast: true })
             .then((res) => {
-                setCartLoadingStatus({ type: "DISABLE", payload: { productId } })
+                setCartStatus({ type: "DISABLE", payload: { productId } })
                 return res ? updateTaxes() : null
             })
             .then(() => {
-                updateCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
+                setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
             })
     }
 
     function shouldDisableCounter() {
-        const isLoading = loadingState.currentProductIds.includes(productId)
-        const isCleaning = loadingState.isLoading && !loadingState.currentProductIds.length
+        const isLoading = cartStatus.currentProductIds.includes(productId)
+        const isCleaning = cartStatus.isLoading && !cartStatus.currentProductIds.length
 
         return isLoading || isCleaning
     }

@@ -1,19 +1,25 @@
 "use client"
 
+import { createCheckoutOrderUseCase } from "@/@core/frontend/main/usecases/order/createCheckoutOrderFactory"
+import { SuccessCheckoutMessage } from "@/libs/react-toastify/components/CheckoutMessages"
 import { getOrderTaxesUseCase } from "@/@core/frontend/main/usecases/order/getOrderTaxesFactory"
-import { CheckoutOrderProps, Taxes } from "@/@core/shared/entities/order/checkoutOrder"
 import { SessionContext } from "./SessionContext"
+import { emitToast } from "@/libs/react-toastify/utils"
+import {
+    CheckoutOrder,
+    CheckoutOrderProps,
+    Taxes
+} from "@/@core/shared/entities/order/checkoutOrder"
 import {
     PropsWithChildren,
     createContext,
     useState,
-    Dispatch,
     SetStateAction,
     useCallback,
     useEffect,
     useContext
 } from "react"
-import { emitToast } from "@/libs/react-toastify/utils"
+import { Id } from "react-toastify"
 
 interface CheckoutStatus {
     isLoadingTaxes: boolean
@@ -25,12 +31,12 @@ interface Order extends Pick<CheckoutOrderProps, "cartItems" | "orderId"> {
 }
 
 interface CheckoutContextProps {
-    status: CheckoutStatus
     taxes: Taxes
     order: Order | null
+    checkoutStatus: CheckoutStatus
     updateTaxes: () => Promise<void>
-    updateOrder: Dispatch<SetStateAction<Order | null>>
-    setCheckoutLoadingStatus: (
+    createOrder: (withToast?: boolean) => Promise<void>
+    setCheckoutStatus: (
         state: SetStateAction<CheckoutStatus>,
         delay?: number
     ) => NodeJS.Timeout | void
@@ -51,10 +57,25 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
         await getOrderTaxesUseCase
             .execute()
             .then((data) => setTaxes(data))
-            .catch((error) => handleErrors(error))
+            .catch((error) => handleErrors(error, "taxes"))
     }, [])
 
-    function setCheckoutLoadingStatus(
+    async function createOrder(withToast?: boolean) {
+        let toastId: Id | undefined
+
+        if (withToast) {
+            toastId = emitToast("loading", "Processing your order. Please wait a moment...")
+        }
+        setStatus((prevState) => ({ ...prevState, isCheckingOut: true }))
+
+        await createCheckoutOrderUseCase
+            .execute()
+            .then((order) => handleCheckout(order, toastId))
+            .catch((error) => handleErrors(error, "order", toastId))
+            .finally(() => setStatus((prevState) => ({ ...prevState, isCheckingOut: false })))
+    }
+
+    function setCheckoutStatus(
         state: SetStateAction<CheckoutStatus>,
         delay?: number
     ): NodeJS.Timeout | void {
@@ -66,12 +87,33 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
         return setStatus(state)
     }
 
-    function handleErrors(error: Error) {
-        console.log(error)
-        emitToast(
-            "error",
-            "Sorry, we're having some issues to update the taxes. Please try again later"
-        )
+    function handleCheckout(order: CheckoutOrder, toastId?: Id) {
+        const { orderId, cartItems } = order.toJSON()
+
+        if (toastId) {
+            const successMsg = SuccessCheckoutMessage(orderId)
+            emitToast("success", successMsg, { id: toastId, update: true })
+        }
+
+        setOrder({
+            orderId,
+            cartItems,
+            grandTotal: order.calculateGrandTotal()
+        })
+    }
+
+    function handleErrors(error: Error, requestType: "order" | "taxes", toastId?: Id) {
+        requestType === "order" && setOrder(null)
+
+        if (error.name === "UnauthorizedError") {
+            return location.reload()
+        }
+
+        if (toastId) {
+            return emitToast("error", error.message, { id: toastId, update: true })
+        } else {
+            return emitToast("error", error.message)
+        }
     }
 
     //Buscando as taxas do carrinho após a sessão ser validada
@@ -86,12 +128,12 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
     return (
         <CheckoutContext.Provider
             value={{
-                status,
                 taxes,
                 order,
+                checkoutStatus: status,
+                setCheckoutStatus,
                 updateTaxes,
-                setCheckoutLoadingStatus: setCheckoutLoadingStatus,
-                updateOrder: setOrder
+                createOrder
             }}
         >
             {children}

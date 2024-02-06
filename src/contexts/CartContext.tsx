@@ -35,12 +35,12 @@ interface CartAdditionParams {
 
 interface CartContextProps {
     cart: CartProps
-    loadingState: CartLoadingState
+    cartStatus: CartLoadingState
     requestCount: MutableRefObject<number>
     addItem: (productId: string, quantity: number, options?: ActionOptions) => Promise<boolean>
     clearCart: () => Promise<boolean>
     removeItem: (productId: string, quantity: number) => Promise<boolean>
-    setCartLoadingStatus: (action: CartLoadingActions, delay?: number) => NodeJS.Timeout | void
+    setCartStatus: (action: CartLoadingActions, delay?: number) => NodeJS.Timeout | void
 }
 
 interface ActionOptions {
@@ -184,12 +184,12 @@ export function CartProvider({ children }: PropsWithChildren) {
         <CartContext.Provider
             value={{
                 requestCount,
-                loadingState,
+                cartStatus: loadingState,
                 cart,
                 addItem,
                 removeItem,
                 clearCart,
-                setCartLoadingStatus
+                setCartStatus: setCartLoadingStatus
             }}
         >
             {children}

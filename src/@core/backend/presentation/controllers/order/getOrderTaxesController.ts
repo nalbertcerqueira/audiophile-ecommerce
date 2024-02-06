@@ -18,7 +18,9 @@ export class GetOrderTaxesController implements Controller {
 
             return { statusCode: 200, data: taxes }
         } catch (error: any) {
-            return serverError()
+            return serverError(
+                "Sorry, we're having some issues to update the taxes. Please try again later"
+            )
         }
     }
 }

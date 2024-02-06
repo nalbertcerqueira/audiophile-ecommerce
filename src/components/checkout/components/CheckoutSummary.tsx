@@ -14,20 +14,20 @@ interface CheckoutSummaryProps {
 }
 
 export function CheckoutSummary({ formId }: CheckoutSummaryProps) {
-    const { loadingState: cartLoadingState, cart } = useContext(CartContext)
-    const { status: checkoutStatus, taxes } = useContext(CheckoutContext)
+    const { cartStatus, cart } = useContext(CartContext)
+    const { checkoutStatus, taxes } = useContext(CheckoutContext)
 
     function shouldPreventSubmit() {
         const { isCheckingOut, isLoadingTaxes } = checkoutStatus
         const isCartEmpty = !cart.items.length
-        const isCartBusy = cartLoadingState.isLoading
+        const isCartBusy = cartStatus.isLoading
 
         return isCartEmpty || isCartBusy || isLoadingTaxes || isCheckingOut
     }
 
     function renderItems() {
-        const isClearing = !cartLoadingState.currentProductIds.length
-        const isCartBusy = cartLoadingState.isLoading
+        const isClearing = !cartStatus.currentProductIds.length
+        const isCartBusy = cartStatus.isLoading
 
         if (isCartBusy && isClearing) {
             return (
@@ -53,7 +53,7 @@ export function CheckoutSummary({ formId }: CheckoutSummaryProps) {
     function renderSummaryFields() {
         const grandTotal = taxes.vat + taxes.shipping + cart.totalSpent
 
-        if (checkoutStatus.isLoadingTaxes || cartLoadingState.isLoading) {
+        if (checkoutStatus.isLoadingTaxes || cartStatus.isLoading) {
             return <SummarySkeleton />
         }
 

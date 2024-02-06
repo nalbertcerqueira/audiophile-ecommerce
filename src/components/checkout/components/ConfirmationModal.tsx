@@ -7,11 +7,10 @@ import { CartItem } from "@/components/shared/cart/CartItem"
 import { useContext, useEffect, useState } from "react"
 
 export function ConfirmationModal() {
+    const { order } = useContext(CheckoutContext)
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const transitionTime = 500
     const gap = 16
-
-    const { order } = useContext(CheckoutContext)
 
     //Alterando dinamicamente a altura do container de items para criar o efeito accordion
     useEffect(() => {

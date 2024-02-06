@@ -1,6 +1,5 @@
 "use client"
 
-import { createCheckoutOrderUseCase } from "@/@core/frontend/main/usecases/order/createCheckoutOrderFactory"
 import { checkoutFieldsSchema } from "../helpers/schemas"
 import { BillingDetailFields } from "./checkoutFields/BillingDetailFields"
 import { CheckoutContext } from "@/contexts/CheckoutContext"
@@ -9,14 +8,10 @@ import { CheckoutFields } from "../types/types"
 import { SessionContext } from "@/contexts/SessionContext"
 import { PaymentFields } from "./checkoutFields/PaymentFields"
 import { CartContext } from "@/contexts/CartContext"
-import { emitToast } from "@/libs/react-toastify/utils"
 import { CashIcon } from "@/components/shared/icons/CashIcon"
 import { FormEvent, useContext, useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Id } from "react-toastify"
 import { useForm } from "react-hook-form"
-import { CheckoutOrder } from "@/@core/shared/entities/order/checkoutOrder"
-import { SuccessCheckoutMessage } from "@/libs/react-toastify/components/CheckoutMessages"
 
 export const checkoutFormInitialState: CheckoutFields = {
     name: "",
@@ -30,13 +25,9 @@ export const checkoutFormInitialState: CheckoutFields = {
 }
 
 export function CheckoutForm({ formId }: { formId: string }) {
-    const { cart, loadingState: cartLoadingState } = useContext(CartContext)
     const { isLogged } = useContext(SessionContext)
-    const {
-        status,
-        setCheckoutLoadingStatus: updateCheckoutStatus,
-        updateOrder
-    } = useContext(CheckoutContext)
+    const { cart, cartStatus } = useContext(CartContext)
+    const { checkoutStatus, createOrder } = useContext(CheckoutContext)
     const {
         watch,
         setValue,
@@ -71,8 +62,8 @@ export function CheckoutForm({ formId }: { formId: string }) {
             return location.assign("/signin")
         } else {
             const isCartEmpty = !cart.items
-            const isCartBusy = cartLoadingState.isLoading
-            const isLoadingTaxes = status.isLoadingTaxes
+            const isCartBusy = cartStatus.isLoading
+            const isLoadingTaxes = checkoutStatus.isLoadingTaxes
 
             if (isCartEmpty || isCartBusy || isLoadingTaxes || isSubmitting) {
                 return
@@ -83,47 +74,11 @@ export function CheckoutForm({ formId }: { formId: string }) {
     }
 
     async function handleSuccessfulSubmit() {
-        let toastId: Id | undefined
-        if (isLogged) {
-            toastId = emitToast("loading", "Processing your order. Please wait a moment...")
-        }
+        const withToast = isLogged
 
-        updateCheckoutStatus((prevState) => ({ ...prevState, isCheckingOut: true }))
-
-        await createCheckoutOrderUseCase
-            .execute()
-            .then((order) => handleCheckout(order, toastId))
-            .catch((error) => handleError(error, toastId))
-            .finally(() =>
-                updateCheckoutStatus((prevState) => ({ ...prevState, isCheckingOut: false }))
-            )
-    }
-
-    function handleCheckout(order: CheckoutOrder, toastId?: Id) {
-        const { orderId, cartItems } = order.toJSON()
-
-        if (toastId) {
-            const successMsg = SuccessCheckoutMessage(orderId)
-            emitToast("success", successMsg, { id: toastId, update: true })
-            updateOrder({
-                orderId,
-                cartItems,
-                grandTotal: order.calculateGrandTotal()
-            })
-        }
-
-        reset({ ...checkoutFormInitialState })
-    }
-
-    function handleError(error: Error, toastId?: Id) {
-        updateOrder(null)
-        if (error.name === "UnauthorizedError") {
-            return location.assign("/signin")
-        } else {
-            if (toastId) {
-                return emitToast("error", error.message, { id: toastId, update: true })
-            }
-        }
+        return createOrder(withToast).then(() => {
+            reset({ ...checkoutFormInitialState })
+        })
     }
 
     return (

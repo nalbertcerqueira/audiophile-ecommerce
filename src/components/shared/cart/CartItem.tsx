@@ -21,22 +21,22 @@ interface CartItemProps {
 
 export function CartItem({ readOnly, name, productId, slug, quantity, price }: CartItemProps) {
     const { cartModal } = useContext(ModalContext)
-    const { updateTaxes, setCheckoutLoadingStatus } = useContext(CheckoutContext)
-    const { addItem, removeItem, setCartLoadingStatus, loadingState, requestCount } =
+    const { updateTaxes, setCheckoutStatus } = useContext(CheckoutContext)
+    const { addItem, removeItem, setCartStatus, cartStatus, requestCount } =
         useContext(CartContext)
 
     async function handleRemoveItem() {
         const requestId = (requestCount.current += 1)
-        const cartTimer = setCartLoadingStatus({ type: "ENABLE", payload: { productId } }, 250)
-        const checkoutTimer = setCheckoutLoadingStatus(
+        const cartTimer = setCartStatus({ type: "ENABLE", payload: { productId } }, 200)
+        const checkoutTimer = setCheckoutStatus(
             { isCheckingOut: false, isLoadingTaxes: true },
-            500
+            400
         )
 
         await removeItem(productId, 1)
             .then((res) => {
                 cartTimer && clearTimeout(cartTimer)
-                setCartLoadingStatus({ type: "DISABLE", payload: { productId } })
+                setCartStatus({ type: "DISABLE", payload: { productId } })
                 return res ? updateTaxes() : null
             })
             .then(() => {
@@ -44,15 +44,15 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
                 if (requestCount.current === requestId) {
                     //Verificando se essa é a ultima (ou a única) requisição de remover items ao carrinho,
                     //para não interromper o loading antes da ultima requisição acabar.
-                    setCheckoutLoadingStatus({ isCheckingOut: false, isLoadingTaxes: false })
+                    setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
                 }
             })
     }
 
     async function handleAddItem() {
         const requestId = (requestCount.current += 1)
-        const cartTimer = setCartLoadingStatus({ type: "ENABLE", payload: { productId } }, 250)
-        const checkoutTimer = setCheckoutLoadingStatus(
+        const cartTimer = setCartStatus({ type: "ENABLE", payload: { productId } }, 250)
+        const checkoutTimer = setCheckoutStatus(
             { isCheckingOut: false, isLoadingTaxes: true },
             500
         )
@@ -60,7 +60,7 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
         await addItem(productId, 1)
             .then((res) => {
                 cartTimer && clearTimeout(cartTimer)
-                setCartLoadingStatus({ type: "DISABLE", payload: { productId } })
+                setCartStatus({ type: "DISABLE", payload: { productId } })
                 return res ? updateTaxes() : null
             })
             .then(() => {
@@ -68,14 +68,14 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
                 //Verificando se essa é a ultima (ou a única) requisição de adicionar items ao carrinho,
                 //para não interromper o loading antes da ultima requisição acabar.
                 if (requestCount.current === requestId) {
-                    setCheckoutLoadingStatus({ isCheckingOut: false, isLoadingTaxes: false })
+                    setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
                 }
             })
     }
 
     function isCartBusy() {
-        const isLoading = loadingState.currentProductIds.includes(productId)
-        const isCleaning = loadingState.isLoading && !loadingState.currentProductIds.length
+        const isLoading = cartStatus.currentProductIds.includes(productId)
+        const isCleaning = cartStatus.isLoading && !cartStatus.currentProductIds.length
 
         return (isLoading && !readOnly) || (isCleaning && !readOnly)
     }
