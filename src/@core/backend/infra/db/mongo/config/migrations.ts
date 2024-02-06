@@ -1,6 +1,7 @@
 import { ProductProps } from "../../../../../shared/entities/product/product"
 import {
     cartItemMongoSchema,
+    externalUserMongoSchema,
     mongoCheckoutOrderSchema,
     productMongoSchema,
     userMongoSchema
@@ -43,6 +44,9 @@ export class Migration {
             await Promise.allSettled([
                 mongoHelper.db.createCollection("products", { validator: productMongoSchema }),
                 mongoHelper.db.createCollection("users", { validator: userMongoSchema }),
+                mongoHelper.db.createCollection("externalUsers", {
+                    validator: externalUserMongoSchema
+                }),
                 mongoHelper.db.createCollection("cartItems", {
                     validator: cartItemMongoSchema
                 }),
