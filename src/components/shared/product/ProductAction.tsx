@@ -28,6 +28,7 @@ export function AddProductAction({ productId }: { productId: string }) {
             .then(() => {
                 setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
             })
+            .finally(() => setCount(0))
     }
 
     function shouldDisableCounter() {
