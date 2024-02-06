@@ -60,14 +60,23 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
             .catch((error) => handleErrors(error, "taxes"))
     }, [])
 
+    //Buscando as taxas do carrinho após a sessão ser validada
+    useEffect(() => {
+        if (!sessionState.isLoading) {
+            updateTaxes().then(() => {
+                setStatus((prevState) => ({ ...prevState, isLoadingTaxes: false }))
+            })
+        }
+    }, [updateTaxes, sessionState.isLoading])
+
     async function createOrder(withToast?: boolean) {
         let toastId: Id | undefined
 
         if (withToast) {
             toastId = emitToast("loading", "Processing your order. Please wait a moment...")
         }
-        setStatus((prevState) => ({ ...prevState, isCheckingOut: true }))
 
+        setStatus((prevState) => ({ ...prevState, isCheckingOut: true }))
         await createCheckoutOrderUseCase
             .execute()
             .then((order) => handleCheckout(order, toastId))
@@ -115,15 +124,6 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
             return emitToast("error", error.message)
         }
     }
-
-    //Buscando as taxas do carrinho após a sessão ser validada
-    useEffect(() => {
-        if (!sessionState.isLoading) {
-            updateTaxes().then(() => {
-                setStatus((prevState) => ({ ...prevState, isLoadingTaxes: false }))
-            })
-        }
-    }, [updateTaxes, sessionState.isLoading])
 
     return (
         <CheckoutContext.Provider

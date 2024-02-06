@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
 
-import GenricProfileImage from "/public/imgs/profile.jpg"
+import GenericProfileImage from "/public/imgs/profile.jpg"
 import { SessionContext } from "@/contexts/SessionContext"
 import { useContext } from "react"
 import Link from "next/link"
@@ -17,7 +17,7 @@ export function AvatarCircle({ avatarUrl, alt, className }: AvatarCircleProps) {
         <div className={`avatar-circle ${className || ""}`.trim()}>
             <img
                 alt={alt}
-                src={avatarUrl || GenricProfileImage.src}
+                src={avatarUrl || GenericProfileImage.src}
                 className="avatar-circle__img"
             />
         </div>
