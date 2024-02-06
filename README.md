@@ -10,7 +10,12 @@
 
 ## 📋 Descrição
 
-Audiophile ecommerce se trata de um projeto desenvolvido a partir de um dos desafios encontrados na página da [Frontend Mentor](https://www.frontendmentor.io), tendo como principal objetivo o desenvolvimento de uma aplicação fullstack em Next.js, como também, consolidar conceitos relacionados a autenticação e autorização pelo protocolo OAuth e o uso de sessões anônimas. O projeto conta com as seguintes funcionalidades:
+Audiophile ecommerce se trata de um projeto desenvolvido a partir de um dos desafios encontrados na página da [Frontend Mentor](https://www.frontendmentor.io), tendo como principal objetivo o desenvolvimento de uma aplicação fullstack em Next.js, como também, consolidar conceitos relacionados a autenticação e autorização pelo protocolo OAuth e o uso de sessões anônimas.
+
+⚡ Link da aplicação! 🔗 [Audiophile ecommerce](https://audiophile-ecommerce-delta.vercel.app/)
+
+
+### Principais funcionalidades
 
 -   🟢 Login tradicional
 -   🟢 Cadastro de usuários
@@ -19,7 +24,7 @@ Audiophile ecommerce se trata de um projeto desenvolvido a partir de um dos desa
 -   🟢 Carrinho de compras (adição e remoção de produtos)
 -   🟢 Checkout do carrinho
 -   ⚪ Painel do usuário (em breve...)
-
+  
 ### Rotas da APi
 
 #### Rotas privadas 🔐
