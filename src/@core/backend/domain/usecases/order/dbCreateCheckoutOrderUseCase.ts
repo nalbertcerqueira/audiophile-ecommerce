@@ -23,7 +23,16 @@ export class DbCreateCheckoutOrderUseCase {
             return null
         }
 
-        const order = new CheckoutOrder({ cartItems: cartProps.items, costumer: costumer })
+        const taxes = {
+            vat: CheckoutOrder.calculateVAT(foundCart.getTotalSpent()),
+            shipping: CheckoutOrder.calculateShipping()
+        }
+
+        const order = new CheckoutOrder({
+            costumer: costumer,
+            cart: foundCart.toJSON(),
+            taxes
+        })
         const isCheckoutCreated = await this.addCheckoutOrderRepository.add(id, type, order)
 
         if (!isCheckoutCreated) {

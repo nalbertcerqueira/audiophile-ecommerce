@@ -4,6 +4,7 @@ import { createCheckoutOrderUseCase } from "@/@core/frontend/main/usecases/order
 import { SuccessCheckoutMessage } from "@/libs/react-toastify/components/CheckoutMessages"
 import { getOrderTaxesUseCase } from "@/@core/frontend/main/usecases/order/getOrderTaxesFactory"
 import { SessionContext } from "./SessionContext"
+import { CartProduct } from "@/@core/shared/entities/cart/cart"
 import { emitToast } from "@/libs/react-toastify/utils"
 import {
     CheckoutOrder,
@@ -26,7 +27,8 @@ interface CheckoutStatus {
     isCheckingOut: boolean
 }
 
-interface Order extends Pick<CheckoutOrderProps, "cartItems" | "orderId"> {
+interface Order extends Pick<CheckoutOrderProps, "orderId"> {
+    cartItems: CartProduct[]
     grandTotal: number
 }
 
@@ -54,11 +56,13 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
     })
 
     const updateTaxes = useCallback(async () => {
+        if (!sessionState.isLogged) return
+
         await getOrderTaxesUseCase
             .execute()
             .then((data) => setTaxes(data))
             .catch((error) => handleErrors(error, "taxes"))
-    }, [])
+    }, [sessionState.isLogged])
 
     //Buscando as taxas do carrinho após a sessão ser validada
     useEffect(() => {
@@ -97,7 +101,7 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
     }
 
     function handleCheckout(order: CheckoutOrder, toastId?: Id) {
-        const { orderId, cartItems } = order.toJSON()
+        const { orderId, cart } = order.toJSON()
 
         if (toastId) {
             const successMsg = SuccessCheckoutMessage(orderId)
@@ -106,8 +110,8 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
 
         setOrder({
             orderId,
-            cartItems,
-            grandTotal: order.calculateGrandTotal()
+            cartItems: cart.items,
+            grandTotal: order.getGrandTotal()
         })
     }
 

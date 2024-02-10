@@ -38,6 +38,5 @@ export interface MongoCheckoutOrder extends Omit<CheckoutOrderProps, "cartItems"
     readonly _id: ObjectId
     readonly userId: string
     readonly userType: UserType
-    cartItems: Pick<CartProduct, "productId" | "quantity">[]
     createdAt: Date
 }

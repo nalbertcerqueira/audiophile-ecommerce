@@ -52,7 +52,6 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
                     shopping cart is open
                 </span>
             )}
-
             <div className="mini-cart__header">
                 <h3
                     aria-label={`cart with ${cart.itemCount} items`}

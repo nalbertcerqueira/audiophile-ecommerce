@@ -13,12 +13,9 @@ export class DbGetOrderTaxesUseCase {
             return { vat: 0, shipping: 0 }
         }
 
-        const { items } = foundCart.toJSON()
-        const order = new CheckoutOrder({ cartItems: items, costumer: null })
-
         return {
-            vat: order.calculateVAT(),
-            shipping: order.calculateShipping()
+            vat: CheckoutOrder.calculateVAT(foundCart.getTotalSpent()),
+            shipping: CheckoutOrder.calculateShipping()
         }
     }
 }
