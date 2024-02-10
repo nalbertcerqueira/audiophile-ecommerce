@@ -27,6 +27,11 @@ import { CartLoadingState } from "@/store/cartLoading/types"
 import { SessionContext } from "./SessionContext"
 import { emitToast } from "@/libs/react-toastify/utils"
 
+interface CustomCart extends CartProps {
+    totalSpent: number
+    itemCount: number
+}
+
 interface CartAdditionParams {
     cart: Cart | null
     productId: string
@@ -34,7 +39,7 @@ interface CartAdditionParams {
 }
 
 interface CartContextProps {
-    cart: CartProps
+    cart: CustomCart
     cartStatus: CartLoadingState
     requestCount: MutableRefObject<number>
     addItem: (productId: string, quantity: number, options?: ActionOptions) => Promise<boolean>
@@ -47,14 +52,12 @@ interface ActionOptions {
     emitToast: boolean
 }
 
-const cartInitialState = Cart.empty().toJSON()
-
 export const CartContext = createContext<CartContextProps>({} as CartContextProps)
 
 export function CartProvider({ children }: PropsWithChildren) {
     const requestCount = useRef(0)
     const sessionState = useContext(SessionContext)
-    const [cart, setCart] = useState<CartProps>(cartInitialState)
+    const [cart, setCart] = useState<CustomCart>({ itemCount: 0, totalSpent: 0, items: [] })
     const [loadingState, loadingDispatch] = useReducer(
         cartLoadingReducer,
         cartLoadingInitialState
@@ -67,7 +70,7 @@ export function CartProvider({ children }: PropsWithChildren) {
 
             getCartUseCase
                 .execute()
-                .then((cart) => setCart(cart.toJSON()))
+                .then((cart) => handleCartUpdate(cart))
                 .catch((error) => handleCartErrors(error, true))
                 .finally(() => loadingDispatch({ type: "DISABLE" }))
         }
@@ -156,7 +159,8 @@ export function CartProvider({ children }: PropsWithChildren) {
 
     function handleCartUpdate(cart: Cart | null) {
         if (cart) {
-            setCart(cart.toJSON())
+            const { items } = cart.toJSON()
+            setCart({ items, itemCount: cart.getCount(), totalSpent: cart.getTotalSpent() })
         }
     }
 

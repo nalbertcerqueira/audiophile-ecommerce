@@ -181,8 +181,6 @@ export class MongoCartRepository
             {
                 $group: {
                     _id: "$userId",
-                    itemCount: { $sum: "$quantity" },
-                    totalSpent: { $sum: { $multiply: ["$quantity", "$price"] } },
                     items: {
                         $push: {
                             productId: "$productId",
@@ -196,8 +194,6 @@ export class MongoCartRepository
             },
             {
                 $project: {
-                    itemCount: 1,
-                    totalSpent: 1,
                     items: 1,
                     _id: 0
                 }

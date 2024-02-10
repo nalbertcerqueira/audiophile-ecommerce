@@ -1,5 +1,5 @@
 import { generateCustomZodErrors } from "../helpers"
-import { cartItemZodSchema, cartZodSchema } from "./util"
+import { cartItemZodSchema, cartZodSchema } from "./utils"
 import { EntityValidationResult } from "../protocols"
 
 export interface CartProduct {
@@ -11,8 +11,6 @@ export interface CartProduct {
 }
 
 export interface CartProps {
-    totalSpent: number
-    itemCount: number
     items: CartProduct[]
 }
 
@@ -36,7 +34,7 @@ export class Cart {
     }
 
     public static empty(): Cart {
-        return new Cart({ items: [], itemCount: 0, totalSpent: 0 })
+        return new Cart({ items: [] })
     }
 
     constructor(props: CartProps) {
@@ -49,15 +47,21 @@ export class Cart {
 
         const { data } = validationResult
         this.props = {
-            ...data,
             items: data.items.map((item) => ({ ...item }))
         }
     }
 
     public toJSON(): CartProps {
         return {
-            ...this.props,
             items: this.props.items.map((item) => ({ ...item }))
         }
+    }
+
+    public getTotalSpent(): number {
+        return this.props.items.reduce((acc, item) => (acc += item.quantity * item.price), 0)
+    }
+
+    public getCount(): number {
+        return this.props.items.reduce((acc, item) => (acc += item.quantity), 0)
     }
 }
