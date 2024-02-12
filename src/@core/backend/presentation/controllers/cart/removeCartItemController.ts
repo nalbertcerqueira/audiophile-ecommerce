@@ -22,7 +22,7 @@ export class RemoveCartItemController implements Controller {
 
         try {
             const cart = await this.removeCartItemUseCase.execute(
-                { id: userId!, type: userType! },
+                { userId: userId!, type: userType! },
                 { quantity: validationResult.data.quantity, productId: productId! }
             )
 

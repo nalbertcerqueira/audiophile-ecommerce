@@ -12,7 +12,7 @@ export class GetOrderTaxesController implements Controller {
 
         try {
             const taxes = await this.getOrderTaxesUseCase.execute({
-                id: userId!,
+                userId: userId!,
                 type: userType!
             })
 

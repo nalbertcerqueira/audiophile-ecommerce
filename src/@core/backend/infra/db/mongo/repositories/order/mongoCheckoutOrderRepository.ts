@@ -1,17 +1,14 @@
 import { AddCheckoutOrderRepository } from "@/@core/backend/domain/repositories/order/addCheckoutOrderRepository"
 import { CheckoutOrder } from "@/@core/shared/entities/order/checkoutOrder"
-import { UserType } from "@/@core/shared/entities/user/user"
 import { mongoHelper } from "../../config/mongo-config"
 import { MongoCheckoutOrder } from "../../models"
+import { UserDetails } from "@/@core/backend/domain/repositories/protocols"
 
 export class MongoCheckoutOrderRepository implements AddCheckoutOrderRepository {
-    public async add(
-        userId: string,
-        userType: UserType,
-        order: CheckoutOrder
-    ): Promise<boolean> {
+    public async add(userDetails: UserDetails, order: CheckoutOrder): Promise<boolean> {
         await mongoHelper.connect()
 
+        const { userId, type } = userDetails
         const creationDate = new Date()
 
         const checkoutOrderCollection =
@@ -19,7 +16,7 @@ export class MongoCheckoutOrderRepository implements AddCheckoutOrderRepository 
 
         const response = await checkoutOrderCollection.insertOne({
             userId,
-            userType,
+            userType: type,
             ...order.toJSON(),
             createdAt: creationDate
         })

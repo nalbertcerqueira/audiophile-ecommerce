@@ -1,6 +1,6 @@
 import { CheckoutOrder } from "@/@core/shared/entities/order/checkoutOrder"
-import { UserType } from "@/@core/shared/entities/user/user"
+import { UserDetails } from "../protocols"
 
 export interface AddCheckoutOrderRepository {
-    add(userId: string, userType: UserType, order: CheckoutOrder): Promise<boolean>
+    add(userDetails: UserDetails, order: CheckoutOrder): Promise<boolean>
 }

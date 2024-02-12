@@ -15,8 +15,8 @@ export class DbCreateCheckoutOrderUseCase {
         userInfo: UserInfo,
         costumer: Costumer
     ): Promise<CheckoutOrder | null> {
-        const { id, type } = userInfo
-        const foundCart = await this.getCartRepository.getCartById(id, type)
+        const { userId, type } = userInfo
+        const foundCart = await this.getCartRepository.getCartById({ userId, type })
         const cartProps = foundCart?.toJSON()
 
         if (!foundCart || !cartProps?.items) {
@@ -33,13 +33,16 @@ export class DbCreateCheckoutOrderUseCase {
             cart: foundCart.toJSON(),
             taxes
         })
-        const isCheckoutCreated = await this.addCheckoutOrderRepository.add(id, type, order)
+        const isCheckoutCreated = await this.addCheckoutOrderRepository.add(
+            { userId, type },
+            order
+        )
 
         if (!isCheckoutCreated) {
             return null
         }
 
-        await this.clearCartRepository.clearCartById(id, type)
+        await this.clearCartRepository.clearCartById({ userId, type })
         return order
     }
 }

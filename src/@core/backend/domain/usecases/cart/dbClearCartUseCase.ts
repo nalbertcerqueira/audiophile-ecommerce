@@ -6,7 +6,7 @@ export class DbClearCartUseCase {
     constructor(private readonly clearCartRepository: ClearCartRepository) {}
 
     public async execute(userId: string, userType: UserType): Promise<Cart> {
-        await this.clearCartRepository.clearCartById(userId, userType)
+        await this.clearCartRepository.clearCartById({ userId, type: userType })
 
         return Cart.empty()
     }

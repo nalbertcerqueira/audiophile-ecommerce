@@ -57,7 +57,7 @@ export class SigninController implements Controller {
                     }))
 
                     await this.addProductsUseCase.execute(
-                        { id, type: sessionType },
+                        { userId: id, type: sessionType },
                         itemsToAdd
                     )
                     await this.clearCartUseCase.execute(guestUser.id, "guest")

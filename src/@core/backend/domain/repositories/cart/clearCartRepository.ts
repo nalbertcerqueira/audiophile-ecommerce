@@ -1,5 +1,5 @@
-import { UserType } from "@/@core/shared/entities/user/user"
+import { UserDetails } from "../protocols"
 
 export interface ClearCartRepository {
-    clearCartById(userId: string, userType: UserType): Promise<void>
+    clearCartById(userDetails: UserDetails): Promise<void>
 }

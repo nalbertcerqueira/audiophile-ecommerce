@@ -56,10 +56,10 @@ export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOption
 
                 if (guestUser && payload) {
                     //Buscando o carrinho do usuário convidado (usuário anônimo)
-                    const guestCart = await mongoCartRepository.getCartById(
-                        guestUser.id,
-                        "guest"
-                    )
+                    const guestCart = await mongoCartRepository.getCartById({
+                        userId: guestUser.id,
+                        type: "guest"
+                    })
 
                     if (guestCart) {
                         const itemsToAdd = guestCart.toJSON().items.map((item) => ({
@@ -69,7 +69,7 @@ export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOption
 
                         //Transferindo o carrinho do usuário convidado para o usuário recem autenticado
                         await dbAddProductsToCartUseCase.execute(
-                            { id: payload.id, type: payload.sessionType },
+                            { userId: payload.id, type: payload.sessionType },
                             itemsToAdd
                         )
                         await dbClearCartUseCase.execute(guestUser.id, "guest")

@@ -22,7 +22,7 @@ export class AddCartItemController implements Controller {
             const userType = request.user?.type
 
             const cart = await this.addCartItemUseCase.execute(
-                { id: userId!, type: userType! },
+                { userId: userId!, type: userType! },
                 { productId, quantity }
             )
 
