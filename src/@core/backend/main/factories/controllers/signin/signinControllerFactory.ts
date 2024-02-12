@@ -1,13 +1,12 @@
-import { ZodSigninValidator } from "@/@core/backend/infra/services/validators/signin/zodSigninValidator"
-import { SigninController } from "@/@core/backend/presentation/controllers/signin/signinController"
-import { authenticatedJwtTokenService } from "../../services/tokenServiceFactory"
+import { dbGuestAuthorizationUseCase } from "../../usecases/auth/guestUser/dbGuestAuthorizationFactory"
+import { dbMoveCartItemsUseCase } from "../../usecases/cart/dbMoveCartItemsFactory"
+import { dbGetCartUseCase } from "../../usecases/cart/dbGetCartFactory"
 import { DbSigninUseCase } from "@/@core/backend/domain/usecases/auth/authenticatedUser/dbSigninUseCase"
 import { mongoUserRepository } from "../../repositories/userRepositoryFactory"
+import { authenticatedJwtTokenService } from "../../services/tokenServiceFactory"
 import { bcryptEncrypterService } from "../../services/encrypterServiceFactory"
-import { dbGuestAuthorizationUseCase } from "../../usecases/auth/guestUser/dbGuestAuthorizationFactory"
-import { dbAddProductsToCartUseCase } from "../../usecases/cart/dbAddProductsToCartFactory"
-import { dbClearCartUseCase } from "../../usecases/cart/dbClearCartFactory"
-import { dbGetCartUseCase } from "../../usecases/cart/dbGetCartFactory"
+import { ZodSigninValidator } from "@/@core/backend/infra/services/validators/signin/zodSigninValidator"
+import { SigninController } from "@/@core/backend/presentation/controllers/signin/signinController"
 
 function createSigninController() {
     const zodSigninValidator = new ZodSigninValidator()
@@ -24,8 +23,7 @@ function createSigninController() {
         dbSigninUseCase,
         dbGuestAuthorizationUseCase,
         dbGetCartUseCase,
-        dbAddProductsToCartUseCase,
-        dbClearCartUseCase
+        dbMoveCartItemsUseCase
     )
 }
 

@@ -1,13 +1,12 @@
 import { DbGuestAuthorizationUseCase } from "@/@core/backend/domain/usecases/auth/guestUser/dbGuestAuthorizationUseCase"
-import { DbAddProductsToCartUseCase } from "@/@core/backend/domain/usecases/cart/dbAddProductsToCartUseCase"
 import { HttpRequest, HttpResponse } from "../../protocols/http"
+import { DbMoveCartItemsUseCase } from "@/@core/backend/domain/usecases/cart/dbMoveCartItemsUseCase"
 import { SchemaValidatorService } from "@/@core/backend/domain/services/schemaValidator"
 import { TokenDecoderService } from "@/@core/backend/domain/services/token/tokenDecoderService"
-import { DbClearCartUseCase } from "@/@core/backend/domain/usecases/cart/dbClearCartUseCase"
 import { DbGetCartUseCase } from "@/@core/backend/domain/usecases/cart/dbGetCartUseCase"
 import { DbSigninUseCase } from "@/@core/backend/domain/usecases/auth/authenticatedUser/dbSigninUseCase"
-import { Controller } from "../../protocols/controller"
 import { serverError } from "../../helpers/errors"
+import { Controller } from "../../protocols/controller"
 
 export class SigninController implements Controller {
     constructor(
@@ -16,8 +15,7 @@ export class SigninController implements Controller {
         private readonly signinUseCase: DbSigninUseCase,
         private readonly guestAuthorizationUseCase: DbGuestAuthorizationUseCase,
         private readonly getCartUseCase: DbGetCartUseCase,
-        private readonly addProductsUseCase: DbAddProductsToCartUseCase,
-        private readonly clearCartUseCase: DbClearCartUseCase
+        private readonly dbMoveCartItemsUseCase: DbMoveCartItemsUseCase
     ) {}
 
     public async handle(request: HttpRequest): Promise<HttpResponse> {
@@ -45,23 +43,20 @@ export class SigninController implements Controller {
 
             if (payload && guestUser) {
                 //Obtendo o carrinho de compras do usuário convidado (sessão anônima)
-                //para transferir para o usuário comum ou externo após o login
+                //para transferir para o usuário autenticado
+                const { id, sessionType } = payload
+
                 const guestCart = await this.getCartUseCase.execute(guestUser.id, "guest")
-                const guestCartItems = guestCart.toJSON().items
+                const itemsToAdd = guestCart.toJSON().items.map(({ productId, quantity }) => ({
+                    productId,
+                    quantity
+                }))
 
-                if (guestCartItems.length) {
-                    const { id, sessionType } = payload
-                    const itemsToAdd = guestCartItems.map((item) => ({
-                        productId: item.productId,
-                        quantity: item.quantity
-                    }))
-
-                    await this.addProductsUseCase.execute(
-                        { userId: id, type: sessionType },
-                        itemsToAdd
-                    )
-                    await this.clearCartUseCase.execute(guestUser.id, "guest")
-                }
+                await this.dbMoveCartItemsUseCase.execute({
+                    from: { userId: guestUser.id, type: "guest" },
+                    to: { userId: id, type: sessionType },
+                    items: itemsToAdd
+                })
             }
 
             return { statusCode: 200, data: token }

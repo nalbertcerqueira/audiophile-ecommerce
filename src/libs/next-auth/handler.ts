@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { mongoCartRepository } from "@/@core/backend/main/factories/repositories/cartRepositoryFactory"
 import { externalJwtTokenService } from "@/@core/backend/main/factories/services/tokenServiceFactory"
 import { dbExternalSigninUseCase } from "@/@core/backend/main/factories/usecases/auth/externalUser/dbExternalSigninFactory"
 import { dbGuestAuthorizationUseCase } from "@/@core/backend/main/factories/usecases/auth/guestUser/dbGuestAuthorizationFactory"
-import { dbAddProductsToCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbAddProductsToCartFactory"
-import { dbClearCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbClearCartFactory"
 import { NextApiRequest } from "next"
 import { AuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import GithubProvider from "next-auth/providers/github"
+import { dbMoveCartItemsUseCase } from "@/@core/backend/main/factories/usecases/cart/dbMoveCartItemsFactory"
+import { dbGetCartUseCase } from "@/@core/backend/main/factories/usecases/cart/dbGetCartFactory"
 
 const nextAuthSecretKey = process.env.NEXTAUTH_SECRET
 
@@ -55,25 +54,21 @@ export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOption
                 }
 
                 if (guestUser && payload) {
+                    const { id, sessionType } = payload
+
                     //Buscando o carrinho do usuário convidado (usuário anônimo)
-                    const guestCart = await mongoCartRepository.getCartById({
-                        userId: guestUser.id,
-                        type: "guest"
+                    const guestCart = await dbGetCartUseCase.execute(guestUser.id, "guest")
+                    const itemsToAdd = guestCart.toJSON().items.map((item) => ({
+                        productId: item.productId,
+                        quantity: item.quantity
+                    }))
+
+                    //Transferindo o carrinho do usuário convidado para o usuário recém autenticado
+                    await dbMoveCartItemsUseCase.execute({
+                        from: { userId: guestUser.id, type: "guest" },
+                        to: { userId: id, type: sessionType },
+                        items: itemsToAdd
                     })
-
-                    if (guestCart) {
-                        const itemsToAdd = guestCart.toJSON().items.map((item) => ({
-                            productId: item.productId,
-                            quantity: item.quantity
-                        }))
-
-                        //Transferindo o carrinho do usuário convidado para o usuário recem autenticado
-                        await dbAddProductsToCartUseCase.execute(
-                            { userId: payload.id, type: payload.sessionType },
-                            itemsToAdd
-                        )
-                        await dbClearCartUseCase.execute(guestUser.id, "guest")
-                    }
                 }
                 return newSessionToken
             },
