@@ -5,7 +5,7 @@ import { SchemaValidatorService } from "@/@core/backend/domain/services/schemaVa
 import { TokenDecoderService } from "@/@core/backend/domain/services/token/tokenDecoderService"
 import { DbGetCartUseCase } from "@/@core/backend/domain/usecases/cart/dbGetCartUseCase"
 import { DbSigninUseCase } from "@/@core/backend/domain/usecases/auth/authenticatedUser/dbSigninUseCase"
-import { serverError } from "../../helpers/errors"
+import { badRequestError, serverError, unauthorizedError } from "../../helpers/errors"
 import { Controller } from "../../protocols/controller"
 
 export class SigninController implements Controller {
@@ -24,7 +24,7 @@ export class SigninController implements Controller {
         const validationResult = await this.schemaValidator.validate(request.body)
 
         if (!validationResult.isValid) {
-            return { statusCode: 400, errors: validationResult.errors }
+            return badRequestError(validationResult.errors)
         }
 
         try {
@@ -32,10 +32,7 @@ export class SigninController implements Controller {
             const token = await this.signinUseCase.execute({ email, password })
 
             if (!token) {
-                return {
-                    statusCode: 401,
-                    errors: ["Invalid email or password"]
-                }
+                return unauthorizedError("Invalid email or password")
             }
 
             const payload = this.tokenDecoder.decode(token)

@@ -1,7 +1,7 @@
 import { HttpRequest, HttpResponse } from "../../protocols/http"
 import { SchemaValidatorService } from "@/@core/backend/domain/services/schemaValidator"
 import { DbAddCartItemUseCase } from "@/@core/backend/domain/usecases/cart/dbAddCartItemUseCase"
-import { serverError } from "../../helpers/errors"
+import { badRequestError, notFoundError, serverError } from "../../helpers/errors"
 import { Controller } from "../../protocols/controller"
 
 export class AddCartItemController implements Controller {
@@ -13,7 +13,7 @@ export class AddCartItemController implements Controller {
         const validationResult = await this.schemaValidator.validate(request.body)
 
         if (!validationResult.isValid) {
-            return { statusCode: 400, errors: validationResult.errors }
+            return badRequestError(validationResult.errors)
         }
 
         try {
@@ -27,10 +27,7 @@ export class AddCartItemController implements Controller {
             )
 
             if (!cart) {
-                return {
-                    statusCode: 404,
-                    errors: [`Product with id '${productId}' not found`]
-                }
+                return notFoundError(`Product with id '${productId}' not found`)
             }
 
             return { statusCode: 200, data: cart.toJSON() }

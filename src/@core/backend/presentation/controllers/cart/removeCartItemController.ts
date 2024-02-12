@@ -2,7 +2,7 @@ import { HttpRequest, HttpResponse } from "../../protocols/http"
 import { DbRemoveCartItemUseCase } from "@/@core/backend/domain/usecases/cart/dbRemoveCartItemUseCase"
 import { SchemaValidatorService } from "@/@core/backend/domain/services/schemaValidator"
 import { Controller } from "../../protocols/controller"
-import { serverError } from "../../helpers/errors"
+import { badRequestError, notFoundError, serverError } from "../../helpers/errors"
 
 export class RemoveCartItemController implements Controller {
     constructor(
@@ -17,7 +17,7 @@ export class RemoveCartItemController implements Controller {
 
         const validationResult = await this.schemaValidator.validate(request.body)
         if (!validationResult.isValid) {
-            return { statusCode: 400, errors: validationResult.errors }
+            return badRequestError(validationResult.errors)
         }
 
         try {
@@ -27,10 +27,7 @@ export class RemoveCartItemController implements Controller {
             )
 
             if (!cart) {
-                return {
-                    statusCode: 404,
-                    errors: [`Product with id '${productId}' not found`]
-                }
+                return notFoundError(`Product with id '${productId}' not found`)
             }
 
             return { statusCode: 200, data: cart.toJSON() }

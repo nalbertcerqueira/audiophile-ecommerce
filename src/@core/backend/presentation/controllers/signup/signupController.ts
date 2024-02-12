@@ -2,7 +2,7 @@ import { SchemaValidatorService } from "@/@core/backend/domain/services/schemaVa
 import { HttpRequest, HttpResponse } from "../../protocols/http"
 import { DbAddUserUseCase } from "@/@core/backend/domain/usecases/user/dbAddUserUseCase"
 import { Controller } from "../../protocols/controller"
-import { serverError } from "../../helpers/errors"
+import { badRequestError, conflictError, serverError } from "../../helpers/errors"
 
 export class SignupController implements Controller {
     constructor(
@@ -14,17 +14,14 @@ export class SignupController implements Controller {
         const validationResult = await this.schemaValidator.validate(request.body)
 
         if (!validationResult.isValid) {
-            return { statusCode: 400, errors: validationResult.errors }
+            return badRequestError(validationResult.errors)
         }
 
         try {
             const { name, email, password } = validationResult.data
             const createdUser = await this.addUserUseCase.execute({ name, email, password })
             if (!createdUser) {
-                return {
-                    statusCode: 409,
-                    errors: [`user with email ${email} is already registered`]
-                }
+                return conflictError(`user with email ${email} is already registered`)
             }
 
             return { statusCode: 201, data: null }

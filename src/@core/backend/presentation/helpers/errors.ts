@@ -19,3 +19,26 @@ export function serverError(message?: string): HttpResponse {
         errors: [message || defaultMessage]
     }
 }
+
+export function notFoundError(message: string): HttpResponse {
+    return {
+        statusCode: 404,
+        errors: [message]
+    }
+}
+
+export function conflictError(message: string): HttpResponse {
+    return {
+        statusCode: 409,
+        errors: [message]
+    }
+}
+
+export function badRequestError(errors: string[]): HttpResponse
+export function badRequestError(message: string): HttpResponse
+export function badRequestError(data: string | string[]): HttpResponse {
+    return {
+        statusCode: 400,
+        errors: Array.isArray(data) ? data : [data]
+    }
+}
