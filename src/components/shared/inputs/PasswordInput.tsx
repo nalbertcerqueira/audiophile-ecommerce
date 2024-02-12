@@ -40,6 +40,7 @@ export const PasswordInput = forwardRef(function PasswordInput(
         >
             <button
                 aria-label="hide, or reveal password"
+                disabled={props.disabled}
                 onClick={() => setIsVisible((prevState) => !prevState)}
                 type="button"
                 className="field__action-btn"

@@ -84,6 +84,15 @@ button {
     cursor: pointer;
     outline: none;
     border: none;
+
+    &:disabled {
+        pointer-events: none;
+        opacity: 0.75;
+    }
+
+    &:disabled * {
+        opacity: 0.75;
+    }
 }
 
 button:focus-visible,

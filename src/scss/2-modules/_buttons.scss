@@ -72,15 +72,6 @@
     &--rounded {
         border-radius: 0.25rem;
     }
-
-    &:disabled {
-        pointer-events: none;
-        opacity: 0.75;
-
-        & > * {
-            opacity: 0.75;
-        }
-    }
 }
 
 //Botão de retornar a página anterior
