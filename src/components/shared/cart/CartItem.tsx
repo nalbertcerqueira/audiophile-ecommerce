@@ -22,7 +22,7 @@ interface CartItemProps {
 export function CartItem({ readOnly, name, productId, slug, quantity, price }: CartItemProps) {
     const { cartModal } = useContext(ModalContext)
     const { updateTaxes, setCheckoutStatus } = useContext(CheckoutContext)
-    const { addItem, removeItem, setCartStatus, cartStatus, requestCount } =
+    const { addItem, removeItem, setCartStatus, isCartBusy, requestCount } =
         useContext(CartContext)
 
     async function handleRemoveItem() {
@@ -73,13 +73,6 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
             })
     }
 
-    function isCartBusy() {
-        const isLoading = cartStatus.currentProductIds.includes(productId)
-        const isCleaning = cartStatus.isLoading && !cartStatus.currentProductIds.length
-
-        return (isLoading && !readOnly) || (isCleaning && !readOnly)
-    }
-
     return (
         <div
             aria-label={`${quantity} items of ${name} with ${price} dollars per unit`}
@@ -107,7 +100,7 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
             </div>
             {!readOnly && (
                 <Counter
-                    disabled={isCartBusy()}
+                    disabled={!readOnly && isCartBusy(productId)}
                     count={quantity}
                     decrement={handleRemoveItem}
                     increment={handleAddItem}
@@ -115,7 +108,7 @@ export function CartItem({ readOnly, name, productId, slug, quantity, price }: C
                     ariaLive={!readOnly ? (cartModal.isOpen ? "polite" : "off") : undefined}
                 />
             )}
-            {isCartBusy() && (
+            {!readOnly && isCartBusy(productId) && (
                 <div className="btn-overlay btn-overlay--right">
                     <RingLoader className="ring-loader--cart-item" />
                 </div>

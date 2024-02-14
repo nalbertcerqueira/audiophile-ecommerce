@@ -31,17 +31,10 @@ export function AddProductAction({ productId }: { productId: string }) {
             })
     }
 
-    function shouldDisableCounter() {
-        const isLoading = cartStatus.currentProductIds.includes(productId)
-        const isCleaning = cartStatus.isLoading && !cartStatus.currentProductIds.length
-
-        return isLoading || isCleaning
-    }
-
     return (
         <div className="product__cart-actions">
             <Counter
-                disabled={shouldDisableCounter()}
+                disabled={cartStatus.isLoading}
                 count={count}
                 increment={() => setCount((prevCount) => prevCount + 1)}
                 decrement={() =>
@@ -49,7 +42,7 @@ export function AddProductAction({ productId }: { productId: string }) {
                 }
             />
             <button
-                disabled={shouldDisableCounter()}
+                disabled={cartStatus.isLoading}
                 onClick={handleAddItem}
                 className="btn btn--primary"
                 aria-label={count ? `add ${count} products to cart` : "can't add 0 products"}
