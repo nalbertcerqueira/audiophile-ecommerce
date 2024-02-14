@@ -11,13 +11,20 @@ import { useRouter } from "next/navigation"
 export function MiniCart({ isOpen }: { isOpen: boolean }) {
     const router = useRouter()
     const { isLogged } = useContext(SessionContext)
-    const { cart, cartStatus, clearCart, setCartStatus } = useContext(CartContext)
     const { updateTaxes, setCheckoutStatus } = useContext(CheckoutContext)
+    const {
+        cart,
+        cartStatus,
+        requestCount,
+        addItem,
+        removeItem,
+        clearCart,
+        isCartBusy,
+        setCartStatus
+    } = useContext(CartContext)
 
     function handleClearCart() {
-        if (cartStatus.isLoading) {
-            return
-        }
+        if (cartStatus.isLoading) return
 
         //O loading da taxa também é ativado para dar a impressão de que ambas, a taxa
         //e a ação de adicionar items ao carrinho, são iniciadas ao mesmo tempo
@@ -39,6 +46,58 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
             return window.location.assign("/signin")
         }
         return router.push("/checkout")
+    }
+
+    async function handleRemoveItem(productId: string) {
+        if (isCartBusy(productId)) return
+
+        const requestId = (requestCount.current += 1)
+        const cartTimer = setCartStatus({ type: "ENABLE", payload: { productId } }, 200)
+        const checkoutTimer = setCheckoutStatus(
+            { isCheckingOut: false, isLoadingTaxes: true },
+            400
+        )
+
+        await removeItem(productId, 1)
+            .then((res) => {
+                cartTimer && clearTimeout(cartTimer)
+                setCartStatus({ type: "DISABLE", payload: { productId } })
+                return res ? updateTaxes() : null
+            })
+            .then(() => {
+                checkoutTimer && clearTimeout(checkoutTimer)
+                if (requestCount.current === requestId) {
+                    //Verificando se esta é a última (ou a única) requisição de remover items ao carrinho,
+                    //para não interromper o loading antes da ultima requisição acabar.
+                    setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
+                }
+            })
+    }
+
+    async function handleAddItem(productId: string) {
+        if (isCartBusy(productId)) return
+
+        const requestId = (requestCount.current += 1)
+        const cartTimer = setCartStatus({ type: "ENABLE", payload: { productId } }, 250)
+        const checkoutTimer = setCheckoutStatus(
+            { isCheckingOut: false, isLoadingTaxes: true },
+            500
+        )
+
+        await addItem(productId, 1)
+            .then((res) => {
+                cartTimer && clearTimeout(cartTimer)
+                setCartStatus({ type: "DISABLE", payload: { productId } })
+                return res ? updateTaxes() : null
+            })
+            .then(() => {
+                checkoutTimer && clearTimeout(checkoutTimer)
+                //Verificando se esta é a última (ou a única) requisição de adicionar items ao carrinho,
+                //para não interromper o loading antes da ultima requisição acabar.
+                if (requestCount.current === requestId) {
+                    setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
+                }
+            })
     }
 
     return (
@@ -75,11 +134,15 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
                 {cart.items.map((item) => (
                     <CartItem
                         key={item.productId}
-                        productId={item.productId}
                         slug={item.slug}
                         name={item.name}
                         price={item.price}
                         quantity={item.quantity}
+                        readOnly={false}
+                        // isBusy={isCartBusy(item.productId)}
+                        isBusy={false}
+                        addItem={() => handleAddItem(item.productId)}
+                        removeItem={() => handleRemoveItem(item.productId)}
                     />
                 ))}
             </div>

@@ -89,7 +89,6 @@ export function ConfirmationModal() {
                                         name={item.name}
                                         price={item.price}
                                         quantity={item.quantity}
-                                        productId={item.productId}
                                         slug={item.slug}
                                         readOnly
                                     />

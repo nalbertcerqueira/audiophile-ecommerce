@@ -63,7 +63,7 @@ export function CartProvider({ children }: PropsWithChildren) {
         cartLoadingInitialState
     )
 
-    //Buscando o carrinho de compras após a sessão ser validada
+    //Buscando o carrinho de compras após o carregamento da página
     useEffect(() => {
         loadingDispatch({ type: "ENABLE" })
         getCartUseCase

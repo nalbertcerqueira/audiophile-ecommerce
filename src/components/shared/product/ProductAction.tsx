@@ -3,17 +3,17 @@
 import { Counter } from "../Counter"
 import { useContext, useState } from "react"
 import { CartContext } from "@/contexts/CartContext"
+import { SessionContext } from "@/contexts/SessionContext"
 import { CheckoutContext } from "@/contexts/CheckoutContext"
 
 export function AddProductAction({ productId }: { productId: string }) {
     const [count, setCount] = useState<number>(0)
+    const { isLoading: isSessionLoading } = useContext(SessionContext)
     const { cartStatus, addItem, setCartStatus } = useContext(CartContext)
     const { updateTaxes, setCheckoutStatus } = useContext(CheckoutContext)
 
     function handleAddItem() {
-        if (cartStatus.isLoading) {
-            return
-        }
+        if (cartStatus.isLoading || isSessionLoading) return
 
         //O loading da taxa também é ativado para dar a impressão de que ambas, a taxa
         //e a ação de adicionar items ao carrinho, são iniciadas ao mesmo tempo
