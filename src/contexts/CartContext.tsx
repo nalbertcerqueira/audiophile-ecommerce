@@ -6,7 +6,6 @@ import {
     useState,
     useEffect,
     useReducer,
-    useContext,
     useRef,
     MutableRefObject
 } from "react"
@@ -24,7 +23,6 @@ import { cartLoadingInitialState } from "@/store/cartLoading/initialState"
 import { CartLoadingActions } from "@/store/cartLoading/types"
 import { cartLoadingReducer } from "@/store/cartLoading/reducer"
 import { CartLoadingState } from "@/store/cartLoading/types"
-import { SessionContext } from "./SessionContext"
 import { emitToast } from "@/libs/react-toastify/utils"
 
 interface CustomCart extends CartProps {
@@ -45,6 +43,7 @@ interface CartContextProps {
     addItem: (productId: string, quantity: number, options?: ActionOptions) => Promise<boolean>
     clearCart: () => Promise<boolean>
     removeItem: (productId: string, quantity: number) => Promise<boolean>
+    isCartBusy: (productId: string, quantity?: number) => boolean
     setCartStatus: (action: CartLoadingActions, delay?: number) => NodeJS.Timeout | void
 }
 
@@ -52,12 +51,13 @@ interface ActionOptions {
     emitToast: boolean
 }
 
+const cartInitialState: CustomCart = { itemCount: 0, totalSpent: 0, items: [] }
+
 export const CartContext = createContext<CartContextProps>({} as CartContextProps)
 
 export function CartProvider({ children }: PropsWithChildren) {
     const requestCount = useRef(0)
-    const sessionState = useContext(SessionContext)
-    const [cart, setCart] = useState<CustomCart>({ itemCount: 0, totalSpent: 0, items: [] })
+    const [cart, setCart] = useState<CustomCart>(cartInitialState)
     const [loadingState, loadingDispatch] = useReducer(
         cartLoadingReducer,
         cartLoadingInitialState
@@ -65,16 +65,17 @@ export function CartProvider({ children }: PropsWithChildren) {
 
     //Buscando o carrinho de compras após a sessão ser validada
     useEffect(() => {
-        if (!sessionState.isLoading) {
-            loadingDispatch({ type: "ENABLE" })
-
-            getCartUseCase
-                .execute()
-                .then((cart) => handleCartUpdate(cart))
-                .catch((error) => handleCartErrors(error, true))
-                .finally(() => loadingDispatch({ type: "DISABLE" }))
-        }
-    }, [sessionState.isLoading])
+        loadingDispatch({ type: "ENABLE" })
+        getCartUseCase
+            .execute()
+            .then((cart) => handleCartUpdate(cart))
+            .catch((error: Error) => {
+                error.name === "UnauthorizedError"
+                    ? setCart(cartInitialState)
+                    : emitToast("error", error.message)
+            })
+            .finally(() => loadingDispatch({ type: "DISABLE" }))
+    }, [])
 
     async function clearCart(): Promise<boolean> {
         if (loadingState.isLoading || !cart.items.length) {
@@ -84,20 +85,20 @@ export function CartProvider({ children }: PropsWithChildren) {
         await clearCartUseCase
             .execute()
             .then((cart) => handleCartUpdate(cart))
-            .catch((error) => handleCartErrors(error, true))
+            .catch((error: Error) => handleCartErrors(error, true))
 
         return true
     }
 
     async function removeItem(productId: string, quantity: number): Promise<boolean> {
-        if (shouldBlockAction(productId, quantity)) {
+        if (isCartBusy(productId, quantity)) {
             return false
         }
 
         await removeCartItemUseCase
             .execute({ productId, quantity })
             .then((cart) => handleCartUpdate(cart))
-            .catch((error) => handleCartErrors(error, true))
+            .catch((error: Error) => handleCartErrors(error, true))
 
         return true
     }
@@ -107,7 +108,7 @@ export function CartProvider({ children }: PropsWithChildren) {
         quantity: number,
         options?: ActionOptions
     ): Promise<boolean> {
-        if (shouldBlockAction(productId, quantity)) {
+        if (isCartBusy(productId, quantity)) {
             return false
         }
 
@@ -119,7 +120,7 @@ export function CartProvider({ children }: PropsWithChildren) {
         await addCartItemUseCase
             .execute({ productId, quantity })
             .then((cart) => handleCartAddition({ cart, productId, quantity }, toastId))
-            .catch((error) => handleCartErrors(error, true, toastId))
+            .catch((error: Error) => handleCartErrors(error, true, toastId))
 
         return true
     }
@@ -136,11 +137,13 @@ export function CartProvider({ children }: PropsWithChildren) {
         return loadingDispatch(action)
     }
 
-    function shouldBlockAction(productId: string, quantity: number): boolean {
+    function isCartBusy(productId: string, quantity?: number): boolean {
         const isProductAction = loadingState.currentProductIds.includes(productId)
         const isCleaning = loadingState.isLoading && !loadingState.currentProductIds.length
 
-        return isProductAction || isCleaning || quantity <= 0
+        return typeof quantity === "number"
+            ? isProductAction || isCleaning || quantity <= 0
+            : isProductAction || isCleaning
     }
 
     function handleCartErrors(error: Error, showToast: boolean, toastId?: Id | null): void {
@@ -149,11 +152,9 @@ export function CartProvider({ children }: PropsWithChildren) {
         }
 
         if (showToast) {
-            if (toastId) {
-                emitToast("error", error.message, { id: toastId, update: true })
-            } else {
-                emitToast("error", error.message)
-            }
+            toastId
+                ? emitToast("error", error.message, { id: toastId, update: true })
+                : emitToast("error", error.message)
         }
     }
 
@@ -193,6 +194,7 @@ export function CartProvider({ children }: PropsWithChildren) {
                 addItem,
                 removeItem,
                 clearCart,
+                isCartBusy,
                 setCartStatus: setCartLoadingStatus
             }}
         >
