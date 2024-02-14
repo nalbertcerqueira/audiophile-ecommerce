@@ -19,6 +19,7 @@
 
     &__action-btn {
         @extend %subtitle;
+        height: 100%;
         padding: 0 1rem;
         color: rgba(vars.$black, 0.5);
         transition: color vars.$transition-duration;

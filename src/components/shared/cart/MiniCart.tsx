@@ -139,8 +139,7 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
                         price={item.price}
                         quantity={item.quantity}
                         readOnly={false}
-                        // isBusy={isCartBusy(item.productId)}
-                        isBusy={false}
+                        isBusy={isCartBusy(item.productId)}
                         addItem={() => handleAddItem(item.productId)}
                         removeItem={() => handleRemoveItem(item.productId)}
                     />
