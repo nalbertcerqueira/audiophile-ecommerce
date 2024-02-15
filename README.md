@@ -25,13 +25,13 @@ Audiophile ecommerce se trata de um projeto desenvolvido a partir de um dos desa
 -   🟢 Checkout do carrinho
 -   ⚪ Painel do usuário (em breve...)
   
-### Rotas da APi
+### Rotas da API
 
 #### Rotas privadas 🔐
 
 | **Método** | **Rota**                   | **Descrição**                             |
 | ---------- | -------------------------- | ----------------------------------------- |
-| GET        | `/api/auth/user`           | Obtém dados usuário para inciar a sessão  |
+| GET        | `/api/auth/user`           | Obtém os dados do usuário ao inciar a sessão  |
 | GET        | `/api/auth/cart`           | Obtém o carrinho de compras do usuário    |
 | DELETE     | `/api/auth/cart`           | Remove todos os produtos do carrinho      |
 | POST       | `/api/auth/cart/items`     | Adiciona um item ao carrinho              |
