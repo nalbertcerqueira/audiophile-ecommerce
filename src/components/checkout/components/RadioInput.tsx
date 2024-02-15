@@ -1,5 +1,3 @@
-"use client"
-
 import { FocusEvent, ChangeEvent, forwardRef, ForwardedRef } from "react"
 
 interface RadioInputProps {

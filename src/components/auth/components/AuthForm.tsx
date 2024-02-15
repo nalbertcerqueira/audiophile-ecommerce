@@ -1,5 +1,3 @@
-"use client"
-
 import { RingLoader } from "@/components/shared/loaders/RingLoader"
 import { FormEvent, ReactNode } from "react"
 
