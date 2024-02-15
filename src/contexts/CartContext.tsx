@@ -7,7 +7,8 @@ import {
     useEffect,
     useReducer,
     useRef,
-    MutableRefObject
+    MutableRefObject,
+    useContext
 } from "react"
 import {
     CartAwaitingMessage,
@@ -23,6 +24,7 @@ import { cartLoadingInitialState } from "@/store/cartLoading/initialState"
 import { CartLoadingActions } from "@/store/cartLoading/types"
 import { cartLoadingReducer } from "@/store/cartLoading/reducer"
 import { CartLoadingState } from "@/store/cartLoading/types"
+import { SessionContext } from "./SessionContext"
 import { emitToast } from "@/libs/react-toastify/utils"
 
 interface CustomCart extends CartProps {
@@ -57,6 +59,7 @@ export const CartContext = createContext<CartContextProps>({} as CartContextProp
 
 export function CartProvider({ children }: PropsWithChildren) {
     const requestCount = useRef(0)
+    const sessionContext = useContext(SessionContext)
     const [cart, setCart] = useState<CustomCart>(cartInitialState)
     const [loadingState, loadingDispatch] = useReducer(
         cartLoadingReducer,
@@ -65,17 +68,15 @@ export function CartProvider({ children }: PropsWithChildren) {
 
     //Buscando o carrinho de compras após o carregamento da página
     useEffect(() => {
+        if (sessionContext.isLoading) return
+
         loadingDispatch({ type: "ENABLE" })
         getCartUseCase
             .execute()
             .then((cart) => handleCartUpdate(cart))
-            .catch((error: Error) => {
-                error.name === "UnauthorizedError"
-                    ? setCart(cartInitialState)
-                    : emitToast("error", error.message)
-            })
+            .catch((error: Error) => handleCartErrors(error, true))
             .finally(() => loadingDispatch({ type: "DISABLE" }))
-    }, [])
+    }, [sessionContext.isLoading])
 
     async function clearCart(): Promise<boolean> {
         if (loadingState.isLoading || !cart.items.length) {

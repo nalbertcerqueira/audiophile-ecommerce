@@ -31,19 +31,19 @@ export function SessionProvider({ children }: PropsWithChildren) {
     const [status, setStatus] = useState<SessionStatus>({ isLoading: true, isLogged: false })
     const [user, setUser] = useState<UserBasicInfo | null>(null)
 
-    //Persistindo o accessToken no localStorage caso o usuário tenha se autenticado
-    //com auxilio do next-auth
     useEffect(() => {
+        //Persistindo o accessToken no localStorage caso o usuário tenha se autenticado
+        //com auxílio do next-auth
         if (nextAuthSession.status === "authenticated") {
             const token = nextAuthSession.data.accessToken
             token && localStorage.setItem("accessToken", token)
         }
-    }, [nextAuthSession.status, nextAuthSession.data?.accessToken])
 
-    //Buscando os dados do usuário no banco de dados após
-    useEffect(() => {
-        nextAuthSession.status !== "loading" && validateSession()
-    }, [nextAuthSession.status])
+        //Buscando as informações do usuário no banco de dados
+        if (nextAuthSession.status !== "loading") {
+            validateSession()
+        }
+    }, [nextAuthSession.status, nextAuthSession.data?.accessToken])
 
     async function validateSession() {
         //Removendo o accessToken do usuário convidado caso o mesmo tenha

@@ -1,17 +1,25 @@
 "use client"
 
 import {
-    CheckoutOrder,
+    Taxes,
     CheckoutOrderProps,
-    Taxes
+    CheckoutOrder
 } from "@/@core/shared/entities/order/checkoutOrder"
 import { createCheckoutOrderUseCase } from "@/@core/frontend/main/usecases/order/createCheckoutOrderFactory"
 import { SuccessCheckoutMessage } from "@/libs/react-toastify/components/CheckoutMessages"
 import { getOrderTaxesUseCase } from "@/@core/frontend/main/usecases/order/getOrderTaxesFactory"
+import { SessionContext } from "./SessionContext"
 import { CartProduct } from "@/@core/shared/entities/cart/cart"
 import { emitToast } from "@/libs/react-toastify/utils"
 
-import { PropsWithChildren, createContext, useState, SetStateAction, useEffect } from "react"
+import {
+    PropsWithChildren,
+    createContext,
+    useState,
+    SetStateAction,
+    useEffect,
+    useContext
+} from "react"
 import { Id } from "react-toastify"
 
 interface CheckoutStatus {
@@ -36,12 +44,12 @@ interface CheckoutContextProps {
     ) => NodeJS.Timeout | void
 }
 
-const taxesInitialState: Taxes = { vat: 0, shipping: 0 }
+const taxesInitialState: Taxes = { shipping: 0, vat: 0 }
 
 export const CheckoutContext = createContext({} as CheckoutContextProps)
 
 export function CheckoutProvider({ children }: PropsWithChildren) {
-    // const sessionState = useContext(SessionContext)
+    const sessionContext = useContext(SessionContext)
     const [taxes, setTaxes] = useState<Taxes>(taxesInitialState)
     const [order, setOrder] = useState<Order | null>(null)
     const [status, setStatus] = useState<CheckoutStatus>({
@@ -49,25 +57,24 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
         isCheckingOut: false
     })
 
-    //Buscando as taxas do carrinho após o carregamento da página
+    //Buscando as taxas do carrinho após a sessão ser validada
     useEffect(() => {
-        setStatus({ isCheckingOut: false, isLoadingTaxes: true })
+        if (sessionContext.isLoading || !sessionContext.isLogged) return
+
         getOrderTaxesUseCase
             .execute()
             .then((taxes) => setTaxes(taxes))
-            .catch((error: Error) => {
-                error.name === "UnauthorizedError"
-                    ? setTaxes(taxesInitialState)
-                    : emitToast("error", error.message)
-            })
+            .catch((error: Error) => handleErrors(error, "taxes"))
             .finally(() => setStatus((prevState) => ({ ...prevState, isLoadingTaxes: false })))
-    }, [])
+    }, [sessionContext.isLogged, sessionContext.isLoading])
 
     async function updateTaxes() {
+        if (!sessionContext.isLogged) return
+
         await getOrderTaxesUseCase
             .execute()
             .then((data) => setTaxes(data))
-            .catch((error: Error) => handleErrors(error, "taxes"))
+            .catch((error) => handleErrors(error, "taxes"))
     }
 
     async function createOrder(withToast?: boolean) {
@@ -119,9 +126,11 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
             return location.reload()
         }
 
-        toastId
-            ? emitToast("error", error.message, { id: toastId, update: true })
-            : emitToast("error", error.message)
+        if (toastId) {
+            return emitToast("error", error.message, { id: toastId, update: true })
+        } else {
+            return emitToast("error", error.message)
+        }
     }
 
     return (

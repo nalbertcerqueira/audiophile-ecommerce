@@ -43,8 +43,9 @@ export function SigninPageComponent() {
     }
 
     async function externalSignin(provider: BuiltInProviderType) {
-        if (isExternalProvider) return
-        else setIsExternalProvider(true)
+        if (isFormBlocked) return
+
+        setIsExternalProvider(true)
 
         const oneDay = 1000 * 3600 * 24
         const expirationDate = new Date(Date.now() + oneDay).toUTCString()
