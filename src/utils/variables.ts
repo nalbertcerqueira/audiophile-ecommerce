@@ -22,3 +22,5 @@ export const categories = [
         thumbAlt: "rounded earphone"
     }
 ]
+
+export const pathnames = ["/home", "/headphones", "/speakers", "/earphones"]

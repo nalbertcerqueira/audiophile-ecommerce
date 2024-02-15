@@ -9,8 +9,7 @@ export function MobileMenuModal() {
     const { menuMobileModal } = useContext(ModalContext)
     const { close } = menuMobileModal
 
-    //Fechando o modal caso o usuário clique em qualquer lugar fora do menu
-    //de navegação
+    //Fechando o modal caso o usuário clique fora dele
     useEffect(() => {
         function handleOutsideClick(e: globalThis.MouseEvent) {
             const target = e.target as HTMLElement

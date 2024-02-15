@@ -1,12 +1,12 @@
 "use client"
 
 import { matchUrlPathname } from "@/utils/helpers"
+import { pathnames } from "@/utils/variables"
 import { NavLink } from "@/components/shared/NavLink"
 import { usePathname } from "next/navigation"
 
 export function FooterNavLinks() {
     const currentPathname = usePathname()
-    const pathnames: string[] = ["/home", "/headphones", "/speakers", "/earphones"]
 
     return (
         <ul className="footer__nav-links">

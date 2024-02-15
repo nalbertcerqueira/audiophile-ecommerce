@@ -9,8 +9,7 @@ export function CartModal() {
     const { cartModal } = useContext(ModalContext)
     const { close } = cartModal
 
-    //Fechando o modal caso o usuário clique em qualquer lugar fora do menu
-    //do carrinho
+    //Fechando o modal caso o usuário clique fora dele
     useEffect(() => {
         function handleOutsideClick(e: globalThis.MouseEvent) {
             const target = e.target as HTMLElement

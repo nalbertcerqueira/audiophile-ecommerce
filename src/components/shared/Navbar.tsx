@@ -1,17 +1,17 @@
 "use client"
 
-import { usePathname } from "next/navigation"
-import { NavLink } from "./NavLink"
 import { matchUrlPathname } from "@/utils/helpers"
+import { pathnames } from "@/utils/variables"
+import { NavLink } from "./NavLink"
+import { usePathname } from "next/navigation"
 
 export function Navbar() {
     const currentPathname = usePathname()
-    const paths: string[] = ["/home", "/headphones", "/speakers", "/earphones"]
 
     return (
         <nav className="navbar">
             <ul className="navbar__link-list">
-                {paths.map((path) => (
+                {pathnames.map((path) => (
                     <li key={path}>
                         <NavLink
                             withMarker={matchUrlPathname(currentPathname, path.slice(1))}
