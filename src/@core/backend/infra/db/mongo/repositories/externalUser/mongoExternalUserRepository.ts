@@ -1,10 +1,10 @@
 import { FindExternalUserByEmailRepository } from "@/@core/backend/domain/repositories/externalUser/findExternalUserByEmailRepository"
-import { ExternalUserWithId } from "@/@core/backend/domain/repositories/externalUser/protocols"
-import { mongoHelper } from "../../config/mongo-config"
-import { MongoExternalUser } from "../../models"
-import { UpsertExternalUserRepository } from "@/@core/backend/domain/repositories/externalUser/upsertExternalUserRepository"
-import { ExternalUser } from "@/@core/shared/entities/user/externalUser"
 import { FindExternalUserByIdRepository } from "@/@core/backend/domain/repositories/externalUser/findExternalUserByIdRepository"
+import { UpsertExternalUserRepository } from "@/@core/backend/domain/repositories/externalUser/upsertExternalUserRepository"
+import { ExternalUserWithId } from "@/@core/backend/domain/repositories/externalUser/protocols"
+import { MongoExternalUser } from "../../models"
+import { ExternalUser } from "@/@core/shared/entities/user/externalUser"
+import { mongoHelper } from "../../config/mongo-config"
 import { ObjectId } from "mongodb"
 
 export class MongoExternalUserRepository

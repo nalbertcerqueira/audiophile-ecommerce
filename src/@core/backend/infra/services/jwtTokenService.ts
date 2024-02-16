@@ -1,9 +1,9 @@
-import { TokenVerifierService } from "../../domain/services/token/tokenVerifierService"
 import { TokenGeneratorService } from "../../domain/services/token/tokenGeneratorService"
+import { TokenVerifierService } from "../../domain/services/token/tokenVerifierService"
+import { TokenDecoderService } from "../../domain/services/token/tokenDecoderService"
 import { TokenPayload } from "../../domain/services/token/protocols"
 import { TextEncoder } from "util"
 import { SignJWT, jwtVerify, decodeJwt } from "jose"
-import { TokenDecoderService } from "../../domain/services/token/tokenDecoderService"
 
 export class JwtTokenService
     implements TokenGeneratorService, TokenVerifierService, TokenDecoderService

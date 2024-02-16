@@ -1,7 +1,7 @@
 import { AddCheckoutOrderRepository } from "@/@core/backend/domain/repositories/order/addCheckoutOrderRepository"
+import { MongoCheckoutOrder } from "../../models"
 import { CheckoutOrder } from "@/@core/shared/entities/order/checkoutOrder"
 import { mongoHelper } from "../../config/mongo-config"
-import { MongoCheckoutOrder } from "../../models"
 import { UserDetails } from "@/@core/backend/domain/repositories/protocols"
 
 export class MongoCheckoutOrderRepository implements AddCheckoutOrderRepository {

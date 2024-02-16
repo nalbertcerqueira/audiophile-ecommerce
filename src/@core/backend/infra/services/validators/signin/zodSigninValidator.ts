@@ -3,8 +3,8 @@ import {
     ValidationResult
 } from "@/@core/backend/domain/services/schemaValidator"
 import { generateCustomZodErrors } from "@/@core/shared/entities/helpers"
-import { User } from "@/@core/shared/entities/user/user"
 import { UserProps } from "@/@core/shared/entities/user/user"
+import { User } from "@/@core/shared/entities/user/user"
 import { ZodSchema } from "zod"
 
 type SigninSchema = Pick<UserProps, "email" | "password">

@@ -2,8 +2,8 @@ import {
     SchemaValidatorService,
     ValidationResult
 } from "@/@core/backend/domain/services/schemaValidator"
-import { CartProduct, Cart } from "@/@core/shared/entities/cart/cart"
 import { generateCustomZodErrors } from "@/@core/shared/entities/helpers"
+import { CartProduct, Cart } from "@/@core/shared/entities/cart/cart"
 import { ZodSchema } from "zod"
 
 type QuantitySchema = Pick<CartProduct, "quantity">

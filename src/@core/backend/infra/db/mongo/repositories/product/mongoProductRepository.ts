@@ -1,14 +1,14 @@
-import { ProductProps } from "../../../../../../shared/entities/product/product"
-import { GetProductsByCategoryRepository } from "../../../../../domain/repositories/product/getProductsByCategoryRepository"
-import { GetProductsRepository } from "../../../../../domain/repositories/product/getProductsRepository"
-import { mongoHelper } from "../../config/mongo-config"
-import { MongoShortProduct, MongoProduct } from "../../models"
-import { GetProductByIdRepository } from "@/@core/backend/domain/repositories/product/getProductByIdRepository"
-import { ObjectId } from "mongodb"
 import {
     ProductFromType,
     ProductType
 } from "@/@core/backend/domain/repositories/product/protocols"
+import { MongoShortProduct, MongoProduct } from "../../models"
+import { GetProductsByCategoryRepository } from "@/@core/backend/domain/repositories/product/getProductsByCategoryRepository"
+import { GetProductByIdRepository } from "@/@core/backend/domain/repositories/product/getProductByIdRepository"
+import { GetProductsRepository } from "@/@core/backend/domain/repositories/product/getProductsRepository"
+import { ProductProps } from "@/@core/shared/entities/product/product"
+import { mongoHelper } from "../../config/mongo-config"
+import { ObjectId } from "mongodb"
 
 export class MongoProductRepository
     implements
