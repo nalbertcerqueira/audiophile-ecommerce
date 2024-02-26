@@ -191,14 +191,14 @@ export const cartItemMongoSchema: Document = {
 export const mongoCheckoutOrderSchema: Document = {
     $jsonSchema: {
         bsonType: "object",
-        required: ["userId", "userType", "orderId", "costumer", "cart", "taxes", "createdAt"],
+        required: ["userId", "userType", "orderId", "customer", "cart", "taxes", "createdAt"],
         additionalProperties: false,
         properties: {
             _id: {},
             userId: { bsonType: "string" },
             userType: userTypeMongoSchema,
             orderId: { bsonType: "string", minLength: 1 },
-            costumer: {
+            customer: {
                 bsonType: "object",
                 required: ["name", "email"],
                 additionalProperties: false,

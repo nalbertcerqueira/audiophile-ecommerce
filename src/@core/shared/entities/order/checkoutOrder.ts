@@ -4,7 +4,7 @@ import { EntityValidationResult, Optional } from "../protocols"
 import { zodCheckoutOrderSchema } from "./utils"
 import * as uuid from "uuid"
 
-export interface Costumer {
+export interface Customer {
     name: string
     email: string
 }
@@ -16,7 +16,7 @@ export interface Taxes {
 
 export interface CheckoutOrderProps {
     orderId: string
-    costumer: Costumer
+    customer: Customer
     cart: CartProps
     taxes: Taxes
 }
@@ -62,7 +62,7 @@ export class CheckoutOrder {
         const { data } = validationResult
         this.props = {
             orderId: data.orderId,
-            costumer: { ...data.costumer },
+            customer: { ...data.customer },
             taxes: { ...data.taxes },
             cart: { items: data.cart.items.map((item) => ({ ...item })) }
         }
@@ -71,7 +71,7 @@ export class CheckoutOrder {
     public toJSON(): CheckoutOrderProps {
         return {
             ...this.props,
-            costumer: { ...this.props.costumer },
+            customer: { ...this.props.customer },
             taxes: { ...this.props.taxes },
             cart: { items: this.props.cart.items.map((item) => ({ ...item })) }
         }

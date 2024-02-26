@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     const { data } = authResponse
     const { statusCode, headers, ...responseRest } =
         await createCheckoutOrderController.handle({
-            body: { costumer: { name: data.name, email: data.email } },
+            body: { customer: { name: data.name, email: data.email } },
             user: { id: authResponse.data.id, type: authResponse.data.type }
         })
 

@@ -8,13 +8,13 @@ export class CreateCheckoutOrderController implements Controller {
 
     public async handle(request: HttpRequest): Promise<HttpResponse> {
         try {
-            const { costumer } = request.body
+            const { customer } = request.body
             const userId = request.user?.id
             const userType = request.user?.type
 
             const order = await this.createCheckoutOrderUseCase.execute(
                 { userId: userId!, type: userType! },
-                { ...costumer }
+                { ...customer }
             )
 
             if (!order) {

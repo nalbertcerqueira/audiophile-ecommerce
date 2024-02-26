@@ -1,4 +1,4 @@
-import { CheckoutOrder, Costumer } from "@/@core/shared/entities/order/checkoutOrder"
+import { CheckoutOrder, Customer } from "@/@core/shared/entities/order/checkoutOrder"
 import { AddCheckoutOrderRepository } from "../../repositories/order/addCheckoutOrderRepository"
 import { UserInfo } from "../protocols"
 import { GetCartRepository } from "../../repositories/cart/getCartRepository"
@@ -13,7 +13,7 @@ export class DbCreateCheckoutOrderUseCase {
 
     public async execute(
         userInfo: UserInfo,
-        costumer: Costumer
+        customer: Customer
     ): Promise<CheckoutOrder | null> {
         const { userId, type } = userInfo
         const foundCart = await this.getCartRepository.getCartById({ userId, type })
@@ -29,7 +29,7 @@ export class DbCreateCheckoutOrderUseCase {
         }
 
         const order = new CheckoutOrder({
-            costumer: costumer,
+            customer: customer,
             cart: foundCart.toJSON(),
             taxes
         })

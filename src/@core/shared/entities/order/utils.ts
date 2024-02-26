@@ -1,10 +1,10 @@
 import { emailZodSchema, userNameZodSchema } from "../user/utils"
-import { CheckoutOrderProps, Costumer, Taxes } from "./checkoutOrder"
+import { CheckoutOrderProps, Customer, Taxes } from "./checkoutOrder"
 import { cartZodSchema } from "../cart/utils"
 import { schemaFromType } from "../helpers"
 import z from "zod"
 
-export const costumerZodSchema = schemaFromType<Costumer>()(
+export const customerZodSchema = schemaFromType<Customer>()(
     z.object({
         name: userNameZodSchema,
         email: emailZodSchema
@@ -21,7 +21,7 @@ export const taxesZodSchema = schemaFromType<Taxes>()(
 export const zodCheckoutOrderSchema = schemaFromType<CheckoutOrderProps>()(
     z.object({
         orderId: z.string().min(1),
-        costumer: costumerZodSchema,
+        customer: customerZodSchema,
         taxes: taxesZodSchema,
         cart: cartZodSchema
     })
