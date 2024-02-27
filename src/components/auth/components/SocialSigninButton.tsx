@@ -12,6 +12,7 @@ export function SocialSigninButton(props: SocialSigninButtonProps) {
 
     return (
         <button
+            aria-disabled={isSubmitting}
             onClick={onClick}
             disabled={isSubmitting}
             className={`btn third-party-btn third-party-btn--${provider}`.trim()}

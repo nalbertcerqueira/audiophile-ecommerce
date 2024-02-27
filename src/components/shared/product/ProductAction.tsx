@@ -35,6 +35,7 @@ export function AddProductAction({ productId }: { productId: string }) {
         <div className="product__cart-actions">
             <Counter
                 disabled={cartStatus.isLoading}
+                ariaLive={count ? "polite" : "off"}
                 count={count}
                 increment={() => setCount((prevCount) => prevCount + 1)}
                 decrement={() =>
@@ -43,6 +44,7 @@ export function AddProductAction({ productId }: { productId: string }) {
             />
             <button
                 disabled={cartStatus.isLoading}
+                aria-disabled={cartStatus.isLoading}
                 onClick={handleAddItem}
                 className="btn btn--primary"
                 aria-label={count ? `add ${count} products to cart` : "can't add 0 products"}

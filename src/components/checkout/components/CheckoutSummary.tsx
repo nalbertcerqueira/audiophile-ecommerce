@@ -93,6 +93,7 @@ export function CheckoutSummary({ formId }: CheckoutSummaryProps) {
             <div className="summary__fields">{renderSummaryFields()}</div>
             <button
                 aria-label="continue and pay"
+                aria-disabled={shouldPreventSubmit()}
                 disabled={shouldPreventSubmit()}
                 form={formId}
                 type="submit"

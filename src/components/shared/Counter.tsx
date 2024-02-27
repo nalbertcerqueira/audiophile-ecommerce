@@ -19,6 +19,7 @@ export function Counter(props: CounterProps) {
             }`.trim()}
         >
             <button
+                aria-disabled={disabled}
                 disabled={disabled}
                 onClick={decrement}
                 className="counter__action-btn"
@@ -36,6 +37,7 @@ export function Counter(props: CounterProps) {
                 {count}
             </p>
             <button
+                aria-disabled={disabled}
                 disabled={disabled}
                 onClick={increment}
                 className="counter__action-btn"
