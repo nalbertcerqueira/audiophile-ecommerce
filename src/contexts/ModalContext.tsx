@@ -19,10 +19,10 @@ export function ModalProvider({ children }: PropsWithChildren) {
     const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
 
-    const toggleCart = useCallback(() => setIsCartOpen((prevState) => !prevState), [])
+    const toggleCart = () => setIsCartOpen((prevState) => !prevState)
     const closeCart = useCallback(() => setIsCartOpen(false), [])
 
-    const toggleMenu = useCallback(() => setIsMenuOpen((prevState) => !prevState), [])
+    const toggleMenu = () => setIsMenuOpen((prevState) => !prevState)
     const closeMenu = useCallback(() => setIsMenuOpen(false), [])
 
     return (
