@@ -29,14 +29,13 @@ export function CheckoutForm({ formId }: { formId: string }) {
     const { cart, cartStatus } = useContext(CartContext)
     const { checkoutStatus, createOrder } = useContext(CheckoutContext)
     const {
+        formState: { errors, isSubmitting },
+        control,
         watch,
-        setValue,
         register,
         handleSubmit,
         unregister,
-        reset,
-        control,
-        formState: { errors, isSubmitting }
+        reset
     } = useForm<CheckoutFields>({
         mode: "onSubmit",
         reValidateMode: "onSubmit",
@@ -45,40 +44,32 @@ export function CheckoutForm({ formId }: { formId: string }) {
     })
     const paymentMethod = watch("paymentMethod")
 
-    useEffect(() => setValue("paymentMethod", "cash"), [setValue])
-
     useEffect(() => {
         if (paymentMethod === "cash") {
-            unregister("cardNumber", { keepValue: false })
-            unregister("expDate", { keepValue: false })
-            unregister("cvv", { keepValue: false })
+            unregister(["cardNumber", "expDate", "cvv"], { keepValue: false })
         }
     }, [paymentMethod, unregister])
 
     async function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
+        const shouldStopSubmit = shouldPreventSubmit()
         e.preventDefault()
 
-        if (!isLogged) {
-            return location.assign("/signin")
-        } else {
-            const isCartEmpty = !cart.items
-            const isCartBusy = cartStatus.isLoading
-            const isLoadingTaxes = checkoutStatus.isLoadingTaxes
-
-            if (isCartEmpty || isCartBusy || isLoadingTaxes || isSubmitting) {
-                return
-            }
-        }
+        if (!isLogged) return location.assign("/signin")
+        if (shouldStopSubmit) return
 
         return await handleSubmit(handleSuccessfulSubmit)(e)
     }
 
     async function handleSuccessfulSubmit() {
-        const withToast = isLogged
+        return createOrder(isLogged).then(() => reset({ ...checkoutFormInitialState }))
+    }
 
-        return createOrder(withToast).then(() => {
-            reset({ ...checkoutFormInitialState })
-        })
+    function shouldPreventSubmit() {
+        const isCartEmpty = !cart.items
+        const isCartBusy = cartStatus.isLoading
+        const isLoadingTaxes = checkoutStatus.isLoadingTaxes
+
+        return isCartEmpty || isCartBusy || isLoadingTaxes || isSubmitting
     }
 
     return (
