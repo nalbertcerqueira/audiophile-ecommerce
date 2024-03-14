@@ -24,7 +24,7 @@ Audiophile ecommerce se trata de um projeto desenvolvido a partir de um dos desa
 -   🟢 Carrinho de compras (adição e remoção de produtos)
 -   🟢 Checkout do carrinho
 -   ⚪ Painel do usuário (em breve...)
-  
+
 ### Rotas da API
 
 #### Rotas privadas 🔐
