@@ -38,10 +38,7 @@ interface CheckoutContextProps {
     checkoutStatus: CheckoutStatus
     updateTaxes: () => Promise<void>
     createOrder: (withToast?: boolean) => Promise<void>
-    setCheckoutStatus: (
-        state: SetStateAction<CheckoutStatus>,
-        delay?: number
-    ) => NodeJS.Timeout | void
+    setCheckoutStatus: (state: SetStateAction<CheckoutStatus>) => void
 }
 
 const taxesInitialState: Taxes = { shipping: 0, vat: 0 }
@@ -92,15 +89,7 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
             .finally(() => setStatus((prevState) => ({ ...prevState, isCheckingOut: false })))
     }
 
-    function setCheckoutStatus(
-        state: SetStateAction<CheckoutStatus>,
-        delay?: number
-    ): NodeJS.Timeout | void {
-        if (delay) {
-            const timerRef = setTimeout(() => setStatus(state), delay)
-            return timerRef
-        }
-
+    function setCheckoutStatus(state: SetStateAction<CheckoutStatus>): void {
         return setStatus(state)
     }
 

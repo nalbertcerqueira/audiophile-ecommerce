@@ -46,7 +46,7 @@ interface CartContextProps {
     clearCart: () => Promise<boolean>
     removeItem: (productId: string, quantity: number) => Promise<boolean>
     isCartBusy: (productId: string, quantity?: number) => boolean
-    setCartStatus: (action: CartLoadingActions, delay?: number) => NodeJS.Timeout | void
+    setCartStatus: (action: CartLoadingActions) => void
 }
 
 interface ActionOptions {
@@ -126,15 +126,7 @@ export function CartProvider({ children }: PropsWithChildren) {
         return true
     }
 
-    function setCartLoadingStatus(
-        action: CartLoadingActions,
-        delay?: number
-    ): NodeJS.Timeout | void {
-        if (delay) {
-            const timerRef = setTimeout(() => loadingDispatch(action), delay)
-            return timerRef
-        }
-
+    function setCartLoadingStatus(action: CartLoadingActions): void {
         return loadingDispatch(action)
     }
 

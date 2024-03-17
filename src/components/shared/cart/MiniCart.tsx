@@ -26,8 +26,6 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
     function handleClearCart() {
         if (cartStatus.isLoading) return
 
-        //O loading da taxa também é ativado para dar a impressão de que ambas, a taxa
-        //e a ação de adicionar items ao carrinho, são iniciadas ao mesmo tempo
         setCartStatus({ type: "CLEAR" })
         setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: true })
 
@@ -52,20 +50,15 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
         if (isCartBusy(productId)) return
 
         const requestId = (requestCount.current += 1)
-        const cartTimer = setCartStatus({ type: "ENABLE", payload: { productId } }, 200)
-        const checkoutTimer = setCheckoutStatus(
-            { isCheckingOut: false, isLoadingTaxes: true },
-            400
-        )
+        setCartStatus({ type: "ENABLE", payload: { productId } })
+        setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: true })
 
         await removeItem(productId, 1)
             .then((res) => {
-                cartTimer && clearTimeout(cartTimer)
                 setCartStatus({ type: "DISABLE", payload: { productId } })
                 return res ? updateTaxes() : null
             })
             .then(() => {
-                checkoutTimer && clearTimeout(checkoutTimer)
                 if (requestCount.current === requestId) {
                     //Verificando se esta é a última (ou a única) requisição de remover items ao carrinho,
                     //para não interromper o loading antes da ultima requisição acabar.
@@ -78,20 +71,15 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
         if (isCartBusy(productId)) return
 
         const requestId = (requestCount.current += 1)
-        const cartTimer = setCartStatus({ type: "ENABLE", payload: { productId } }, 250)
-        const checkoutTimer = setCheckoutStatus(
-            { isCheckingOut: false, isLoadingTaxes: true },
-            500
-        )
+        setCartStatus({ type: "ENABLE", payload: { productId } })
+        setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: true })
 
         await addItem(productId, 1)
             .then((res) => {
-                cartTimer && clearTimeout(cartTimer)
                 setCartStatus({ type: "DISABLE", payload: { productId } })
                 return res ? updateTaxes() : null
             })
             .then(() => {
-                checkoutTimer && clearTimeout(checkoutTimer)
                 //Verificando se esta é a última (ou a única) requisição de adicionar items ao carrinho,
                 //para não interromper o loading antes da ultima requisição acabar.
                 if (requestCount.current === requestId) {
