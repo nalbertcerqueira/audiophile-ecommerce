@@ -1,6 +1,6 @@
 "use client"
 
-import { ModalContext } from "@/contexts/ModalContext"
+import { ModalContext } from "@/contexts/modalContext/ModalContext"
 import { useContext, useEffect } from "react"
 import { MiniCart } from "./MiniCart"
 import { Overlay } from "../Overlay"

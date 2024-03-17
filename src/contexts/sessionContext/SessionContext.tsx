@@ -1,28 +1,10 @@
 "use client"
 
-import {
-    AuthenticatedUser,
-    GuestUser
-} from "@/@core/frontend/domain/gateways/user/getUserGateway"
+import { SessionStatus, SessionContextProps, UserBasicInfo } from "./types"
 import { getUserUseCase } from "@/@core/frontend/main/usecases/user/getUserFactory"
 import { toCapitalized } from "@/utils/helpers"
-import { PropsWithChildren, createContext, useState, useEffect } from "react"
 import { useSession, signOut } from "next-auth/react"
-
-type UserBasicInfo = AuthenticatedUser | GuestUser
-
-interface SessionStatus {
-    isLogged: boolean
-    isLoading: boolean
-}
-
-interface SessionContextProps {
-    isLogged: boolean
-    isLoading: boolean
-    user: AuthenticatedUser | GuestUser | null
-    logout: () => void
-    getFirstName: () => string | null
-}
+import { PropsWithChildren, createContext, useState, useEffect } from "react"
 
 export const SessionContext = createContext<SessionContextProps>({} as SessionContextProps)
 

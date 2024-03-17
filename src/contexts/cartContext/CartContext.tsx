@@ -7,51 +7,24 @@ import {
     useEffect,
     useReducer,
     useRef,
-    MutableRefObject,
     useContext
 } from "react"
 import {
     CartAwaitingMessage,
     SuccessAdditionMessage
 } from "@/libs/react-toastify/components/CartMessages"
-import { Id } from "react-toastify"
+import { CustomCart, ActionOptions, CartAdditionParams, CartContextProps } from "./types"
+import { cartLoadingInitialState } from "@/store/cartLoading/initialState"
 import { removeCartItemUseCase } from "@/@core/frontend/main/usecases/cart/removeCartItemFactory"
 import { addCartItemUseCase } from "@/@core/frontend/main/usecases/cart/addCartItemFactory"
-import { clearCartUseCase } from "@/@core/frontend/main/usecases/cart/clearCartFactory"
-import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
-import { getCartUseCase } from "@/@core/frontend/main/usecases/cart/getCartFactory"
-import { cartLoadingInitialState } from "@/store/cartLoading/initialState"
-import { CartLoadingActions } from "@/store/cartLoading/types"
 import { cartLoadingReducer } from "@/store/cartLoading/reducer"
-import { CartLoadingState } from "@/store/cartLoading/types"
-import { SessionContext } from "./SessionContext"
+import { CartLoadingActions } from "@/store/cartLoading/types"
+import { clearCartUseCase } from "@/@core/frontend/main/usecases/cart/clearCartFactory"
+import { getCartUseCase } from "@/@core/frontend/main/usecases/cart/getCartFactory"
+import { SessionContext } from "../sessionContext/SessionContext"
 import { emitToast } from "@/libs/react-toastify/utils"
-
-interface CustomCart extends CartProps {
-    totalSpent: number
-    itemCount: number
-}
-
-interface CartAdditionParams {
-    cart: Cart | null
-    productId: string
-    quantity: number
-}
-
-interface CartContextProps {
-    cart: CustomCart
-    cartStatus: CartLoadingState
-    requestCount: MutableRefObject<number>
-    addItem: (productId: string, quantity: number, options?: ActionOptions) => Promise<boolean>
-    clearCart: () => Promise<boolean>
-    removeItem: (productId: string, quantity: number) => Promise<boolean>
-    isCartBusy: (productId: string, quantity?: number) => boolean
-    setCartStatus: (action: CartLoadingActions) => void
-}
-
-interface ActionOptions {
-    emitToast: boolean
-}
+import { Cart } from "@/@core/shared/entities/cart/cart"
+import { Id } from "react-toastify"
 
 const cartInitialState: CustomCart = { itemCount: 0, totalSpent: 0, items: [] }
 

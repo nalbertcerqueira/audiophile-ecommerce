@@ -1,6 +1,6 @@
 "use client"
 
-import { ModalContext } from "@/contexts/ModalContext"
+import { ModalContext } from "@/contexts/modalContext/ModalContext"
 import { MenuIcon } from "../icons/MenuIcon"
 import { useContext, useEffect } from "react"
 import { usePathname } from "next/navigation"

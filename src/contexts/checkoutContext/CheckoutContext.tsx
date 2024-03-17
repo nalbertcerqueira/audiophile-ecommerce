@@ -1,17 +1,14 @@
 "use client"
 
-import {
-    Taxes,
-    CheckoutOrderProps,
-    CheckoutOrder
-} from "@/@core/shared/entities/order/checkoutOrder"
+import { Order, CheckoutContextProps, CheckoutStatus } from "./types"
 import { createCheckoutOrderUseCase } from "@/@core/frontend/main/usecases/order/createCheckoutOrderFactory"
 import { SuccessCheckoutMessage } from "@/libs/react-toastify/components/CheckoutMessages"
+import { Taxes, CheckoutOrder } from "@/@core/shared/entities/order/checkoutOrder"
 import { getOrderTaxesUseCase } from "@/@core/frontend/main/usecases/order/getOrderTaxesFactory"
-import { SessionContext } from "./SessionContext"
-import { CartProduct } from "@/@core/shared/entities/cart/cart"
+import { SessionContext } from "../sessionContext/SessionContext"
 import { emitToast } from "@/libs/react-toastify/utils"
 
+import { Id } from "react-toastify"
 import {
     PropsWithChildren,
     createContext,
@@ -20,35 +17,13 @@ import {
     useEffect,
     useContext
 } from "react"
-import { Id } from "react-toastify"
-
-interface CheckoutStatus {
-    isLoadingTaxes: boolean
-    isCheckingOut: boolean
-}
-
-interface Order extends Pick<CheckoutOrderProps, "orderId"> {
-    cartItems: CartProduct[]
-    grandTotal: number
-}
-
-interface CheckoutContextProps {
-    taxes: Taxes
-    order: Order | null
-    checkoutStatus: CheckoutStatus
-    updateTaxes: () => Promise<void>
-    createOrder: (withToast?: boolean) => Promise<void>
-    setCheckoutStatus: (state: SetStateAction<CheckoutStatus>) => void
-}
-
-const taxesInitialState: Taxes = { shipping: 0, vat: 0 }
 
 export const CheckoutContext = createContext({} as CheckoutContextProps)
 
 export function CheckoutProvider({ children }: PropsWithChildren) {
     const sessionContext = useContext(SessionContext)
-    const [taxes, setTaxes] = useState<Taxes>(taxesInitialState)
     const [order, setOrder] = useState<Order | null>(null)
+    const [taxes, setTaxes] = useState<Taxes>({ shipping: 0, vat: 0 })
     const [status, setStatus] = useState<CheckoutStatus>({
         isLoadingTaxes: true,
         isCheckingOut: false

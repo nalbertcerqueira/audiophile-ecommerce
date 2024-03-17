@@ -2,7 +2,7 @@
 "use client"
 
 import GenericProfileImage from "/public/imgs/profile.jpg"
-import { SessionContext } from "@/contexts/SessionContext"
+import { SessionContext } from "@/contexts/sessionContext/SessionContext"
 import { useContext } from "react"
 import Link from "next/link"
 

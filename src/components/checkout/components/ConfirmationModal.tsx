@@ -1,7 +1,7 @@
 "use client"
 
 import { ConfirmationIcon } from "@/components/shared/icons/ConfirmationIcon"
-import { CheckoutContext } from "@/contexts/CheckoutContext"
+import { CheckoutContext } from "@/contexts/checkoutContext/CheckoutContext"
 import { formatCurrency } from "@/utils/helpers"
 import { CartItem } from "@/components/shared/cart/CartItem"
 import { useContext, useEffect, useState } from "react"

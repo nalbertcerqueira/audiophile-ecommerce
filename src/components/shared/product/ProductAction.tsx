@@ -2,9 +2,9 @@
 
 import { Counter } from "../Counter"
 import { useContext, useState } from "react"
-import { CartContext } from "@/contexts/CartContext"
-import { SessionContext } from "@/contexts/SessionContext"
-import { CheckoutContext } from "@/contexts/CheckoutContext"
+import { CartContext } from "@/contexts/cartContext/CartContext"
+import { SessionContext } from "@/contexts/sessionContext/SessionContext"
+import { CheckoutContext } from "@/contexts/checkoutContext/CheckoutContext"
 
 export function AddProductAction({ productId }: { productId: string }) {
     const [count, setCount] = useState<number>(0)

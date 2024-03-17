@@ -1,9 +1,9 @@
 "use client"
 
-import { CheckoutContext } from "@/contexts/CheckoutContext"
-import { SessionContext } from "@/contexts/SessionContext"
+import { CheckoutContext } from "@/contexts/checkoutContext/CheckoutContext"
+import { SessionContext } from "@/contexts/sessionContext/SessionContext"
 import { SummaryField } from "./SummaryField"
-import { CartContext } from "@/contexts/CartContext"
+import { CartContext } from "@/contexts/cartContext/CartContext"
 import { CartItem } from "./CartItem"
 import { useContext } from "react"
 import { useRouter } from "next/navigation"

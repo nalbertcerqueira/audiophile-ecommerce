@@ -1,8 +1,8 @@
-import { NextAuthSessionProvider } from "@/contexts/NextAuthSessionContext"
-import { ModalProvider } from "@/contexts/ModalContext"
-import { CheckoutProvider } from "@/contexts/CheckoutContext"
-import { SessionProvider } from "@/contexts/SessionContext"
-import { CartProvider } from "@/contexts/CartContext"
+import { NextAuthSessionProvider } from "@/contexts/nextAuthSessionContext/NextAuthSessionContext"
+import { CheckoutProvider } from "@/contexts/checkoutContext/CheckoutContext"
+import { SessionProvider } from "@/contexts/sessionContext/SessionContext"
+import { ModalProvider } from "@/contexts/modalContext/ModalContext"
+import { CartProvider } from "@/contexts/cartContext/CartContext"
 import { PropsWithChildren } from "react"
 
 export function AppProvider({ children }: PropsWithChildren) {

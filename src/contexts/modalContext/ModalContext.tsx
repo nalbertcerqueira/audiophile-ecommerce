@@ -1,19 +1,9 @@
 "use client"
 
 import { createContext, PropsWithChildren, useCallback, useState } from "react"
+import { ModalContextProps } from "./types"
 
-interface Modal {
-    isOpen: boolean
-    toggle: () => void
-    close: () => void
-}
-
-interface ModalContext {
-    cartModal: Modal
-    menuMobileModal: Modal
-}
-
-export const ModalContext = createContext<ModalContext>({} as ModalContext)
+export const ModalContext = createContext<ModalContextProps>({} as ModalContextProps)
 
 export function ModalProvider({ children }: PropsWithChildren) {
     const [isCartOpen, setIsCartOpen] = useState<boolean>(false)

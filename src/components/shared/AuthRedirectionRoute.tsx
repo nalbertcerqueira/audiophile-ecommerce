@@ -1,6 +1,6 @@
 "use client"
 
-import { SessionContext } from "@/contexts/SessionContext"
+import { SessionContext } from "@/contexts/sessionContext/SessionContext"
 import { useRouter } from "next/navigation"
 import { ReactNode, useContext, useEffect } from "react"
 

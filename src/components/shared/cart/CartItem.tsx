@@ -2,7 +2,7 @@
 
 import { staticProductImages } from "@/utils/imageMap"
 import { formatCurrency } from "@/utils/helpers"
-import { ModalContext } from "@/contexts/ModalContext"
+import { ModalContext } from "@/contexts/modalContext/ModalContext"
 import { RingLoader } from "../loaders/RingLoader"
 import { Counter } from "../Counter"
 import { useContext } from "react"

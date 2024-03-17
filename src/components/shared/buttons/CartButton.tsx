@@ -2,9 +2,9 @@
 
 import { CartIcon } from "../icons/CartIcon"
 import { useContext, useEffect } from "react"
-import { ModalContext } from "@/contexts/ModalContext"
+import { ModalContext } from "@/contexts/modalContext/ModalContext"
 import { usePathname } from "next/navigation"
-import { CartContext } from "@/contexts/CartContext"
+import { CartContext } from "@/contexts/cartContext/CartContext"
 
 export function CartButton() {
     const { cartModal } = useContext(ModalContext)

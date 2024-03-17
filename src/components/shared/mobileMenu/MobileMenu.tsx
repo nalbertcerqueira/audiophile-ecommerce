@@ -3,7 +3,7 @@
 import { MobileUserActions } from "./MobileUserActions"
 import { MobileAuthActions } from "./MobileAuthActions"
 import { MobileMenuItem } from "./MobileMenuItem"
-import { SessionContext } from "@/contexts/SessionContext"
+import { SessionContext } from "@/contexts/sessionContext/SessionContext"
 import { AvatarCircle } from "../UserActions"
 import { categories } from "@/utils/variables"
 import { useContext } from "react"
