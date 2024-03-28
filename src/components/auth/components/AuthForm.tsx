@@ -6,14 +6,14 @@ interface AuthFormProps {
     isSubmitting: boolean
     submitBtn: ReactNode
     ariaLabel?: string
-    submitHandler: (e: FormEvent<HTMLFormElement>) => void
+    onSubmit: (e: FormEvent<HTMLFormElement>) => void
 }
 
 export function AuthForm(props: AuthFormProps) {
-    const { children, isSubmitting, submitBtn, ariaLabel, submitHandler } = props
+    const { children, isSubmitting, submitBtn, ariaLabel, onSubmit } = props
 
     return (
-        <form aria-label={ariaLabel} onSubmit={submitHandler} className="auth-form">
+        <form aria-label={ariaLabel} onSubmit={onSubmit} className="auth-form">
             <div className="auth-form__input-wrapper">{children}</div>
             <button
                 aria-disabled={isSubmitting}
