@@ -1,19 +1,17 @@
 "use client"
 
-import { checkoutFieldsSchema } from "../helpers/schemas"
-import { BillingDetailFields } from "./checkoutFields/BillingDetailFields"
+import { BillingDetailFields } from "./BillingDetailFields"
 import { CheckoutContext } from "@/contexts/checkoutContext/CheckoutContext"
-import { ShippingFields } from "./checkoutFields/ShippingFields"
-import { CheckoutFields } from "../types/types"
+import { ShippingFields } from "./ShippingFields"
+import { CheckoutFields } from "../../types/types"
 import { SessionContext } from "@/contexts/sessionContext/SessionContext"
-import { PaymentFields } from "./checkoutFields/PaymentFields"
+import { PaymentFields } from "./PaymentFields"
 import { CartContext } from "@/contexts/cartContext/CartContext"
 import { CashIcon } from "@/components/shared/icons/CashIcon"
-import { FormEvent, useContext, useEffect } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { FormEvent, useContext } from "react"
+import { useCheckoutForm } from "./useCheckoutForm"
 
-export const checkoutFormInitialState: CheckoutFields = {
+const checkoutFormInitialState: CheckoutFields = {
     name: "",
     email: "",
     phone: "",
@@ -23,45 +21,24 @@ export const checkoutFormInitialState: CheckoutFields = {
     country: "",
     paymentMethod: "cash"
 }
-
 export function CheckoutForm({ formId }: { formId: string }) {
-    const { isLogged } = useContext(SessionContext)
-    const { cart, cartStatus } = useContext(CartContext)
     const { checkoutStatus, createOrder } = useContext(CheckoutContext)
-    const {
-        formState: { errors, isSubmitting },
-        control,
-        watch,
-        register,
-        handleSubmit,
-        unregister,
-        reset
-    } = useForm<CheckoutFields>({
-        mode: "onSubmit",
-        reValidateMode: "onSubmit",
-        defaultValues: checkoutFormInitialState,
-        resolver: zodResolver(checkoutFieldsSchema)
-    })
-    const paymentMethod = watch("paymentMethod")
-
-    useEffect(() => {
-        if (paymentMethod === "cash") {
-            unregister(["cardNumber", "expDate", "cvv"], { keepValue: false })
-        }
-    }, [paymentMethod, unregister])
+    const { cart, cartStatus } = useContext(CartContext)
+    const { isLogged } = useContext(SessionContext)
+    const form = useCheckoutForm(checkoutFormInitialState)
 
     async function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
-        const shouldStopSubmit = shouldPreventSubmit()
         e.preventDefault()
+        const preventSubmit = shouldPreventSubmit()
 
         if (!isLogged) return location.assign("/signin")
-        if (shouldStopSubmit) return
+        if (preventSubmit) return
 
-        return await handleSubmit(handleSuccessfulSubmit)(e)
+        return await form.handleSubmit(handleSuccessfulSubmit)(e)
     }
 
     async function handleSuccessfulSubmit() {
-        return createOrder(isLogged).then(() => reset({ ...checkoutFormInitialState }))
+        return createOrder(isLogged).then(() => form.reset({ ...checkoutFormInitialState }))
     }
 
     function shouldPreventSubmit() {
@@ -69,7 +46,7 @@ export function CheckoutForm({ formId }: { formId: string }) {
         const isCartBusy = cartStatus.isLoading
         const isLoadingTaxes = checkoutStatus.isLoadingTaxes
 
-        return isCartEmpty || isCartBusy || isLoadingTaxes || isSubmitting
+        return isCartEmpty || isCartBusy || isLoadingTaxes || form.isSubmitting
     }
 
     return (
@@ -78,25 +55,25 @@ export function CheckoutForm({ formId }: { formId: string }) {
             <form id={formId} className="checkout__form" onSubmit={handleFormSubmit}>
                 <BillingDetailFields
                     fieldsetTitle="BILLING DETAILS"
-                    control={control}
-                    formErrors={errors}
-                    register={register}
+                    control={form.control}
+                    formErrors={form.errors}
+                    register={form.register}
                 />
                 <ShippingFields
                     fieldsetTitle="SHIPPING INFO"
-                    control={control}
-                    formErrors={errors}
-                    register={register}
+                    control={form.control}
+                    formErrors={form.errors}
+                    register={form.register}
                 />
                 <PaymentFields
                     fieldsetTitle="PAYMENT DETAILS"
-                    control={control}
-                    formErrors={errors}
-                    currentPaymentMethod={paymentMethod}
-                    register={register}
+                    control={form.control}
+                    formErrors={form.errors}
+                    currentPaymentMethod={form.paymentMethod}
+                    register={form.register}
                 />
             </form>
-            {paymentMethod === "cash" && (
+            {form.paymentMethod === "cash" && (
                 <div className="checkout__cash-guidance">
                     <CashIcon className="checkout__cash-icon" />
                     <p className="checkout__cash-info">

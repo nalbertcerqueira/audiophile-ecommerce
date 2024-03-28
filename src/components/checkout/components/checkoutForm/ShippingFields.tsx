@@ -5,6 +5,7 @@ import { BaseCheckoutFieldProps } from "./types"
 
 export function ShippingFields(props: BaseCheckoutFieldProps) {
     const { fieldsetTitle, formErrors, control, register } = props
+
     return (
         <fieldset className="checkout__shipping-details">
             <legend className="checkout__group-name">{fieldsetTitle}</legend>
