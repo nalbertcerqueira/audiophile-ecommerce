@@ -11,7 +11,8 @@ const appReducer = combineReducers({
 
 export function makeStore() {
     const appStore = configureStore({
-        reducer: appReducer
+        reducer: appReducer,
+        devTools: false
     })
 
     return appStore
