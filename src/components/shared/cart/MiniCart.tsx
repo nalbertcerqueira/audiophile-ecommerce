@@ -62,8 +62,8 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
             .then(() => dispatch(fetchTaxes()))
             .catch((error: Error) => handleHttpErrors(error, true))
             .finally(() => {
-                const isSameRquest = requestId === requestRef.current
-                isSameRquest && dispatch(setCheckoutStatus({ taxes: "idle" }))
+                const isSameRequest = requestId === requestRef.current
+                isSameRequest && dispatch(setCheckoutStatus({ taxes: "idle" }))
             })
     }
 
