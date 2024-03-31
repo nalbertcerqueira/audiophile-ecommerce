@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit"
+import { checkoutReducer } from "./checkout"
 import { cartReducer } from "./cart/cartSlice"
 
 const appReducer = combineReducers({
-    cart: cartReducer
+    cart: cartReducer,
+    checkout: checkoutReducer
 })
 
 export function makeStore() {
