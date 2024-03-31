@@ -4,8 +4,7 @@ import { Id, toast } from "react-toastify"
 type ToastType = "success" | "error" | "loading"
 
 interface ToastOptions {
-    update: boolean
-    id: Id
+    toastId: Id
 }
 
 export function emitToast(type: ToastType, message: ReactNode): Id
@@ -20,16 +19,16 @@ export function emitToast(
 
     switch (type) {
         case "success":
-            return options?.update
-                ? toast.update(options.id, {
+            return options?.toastId
+                ? toast.update(options.toastId, {
                       ...defaultUpdateOptions,
                       render: message,
                       type: "success"
                   })
                 : toast.success(message, defaultOptions)
         case "error":
-            return options?.update
-                ? toast.update(options.id, {
+            return options?.toastId
+                ? toast.update(options?.toastId, {
                       ...defaultUpdateOptions,
                       render: message,
                       type: "error"

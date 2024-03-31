@@ -1,15 +1,21 @@
 "use client"
 
 import { BillingDetailFields } from "./BillingDetailFields"
-import { CheckoutContext } from "@/contexts/checkoutContext/CheckoutContext"
 import { ShippingFields } from "./ShippingFields"
 import { CheckoutFields } from "../../types/types"
 import { SessionContext } from "@/contexts/sessionContext/SessionContext"
 import { PaymentFields } from "./PaymentFields"
-import { CartContext } from "@/contexts/cartContext/CartContext"
 import { CashIcon } from "@/components/shared/icons/CashIcon"
 import { FormEvent, useContext } from "react"
 import { useCheckoutForm } from "./useCheckoutForm"
+import { useAppDispatch, useAppSelector } from "@/libs/redux/hooks"
+import { createOrder } from "@/store/checkout"
+import { emitToast } from "@/libs/react-toastify/utils"
+import { SuccessCheckoutMessage } from "@/libs/react-toastify/components/CheckoutMessages"
+import { handleHttpErrors } from "@/utils/helpers"
+import { Id } from "react-toastify"
+import { selectTaxesStatus } from "@/store/checkout/checkoutSlice"
+import { selectCartStatus, selectCartItemsLength } from "@/store/cart/cartSlice"
 
 const checkoutFormInitialState: CheckoutFields = {
     name: "",
@@ -22,37 +28,43 @@ const checkoutFormInitialState: CheckoutFields = {
     paymentMethod: "cash"
 }
 export function CheckoutForm({ formId }: { formId: string }) {
-    const { checkoutStatus, createOrder } = useContext(CheckoutContext)
-    const { cart, cartStatus } = useContext(CartContext)
+    const dispatch = useAppDispatch()
+    const isLoadingTaxes = useAppSelector(selectTaxesStatus) === "loading"
+    const isCartBusy = useAppSelector(selectCartStatus) !== "idle"
+    const isCartEmpty = useAppSelector(selectCartItemsLength) === 0
     const { isLogged } = useContext(SessionContext)
     const form = useCheckoutForm(checkoutFormInitialState)
 
-    async function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault()
-        const preventSubmit = shouldPreventSubmit()
+    const submitBlocked = isCartEmpty || isCartBusy || isLoadingTaxes || form.isSubmitting
 
+    async function onSubmit(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+
+        if (submitBlocked) return
         if (!isLogged) return location.assign("/signin")
-        if (preventSubmit) return
 
         return await form.handleSubmit(handleSuccessfulSubmit)(e)
     }
 
     async function handleSuccessfulSubmit() {
-        return createOrder(isLogged).then(() => form.reset({ ...checkoutFormInitialState }))
+        const toastId = emitToast("loading", "Processing your order. Please wait a moment...")
+        dispatch(createOrder())
+            .unwrap()
+            .then((order) => handleSuccess(order.orderId, toastId))
+            .catch((error: Error) => handleHttpErrors(error, true, toastId))
     }
 
-    function shouldPreventSubmit() {
-        const isCartEmpty = !cart.items
-        const isCartBusy = cartStatus.isLoading
-        const isLoadingTaxes = checkoutStatus.isLoadingTaxes
-
-        return isCartEmpty || isCartBusy || isLoadingTaxes || form.isSubmitting
+    function handleSuccess(orderId: string, toastId: Id) {
+        form.reset({ ...checkoutFormInitialState })
+        emitToast("success", <SuccessCheckoutMessage orderId={orderId} />, {
+            toastId
+        })
     }
 
     return (
         <div className="checkout">
             <h1 className="checkout__title">CHECKOUT</h1>
-            <form id={formId} className="checkout__form" onSubmit={handleFormSubmit}>
+            <form id={formId} className="checkout__form" onSubmit={onSubmit}>
                 <BillingDetailFields
                     fieldsetTitle="BILLING DETAILS"
                     control={form.control}

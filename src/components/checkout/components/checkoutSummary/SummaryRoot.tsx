@@ -1,9 +1,10 @@
 "use client"
 
-import { CartContext } from "@/contexts/cartContext/CartContext"
-import { CheckoutContext } from "@/contexts/checkoutContext/CheckoutContext"
 import { RingLoader } from "@/components/shared/loaders/RingLoader"
-import { ReactNode, useContext } from "react"
+import { ReactNode } from "react"
+import { useAppSelector } from "@/libs/redux/hooks"
+import { selectOrderStatus, selectTaxesStatus } from "@/store/checkout/checkoutSlice"
+import { selectCartItemsLength, selectCartStatus } from "@/store/cart/cartSlice"
 
 interface SummaryRootProps {
     formId: string
@@ -11,16 +12,12 @@ interface SummaryRootProps {
 }
 
 export function SummaryRoot({ formId, children }: SummaryRootProps) {
-    const { cartStatus, cart } = useContext(CartContext)
-    const { checkoutStatus } = useContext(CheckoutContext)
+    const isCartEmpty = useAppSelector(selectCartItemsLength) === 0
+    const isCartBusy = useAppSelector(selectCartStatus) !== "idle"
+    const isCheckingOut = useAppSelector(selectOrderStatus) === "loading"
+    const isLoadingTaxes = useAppSelector(selectTaxesStatus) === "loading"
 
-    function shouldPreventSubmit() {
-        const { isCheckingOut, isLoadingTaxes } = checkoutStatus
-        const isCartEmpty = !cart.items.length
-        const isCartBusy = cartStatus.isLoading
-
-        return isCartEmpty || isCartBusy || isLoadingTaxes || isCheckingOut
-    }
+    const submitBlocked = isCartEmpty || isCartBusy || isLoadingTaxes || isCheckingOut
 
     return (
         <div className="summary">
@@ -28,13 +25,13 @@ export function SummaryRoot({ formId, children }: SummaryRootProps) {
             {children}
             <button
                 aria-label="continue and pay"
-                aria-disabled={shouldPreventSubmit()}
-                disabled={shouldPreventSubmit()}
+                aria-disabled={submitBlocked}
+                disabled={submitBlocked}
                 form={formId}
                 type="submit"
                 className="btn btn--primary summary__submit-btn"
             >
-                {checkoutStatus.isCheckingOut && (
+                {isCheckingOut && (
                     <div className="btn-overlay">
                         <RingLoader />
                     </div>

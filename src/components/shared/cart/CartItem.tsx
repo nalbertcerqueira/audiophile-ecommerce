@@ -2,10 +2,8 @@
 
 import { staticProductImages } from "@/utils/imageMap"
 import { formatCurrency } from "@/utils/helpers"
-import { ModalContext } from "@/contexts/modalContext/ModalContext"
 import { RingLoader } from "../loaders/RingLoader"
 import { Counter } from "../Counter"
-import { useContext } from "react"
 import Image from "next/image"
 
 interface CartItemProps {
@@ -28,7 +26,6 @@ interface CartItemWithoutAction extends CartItemProps {
 
 export function CartItem(props: CartItemWithActions | CartItemWithoutAction) {
     const { readOnly, name, slug, quantity, price } = props
-    const { cartModal } = useContext(ModalContext)
 
     return (
         <div
@@ -62,7 +59,6 @@ export function CartItem(props: CartItemWithActions | CartItemWithoutAction) {
                     decrement={props.removeItem}
                     increment={props.addItem}
                     className="cart-item__counter"
-                    ariaLive={!readOnly ? (cartModal.isOpen ? "polite" : "off") : undefined}
                 />
             )}
             {!readOnly && props.isBusy && (

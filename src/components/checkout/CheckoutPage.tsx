@@ -1,7 +1,8 @@
 import { BackButton } from "@/components/shared/buttons/BackButton"
 import { CheckoutSection } from "./components/CheckoutSection"
-import { ConfirmationModal } from "./components/ConfirmationModal"
+
 import "./styles.scss"
+import { ConfirmationModal } from "./components/checkoutModal"
 
 export function CheckoutPageComponent() {
     return (
@@ -13,7 +14,9 @@ export function CheckoutPageComponent() {
                     </div>
                 </div>
                 <CheckoutSection />
-                <ConfirmationModal />
+                <ConfirmationModal.Root>
+                    <ConfirmationModal.Items />
+                </ConfirmationModal.Root>
             </div>
         </>
     )

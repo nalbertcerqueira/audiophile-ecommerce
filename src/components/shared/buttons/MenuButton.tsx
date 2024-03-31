@@ -1,22 +1,27 @@
 "use client"
 
-import { ModalContext } from "@/contexts/modalContext/ModalContext"
+import { useEffect } from "react"
 import { MenuIcon } from "../icons/MenuIcon"
-import { useContext, useEffect } from "react"
 import { usePathname } from "next/navigation"
+import { useAppDispatch } from "@/libs/redux/hooks"
+import { closeModal, toggleModal } from "@/store/modals/modalsSlice"
 
 export function MobileMenuButton() {
-    const { menuMobileModal } = useContext(ModalContext)
+    const dispatch = useAppDispatch()
     const pathname = usePathname()
 
     //Fechando o modal quando a rota for alterada
-    useEffect(() => menuMobileModal.close, [menuMobileModal.close, pathname])
+    useEffect(() => {
+        return () => {
+            dispatch(closeModal("mobileMenu"))
+        }
+    }, [dispatch, pathname])
 
     return (
         <button
             type="button"
             className="menu-btn"
-            onClick={() => menuMobileModal.toggle()}
+            onClick={() => dispatch(toggleModal("mobileMenu"))}
             aria-label="toggle navigation menu"
             aria-controls="mobile-menu"
         >

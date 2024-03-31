@@ -1,3 +1,6 @@
+import { Id } from "react-toastify"
+import { emitToast } from "@/libs/react-toastify/utils"
+
 //Formatando valores monetários para en-US
 export function formatCurrency(value: number): string {
     const valueWithCurrency = Intl.NumberFormat("en-US", {
@@ -25,4 +28,17 @@ export function matchUrlPathname(currentPathname: string | null, target: string)
 
     const pathList = currentPathname?.split("/")
     return pathList?.includes(target)
+}
+
+//Tratando o erro retornado por uma requisição http
+export function handleHttpErrors(error: Error, showToast: boolean, toastId?: Id | null): void {
+    if (error.name === "UnauthorizedError") {
+        return location.reload()
+    }
+
+    if (showToast) {
+        toastId
+            ? emitToast("error", error.message, { toastId })
+            : emitToast("error", error.message)
+    }
 }

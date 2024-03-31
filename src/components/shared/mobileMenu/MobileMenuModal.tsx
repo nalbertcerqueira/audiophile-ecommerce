@@ -1,13 +1,14 @@
 "use client"
 
-import { ModalContext } from "@/contexts/modalContext/ModalContext"
 import { MobileMenu } from "./MobileMenu"
 import { Overlay } from "../Overlay"
-import { useContext, useEffect } from "react"
+import { useEffect } from "react"
+import { useAppDispatch, useAppSelector } from "@/libs/redux/hooks"
+import { closeModal } from "@/store/modals/modalsSlice"
 
 export function MobileMenuModal() {
-    const { menuMobileModal } = useContext(ModalContext)
-    const { close } = menuMobileModal
+    const dispatch = useAppDispatch()
+    const isOpen = useAppSelector((state) => state.modals.mobileMenu.isOpen)
 
     //Fechando o modal caso o usuário clique fora dele
     useEffect(() => {
@@ -16,17 +17,17 @@ export function MobileMenuModal() {
             const isMenuButton = target.classList.contains("menu-btn")
 
             if (!target.closest(".mobile-menu") && !isMenuButton) {
-                close()
+                dispatch(closeModal("mobileMenu"))
             }
         }
 
         document.addEventListener("click", handleOutsideClick)
         return () => window.removeEventListener("click", handleOutsideClick)
-    }, [close])
+    }, [dispatch])
 
     return (
-        <Overlay className={`mobile-menu-overlay`} isHidden={!menuMobileModal.isOpen}>
-            <MobileMenu isOpen={menuMobileModal.isOpen} />
+        <Overlay className={`mobile-menu-overlay`} isHidden={!isOpen}>
+            <MobileMenu isOpen={isOpen} />
         </Overlay>
     )
 }

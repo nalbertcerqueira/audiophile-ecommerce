@@ -1,40 +1,56 @@
 "use client"
 
-import { Counter } from "../Counter"
-import { useContext, useState } from "react"
-import { CartContext } from "@/contexts/cartContext/CartContext"
+import {
+    CartAwaitingMessage,
+    SuccessAdditionMessage
+} from "@/libs/react-toastify/components/CartMessages"
+import { fetchTaxes, setCheckoutStatus } from "@/store/checkout"
+import { handleHttpErrors } from "@/utils/helpers"
 import { SessionContext } from "@/contexts/sessionContext/SessionContext"
-import { CheckoutContext } from "@/contexts/checkoutContext/CheckoutContext"
+import { addCartItem } from "@/store/cart"
+import { CartState } from "@/store/cart/types"
+import { Counter } from "../Counter"
+import { Id } from "react-toastify"
+import { useAppDispatch, useAppSelector } from "@/libs/redux/hooks"
+import { useState, useContext } from "react"
+import { emitToast } from "@/libs/react-toastify/utils"
+import { selectCartStatus } from "@/store/cart/cartSlice"
 
 export function AddProductAction({ productId }: { productId: string }) {
-    const [count, setCount] = useState<number>(0)
     const { isLoading: isSessionLoading } = useContext(SessionContext)
-    const { cartStatus, addItem, setCartStatus } = useContext(CartContext)
-    const { updateTaxes, setCheckoutStatus } = useContext(CheckoutContext)
+    const cartStatus = useAppSelector(selectCartStatus)
+    const [count, setCount] = useState<number>(0)
+    const dispatch = useAppDispatch()
 
-    function handleAddItem() {
-        if (cartStatus.isLoading || isSessionLoading) return
+    function handleAddItem(productId: string) {
+        if (cartStatus !== "idle" || isSessionLoading) {
+            return
+        }
 
-        //O loading da taxa também é ativado para dar a impressão de que ambas, a taxa
-        //e a ação de adicionar items ao carrinho, são iniciadas ao mesmo tempo
-        setCartStatus({ type: "ENABLE", payload: { productId } })
-        setCheckoutStatus((prevState) => ({ ...prevState, isLoadingTaxes: true }))
+        const toastId = emitToast("loading", <CartAwaitingMessage />)
+        dispatch(setCheckoutStatus({ taxes: "loading" }))
+        dispatch(addCartItem({ quantity: count, productId }))
+            .unwrap()
+            .then((data) => handleSuccess(data, toastId))
+            .then(() => dispatch(fetchTaxes()))
+            .catch((error: Error) => handleHttpErrors(error, true, toastId))
+            .finally(() => dispatch(setCheckoutStatus({ taxes: "idle" })))
+    }
 
-        addItem(productId, count, { emitToast: true })
-            .then((res) => {
-                setCount(0)
-                setCartStatus({ type: "DISABLE", payload: { productId } })
-                return res ? updateTaxes() : null
-            })
-            .then(() => {
-                setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
-            })
+    function handleSuccess(data: Omit<CartState, "status"> | undefined, toastId: Id) {
+        const addedItem = data?.items.find((item) => item.productId === productId)
+        emitToast(
+            "success",
+            <SuccessAdditionMessage quantity={count} productName={addedItem?.name} />,
+            { toastId }
+        )
+        setCount(0)
     }
 
     return (
         <div className="product__cart-actions">
             <Counter
-                disabled={cartStatus.isLoading}
+                disabled={cartStatus !== "idle"}
                 ariaLive={count ? "polite" : "off"}
                 count={count}
                 increment={() => setCount((prevCount) => prevCount + 1)}
@@ -43,9 +59,9 @@ export function AddProductAction({ productId }: { productId: string }) {
                 }
             />
             <button
-                disabled={cartStatus.isLoading}
-                aria-disabled={cartStatus.isLoading}
-                onClick={handleAddItem}
+                disabled={cartStatus !== "idle"}
+                aria-disabled={cartStatus !== "idle"}
+                onClick={() => handleAddItem(productId)}
                 className="btn btn--primary"
                 aria-label={count ? `add ${count} products to cart` : "can't add 0 products"}
                 type="button"

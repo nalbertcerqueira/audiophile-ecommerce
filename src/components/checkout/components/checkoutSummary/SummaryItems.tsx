@@ -1,14 +1,13 @@
 "use client"
 
 import { CartItemSkeleton } from "@/components/shared/loaders/skeletons/CartItemSkeleton"
-import { CartContext } from "@/contexts/cartContext/CartContext"
+import { useAppSelector } from "@/libs/redux/hooks"
 import { CartItem } from "@/components/shared/cart/CartItem"
-import { useContext } from "react"
+import { selectCart } from "@/store/cart/cartSlice"
 
 export function SummaryItems() {
-    const { cartStatus, cart } = useContext(CartContext)
-    const isCartClearing = !cartStatus.currentProductIds.length
-    const isCartBusy = cartStatus.isLoading
+    const { items, status } = useAppSelector(selectCart)
+    const cleaningOrFetching = status.state === "fetching" || status.state === "clearing"
 
     const renderedLoading = (
         <>
@@ -17,7 +16,7 @@ export function SummaryItems() {
         </>
     )
 
-    const renderedItems = cart.items.map((item) => (
+    const renderedItems = items.map((item) => (
         <CartItem
             key={item.productId}
             name={item.name}
@@ -30,7 +29,7 @@ export function SummaryItems() {
 
     return (
         <div className="summary__items">
-            {isCartBusy && isCartClearing ? renderedLoading : renderedItems}
+            {cleaningOrFetching ? renderedLoading : renderedItems}
         </div>
     )
 }

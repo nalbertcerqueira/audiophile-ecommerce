@@ -1,16 +1,16 @@
 "use client"
 
 import { SummarySkeleton } from "@/components/shared/loaders/skeletons/SummarySkeleton"
-import { CheckoutContext } from "@/contexts/checkoutContext/CheckoutContext"
 import { SummaryField } from "@/components/shared/cart/SummaryField"
-import { CartContext } from "@/contexts/cartContext/CartContext"
-import { useContext } from "react"
+import { useAppSelector } from "@/libs/redux/hooks"
+import { selectCart } from "@/store/cart/cartSlice"
 
 export function SummaryFields() {
-    const { taxes, checkoutStatus } = useContext(CheckoutContext)
-    const { cartStatus, cart } = useContext(CartContext)
+    const taxes = useAppSelector((state) => state.checkout.taxes)
+    const cart = useAppSelector(selectCart)
+    const grandTotal = taxes.data.vat + taxes.data.shipping + cart.totalSpent
 
-    if (checkoutStatus.isLoadingTaxes || cartStatus.isLoading) {
+    if (taxes.status === "loading" || cart.status.state !== "idle") {
         return <SummarySkeleton />
     }
 
@@ -23,21 +23,21 @@ export function SummaryFields() {
                     value={cart.totalSpent}
                 />
                 <SummaryField
-                    ariaLabel={`shipping tax of: ${taxes.shipping} dollars`}
+                    ariaLabel={`shipping tax of: ${taxes.data.shipping} dollars`}
                     name="SHIPPING"
-                    value={taxes.shipping}
+                    value={taxes.data.shipping}
                 />
                 <SummaryField
-                    ariaLabel={`vat tax of: ${taxes.vat} dollars`}
+                    ariaLabel={`vat tax of: ${taxes.data.vat} dollars`}
                     name="VAT (INCLUDED)"
-                    value={taxes.vat}
+                    value={taxes.data.vat}
                 />
             </div>
             <div className="summary__grand-total">
                 <SummaryField
-                    ariaLabel={`grand total of: ${taxes.vat} dollars`}
+                    ariaLabel={`grand total of: ${grandTotal} dollars`}
                     name="GRAND TOTAL"
-                    value={taxes.vat + taxes.shipping + cart.totalSpent}
+                    value={grandTotal}
                 />
             </div>
         </div>

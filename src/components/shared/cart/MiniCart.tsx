@@ -1,90 +1,69 @@
 "use client"
 
-import { CheckoutContext } from "@/contexts/checkoutContext/CheckoutContext"
+import { addCartItem, clearCart, fetchCart, removeCartItem } from "@/store/cart"
 import { SessionContext } from "@/contexts/sessionContext/SessionContext"
+import { useAppSelector } from "@/libs/redux/hooks"
 import { SummaryField } from "./SummaryField"
-import { CartContext } from "@/contexts/cartContext/CartContext"
+import { AppDispatch } from "@/store/store"
 import { CartItem } from "./CartItem"
-import { useContext } from "react"
+import { useContext, useEffect, useRef } from "react"
+import { useDispatch } from "react-redux"
 import { useRouter } from "next/navigation"
+import { fetchTaxes, setCheckoutStatus } from "@/store/checkout"
+import { handleHttpErrors } from "@/utils/helpers"
+import { selectOrderStatus } from "@/store/checkout/checkoutSlice"
+import { selectCart } from "@/store/cart/cartSlice"
 
 export function MiniCart({ isOpen }: { isOpen: boolean }) {
+    const dispatch = useDispatch<AppDispatch>()
+    const isCheckingOut = useAppSelector(selectOrderStatus) === "loading"
+    const requestRef = useRef<number>(0)
+    const session = useContext(SessionContext)
     const router = useRouter()
-    const { isLogged } = useContext(SessionContext)
-    const { updateTaxes, setCheckoutStatus } = useContext(CheckoutContext)
-    const {
-        cart,
-        cartStatus,
-        requestCount,
-        addItem,
-        removeItem,
-        clearCart,
-        isCartBusy,
-        setCartStatus
-    } = useContext(CartContext)
+    const cart = useAppSelector(selectCart)
 
-    function handleClearCart() {
-        if (cartStatus.isLoading) return
+    const { items, itemCount, totalSpent, status } = cart
 
-        setCartStatus({ type: "CLEAR" })
-        setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: true })
-
-        clearCart()
-            .then((res) => {
-                setCartStatus({ type: "DISABLE" })
-                return res ? updateTaxes() : null
-            })
-            .then(() => {
-                setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
-            })
-    }
-
-    function shouldCheckout() {
-        if (!isLogged) {
-            return window.location.assign("/signin")
+    //Buscando o carrinho de compras após o carregamento da página
+    useEffect(() => {
+        if (!session.isLoading) {
+            Promise.all([dispatch(fetchCart()).unwrap(), dispatch(fetchTaxes()).unwrap()])
+                .catch((error: Error) => handleHttpErrors(error, true))
+                .finally(() => dispatch(setCheckoutStatus({ taxes: "idle" })))
         }
-        return router.push("/checkout")
+    }, [session.isLoading, dispatch])
+
+    async function handleClearCart() {
+        const actionBlocked = isCheckingOut || !items.length || status.state !== "idle"
+        if (actionBlocked) {
+            return
+        }
+
+        dispatch(setCheckoutStatus({ taxes: "loading" }))
+        dispatch(clearCart())
+            .unwrap()
+            .then(() => dispatch(fetchTaxes()))
+            .catch((error: Error) => handleHttpErrors(error, true))
+            .finally(() => dispatch(setCheckoutStatus({ taxes: "idle" })))
     }
 
-    async function handleRemoveItem(productId: string) {
-        if (isCartBusy(productId)) return
+    async function addOrRemove(operation: "add" | "remove", productId: string) {
+        const actionBlocked = isCheckingOut || status.state === "clearing"
+        const thunkAction = operation === "add" ? addCartItem : removeCartItem
 
-        const requestId = (requestCount.current += 1)
-        setCartStatus({ type: "ENABLE", payload: { productId } })
-        setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: true })
+        if (actionBlocked || status.busyProducts.includes(productId)) {
+            return
+        }
 
-        await removeItem(productId, 1)
-            .then((res) => {
-                setCartStatus({ type: "DISABLE", payload: { productId } })
-                return res ? updateTaxes() : null
-            })
-            .then(() => {
-                if (requestCount.current === requestId) {
-                    //Verificando se esta é a última (ou a única) requisição de remover items ao carrinho,
-                    //para não interromper o loading antes da ultima requisição acabar.
-                    setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
-                }
-            })
-    }
-
-    async function handleAddItem(productId: string) {
-        if (isCartBusy(productId)) return
-
-        const requestId = (requestCount.current += 1)
-        setCartStatus({ type: "ENABLE", payload: { productId } })
-        setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: true })
-
-        await addItem(productId, 1)
-            .then((res) => {
-                setCartStatus({ type: "DISABLE", payload: { productId } })
-                return res ? updateTaxes() : null
-            })
-            .then(() => {
-                //Verificando se esta é a última (ou a única) requisição de adicionar items ao carrinho,
-                //para não interromper o loading antes da ultima requisição acabar.
-                if (requestCount.current === requestId) {
-                    setCheckoutStatus({ isCheckingOut: false, isLoadingTaxes: false })
-                }
+        const requestId = (requestRef.current += 1)
+        dispatch(setCheckoutStatus({ taxes: "loading" }))
+        dispatch(thunkAction({ quantity: 1, productId }))
+            .unwrap()
+            .then(() => dispatch(fetchTaxes()))
+            .catch((error: Error) => handleHttpErrors(error, true))
+            .finally(() => {
+                const isSameRquest = requestId === requestRef.current
+                isSameRquest && dispatch(setCheckoutStatus({ taxes: "idle" }))
             })
     }
 
@@ -100,13 +79,10 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
                 </span>
             )}
             <div className="mini-cart__header">
-                <h3
-                    aria-label={`cart with ${cart.itemCount} items`}
-                    className="mini-cart__title"
-                >
+                <h3 aria-label={`cart with ${itemCount} items`} className="mini-cart__title">
                     CART{" "}
-                    <span aria-label={`${cart.itemCount} items`} className="mini-cart__count">
-                        ({cart.itemCount})
+                    <span aria-label={`${itemCount} items`} className="mini-cart__count">
+                        ({itemCount})
                     </span>
                 </h3>
                 <button
@@ -119,7 +95,7 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
                 </button>
             </div>
             <div className="mini-cart__items">
-                {cart.items.map((item) => (
+                {items.map((item) => (
                     <CartItem
                         key={item.productId}
                         slug={item.slug}
@@ -127,23 +103,31 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
                         price={item.price}
                         quantity={item.quantity}
                         readOnly={false}
-                        isBusy={isCartBusy(item.productId)}
-                        addItem={() => handleAddItem(item.productId)}
-                        removeItem={() => handleRemoveItem(item.productId)}
+                        isBusy={
+                            isCheckingOut ||
+                            status.state === "clearing" ||
+                            status.busyProducts.includes(item.productId)
+                        }
+                        addItem={() => addOrRemove("add", item.productId)}
+                        removeItem={() => addOrRemove("remove", item.productId)}
                     />
                 ))}
             </div>
             <div className="mini-cart__total">
                 <SummaryField
-                    ariaLabel={`total of: ${cart.totalSpent} dollars`}
+                    ariaLabel={`total of: ${totalSpent} dollars`}
                     name="TOTAL"
-                    value={cart.totalSpent}
+                    value={totalSpent}
                 />
             </div>
             <button
-                onClick={() => shouldCheckout()}
                 className="btn btn--primary mini-cart__checkout-btn"
                 type="button"
+                onClick={() =>
+                    session.isLogged
+                        ? router.push("/checkout")
+                        : window.location.assign("/signin")
+                }
             >
                 CHECKOUT
             </button>

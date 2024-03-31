@@ -1,20 +1,14 @@
-import { NextAuthSessionProvider } from "@/contexts/nextAuthSessionContext/NextAuthSessionContext"
-import { CheckoutProvider } from "@/contexts/checkoutContext/CheckoutContext"
+import { NextAuthProvider } from "@/libs/next-auth/Provider"
 import { SessionProvider } from "@/contexts/sessionContext/SessionContext"
-import { ModalProvider } from "@/contexts/modalContext/ModalContext"
-import { CartProvider } from "@/contexts/cartContext/CartContext"
+import { StoreProvider } from "@/libs/redux/StoreProvider"
 import { PropsWithChildren } from "react"
 
 export function AppProvider({ children }: PropsWithChildren) {
     return (
-        <NextAuthSessionProvider>
+        <NextAuthProvider>
             <SessionProvider>
-                <CartProvider>
-                    <ModalProvider>
-                        <CheckoutProvider>{children}</CheckoutProvider>
-                    </ModalProvider>
-                </CartProvider>
+                <StoreProvider>{children}</StoreProvider>
             </SessionProvider>
-        </NextAuthSessionProvider>
+        </NextAuthProvider>
     )
 }

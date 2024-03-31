@@ -1,31 +1,35 @@
 "use client"
 
+import { useAppDispatch, useAppSelector } from "@/libs/redux/hooks"
 import { CartIcon } from "../icons/CartIcon"
-import { useContext, useEffect } from "react"
-import { ModalContext } from "@/contexts/modalContext/ModalContext"
+import { useEffect } from "react"
 import { usePathname } from "next/navigation"
-import { CartContext } from "@/contexts/cartContext/CartContext"
+import { closeModal, toggleModal } from "@/store/modals/modalsSlice"
 
 export function CartButton() {
-    const { cartModal } = useContext(ModalContext)
-    const { cart } = useContext(CartContext)
+    const dispatch = useAppDispatch()
+    const itemCount = useAppSelector((state) => state.cart.itemCount)
     const pathname = usePathname()
 
     //Fechando o modal quando a rota for alterada
-    useEffect(() => cartModal.close, [cartModal.close, pathname])
+    useEffect(() => {
+        return () => {
+            dispatch(closeModal("cart"))
+        }
+    }, [dispatch, pathname])
 
     return (
         <button
-            onClick={() => cartModal.toggle()}
+            onClick={() => dispatch(toggleModal("cart"))}
             className="cart-btn"
             type="button"
             aria-label="toggle shopping cart"
             aria-controls="shopping-cart"
         >
             <CartIcon />
-            {cart.itemCount > 0 && (
+            {itemCount > 0 && (
                 <span aria-hidden="false" className="cart-btn__counter">
-                    {cart.itemCount > 99 ? 99 : cart.itemCount}
+                    {itemCount > 99 ? 99 : itemCount}
                 </span>
             )}
         </button>
