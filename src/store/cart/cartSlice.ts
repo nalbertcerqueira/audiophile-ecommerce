@@ -15,7 +15,7 @@ const initialState: CartState = {
     totalSpent: 0,
     itemCount: 0,
     status: {
-        state: "fetching",
+        state: "idle",
         busyProducts: []
     }
 }
@@ -27,10 +27,10 @@ const cartSlice = createSlice({
     extraReducers: (builder) =>
         builder
             .addCase(fetchCart.pending, (state) => {
-                return { ...state, status: { ...state.status, state: "fetching" } }
+                return { ...state, status: { ...state.status, state: "loading" } }
             })
             .addCase(clearCart.pending, (state) => {
-                return { ...state, status: { state: "clearing", busyProducts: [] } }
+                return { ...state, status: { state: "loading", busyProducts: [] } }
             })
             .addCase(removeCartItem.pending, (state, action) => {
                 const busyProducts = state.status.busyProducts
@@ -38,7 +38,7 @@ const cartSlice = createSlice({
                 return {
                     ...state,
                     status: {
-                        state: "updating",
+                        ...state.status,
                         busyProducts: [...busyProducts, productId]
                     }
                 }
@@ -48,7 +48,7 @@ const cartSlice = createSlice({
                 return {
                     ...state,
                     status: {
-                        state: "updating",
+                        ...state.status,
                         busyProducts: [...busyProducts, action.meta.arg.productId]
                     }
                 }
@@ -64,7 +64,7 @@ const cartSlice = createSlice({
                         itemCount: payload.itemCount,
                         totalSpent: payload.totalSpent,
                         status: {
-                            state: "idle",
+                            state: "settled",
                             busyProducts: arg?.productId
                                 ? busyProducts.filter((id) => id !== arg.productId)
                                 : busyProducts
@@ -80,3 +80,5 @@ export const cartReducer = cartSlice.reducer
 export const selectCart = (state: AppState) => state.cart
 export const selectCartStatus = (state: AppState) => state.cart.status.state
 export const selectCartItemsLength = (state: AppState) => state.cart.items.length
+export const selectBusyProductsLength = (state: AppState) =>
+    state.cart.status.busyProducts.length

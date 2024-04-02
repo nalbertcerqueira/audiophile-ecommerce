@@ -2,7 +2,7 @@ import { CartProduct } from "@/@core/shared/entities/cart/cart"
 import { CheckoutOrderProps } from "@/@core/shared/entities/order/checkoutOrder"
 import { Taxes } from "@/@core/shared/entities/order/checkoutOrder"
 
-export type CheckoutStatus = "idle" | "loading"
+export type CheckoutStatus = "idle" | "loading" | "settled"
 
 export interface Order extends Pick<CheckoutOrderProps, "orderId"> {
     grandTotal: number

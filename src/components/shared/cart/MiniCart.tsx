@@ -16,12 +16,11 @@ import { selectCart } from "@/store/cart/cartSlice"
 
 export function MiniCart({ isOpen }: { isOpen: boolean }) {
     const dispatch = useDispatch<AppDispatch>()
-    const isCheckingOut = useAppSelector(selectOrderStatus) === "loading"
     const requestRef = useRef<number>(0)
     const session = useContext(SessionContext)
     const router = useRouter()
     const cart = useAppSelector(selectCart)
-
+    const isCheckingOut = useAppSelector(selectOrderStatus) === "loading"
     const { items, itemCount, totalSpent, status } = cart
 
     //Buscando o carrinho de compras após o carregamento da página
@@ -29,12 +28,14 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
         if (!session.isLoading) {
             Promise.all([dispatch(fetchCart()).unwrap(), dispatch(fetchTaxes()).unwrap()])
                 .catch((error: Error) => handleHttpErrors(error, true))
-                .finally(() => dispatch(setCheckoutStatus({ taxes: "idle" })))
+                .finally(() => dispatch(setCheckoutStatus({ taxes: "settled" })))
         }
     }, [session.isLoading, dispatch])
 
     async function handleClearCart() {
-        const actionBlocked = isCheckingOut || !items.length || status.state !== "idle"
+        const isCartBusy = status.state !== "settled" || status.busyProducts.length > 0
+        const actionBlocked = isCheckingOut || !items.length || isCartBusy
+
         if (actionBlocked) {
             return
         }
@@ -44,17 +45,18 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
             .unwrap()
             .then(() => dispatch(fetchTaxes()))
             .catch((error: Error) => handleHttpErrors(error, true))
-            .finally(() => dispatch(setCheckoutStatus({ taxes: "idle" })))
+            .finally(() => dispatch(setCheckoutStatus({ taxes: "settled" })))
     }
 
     async function addOrRemove(operation: "add" | "remove", productId: string) {
-        const actionBlocked = isCheckingOut || status.state === "clearing"
-        const thunkAction = operation === "add" ? addCartItem : removeCartItem
+        const isProductBusy = status.busyProducts.includes(productId)
+        const actionBlocked = isCheckingOut || isProductBusy || status.state !== "settled"
 
-        if (actionBlocked || status.busyProducts.includes(productId)) {
+        if (actionBlocked) {
             return
         }
 
+        const thunkAction = operation === "add" ? addCartItem : removeCartItem
         const requestId = (requestRef.current += 1)
         dispatch(setCheckoutStatus({ taxes: "loading" }))
         dispatch(thunkAction({ quantity: 1, productId }))
@@ -63,7 +65,7 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
             .catch((error: Error) => handleHttpErrors(error, true))
             .finally(() => {
                 const isSameRequest = requestId === requestRef.current
-                isSameRequest && dispatch(setCheckoutStatus({ taxes: "idle" }))
+                isSameRequest && dispatch(setCheckoutStatus({ taxes: "settled" }))
             })
     }
 
@@ -105,7 +107,7 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
                         readOnly={false}
                         isBusy={
                             isCheckingOut ||
-                            status.state === "clearing" ||
+                            status.state !== "settled" ||
                             status.busyProducts.includes(item.productId)
                         }
                         addItem={() => addOrRemove("add", item.productId)}

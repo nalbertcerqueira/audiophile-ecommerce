@@ -8,9 +8,10 @@ import { selectCart } from "@/store/cart/cartSlice"
 export function SummaryFields() {
     const taxes = useAppSelector((state) => state.checkout.taxes)
     const cart = useAppSelector(selectCart)
+    const isCartBusy = cart.status.state !== "settled" || cart.status.busyProducts.length > 0
     const grandTotal = taxes.data.vat + taxes.data.shipping + cart.totalSpent
 
-    if (taxes.status === "loading" || cart.status.state !== "idle") {
+    if (taxes.status !== "settled" || isCartBusy) {
         return <SummarySkeleton />
     }
 

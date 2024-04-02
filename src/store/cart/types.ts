@@ -1,7 +1,7 @@
 import { CartProps } from "@/@core/shared/entities/cart/cart"
 import { AsyncThunk } from "@reduxjs/toolkit"
 
-export type CartStatus = "idle" | "fetching" | "updating" | "clearing"
+export type CartStatus = "idle" | "loading" | "settled"
 
 export interface CartState {
     items: CartProps["items"]

@@ -14,16 +14,19 @@ import { Id } from "react-toastify"
 import { useAppDispatch, useAppSelector } from "@/libs/redux/hooks"
 import { useState, useContext } from "react"
 import { emitToast } from "@/libs/react-toastify/utils"
-import { selectCartStatus } from "@/store/cart/cartSlice"
+import { selectBusyProductsLength, selectCartStatus } from "@/store/cart/cartSlice"
 
 export function AddProductAction({ productId }: { productId: string }) {
-    const { isLoading: isSessionLoading } = useContext(SessionContext)
-    const cartStatus = useAppSelector(selectCartStatus)
-    const [count, setCount] = useState<number>(0)
     const dispatch = useAppDispatch()
+    const [count, setCount] = useState<number>(0)
+    const cartStatus = useAppSelector(selectCartStatus)
+    const busyProductsLength = useAppSelector(selectBusyProductsLength)
+
+    const isCartBusy = cartStatus !== "settled" || busyProductsLength > 0
+    const { isLoading: isSessionLoading } = useContext(SessionContext)
 
     function handleAddItem(productId: string) {
-        if (cartStatus !== "idle" || isSessionLoading) {
+        if (isCartBusy || isSessionLoading || count <= 0) {
             return
         }
 
@@ -34,7 +37,7 @@ export function AddProductAction({ productId }: { productId: string }) {
             .then((data) => handleSuccess(data, toastId))
             .then(() => dispatch(fetchTaxes()))
             .catch((error: Error) => handleHttpErrors(error, true, toastId))
-            .finally(() => dispatch(setCheckoutStatus({ taxes: "idle" })))
+            .finally(() => dispatch(setCheckoutStatus({ taxes: "settled" })))
     }
 
     function handleSuccess(data: Omit<CartState, "status"> | undefined, toastId: Id) {
@@ -50,7 +53,7 @@ export function AddProductAction({ productId }: { productId: string }) {
     return (
         <div className="product__cart-actions">
             <Counter
-                disabled={cartStatus !== "idle"}
+                disabled={isCartBusy}
                 ariaLive={count ? "polite" : "off"}
                 count={count}
                 increment={() => setCount((prevCount) => prevCount + 1)}
@@ -59,8 +62,8 @@ export function AddProductAction({ productId }: { productId: string }) {
                 }
             />
             <button
-                disabled={cartStatus !== "idle"}
-                aria-disabled={cartStatus !== "idle"}
+                disabled={isCartBusy}
+                aria-disabled={isCartBusy}
                 onClick={() => handleAddItem(productId)}
                 className="btn btn--primary"
                 aria-label={count ? `add ${count} products to cart` : "can't add 0 products"}

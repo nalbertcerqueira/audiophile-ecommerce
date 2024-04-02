@@ -15,7 +15,11 @@ import { SuccessCheckoutMessage } from "@/libs/react-toastify/components/Checkou
 import { handleHttpErrors } from "@/utils/helpers"
 import { Id } from "react-toastify"
 import { selectTaxesStatus } from "@/store/checkout/checkoutSlice"
-import { selectCartStatus, selectCartItemsLength } from "@/store/cart/cartSlice"
+import {
+    selectCartStatus,
+    selectCartItemsLength,
+    selectBusyProductsLength
+} from "@/store/cart/cartSlice"
 
 const checkoutFormInitialState: CheckoutFields = {
     name: "",
@@ -29,11 +33,14 @@ const checkoutFormInitialState: CheckoutFields = {
 }
 export function CheckoutForm({ formId }: { formId: string }) {
     const dispatch = useAppDispatch()
-    const isLoadingTaxes = useAppSelector(selectTaxesStatus) === "loading"
-    const isCartBusy = useAppSelector(selectCartStatus) !== "idle"
-    const isCartEmpty = useAppSelector(selectCartItemsLength) === 0
-    const { isLogged } = useContext(SessionContext)
     const form = useCheckoutForm(checkoutFormInitialState)
+    const cartStatus = useAppSelector(selectCartStatus)
+    const busyProductsLength = useAppSelector(selectBusyProductsLength)
+
+    const isLoadingTaxes = useAppSelector(selectTaxesStatus) !== "settled"
+    const isCartEmpty = useAppSelector(selectCartItemsLength) === 0
+    const isCartBusy = cartStatus !== "settled" || busyProductsLength > 0
+    const { isLogged } = useContext(SessionContext)
 
     const submitBlocked = isCartEmpty || isCartBusy || isLoadingTaxes || form.isSubmitting
 

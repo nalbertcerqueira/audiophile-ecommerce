@@ -7,7 +7,7 @@ import { selectCart } from "@/store/cart/cartSlice"
 
 export function SummaryItems() {
     const { items, status } = useAppSelector(selectCart)
-    const cleaningOrFetching = status.state === "fetching" || status.state === "clearing"
+    const isCartLoading = status.state !== "settled"
 
     const renderedLoading = (
         <>
@@ -28,8 +28,6 @@ export function SummaryItems() {
     ))
 
     return (
-        <div className="summary__items">
-            {cleaningOrFetching ? renderedLoading : renderedItems}
-        </div>
+        <div className="summary__items">{isCartLoading ? renderedLoading : renderedItems}</div>
     )
 }

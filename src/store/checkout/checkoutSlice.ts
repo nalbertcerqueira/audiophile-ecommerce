@@ -5,7 +5,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 const checkoutInitialState: CheckoutState = {
     order: { data: null, status: "idle" },
-    taxes: { data: { shipping: 0, vat: 0 }, status: "loading" }
+    taxes: { data: { shipping: 0, vat: 0 }, status: "idle" }
 }
 
 const checkoutSlice = createSlice({
@@ -40,7 +40,7 @@ const checkoutSlice = createSlice({
                 return { ...state, taxes: { ...state.taxes, data: action.payload } }
             })
             .addMatcher(createOrder.settled, (state) => {
-                return { ...state, order: { ...state.order, status: "idle" } }
+                return { ...state, order: { ...state.order, status: "settled" } }
             })
 })
 
