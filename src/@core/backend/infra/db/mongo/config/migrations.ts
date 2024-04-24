@@ -40,23 +40,19 @@ export class Migration {
 
     //Criando as coleções juntamente com sua respectivas validações de schemas
     private async createCollections(): Promise<void> {
-        try {
-            await Promise.allSettled([
-                mongoHelper.db.createCollection("products", { validator: productMongoSchema }),
-                mongoHelper.db.createCollection("users", { validator: userMongoSchema }),
-                mongoHelper.db.createCollection("externalUsers", {
-                    validator: externalUserMongoSchema
-                }),
-                mongoHelper.db.createCollection("cartItems", {
-                    validator: cartItemMongoSchema
-                }),
-                mongoHelper.db.createCollection("checkoutOrders", {
-                    validator: mongoCheckoutOrderSchema
-                })
-            ])
-        } catch {
-            null
-        }
+        await Promise.allSettled([
+            mongoHelper.db.createCollection("products", { validator: productMongoSchema }),
+            mongoHelper.db.createCollection("users", { validator: userMongoSchema }),
+            mongoHelper.db.createCollection("externalUsers", {
+                validator: externalUserMongoSchema
+            }),
+            mongoHelper.db.createCollection("cartItems", {
+                validator: cartItemMongoSchema
+            }),
+            mongoHelper.db.createCollection("checkoutOrders", {
+                validator: mongoCheckoutOrderSchema
+            })
+        ])
     }
 }
 
