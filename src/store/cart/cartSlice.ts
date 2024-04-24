@@ -10,7 +10,7 @@ function isCartSettledAction(action: UnknownAction): action is FulfilledAction {
     return typeof action.type === "string" && isCartAction && isSettled
 }
 
-const initialState: CartState = {
+const cartInitialState: CartState = {
     items: [],
     totalSpent: 0,
     itemCount: 0,
@@ -22,7 +22,7 @@ const initialState: CartState = {
 
 const cartSlice = createSlice({
     name: "cart",
-    initialState: initialState,
+    initialState: cartInitialState,
     reducers: {},
     extraReducers: (builder) =>
         builder
