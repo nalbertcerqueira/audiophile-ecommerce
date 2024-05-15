@@ -21,17 +21,17 @@ export function ProductRoot(props: ProductRootProps) {
                     images={[
                         {
                             ...images.desktop,
-                            alt: `a detailed image of ${name}`,
+                            alt: `A closer look image of ${name}`,
                             className: `${type}__img ${type}__img--desktop`
                         },
                         {
                             ...images.tablet,
-                            alt: `a detailed image of ${name}`,
+                            alt: `A closer look image of ${name}`,
                             className: `${type}__img ${type}__img--tablet`
                         },
                         {
                             ...images.mobile,
-                            alt: `a detailed image of ${name}`,
+                            alt: `A closer look image of ${name}`,
                             className: `${type}__img ${type}__img--mobile`
                         }
                     ]}

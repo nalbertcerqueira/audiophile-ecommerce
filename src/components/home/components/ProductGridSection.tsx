@@ -24,19 +24,19 @@ export function ProductGridSection() {
                                 images={[
                                     {
                                         ...LargeSpeaker,
-                                        alt: "an image of ZX9 speaker",
+                                        alt: "An image of ZX9 speaker",
                                         className:
                                             "featured-product__img featured-product__img--desktop"
                                     },
                                     {
                                         ...LargeSpeakerTablet,
-                                        alt: "an image of ZX9 speaker",
+                                        alt: "An image of ZX9 speaker",
                                         className:
                                             "featured-product__img featured-product__img--tablet"
                                     },
                                     {
                                         ...LargeSpeakerMobile,
-                                        alt: "an image of ZX9 speaker",
+                                        alt: "An image of ZX9 speaker",
                                         className:
                                             "featured-product__img featured-product__img--mobile"
                                     }

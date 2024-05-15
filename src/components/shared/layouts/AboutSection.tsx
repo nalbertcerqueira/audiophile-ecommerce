@@ -26,17 +26,17 @@ export function AboutSection({ className }: { className?: string }) {
                         images={[
                             {
                                 ...BeastGearImage,
-                                alt: "A man using Audiophile headphones",
+                                alt: "A man using an Audiophile headphones",
                                 className: "about-us__img about-us__img--desktop"
                             },
                             {
                                 ...BeastGearImageTablet,
-                                alt: "A man using Audiophile headphones",
+                                alt: "A man using an Audiophile headphones",
                                 className: "about-us__img about-us__img--tablet"
                             },
                             {
                                 ...BeastGearImageMobile,
-                                alt: "A man using Audiophile headphones",
+                                alt: "A man using an Audiophile headphones",
                                 className: "about-us__img about-us__img--mobile"
                             }
                         ]}

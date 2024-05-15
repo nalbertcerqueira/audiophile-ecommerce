@@ -31,12 +31,12 @@ export function HeroSection() {
                 images={[
                     {
                         ...HeroImage,
-                        alt: "XX99 Mark II black headphones",
+                        alt: "A closer image of XX99 Mark II black headphones",
                         className: "hero-banner hero-banner--desktop"
                     },
                     {
                         ...HeroImageTablet,
-                        alt: "XX99 Mark II black headphones",
+                        alt: "A closer image of XX99 Mark II black headphones",
                         className: "hero-banner hero-banner--tablet"
                     }
                 ]}
