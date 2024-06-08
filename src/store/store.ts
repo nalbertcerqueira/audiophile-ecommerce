@@ -12,7 +12,7 @@ const appReducer = combineReducers({
 export function makeStore() {
     const appStore = configureStore({
         reducer: appReducer,
-        devTools: false
+        devTools: process.env.NODE_ENV !== "production"
     })
 
     return appStore
