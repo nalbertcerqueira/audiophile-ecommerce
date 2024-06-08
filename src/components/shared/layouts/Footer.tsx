@@ -41,7 +41,7 @@ export function Footer() {
                             ))}
                         </div>
                         <p className="footer__attributions">
-                            Code by{" "}
+                            Coded by{" "}
                             <a
                                 target="_blank"
                                 rel="noreferrer noopener"

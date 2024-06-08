@@ -4,13 +4,9 @@ import { Navbar } from "../Navbar"
 import { UserActions } from "../UserActions"
 import { MobileMenuButton } from "../buttons/MenuButton"
 
-interface HeaderProps {
-    className?: string
-}
-
-export function Header({ className }: HeaderProps) {
+export function Header() {
     return (
-        <header className={`header ${className || ""}`.trim()}>
+        <header className="header">
             <div className="header__inner-container">
                 <MobileMenuButton />
                 <HomepageLink />
