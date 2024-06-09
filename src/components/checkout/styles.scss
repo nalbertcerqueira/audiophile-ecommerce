@@ -244,13 +244,11 @@
     }
 
     &__label {
+        @extend %input-field;
         @include mixins.flex($gap: 1rem, $items: center);
         border: 1px solid #cfcfcf;
-        padding: 1.125rem 1rem;
         border-radius: 0.5rem;
         white-space: nowrap;
-        font-size: 0.875rem;
-        font-weight: vars.$bold-weight;
         transition: border-color vars.$transition-duration;
         cursor: pointer;
 

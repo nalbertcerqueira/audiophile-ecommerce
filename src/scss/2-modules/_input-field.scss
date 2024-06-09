@@ -28,7 +28,6 @@
     &__input {
         @extend %input-field;
         border: 1px solid #cfcfcf;
-        padding: 1.125rem 1.5rem;
         border-radius: 0.5rem;
         width: 100%;
         transition: border-color vars.$transition-duration;
@@ -36,7 +35,7 @@
 
         &--password {
             $padding-right: 1rem + $icon-size + $icon-right-position;
-            padding: 1.125rem $padding-right 1.125rem 1.5rem;
+            padding: 1rem $padding-right 1rem 1.5rem;
         }
 
         &--error {

@@ -3,7 +3,7 @@
 @use "../../scss/1-base/placeholders";
 
 .form-container {
-    max-width: 480px;
+    max-width: 500px;
     margin: 5rem auto;
     padding: 2.5rem;
     background-color: vars.$white;
@@ -62,6 +62,15 @@
         &:hover {
             text-decoration-color: vars.$default-orange;
         }
+    }
+}
+
+.names-wrapper {
+    @include mixins.flex($gap: 1rem);
+
+    @include mixins.media-mobile {
+        flex-direction: column;
+        gap: 1.5rem;
     }
 }
 
