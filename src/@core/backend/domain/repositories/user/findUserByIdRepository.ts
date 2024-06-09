@@ -1,6 +1,6 @@
 import { UserProps } from "@/@core/shared/entities/user/user"
 
-export interface BasicUserInfo extends Pick<UserProps, "name" | "email" | "images"> {
+export interface BasicUserInfo extends Omit<UserProps, "password"> {
     readonly id: string
 }
 

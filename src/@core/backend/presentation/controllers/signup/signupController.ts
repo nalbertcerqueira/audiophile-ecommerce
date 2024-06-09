@@ -18,8 +18,13 @@ export class SignupController implements Controller {
         }
 
         try {
-            const { name, email, password } = validationResult.data
-            const createdUser = await this.addUserUseCase.execute({ name, email, password })
+            const { firstName, lastName, email, password } = validationResult.data
+            const createdUser = await this.addUserUseCase.execute({
+                firstName,
+                lastName,
+                email,
+                password
+            })
             if (!createdUser) {
                 return conflictError(`user with email ${email} is already registered`)
             }

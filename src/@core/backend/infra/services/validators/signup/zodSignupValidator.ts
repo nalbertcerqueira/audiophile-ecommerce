@@ -7,7 +7,7 @@ import { passwordZodSchema } from "@/@core/shared/entities/user/utils"
 import { User, UserProps } from "@/@core/shared/entities/user/user"
 import { ZodSchema } from "zod"
 
-interface SignupSchema extends Pick<UserProps, "name" | "email" | "password"> {
+interface SignupSchema extends Omit<UserProps, "images"> {
     passwordConfirmation: string
 }
 export class ZodSignupValidator implements SchemaValidatorService {
@@ -15,7 +15,7 @@ export class ZodSignupValidator implements SchemaValidatorService {
 
     constructor() {
         this.signupSchema = User.userSchema
-            .pick({ name: true, email: true, password: true })
+            .pick({ firstName: true, lastName: true, email: true, password: true })
             .extend({ passwordConfirmation: passwordZodSchema })
             .refine((data) => data.password === data.passwordConfirmation, {
                 message: "Passwords don't match",

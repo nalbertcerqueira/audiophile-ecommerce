@@ -3,7 +3,7 @@ import { UpsertExternalUserRepository } from "../../../repositories/externalUser
 import { ExternalUser } from "@/@core/shared/entities/user/externalUser"
 import { TokenGeneratorService } from "../../../services/token/tokenGeneratorService"
 
-interface ExternalSigninInputDTO extends Pick<ExternalUserProps, "name" | "email"> {
+interface ExternalSigninInputDTO extends Omit<ExternalUserProps, "images"> {
     image: string | null
 }
 
@@ -14,10 +14,11 @@ export class DbExternalSigninUseCase {
     ) {}
 
     public async execute(signinData: ExternalSigninInputDTO): Promise<string> {
-        const { name, email, image } = signinData
+        const { firstName, lastName, email, image } = signinData
 
         const newUser = new ExternalUser({
-            name,
+            firstName,
+            lastName,
             email,
             images: { profile: image }
         })

@@ -14,10 +14,12 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(responseRest, { status: statusCode, headers })
     }
 
-    const { data } = authResponse
+    const { firstName, lastName, email } = authResponse.data
+    const fullName = `${firstName} ${lastName}`
+
     const { statusCode, headers, ...responseRest } =
         await createCheckoutOrderController.handle({
-            body: { customer: { name: data.name, email: data.email } },
+            body: { customer: { fullName, email } },
             user: { id: authResponse.data.id, type: authResponse.data.type }
         })
 

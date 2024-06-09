@@ -1,11 +1,11 @@
 import { CartProps } from "../cart/cart"
 import { generateCustomZodErrors } from "../helpers"
 import { EntityValidationResult, Optional } from "../protocols"
-import { zodCheckoutOrderSchema } from "./utils"
+import { checkoutOrderZodSchema } from "./utils"
 import * as uuid from "uuid"
 
 export interface Customer {
-    name: string
+    fullName: string
     email: string
 }
 
@@ -24,7 +24,7 @@ export interface CheckoutOrderProps {
 //Entidade utilizada para representar o pedido de compras do usuário após o checkout
 export class CheckoutOrder {
     private props: CheckoutOrderProps
-    public static readonly orderSchema = zodCheckoutOrderSchema
+    public static readonly orderSchema = checkoutOrderZodSchema
 
     public static validateOrder(order: any): EntityValidationResult<CheckoutOrderProps> {
         const validationResult = this.orderSchema.safeParse(order)

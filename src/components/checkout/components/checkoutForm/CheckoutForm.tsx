@@ -22,7 +22,7 @@ import {
 } from "@/store/cart/cartSlice"
 
 const checkoutFormInitialState: CheckoutFields = {
-    name: "",
+    fullName: "",
     email: "",
     phone: "",
     address: "",

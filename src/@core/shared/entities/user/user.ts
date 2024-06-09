@@ -5,7 +5,8 @@ import { userZodSchema } from "./utils"
 export type UserType = "authenticated" | "external" | "guest"
 
 export interface UserProps {
-    name: string
+    firstName: string
+    lastName: string
     email: string
     password: string
     images: {
@@ -13,7 +14,7 @@ export interface UserProps {
     }
 }
 
-//Representação de um usuário comum
+//Entidade que representa um usuário comum
 export class User {
     private props: UserProps
     public static readonly userSchema = userZodSchema

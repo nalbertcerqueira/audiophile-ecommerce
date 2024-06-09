@@ -37,10 +37,12 @@ export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOption
         callbacks: {
             jwt: async ({ token, account }) => {
                 if (!account) return token
+                const [firstName, ...rest] = (token.name as string).split(/ |-/)
 
                 //Gerando um accessToken após o login bem sucedido do usuário
                 const clientAccessToken = await dbExternalSigninUseCase.execute({
-                    name: token.name as string,
+                    firstName,
+                    lastName: rest.join(" ") || " ",
                     email: token.email as string,
                     image: token.picture || null
                 })

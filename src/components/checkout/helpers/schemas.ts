@@ -1,32 +1,30 @@
+import { nameMessage, nameRegexp } from "@/@core/shared/entities/user/utils"
 import { lengthErrorMessage, requiredErrorMessage } from "../../../libs/zod/errors"
 import { CheckoutFields } from "../types/types"
 import z from "zod"
 
 const checkoutBaseSchema = z.object({
-    name: z
-        .string({ required_error: requiredErrorMessage("Name") })
-        .min(6, lengthErrorMessage("Name", "min", 6)),
+    fullName: createStringSchema("Full Name", { min: 8 }).refine(
+        (name) => name.match(nameRegexp),
+        { message: `Full Name ${nameMessage}`, path: [""] }
+    ),
     email: z
         .string({ required_error: requiredErrorMessage("Email") })
+        .trim()
         .email("Invalid email format"),
     phone: z
         .string({ required_error: requiredErrorMessage("Phone") })
+        .trim()
         .refine((phone) => phone.split(" ").slice(1).join("").replace(/\D/g, "").length >= 9, {
             message: "Minimum of 9 characters without country code",
             path: [""]
         }),
-    address: z
-        .string({ required_error: requiredErrorMessage("Address") })
-        .min(8, lengthErrorMessage("Address", "min", 8)),
     zipCode: z
         .string({ required_error: requiredErrorMessage("Zip code") })
         .min(5, lengthErrorMessage("Zip code", "min", 5)),
-    city: z
-        .string({ required_error: requiredErrorMessage("City") })
-        .min(4, lengthErrorMessage("City", "min", 4)),
-    country: z
-        .string({ required_error: requiredErrorMessage("Country") })
-        .min(4, lengthErrorMessage("Country", "min", 4))
+    address: createStringSchema("Address", { min: 8 }),
+    city: createStringSchema("City", { min: 4 }),
+    country: createStringSchema("Country", { min: 4 })
 })
 
 const cashPaymentSchema = z.object({
@@ -60,3 +58,14 @@ export const checkoutFieldsSchema: z.ZodType<CheckoutFields> = z.discriminatedUn
         checkoutBaseSchema.merge(creditCardPaymentSchema).strict()
     ]
 )
+
+function createStringSchema(fieldName: string, { min }: { min: number }) {
+    return z
+        .string({ required_error: requiredErrorMessage(fieldName) })
+        .trim()
+        .min(min, lengthErrorMessage(fieldName, "min", min))
+        .refine((input) => input.replace(/ /g, "").length >= min, {
+            message: lengthErrorMessage(fieldName, "min", min),
+            path: [""]
+        })
+}

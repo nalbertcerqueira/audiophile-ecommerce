@@ -20,8 +20,8 @@ export class MongoExternalUserRepository
         const foundUser = await userCollection.findOne({ email })
 
         if (foundUser) {
-            const { name, email, images, _id } = foundUser
-            return { id: _id.toString(), name, email, images }
+            const { firstName, lastName, email, images, _id } = foundUser
+            return { id: _id.toString(), firstName, lastName, email, images }
         }
 
         return null
@@ -31,7 +31,7 @@ export class MongoExternalUserRepository
         await mongoHelper.connect()
 
         const creationDate = new Date()
-        const { name, email, images } = user.toJSON()
+        const { firstName, lastName, email, images } = user.toJSON()
 
         const userCollection =
             mongoHelper.db.collection<Omit<MongoExternalUser, "_id">>("externalUsers")
@@ -39,7 +39,7 @@ export class MongoExternalUserRepository
         const updatedUser = await userCollection.findOneAndUpdate(
             { email },
             {
-                $set: { name, images: { ...images } },
+                $set: { firstName, lastName, images: { ...images } },
                 $setOnInsert: { email, createdAt: creationDate, updatedAt: creationDate }
             },
             { upsert: true, returnDocument: "after" }
@@ -49,7 +49,8 @@ export class MongoExternalUserRepository
 
         return {
             id: updatedUser._id.toString(),
-            name: updatedUser.name,
+            firstName: updatedUser.firstName,
+            lastName: updatedUser.lastName,
             email: updatedUser.email,
             images: { ...updatedUser.images }
         }
@@ -67,8 +68,8 @@ export class MongoExternalUserRepository
             })
 
             if (foundExternalUser) {
-                const { name, email, images } = foundExternalUser
-                return new ExternalUser({ name, email, images: images })
+                const { firstName, lastName, email, images } = foundExternalUser
+                return new ExternalUser({ firstName, lastName, email, images: images })
             }
 
             return null

@@ -40,16 +40,28 @@ export function SignupPageComponent() {
                 isSubmitting={isFormBlocked}
                 onSubmit={form.handleSubmit(handleSuccessfulSubmit)}
             >
-                <Input
-                    {...form.register("name")}
-                    disabled={isFormBlocked}
-                    type="text"
-                    autocomplete="name"
-                    id="name"
-                    label="Name"
-                    placeholder="Your Name"
-                    error={form.errors.name?.message}
-                />
+                <div className="names-wrapper">
+                    <Input
+                        {...form.register("firstName")}
+                        disabled={isFormBlocked}
+                        type="text"
+                        autocomplete="name"
+                        id="firstName"
+                        label="First name"
+                        placeholder="First name"
+                        error={form.errors.firstName?.message}
+                    />
+                    <Input
+                        {...form.register("lastName")}
+                        disabled={isFormBlocked}
+                        type="text"
+                        autocomplete="name"
+                        id="lastName"
+                        label="Last name"
+                        placeholder="Last name"
+                        error={form.errors.lastName?.message}
+                    />
+                </div>
                 <Input
                     {...form.register("email")}
                     disabled={isFormBlocked}

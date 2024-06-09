@@ -15,10 +15,10 @@ export function BillingDetailFields(props: BaseCheckoutFieldProps) {
         <fieldset className="checkout__billing-details">
             <legend className="checkout__group-name">{fieldsetTitle}</legend>
             <Input
-                {...register("name")}
-                error={formErrors.name?.message}
-                label="Name"
-                id="name"
+                {...register("fullName")}
+                error={formErrors.fullName?.message}
+                label="Full Name"
+                id="fullName"
                 type="text"
                 autocomplete="name"
                 placeholder="Alexei Ward"

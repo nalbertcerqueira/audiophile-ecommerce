@@ -31,7 +31,7 @@ const userImageMongoSchema: Document = {
 
 const userNameMongoSchema: Document = {
     bsonType: "string",
-    minLength: 6,
+    minLength: 4,
     pattern: `${nameRegexp.source}`
 }
 
@@ -125,12 +125,21 @@ export const userMongoSchema: Document = {
     $jsonSchema: {
         bsonType: "object",
         additionalProperties: false,
-        required: ["name", "email", "password", "images", "createdAt", "updatedAt"],
+        required: [
+            "firstName",
+            "lastName",
+            "email",
+            "password",
+            "images",
+            "createdAt",
+            "updatedAt"
+        ],
         properties: {
             _id: {},
             createdAt: dateMongoSchema,
             updatedAt: dateMongoSchema,
-            name: userNameMongoSchema,
+            firstName: userNameMongoSchema,
+            lastName: userNameMongoSchema,
             email: userEmailMongoSchema,
             password: {
                 bsonType: "string",
@@ -152,13 +161,14 @@ export const externalUserMongoSchema: Document = {
     $jsonSchema: {
         bsonType: "object",
         additionalProperties: false,
-        required: ["name", "email", "images", "createdAt", "updatedAt"],
+        required: ["firstName", "lastName", "email", "images", "createdAt", "updatedAt"],
         properties: {
             _id: {},
             createdAt: dateMongoSchema,
             updatedAt: dateMongoSchema,
             email: userEmailMongoSchema,
-            name: { bsonType: "string", minLength: 1 },
+            firstName: { bsonType: "string", minLength: 1 },
+            lastName: { bsonType: "string", minLength: 1 },
             images: {
                 bsonType: "object",
                 additionalProperties: false,
@@ -200,11 +210,15 @@ export const mongoCheckoutOrderSchema: Document = {
             orderId: { bsonType: "string", minLength: 1 },
             customer: {
                 bsonType: "object",
-                required: ["name", "email"],
+                required: ["fullName", "email"],
                 additionalProperties: false,
                 properties: {
-                    name: userNameMongoSchema,
-                    email: userEmailMongoSchema
+                    email: userEmailMongoSchema,
+                    fullName: {
+                        bsonType: "string",
+                        minLength: 8,
+                        pattern: `${nameRegexp.source}`
+                    }
                 }
             },
             cart: {

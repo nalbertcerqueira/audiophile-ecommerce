@@ -62,7 +62,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
 
     function getFirstName(): string | null {
         if (user?.type === "authenticated" || user?.type === "external") {
-            return toCapitalized(user.name.split(" ")[0]) || null
+            return toCapitalized(user.firstName) || null
         }
         return null
     }

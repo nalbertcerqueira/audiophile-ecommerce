@@ -10,7 +10,8 @@ export const signinSchema: z.ZodType<AuthFormFields<"signin">> = User.userSchema
 
 export const signupSchema: z.ZodType<AuthFormFields<"signup">> = User.userSchema
     .pick({
-        name: true,
+        firstName: true,
+        lastName: true,
         email: true,
         password: true
     })

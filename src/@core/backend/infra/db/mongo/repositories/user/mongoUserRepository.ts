@@ -22,8 +22,8 @@ export class MongoUserRepository
         const foundUser = await userCollection.findOne<MongoUser>({ email })
 
         if (foundUser) {
-            const { _id, name, email, password, images } = foundUser
-            return { id: _id.toString(), name, email, password, images }
+            const { _id, firstName, lastName, email, password, images } = foundUser
+            return { id: _id.toString(), firstName, lastName, email, password, images }
         }
 
         return null
@@ -59,8 +59,8 @@ export class MongoUserRepository
                 return null
             }
 
-            const { _id, name, email, images } = foundUser
-            return { id: _id.toString(), name, email, images }
+            const { _id, firstName, lastName, email, images } = foundUser
+            return { id: _id.toString(), firstName, lastName, email, images }
         } catch {
             return null
         }

@@ -2,7 +2,7 @@ import { FindUserByIdRepository } from "../../../repositories/user/findUserByIdR
 import { TokenVerifierService } from "../../../services/token/tokenVerifierService"
 import { UserProps } from "@/@core/shared/entities/user/user"
 
-interface AuthorizationOutputDTO extends Pick<UserProps, "name" | "email" | "images"> {
+interface AuthorizationOutputDTO extends Omit<UserProps, "password"> {
     readonly id: string
 }
 
