@@ -11,9 +11,9 @@ export class DbRemoveCartItemUseCase {
         private readonly removeCartItemRepository: RemoveCartItemRepository
     ) {}
 
-    public async execute(userInfo: UserInfo, product: CartItemInfo): Promise<Cart | null> {
+    public async execute(user: UserInfo, product: CartItemInfo): Promise<Cart | null> {
         const { productId, quantity } = product
-        const { userId, type } = userInfo
+        const { id, type } = user
 
         const foundProduct = await this.getProductByIdRepository.getById(
             productId,
@@ -24,17 +24,14 @@ export class DbRemoveCartItemUseCase {
             return null
         }
 
-        const foundCartItem = await this.getCartItemRepository.getItem(
-            { userId, type },
-            productId
-        )
+        const foundCartItem = await this.getCartItemRepository.getItem({ id, type }, productId)
 
         if (!foundCartItem) {
             return null
         }
 
         const cart = await this.removeCartItemRepository.removeItem(
-            { userId, type },
+            { id, type },
             {
                 type: foundCartItem.quantity - quantity < 1 ? "delete" : "decrease",
                 productId,

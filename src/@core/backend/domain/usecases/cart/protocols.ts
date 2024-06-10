@@ -1,4 +1,4 @@
-export type { UserInfo } from "../protocols"
+export type { UserInfo } from "../../protocols"
 
 export interface CartItemInfo {
     readonly productId: string

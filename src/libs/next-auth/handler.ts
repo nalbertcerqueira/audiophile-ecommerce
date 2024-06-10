@@ -67,8 +67,8 @@ export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOption
 
                     //Transferindo o carrinho do usuário convidado para o usuário recém autenticado
                     await dbMoveCartItemsUseCase.execute({
-                        from: { userId: guestUser.id, type: "guest" },
-                        to: { userId: id, type: sessionType },
+                        from: { id: guestUser.id, type: "guest" },
+                        to: { id: id, type: sessionType },
                         items: itemsToAdd
                     })
                 }

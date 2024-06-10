@@ -1,6 +1,6 @@
 import { UserType } from "@/@core/shared/entities/user/user"
 
 export interface UserInfo {
-    userId: string
+    id: string
     type: UserType
 }

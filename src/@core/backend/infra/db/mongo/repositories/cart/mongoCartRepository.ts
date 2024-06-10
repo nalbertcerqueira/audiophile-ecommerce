@@ -6,7 +6,7 @@ import { AddCartItemRepository } from "@/@core/backend/domain/repositories/cart/
 import { ClearCartRepository } from "@/@core/backend/domain/repositories/cart/clearCartRepository"
 import { GetCartRepository } from "@/@core/backend/domain/repositories/cart/getCartRepository"
 import { MongoCartItem } from "../../models"
-import { UserDetails } from "@/@core/backend/domain/repositories/protocols"
+import { UserInfo } from "@/@core/backend/domain/repositories/cart/protocols"
 import { mongoHelper } from "../../config/mongo-config"
 import { UserType } from "@/@core/shared/entities/user/user"
 import { Cart } from "@/@core/shared/entities/cart/cart"
@@ -25,25 +25,22 @@ export class MongoCartRepository
         ClearCartRepository,
         RemoveCartItemRepository
 {
-    public async getCartById(userDetails: UserDetails): Promise<Cart | null> {
+    public async getCartById(user: UserInfo): Promise<Cart | null> {
         await mongoHelper.connect()
 
-        const { userId, type } = userDetails
-        const foundCart = this.retrieveCart(userId, type)
+        const { id, type } = user
+        const foundCart = this.retrieveCart(id, type)
         return foundCart
     }
 
-    public async getItem(
-        userDetails: UserDetails,
-        productId: string
-    ): Promise<CartProduct | null> {
+    public async getItem(user: UserInfo, productId: string): Promise<CartProduct | null> {
         await mongoHelper.connect()
 
-        const { userId, type } = userDetails
+        const { id, type } = user
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
         const foundCartItem = await cartItemCollection
             .aggregate<CartProduct>([
-                { $match: { userId, userType: type, productId } },
+                { $match: { userId: id, userType: type, productId } },
                 { $set: { productId: { $toObjectId: "$productId" } } },
                 {
                     $lookup: {
@@ -68,19 +65,16 @@ export class MongoCartRepository
         return foundCartItem[0] || null
     }
 
-    public async addItem(
-        userDetails: UserDetails,
-        operationInfo: InsertionDetails
-    ): Promise<Cart> {
+    public async addItem(user: UserInfo, operationInfo: InsertionDetails): Promise<Cart> {
         await mongoHelper.connect()
         const { productId, quantity } = operationInfo
-        const { userId, type } = userDetails
+        const { id, type } = user
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
 
         const now = new Date()
 
         await cartItemCollection.findOneAndUpdate(
-            { userId, userType: type, productId },
+            { userId: id, userType: type, productId },
             {
                 $set: { updatedAt: now },
                 $inc: { quantity },
@@ -89,16 +83,17 @@ export class MongoCartRepository
             { upsert: true }
         )
 
-        const foundCart = await this.retrieveCart(userId, type)
+        const foundCart = await this.retrieveCart(id, type)
         return foundCart as Cart
     }
 
     public async addManyItems(
-        { userId, type }: UserDetails,
+        user: UserInfo,
         products: InsertionDetails[]
     ): Promise<Cart | null> {
         await mongoHelper.connect()
 
+        const { id, type } = user
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
         const bulkOperations: AnyBulkWriteOperation<MongoCartItem>[] = products.map((item) => {
             const { productId, quantity } = item
@@ -106,7 +101,7 @@ export class MongoCartRepository
             return {
                 updateOne: {
                     upsert: true,
-                    filter: { userId, userType: type, productId },
+                    filter: { userId: id, userType: type, productId },
                     update: {
                         $inc: { quantity },
                         $set: { updatedAt: now },
@@ -118,42 +113,42 @@ export class MongoCartRepository
 
         await cartItemCollection.bulkWrite(bulkOperations, { ordered: false })
 
-        const foundCart = await this.retrieveCart(userId, type)
+        const foundCart = await this.retrieveCart(id, type)
         return foundCart
     }
 
     public async removeItem(
-        userDetails: UserDetails,
+        user: UserInfo,
         operationInfo: RemovalDetails
     ): Promise<Cart | null> {
         await mongoHelper.connect()
 
-        const { userId, type: userType } = userDetails
+        const { id, type: userType } = user
         const { type, productId, quantity } = operationInfo
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
 
         if (type === "delete") {
-            await cartItemCollection.findOneAndDelete({ userId, userType, productId })
+            await cartItemCollection.findOneAndDelete({ userId: id, userType, productId })
         }
 
         if (type === "decrease") {
             const updatedAt = new Date()
             await cartItemCollection.findOneAndUpdate(
-                { userId, userType, productId },
+                { userId: id, userType, productId },
                 { $set: { updatedAt }, $inc: { quantity: quantity * -1 } }
             )
         }
 
-        const foundCart = await this.retrieveCart(userId, userType)
+        const foundCart = await this.retrieveCart(id, userType)
         return foundCart
     }
 
-    public async clearCartById(userDetails: UserDetails): Promise<void> {
+    public async clearCartById(user: UserInfo): Promise<void> {
         await mongoHelper.connect()
 
-        const { userId, type } = userDetails
+        const { id, type } = user
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
-        await cartItemCollection.deleteMany({ userId, userType: type })
+        await cartItemCollection.deleteMany({ userId: id, userType: type })
     }
 
     private async retrieveCart(userId: string, userType: UserType): Promise<Cart | null> {

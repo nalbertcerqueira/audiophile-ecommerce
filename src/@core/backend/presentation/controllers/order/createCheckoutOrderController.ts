@@ -13,7 +13,7 @@ export class CreateCheckoutOrderController implements Controller {
             const userType = request.user?.type
 
             const order = await this.createCheckoutOrderUseCase.execute(
-                { userId: userId!, type: userType! },
+                { id: userId!, type: userType! },
                 { ...customer }
             )
 

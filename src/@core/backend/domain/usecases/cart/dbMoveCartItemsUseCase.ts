@@ -1,6 +1,6 @@
 import { AddManyCartItemsRepository } from "../../repositories/cart/addManyCartItemsRepository"
 import { ClearCartRepository } from "../../repositories/cart/clearCartRepository"
-import { UserInfo } from "../protocols"
+import { UserInfo } from "../../protocols"
 import { CartProduct } from "@/@core/shared/entities/cart/cart"
 
 interface MoveCartItemsInputDTO {
@@ -23,12 +23,9 @@ export class DbMoveCartItemsUseCase {
         }
 
         await Promise.all([
-            this.addManyCartItemsRepository.addManyItems(
-                { userId: to.userId, type: to.type },
-                items
-            ),
+            this.addManyCartItemsRepository.addManyItems({ id: to.id, type: to.type }, items),
             this.clearCartRepository.clearCartById({
-                userId: from.userId,
+                id: from.id,
                 type: from.type
             })
         ])

@@ -50,8 +50,8 @@ export class SigninController implements Controller {
                 }))
 
                 await this.dbMoveCartItemsUseCase.execute({
-                    from: { userId: guestUser.id, type: "guest" },
-                    to: { userId: id, type: sessionType },
+                    from: { id: guestUser.id, type: "guest" },
+                    to: { id: id, type: sessionType },
                     items: itemsToAdd
                 })
             }
