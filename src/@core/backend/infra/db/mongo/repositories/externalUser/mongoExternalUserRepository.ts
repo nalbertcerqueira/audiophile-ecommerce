@@ -17,10 +17,13 @@ export class MongoExternalUserRepository
         await mongoHelper.connect()
 
         const userCollection = mongoHelper.db.collection<MongoExternalUser>("externalUsers")
-        const foundUser = await userCollection.findOne({ email })
+        const foundUser = await userCollection.findOne(
+            { email },
+            { projection: { createdAt: 0, updatedAt: 0 } }
+        )
 
         if (foundUser) {
-            const { firstName, lastName, email, images, _id } = foundUser
+            const { _id, firstName, lastName, email, images } = foundUser
             return { id: _id.toString(), firstName, lastName, email, images }
         }
 
@@ -63,9 +66,10 @@ export class MongoExternalUserRepository
             const id = new ObjectId(userId)
 
             const externalUserCollection = mongoHelper.db.collection("externalUsers")
-            const foundExternalUser = await externalUserCollection.findOne<MongoExternalUser>({
-                _id: id
-            })
+            const foundExternalUser = await externalUserCollection.findOne<MongoExternalUser>(
+                { _id: id },
+                { projection: { createdAt: 0, updatedAt: 0 } }
+            )
 
             if (foundExternalUser) {
                 const { firstName, lastName, email, images } = foundExternalUser

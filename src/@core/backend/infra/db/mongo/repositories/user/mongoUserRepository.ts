@@ -16,7 +16,10 @@ export class MongoUserRepository
         await mongoHelper.connect()
 
         const userCollection = mongoHelper.db.collection<MongoUser>("users")
-        const foundUser = await userCollection.findOne<MongoUser>({ email })
+        const foundUser = await userCollection.findOne<MongoUser>(
+            { email },
+            { projection: { createdAt: 0, updatedAt: 0 } }
+        )
 
         if (foundUser) {
             const { _id, firstName, lastName, email, password, images } = foundUser
@@ -49,7 +52,7 @@ export class MongoUserRepository
             const userCollection = mongoHelper.db.collection<MongoUser>("users")
             const foundUser = await userCollection.findOne<Omit<MongoUser, "password">>(
                 { _id: id },
-                { projection: { password: 0 } }
+                { projection: { password: 0, createdAt: 0, updatedAt: 0 } }
             )
 
             if (!foundUser) {
