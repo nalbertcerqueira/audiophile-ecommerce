@@ -1,7 +1,7 @@
 import { Cart } from "@/@core/shared/entities/cart/cart"
-import { UserDetails } from "../protocols"
 import { RemovalDetails } from "./protocols"
+import { UserInfo } from "../../usecases/protocols"
 
 export interface RemoveCartItemRepository {
-    removeItem(userDetails: UserDetails, operationInfo: RemovalDetails): Promise<Cart | null>
+    removeItem(user: UserInfo, operationInfo: RemovalDetails): Promise<Cart | null>
 }

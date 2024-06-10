@@ -1,6 +1,6 @@
 import { CartProduct } from "@/@core/shared/entities/cart/cart"
-import { UserDetails } from "../protocols"
+import { UserInfo } from "../../usecases/protocols"
 
 export interface GetCartItemRepository {
-    getItem(userDetails: UserDetails, productId: string): Promise<CartProduct | null>
+    getItem(user: UserInfo, productId: string): Promise<CartProduct | null>
 }
