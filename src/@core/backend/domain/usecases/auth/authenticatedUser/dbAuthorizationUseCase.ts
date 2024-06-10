@@ -28,6 +28,6 @@ export class DbAuthorizationUseCase {
             return null
         }
 
-        return foundUser
+        return { id, ...foundUser }
     }
 }
