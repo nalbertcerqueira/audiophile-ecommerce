@@ -1,11 +1,7 @@
-import { ExternalUserProps } from "@/@core/shared/entities/user/externalUser"
-import { UpsertExternalUserRepository } from "../../../repositories/externalUser/upsertExternalUserRepository"
 import { ExternalUser } from "@/@core/shared/entities/user/externalUser"
 import { TokenGeneratorService } from "../../../services/token/tokenGeneratorService"
-
-interface ExternalSigninInputDTO extends Omit<ExternalUserProps, "images"> {
-    image: string | null
-}
+import { ExternalSigninInputDTO } from "./externalAuthDTOs"
+import { UpsertExternalUserRepository } from "../../../repositories/externalUser/upsertExternalUserRepository"
 
 export class DbExternalSigninUseCase {
     constructor(

@@ -1,12 +1,8 @@
-import { FindUserByIdRepository } from "../../../repositories/user/findUserByIdRepository"
 import { TokenVerifierService } from "../../../services/token/tokenVerifierService"
-import { UserProps } from "@/@core/shared/entities/user/user"
+import { AuthorizationOutputDTO } from "./userAuthDTOs"
+import { FindUserByIdRepository } from "../../../repositories/user/findUserByIdRepository"
 
-interface AuthorizationOutputDTO extends Omit<UserProps, "password"> {
-    readonly id: string
-}
-
-//Caso de uso para validar um usuário comum com base no token recebido
+//Caso de uso para autenticar um usuário comum com base no token recebido
 export class DbAuthorizationUseCase {
     constructor(
         private readonly tokenVerifierService: TokenVerifierService,

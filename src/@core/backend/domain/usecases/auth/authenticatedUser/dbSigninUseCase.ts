@@ -1,9 +1,7 @@
-import { UserProps } from "@/@core/shared/entities/user/user"
-import { FindUserByEmailRepository } from "../../../repositories/user/findUserByEmailRepository"
+import { DbSigninInputDTO } from "./userAuthDTOs"
 import { HashComparerService } from "../../../services/crypto/hashComparerService"
 import { TokenGeneratorService } from "../../../services/token/tokenGeneratorService"
-
-type DbSigninInputDTO = Pick<UserProps, "email" | "password">
+import { FindUserByEmailRepository } from "../../../repositories/user/findUserByEmailRepository"
 
 export class DbSigninUseCase {
     constructor(
