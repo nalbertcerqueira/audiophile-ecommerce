@@ -1,15 +1,13 @@
 import { Cart } from "@/@core/shared/entities/cart/cart"
-import { UserType } from "@/@core/shared/entities/user/user"
+import { UserInfo } from "../../protocols"
 import { GetCartRepository } from "../../repositories/cart/getCartRepository"
 
 export class DbGetCartUseCase {
     constructor(private readonly getCartRepository: GetCartRepository) {}
 
-    public async execute(userId: string, userType: UserType): Promise<Cart> {
-        const userCart = await this.getCartRepository.getCartById({
-            id: userId,
-            type: userType
-        })
+    public async execute(user: UserInfo): Promise<Cart> {
+        const { id, type } = user
+        const userCart = await this.getCartRepository.getCartById({ id, type })
 
         return userCart ? userCart : Cart.empty()
     }

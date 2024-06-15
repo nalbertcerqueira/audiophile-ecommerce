@@ -59,7 +59,10 @@ export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOption
                     const { id, sessionType } = payload
 
                     //Buscando o carrinho do usuário convidado (usuário anônimo)
-                    const guestCart = await dbGetCartUseCase.execute(guestUser.id, "guest")
+                    const guestCart = await dbGetCartUseCase.execute({
+                        id: guestUser.id,
+                        type: "guest"
+                    })
                     const itemsToAdd = guestCart.toJSON().items.map((item) => ({
                         productId: item.productId,
                         quantity: item.quantity

@@ -1,8 +1,8 @@
+import { Cart } from "@/@core/shared/entities/cart/cart"
+import { CartItemInputDTO } from "./cartDTOs"
+import { GetCartItemRepository } from "../../repositories/cart/getCartItemRepository"
 import { RemoveCartItemRepository } from "../../repositories/cart/removeCartItemRepository"
 import { GetProductByIdRepository } from "../../repositories/product/getProductByIdRepository"
-import { GetCartItemRepository } from "../../repositories/cart/getCartItemRepository"
-import { CartItemInfo, UserInfo } from "./protocols"
-import { Cart } from "@/@core/shared/entities/cart/cart"
 
 export class DbRemoveCartItemUseCase {
     constructor(
@@ -11,9 +11,8 @@ export class DbRemoveCartItemUseCase {
         private readonly removeCartItemRepository: RemoveCartItemRepository
     ) {}
 
-    public async execute(user: UserInfo, product: CartItemInfo): Promise<Cart | null> {
-        const { productId, quantity } = product
-        const { id, type } = user
+    public async execute(data: CartItemInputDTO): Promise<Cart | null> {
+        const { user, productId, quantity } = data
 
         const foundProduct = await this.getProductByIdRepository.getById(
             productId,
@@ -24,20 +23,17 @@ export class DbRemoveCartItemUseCase {
             return null
         }
 
-        const foundCartItem = await this.getCartItemRepository.getItem({ id, type }, productId)
+        const foundCartItem = await this.getCartItemRepository.getItem(user, productId)
 
         if (!foundCartItem) {
             return null
         }
 
-        const cart = await this.removeCartItemRepository.removeItem(
-            { id, type },
-            {
-                type: foundCartItem.quantity - quantity < 1 ? "delete" : "decrease",
-                productId,
-                quantity
-            }
-        )
+        const cart = await this.removeCartItemRepository.removeItem(user, {
+            type: foundCartItem.quantity - quantity < 1 ? "delete" : "decrease",
+            productId,
+            quantity
+        })
 
         return cart || Cart.empty()
     }

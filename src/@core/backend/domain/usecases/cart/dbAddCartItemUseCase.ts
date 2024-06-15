@@ -1,6 +1,6 @@
 import { AddCartItemRepository } from "../../repositories/cart/addCartItemRepository"
 import { GetProductByIdRepository } from "../../repositories/product/getProductByIdRepository"
-import { CartItemInfo, UserInfo } from "./protocols"
+import { CartItemInputDTO } from "./cartDTOs"
 import { Cart } from "@/@core/shared/entities/cart/cart"
 
 export class DbAddCartItemUseCase {
@@ -9,10 +9,10 @@ export class DbAddCartItemUseCase {
         private readonly addCartItemRepository: AddCartItemRepository
     ) {}
 
-    public async execute(user: UserInfo, product: CartItemInfo): Promise<Cart | null> {
-        const { id, type } = user
+    public async execute(data: CartItemInputDTO): Promise<Cart | null> {
+        const { user, productId, quantity } = data
         const foundProduct = await this.getProductByIdRepository.getById(
-            product.productId,
+            productId,
             "shortProduct"
         )
 
@@ -20,7 +20,7 @@ export class DbAddCartItemUseCase {
             return null
         }
 
-        const cart = await this.addCartItemRepository.addItem({ id, type }, { ...product })
+        const cart = await this.addCartItemRepository.addItem(user, { productId, quantity })
         return cart
     }
 }

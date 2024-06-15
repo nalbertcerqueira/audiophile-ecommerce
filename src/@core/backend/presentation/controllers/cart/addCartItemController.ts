@@ -21,10 +21,11 @@ export class AddCartItemController implements Controller {
             const userId = request.user?.id
             const userType = request.user?.type
 
-            const cart = await this.addCartItemUseCase.execute(
-                { id: userId!, type: userType! },
-                { productId, quantity }
-            )
+            const cart = await this.addCartItemUseCase.execute({
+                user: { id: userId!, type: userType! },
+                productId,
+                quantity
+            })
 
             if (!cart) {
                 return notFoundError(`Product with id '${productId}' not found`)

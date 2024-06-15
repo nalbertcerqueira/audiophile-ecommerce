@@ -1,12 +1,14 @@
 import { Cart } from "@/@core/shared/entities/cart/cart"
-import { UserType } from "@/@core/shared/entities/user/user"
+import { UserInfo } from "../../protocols"
 import { ClearCartRepository } from "../../repositories/cart/clearCartRepository"
 
 export class DbClearCartUseCase {
     constructor(private readonly clearCartRepository: ClearCartRepository) {}
 
-    public async execute(userId: string, userType: UserType): Promise<Cart> {
-        await this.clearCartRepository.clearCartById({ id: userId, type: userType })
+    public async execute(user: UserInfo): Promise<Cart> {
+        const { id, type } = user
+
+        await this.clearCartRepository.clearCartById({ id, type })
 
         return Cart.empty()
     }

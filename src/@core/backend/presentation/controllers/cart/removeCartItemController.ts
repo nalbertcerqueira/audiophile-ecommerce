@@ -21,10 +21,11 @@ export class RemoveCartItemController implements Controller {
         }
 
         try {
-            const cart = await this.removeCartItemUseCase.execute(
-                { id: userId!, type: userType! },
-                { quantity: validationResult.data.quantity, productId: productId! }
-            )
+            const cart = await this.removeCartItemUseCase.execute({
+                user: { id: userId!, type: userType! },
+                productId: productId!,
+                quantity: validationResult.data.quantity
+            })
 
             if (!cart) {
                 return notFoundError(`Product with id '${productId}' not found`)

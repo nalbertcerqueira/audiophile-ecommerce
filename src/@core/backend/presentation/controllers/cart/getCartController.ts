@@ -11,7 +11,7 @@ export class GetCartController implements Controller {
         const userType = request.user?.type
 
         try {
-            const cart = await this.getCartUseCase.execute(userId!, userType!)
+            const cart = await this.getCartUseCase.execute({ id: userId!, type: userType! })
             return { statusCode: 200, data: cart.toJSON() }
         } catch (error: any) {
             return serverError()

@@ -1,13 +1,6 @@
-import { AddManyCartItemsRepository } from "../../repositories/cart/addManyCartItemsRepository"
 import { ClearCartRepository } from "../../repositories/cart/clearCartRepository"
-import { UserInfo } from "../../protocols"
-import { CartProduct } from "@/@core/shared/entities/cart/cart"
-
-interface MoveCartItemsInputDTO {
-    from: UserInfo
-    to: UserInfo
-    items: Pick<CartProduct, "productId" | "quantity">[]
-}
+import { MoveCartItemsInputDTO } from "./cartDTOs"
+import { AddManyCartItemsRepository } from "../../repositories/cart/addManyCartItemsRepository"
 
 export class DbMoveCartItemsUseCase {
     constructor(
