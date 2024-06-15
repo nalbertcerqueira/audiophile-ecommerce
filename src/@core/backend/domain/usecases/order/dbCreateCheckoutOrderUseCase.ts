@@ -1,8 +1,8 @@
-import { CheckoutOrder, Customer } from "@/@core/shared/entities/order/checkoutOrder"
+import { CheckoutOrder } from "@/@core/shared/entities/order/checkoutOrder"
 import { AddCheckoutOrderRepository } from "../../repositories/order/addCheckoutOrderRepository"
-import { UserInfo } from "../../protocols"
 import { GetCartRepository } from "../../repositories/cart/getCartRepository"
 import { ClearCartRepository } from "../../repositories/cart/clearCartRepository"
+import { CreateOrderInputDTO } from "./orderDTOs"
 
 export class DbCreateCheckoutOrderUseCase {
     constructor(
@@ -11,9 +11,9 @@ export class DbCreateCheckoutOrderUseCase {
         private readonly addCheckoutOrderRepository: AddCheckoutOrderRepository
     ) {}
 
-    public async execute(user: UserInfo, customer: Customer): Promise<CheckoutOrder | null> {
-        const { id, type } = user
-        const foundCart = await this.getCartRepository.getCartById({ id, type })
+    public async execute(data: CreateOrderInputDTO): Promise<CheckoutOrder | null> {
+        const { user, customer } = data
+        const foundCart = await this.getCartRepository.getCartById(user)
         const cartProps = foundCart?.toJSON()
 
         if (!foundCart || !cartProps?.items) {
@@ -31,7 +31,7 @@ export class DbCreateCheckoutOrderUseCase {
             taxes
         })
         const isCheckoutCreated = await this.addCheckoutOrderRepository.add(
-            { id, type },
+            { id: user.id, type: user.type },
             order
         )
 
@@ -39,7 +39,7 @@ export class DbCreateCheckoutOrderUseCase {
             return null
         }
 
-        await this.clearCartRepository.clearCartById({ id, type })
+        await this.clearCartRepository.clearCartById({ id: user.id, type: user.type })
         return order
     }
 }

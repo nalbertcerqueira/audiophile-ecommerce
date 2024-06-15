@@ -1,6 +1,6 @@
-import { CheckoutOrder, Taxes } from "@/@core/shared/entities/order/checkoutOrder"
-import { GetCartRepository } from "../../repositories/cart/getCartRepository"
 import { UserInfo } from "../../protocols"
+import { GetCartRepository } from "../../repositories/cart/getCartRepository"
+import { CheckoutOrder, Taxes } from "@/@core/shared/entities/order/checkoutOrder"
 
 export class DbGetOrderTaxesUseCase {
     constructor(private readonly getCartRepository: GetCartRepository) {}
