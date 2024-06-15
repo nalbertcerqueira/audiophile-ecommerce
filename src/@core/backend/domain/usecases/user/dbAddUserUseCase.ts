@@ -1,10 +1,9 @@
-import { User, UserProps } from "@/@core/shared/entities/user/user"
+import { User } from "@/@core/shared/entities/user/user"
+import { AddUserInputDTO } from "./userDTOs"
 import { AddUserRepository } from "../../repositories/user/addUserRepository"
 import { FindUserByEmailRepository } from "../../repositories/user/findUserByEmailRepository"
 import { HashService } from "../../services/crypto/hashService"
 import { FindExternalUserByEmailRepository } from "../../repositories/externalUser/findExternalUserByEmailRepository"
-
-type AddUserInputDTO = Omit<UserProps, "images">
 
 export class DbAddUserUseCase {
     constructor(

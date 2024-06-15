@@ -40,10 +40,13 @@ export class SigninController implements Controller {
 
             if (payload && guestUser) {
                 //Obtendo o carrinho de compras do usuário convidado (sessão anônima)
-                //para transferir para o usuário autenticado
+                //para transferi-lo para o usuário autenticado
                 const { id, sessionType } = payload
 
-                const guestCart = await this.getCartUseCase.execute(guestUser.id, "guest")
+                const guestCart = await this.getCartUseCase.execute({
+                    id: guestUser.id,
+                    type: "guest"
+                })
                 const itemsToAdd = guestCart.toJSON().items.map(({ productId, quantity }) => ({
                     productId,
                     quantity

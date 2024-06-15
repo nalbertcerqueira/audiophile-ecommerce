@@ -1,4 +1,4 @@
-import { ProductProps } from "../../../../shared/entities/product/product"
+import { GetProductsOutputDTO } from "./productDTOs"
 import { GetProductsByCategoryRepository } from "../../repositories/product/getProductsByCategoryRepository"
 
 export class DbGetProductsByCategoryUseCase {
@@ -6,7 +6,7 @@ export class DbGetProductsByCategoryUseCase {
         private readonly getProductsByCategoryRepository: GetProductsByCategoryRepository
     ) {}
 
-    public async execute(category: string): Promise<ProductProps[]> {
+    public async execute(category: string): Promise<GetProductsOutputDTO> {
         const products = await this.getProductsByCategoryRepository.getByCategory(category)
 
         return products
