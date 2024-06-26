@@ -57,11 +57,20 @@ export class Cart {
         }
     }
 
-    public getTotalSpent(): number {
+    public calculateTotalSpent(): number {
         return this.props.items.reduce((acc, item) => (acc += item.quantity * item.price), 0)
     }
 
-    public getCount(): number {
+    public countItems(): number {
         return this.props.items.reduce((acc, item) => (acc += item.quantity), 0)
+    }
+}
+
+export class CartItem {
+    public name: String
+    public age: number
+
+    public print(): void {
+        console.log()
     }
 }

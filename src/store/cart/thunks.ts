@@ -41,6 +41,6 @@ export const removeCartItem = createAsyncThunk<CartThunkProps, CartActionParams>
 function mapCartToState(cart: Cart | null) {
     if (cart) {
         const { items } = cart.toJSON()
-        return { items, itemCount: cart.getCount(), totalSpent: cart.getTotalSpent() }
+        return { items, itemCount: cart.countItems(), totalSpent: cart.calculateTotalSpent() }
     }
 }
