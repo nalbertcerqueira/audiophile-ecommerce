@@ -10,6 +10,12 @@ export class MongoCheckoutOrderRepository implements AddCheckoutOrderRepository 
 
         const { id, type } = user
         const creationDate = new Date()
+        const { cart, ...orderRest } = order.toJSON()
+        const items = cart.items.map(({ productId, quantity, price }) => ({
+            productId,
+            quantity,
+            price
+        }))
 
         const checkoutOrderCollection =
             mongoHelper.db.collection<Omit<MongoCheckoutOrder, "_id">>("checkoutOrders")
@@ -17,7 +23,8 @@ export class MongoCheckoutOrderRepository implements AddCheckoutOrderRepository 
         const response = await checkoutOrderCollection.insertOne({
             userId: id,
             userType: type,
-            ...order.toJSON(),
+            items,
+            ...orderRest,
             createdAt: creationDate
         })
 

@@ -201,7 +201,7 @@ export const cartItemMongoSchema: Document = {
 export const mongoCheckoutOrderSchema: Document = {
     $jsonSchema: {
         bsonType: "object",
-        required: ["userId", "userType", "orderId", "customer", "cart", "taxes", "createdAt"],
+        required: ["userId", "userType", "orderId", "customer", "items", "taxes", "createdAt"],
         additionalProperties: false,
         properties: {
             _id: {},
@@ -221,26 +221,17 @@ export const mongoCheckoutOrderSchema: Document = {
                     }
                 }
             },
-            cart: {
-                bsonType: "object",
-                required: ["items"],
-                additionalProperties: false,
-                properties: {
-                    items: {
-                        bsonType: "array",
-                        minItems: 1,
-                        items: {
-                            bsonType: "object",
-                            additionalProperties: false,
-                            required: ["productId", "slug", "name", "quantity", "price"],
-                            properties: {
-                                productId: { bsonType: "string" },
-                                slug: { bsonType: "string", minLength: 1 },
-                                name: { bsonType: "string", minLength: 1 },
-                                quantity: { bsonType: "int", minimum: 1 },
-                                price: { bsonType: ["int", "double"], minimum: 0.01 }
-                            }
-                        }
+            items: {
+                bsonType: "array",
+                minItems: 1,
+                items: {
+                    bsonType: "object",
+                    additionalProperties: false,
+                    required: ["productId", "quantity", "price"],
+                    properties: {
+                        productId: { bsonType: "string" },
+                        quantity: { bsonType: "int", minimum: 1 },
+                        price: { bsonType: ["int", "double"], minimum: 0.01 }
                     }
                 }
             },
