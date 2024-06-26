@@ -65,12 +65,3 @@ export class Cart {
         return this.props.items.reduce((acc, item) => (acc += item.quantity), 0)
     }
 }
-
-export class CartItem {
-    public name: String
-    public age: number
-
-    public print(): void {
-        console.log()
-    }
-}
