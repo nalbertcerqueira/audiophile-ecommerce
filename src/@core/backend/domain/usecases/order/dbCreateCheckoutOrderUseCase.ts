@@ -21,7 +21,7 @@ export class DbCreateCheckoutOrderUseCase {
         }
 
         const taxes = {
-            vat: CheckoutOrder.calculateVAT(foundCart.getTotalSpent()),
+            vat: CheckoutOrder.calculateVAT(foundCart.calculateTotalSpent()),
             shipping: CheckoutOrder.calculateShipping()
         }
 

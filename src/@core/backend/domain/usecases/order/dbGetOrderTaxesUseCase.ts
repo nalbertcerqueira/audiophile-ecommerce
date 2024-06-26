@@ -14,7 +14,7 @@ export class DbGetOrderTaxesUseCase {
         }
 
         return {
-            vat: CheckoutOrder.calculateVAT(foundCart.getTotalSpent()),
+            vat: CheckoutOrder.calculateVAT(foundCart.calculateTotalSpent()),
             shipping: CheckoutOrder.calculateShipping()
         }
     }

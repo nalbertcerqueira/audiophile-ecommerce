@@ -77,15 +77,15 @@ export class CheckoutOrder {
         }
     }
 
-    public getCartTotal(): number {
+    public calculateCartTotal(): number {
         return this.props.cart.items.reduce(
             (acc, item) => (acc += item.quantity * item.price),
             0
         )
     }
 
-    public getGrandTotal(): number {
+    public calculateGrandTotal(): number {
         const totalTaxes = this.props.taxes.vat + this.props.taxes.shipping
-        return this.getCartTotal() + totalTaxes
+        return this.calculateCartTotal() + totalTaxes
     }
 }
