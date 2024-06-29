@@ -2,7 +2,7 @@
 
 import { CartItemSkeleton } from "@/components/shared/loaders/skeletons/CartItemSkeleton"
 import { useAppSelector } from "@/libs/redux/hooks"
-import { CartItem } from "@/components/shared/cart/CartItem"
+import { CartItemCard } from "@/components/shared/cart/CartItem"
 import { selectCart } from "@/store/cart/cartSlice"
 
 export function SummaryItems() {
@@ -17,7 +17,7 @@ export function SummaryItems() {
     )
 
     const renderedItems = items.map((item) => (
-        <CartItem
+        <CartItemCard
             key={item.productId}
             name={item.name}
             price={item.price}

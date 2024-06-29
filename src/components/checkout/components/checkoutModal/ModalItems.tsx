@@ -1,6 +1,6 @@
 "use client"
 
-import { CartItem } from "@/components/shared/cart/CartItem"
+import { CartItemCard } from "@/components/shared/cart/CartItem"
 import { useAppSelector } from "@/libs/redux/hooks"
 import { useEffect, useState } from "react"
 
@@ -60,7 +60,7 @@ export function ModalItems() {
                 id="order-confirmation-items"
             >
                 {order?.items.map((item) => (
-                    <CartItem
+                    <CartItemCard
                         key={item.productId}
                         name={item.name}
                         price={item.price}

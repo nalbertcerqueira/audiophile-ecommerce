@@ -5,7 +5,7 @@ import { SessionContext } from "@/contexts/sessionContext/SessionContext"
 import { useAppSelector } from "@/libs/redux/hooks"
 import { SummaryField } from "./SummaryField"
 import { AppDispatch } from "@/store/store"
-import { CartItem } from "./CartItem"
+import { CartItemCard } from "./CartItem"
 import { useContext, useEffect, useRef } from "react"
 import { useDispatch } from "react-redux"
 import { useRouter } from "next/navigation"
@@ -98,7 +98,7 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
             </div>
             <div className="mini-cart__items">
                 {items.map((item) => (
-                    <CartItem
+                    <CartItemCard
                         key={item.productId}
                         slug={item.slug}
                         name={item.name}

@@ -6,25 +6,25 @@ import { RingLoader } from "../loaders/RingLoader"
 import { Counter } from "../Counter"
 import Image from "next/image"
 
-interface CartItemProps {
+interface CartItemCardProps {
     slug: string
     name: string
     quantity: number
     price: number
 }
 
-interface CartItemWithActions extends CartItemProps {
+interface CartItemWithActions extends CartItemCardProps {
     readOnly: false
     isBusy: boolean
     addItem: () => void
     removeItem: () => void
 }
 
-interface CartItemWithoutAction extends CartItemProps {
+interface CartItemWithoutAction extends CartItemCardProps {
     readOnly: true
 }
 
-export function CartItem(props: CartItemWithActions | CartItemWithoutAction) {
+export function CartItemCard(props: CartItemWithActions | CartItemWithoutAction) {
     const { readOnly, name, slug, quantity, price } = props
 
     return (
