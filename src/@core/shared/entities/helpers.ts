@@ -1,4 +1,5 @@
 import z from "zod"
+import { EntityValidationResult } from "./protocols"
 
 //Gerando um schema do zod a partir de um tipo genérico <T>
 export function schemaFromType<T>() {
@@ -38,4 +39,23 @@ export function generateCustomZodErrors<T extends z.ZodError<any>>(
     })
 
     return errors.filter((error) => !!error) as string[]
+}
+
+//Entidade genérica
+export class Entity<Props extends Record<string, any>> {
+    protected validate(
+        props: any,
+        schema: z.ZodObject<Record<string, any>>
+    ): EntityValidationResult<Props> {
+        const validation = schema.safeParse(props)
+
+        if (!validation.success) {
+            return {
+                success: false,
+                errors: generateCustomZodErrors(validation.error, 1)
+            }
+        }
+
+        return { success: true, data: validation.data as any }
+    }
 }
