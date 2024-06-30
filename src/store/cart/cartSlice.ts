@@ -54,24 +54,36 @@ const cartSlice = createSlice({
                 }
             })
             .addMatcher(isCartSettledAction, (state, action) => {
-                if (action.payload) {
-                    const payload = action.payload as CartThunkPayload
-                    const arg = action.meta.arg as { productId: string } | undefined
-                    const busyProducts = state.status.busyProducts
-                    return {
-                        ...state,
-                        items: payload.items,
-                        itemCount: payload.itemCount,
-                        totalSpent: payload.totalSpent,
-                        status: {
-                            state: "settled",
-                            busyProducts: arg?.productId
-                                ? busyProducts.filter((id) => id !== arg.productId)
-                                : busyProducts
+                const busyProducts = state.status.busyProducts
+                const arg = action.meta.arg as { productId: string } | undefined
+                switch (action.meta.requestStatus) {
+                    case "fulfilled":
+                        const payload = action.payload as CartThunkPayload
+                        return {
+                            ...state,
+                            items: payload.items,
+                            itemCount: payload.itemCount,
+                            totalSpent: payload.totalSpent,
+                            status: {
+                                state: "settled",
+                                busyProducts: arg?.productId
+                                    ? busyProducts.filter((id) => id !== arg.productId)
+                                    : busyProducts
+                            }
                         }
-                    }
+                    case "rejected":
+                        return {
+                            ...state,
+                            status: {
+                                state: "settled",
+                                busyProducts: arg?.productId
+                                    ? busyProducts.filter((id) => id !== arg.productId)
+                                    : busyProducts
+                            }
+                        }
+                    default:
+                        return state
                 }
-                return state
             })
 })
 
