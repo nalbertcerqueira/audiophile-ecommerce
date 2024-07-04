@@ -26,7 +26,7 @@ export class HttpCartGateway
 
     public async clearCart(): Promise<Cart> {
         const accessToken = localStorage.getItem("accessToken")
-        const fullUrl = `${this.baseApiUrl}/cart`
+        const fullUrl = `${this.baseApiUrl}/cart/items`
 
         const cartData = await this.submitRequest({
             method: "DELETE",
