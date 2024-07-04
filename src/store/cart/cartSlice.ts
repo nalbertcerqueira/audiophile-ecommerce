@@ -57,7 +57,7 @@ const cartSlice = createSlice({
                 const busyProducts = state.status.busyProducts
                 const arg = action.meta.arg as { productId: string } | undefined
                 switch (action.meta.requestStatus) {
-                    case "fulfilled":
+                    case "fulfilled": {
                         const payload = action.payload as CartThunkPayload
                         return {
                             ...state,
@@ -71,7 +71,8 @@ const cartSlice = createSlice({
                                     : busyProducts
                             }
                         }
-                    case "rejected":
+                    }
+                    case "rejected": {
                         return {
                             ...state,
                             status: {
@@ -81,8 +82,10 @@ const cartSlice = createSlice({
                                     : busyProducts
                             }
                         }
-                    default:
+                    }
+                    default: {
                         return state
+                    }
                 }
             })
 })
