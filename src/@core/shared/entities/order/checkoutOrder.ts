@@ -1,7 +1,7 @@
-import { CartProps } from "../cart/cart"
-import { generateCustomZodErrors } from "../helpers"
-import { EntityValidationResult, Optional } from "../protocols"
 import { checkoutOrderZodSchema } from "./utils"
+import { CartProps } from "../cart/cart"
+import { Optional } from "../protocols"
+import { Entity } from "../helpers"
 import * as uuid from "uuid"
 
 export interface Customer {
@@ -22,22 +22,9 @@ export interface CheckoutOrderProps {
 }
 
 //Entidade utilizada para representar o pedido de compras do usuário após o checkout
-export class CheckoutOrder {
+export class CheckoutOrder extends Entity<CheckoutOrderProps> {
     private props: CheckoutOrderProps
-    public static readonly orderSchema = checkoutOrderZodSchema
-
-    public static validateOrder(order: any): EntityValidationResult<CheckoutOrderProps> {
-        const validationResult = this.orderSchema.safeParse(order)
-
-        if (!validationResult.success) {
-            return {
-                success: false,
-                errors: generateCustomZodErrors(validationResult.error, 1)
-            }
-        }
-
-        return { success: true, data: validationResult.data }
-    }
+    private orderSchema = checkoutOrderZodSchema
 
     public static calculateVAT(value: number): number {
         const vat = value * 0.2
@@ -49,17 +36,21 @@ export class CheckoutOrder {
     }
 
     constructor(props: Optional<CheckoutOrderProps, "orderId">) {
-        const validationResult = CheckoutOrder.validateOrder({
-            ...props,
-            orderId: props.orderId ?? uuid.v4()
-        })
+        super()
+        const validation = this.validate(
+            {
+                ...props,
+                orderId: props.orderId ?? uuid.v4()
+            },
+            this.orderSchema
+        )
 
-        if (!validationResult.success) {
-            const firstError = validationResult.errors[0]
+        if (!validation.success) {
+            const firstError = validation.errors[0]
             throw new Error(firstError)
         }
 
-        const { data } = validationResult
+        const { data } = validation
         this.props = {
             orderId: data.orderId,
             customer: { ...data.customer },

@@ -1,6 +1,5 @@
-import { generateCustomZodErrors } from "../helpers"
-import { cartItemZodSchema, cartZodSchema } from "./utils"
-import { EntityValidationResult } from "../protocols"
+import { Entity } from "../helpers"
+import { cartZodSchema } from "./utils"
 
 export interface CartProduct {
     readonly productId: string
@@ -15,37 +14,24 @@ export interface CartProps {
 }
 
 //Entidade responsável por representar o carrinho de compras do usuário
-export class Cart {
+export class Cart extends Entity<CartProps> {
     private props: CartProps
-    public static readonly cartSchema = cartZodSchema
-    public static readonly itemSchema = cartItemZodSchema
-
-    public static validateCart(cart: any): EntityValidationResult<CartProps> {
-        const validationResult = Cart.cartSchema.safeParse(cart)
-
-        if (!validationResult.success) {
-            return {
-                success: false,
-                errors: generateCustomZodErrors(validationResult.error, 1)
-            }
-        }
-
-        return { success: true, data: validationResult.data }
-    }
+    private cartSchema = cartZodSchema
 
     public static empty(): Cart {
         return new Cart({ items: [] })
     }
 
     constructor(props: CartProps) {
-        const validationResult = Cart.validateCart(props)
+        super()
+        const validation = this.validate(props, this.cartSchema)
 
-        if (!validationResult.success) {
-            const firstError = validationResult.errors[0]
+        if (!validation.success) {
+            const firstError = validation.errors[0]
             throw new Error(firstError)
         }
 
-        const { data } = validationResult
+        const { data } = validation
         this.props = {
             items: data.items.map((item) => ({ ...item }))
         }
