@@ -4,7 +4,8 @@ import {
 } from "@/@core/backend/domain/services/schemaValidator"
 import { generateCustomZodErrors } from "@/@core/shared/entities/helpers"
 import { passwordZodSchema } from "@/@core/shared/entities/user/utils"
-import { User, UserProps } from "@/@core/shared/entities/user/user"
+import { userZodSchema } from "@/@core/shared/entities/user/utils"
+import { UserProps } from "@/@core/shared/entities/user/user"
 import { ZodSchema } from "zod"
 
 interface SignupSchema extends Omit<UserProps, "images"> {
@@ -14,7 +15,7 @@ export class ZodSignupValidator implements SchemaValidatorService {
     private readonly signupSchema: ZodSchema<SignupSchema>
 
     constructor() {
-        this.signupSchema = User.userSchema
+        this.signupSchema = userZodSchema
             .pick({ firstName: true, lastName: true, email: true, password: true })
             .extend({ passwordConfirmation: passwordZodSchema })
             .refine((data) => data.password === data.passwordConfirmation, {

@@ -1,38 +1,25 @@
-import { generateCustomZodErrors } from "../helpers"
-import { EntityValidationResult } from "../protocols"
-import { UserProps } from "./user"
 import { externalUserZodSchema } from "./utils"
+import { UserProps } from "./user"
+import { Entity } from "../helpers"
 
 export type ExternalUserProps = Omit<UserProps, "password">
 
 //Entidade que representa um usuário que se autenticou através de um servidor
 //de autenticação de terceiros, como google ou github por exemplo.
-export class ExternalUser {
+export class ExternalUser extends Entity<ExternalUserProps> {
     private props: ExternalUserProps
-    public static readonly externalUserSchema = externalUserZodSchema
-
-    public static validate(user: any): EntityValidationResult<ExternalUserProps> {
-        const validationResult = ExternalUser.externalUserSchema.safeParse(user)
-
-        if (!validationResult.success) {
-            return {
-                success: false,
-                errors: generateCustomZodErrors(validationResult.error, 1)
-            }
-        }
-
-        return { success: true, data: validationResult.data }
-    }
+    private externalUserSchema = externalUserZodSchema
 
     constructor(props: ExternalUserProps) {
-        const validationResult = ExternalUser.validate(props)
+        super()
+        const validation = this.validate(props, this.externalUserSchema)
 
-        if (!validationResult.success) {
-            const firstError = validationResult.errors[0]
+        if (!validation.success) {
+            const firstError = validation.errors[0]
             throw new Error(firstError)
         }
 
-        const { data } = validationResult
+        const { data } = validation
         this.props = { ...data, images: { ...data.images } }
     }
 

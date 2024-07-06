@@ -1,6 +1,5 @@
-import { generateCustomZodErrors } from "../helpers"
-import { EntityValidationResult } from "../protocols"
 import { userZodSchema } from "./utils"
+import { Entity } from "../helpers"
 
 export type UserType = "authenticated" | "external" | "guest"
 
@@ -15,32 +14,20 @@ export interface UserProps {
 }
 
 //Entidade que representa um usuário comum
-export class User {
+export class User extends Entity<UserProps> {
     private props: UserProps
-    public static readonly userSchema = userZodSchema
-
-    public static validate(user: any): EntityValidationResult<UserProps> {
-        const validationResult = this.userSchema.safeParse(user)
-
-        if (!validationResult.success) {
-            return {
-                success: false,
-                errors: generateCustomZodErrors(validationResult.error, 1)
-            }
-        }
-
-        return { success: true, data: validationResult.data }
-    }
+    private userSchema = userZodSchema
 
     constructor(props: UserProps) {
-        const validationResult = User.validate(props)
+        super()
+        const validation = this.validate(props, this.userSchema)
 
-        if (!validationResult.success) {
-            const firstError = validationResult.errors[0]
+        if (!validation.success) {
+            const firstError = validation.errors[0]
             throw new Error(firstError)
         }
 
-        const { data } = validationResult
+        const { data } = validation
         this.props = { ...data, images: { ...data.images } }
     }
 
