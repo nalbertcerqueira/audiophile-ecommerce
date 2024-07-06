@@ -8,7 +8,7 @@ import { GetProductByIdRepository } from "@/@core/backend/domain/repositories/pr
 import { GetProductsRepository } from "@/@core/backend/domain/repositories/product/getProductsRepository"
 import { MongoProduct } from "../../models"
 import { ProductProps } from "@/@core/shared/entities/product/product"
-import { CartProduct } from "@/@core/shared/entities/cart/cart"
+import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
 import { mongoHelper } from "../../config/mongo-config"
 import { ObjectId } from "mongodb"
 

@@ -1,6 +1,6 @@
 import { ProductProps } from "@/@core/shared/entities/product/product"
 import { UserProps } from "@/@core/shared/entities/user/user"
-import { CartProduct } from "@/@core/shared/entities/cart/cart"
+import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
 import { UserType } from "@/@core/shared/entities/user/user"
 import { ObjectId } from "mongodb"
 import { ExternalUserProps } from "@/@core/shared/entities/user/externalUser"

@@ -1,4 +1,4 @@
-import { CartProduct } from "@/@core/shared/entities/cart/cart"
+import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
 
 export type { UserInfo } from "../../protocols"
 

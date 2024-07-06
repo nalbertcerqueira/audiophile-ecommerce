@@ -1,13 +1,6 @@
 import { Entity } from "../helpers"
+import { CartProduct } from "./cartItem"
 import { cartZodSchema } from "./utils"
-
-export interface CartProduct {
-    readonly productId: string
-    readonly slug: string
-    name: string
-    quantity: number
-    price: number
-}
 
 export interface CartProps {
     items: CartProduct[]

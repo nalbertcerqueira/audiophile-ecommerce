@@ -4,7 +4,7 @@ import {
 } from "@/@core/backend/domain/services/schemaValidator"
 import { generateCustomZodErrors } from "@/@core/shared/entities/helpers"
 import { cartItemZodSchema } from "@/@core/shared/entities/cart/utils"
-import { CartProduct } from "@/@core/shared/entities/cart/cart"
+import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
 import { ZodSchema } from "zod"
 
 type QuantitySchema = Pick<CartProduct, "quantity">

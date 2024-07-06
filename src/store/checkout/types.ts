@@ -1,4 +1,4 @@
-import { CartProduct } from "@/@core/shared/entities/cart/cart"
+import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
 import { CheckoutOrderProps } from "@/@core/shared/entities/order/checkoutOrder"
 import { Taxes } from "@/@core/shared/entities/order/checkoutOrder"
 

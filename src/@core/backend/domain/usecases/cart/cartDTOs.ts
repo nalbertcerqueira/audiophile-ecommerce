@@ -1,5 +1,5 @@
 import { UserInfo } from "../../protocols"
-import { CartProduct } from "@/@core/shared/entities/cart/cart"
+import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
 
 export interface CartItemInputDTO {
     user: UserInfo

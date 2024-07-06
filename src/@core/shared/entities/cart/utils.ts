@@ -1,5 +1,6 @@
 import z from "zod"
-import { CartProduct, CartProps } from "./cart"
+import { CartProps } from "./cart"
+import { CartProduct } from "./cartItem"
 import { schemaFromType } from "../helpers"
 
 export const cartItemZodSchema = schemaFromType<CartProduct>()(

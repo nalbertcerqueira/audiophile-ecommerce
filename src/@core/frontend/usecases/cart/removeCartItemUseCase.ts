@@ -1,5 +1,6 @@
-import { Cart, CartProduct } from "../../../shared/entities/cart/cart"
 import { RemoveCartItemGateway } from "../../domain/gateways/cart/removeCartItemGateway"
+import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
+import { Cart } from "../../../shared/entities/cart/cart"
 
 type RemoveItemInputDTO = Pick<CartProduct, "productId" | "quantity">
 

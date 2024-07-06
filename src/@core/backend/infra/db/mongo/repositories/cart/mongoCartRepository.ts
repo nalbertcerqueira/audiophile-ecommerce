@@ -1,15 +1,15 @@
 import { AddManyCartItemsRepository } from "@/@core/backend/domain/repositories/cart/addManyCartItemsRepository"
 import { RemoveCartItemRepository } from "@/@core/backend/domain/repositories/cart/removeCartItemRepository"
-import { CartProduct, CartProps } from "@/@core/shared/entities/cart/cart"
+import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
 import { GetCartItemRepository } from "@/@core/backend/domain/repositories/cart/getCartItemRepository"
 import { AddCartItemRepository } from "@/@core/backend/domain/repositories/cart/addCartItemRepository"
 import { ClearCartRepository } from "@/@core/backend/domain/repositories/cart/clearCartRepository"
 import { GetCartRepository } from "@/@core/backend/domain/repositories/cart/getCartRepository"
+import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
 import { MongoCartItem } from "../../models"
 import { UserInfo } from "@/@core/backend/domain/repositories/cart/protocols"
 import { mongoHelper } from "../../config/mongo-config"
 import { UserType } from "@/@core/shared/entities/user/user"
-import { Cart } from "@/@core/shared/entities/cart/cart"
 import {
     InsertionDetails,
     RemovalDetails
