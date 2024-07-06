@@ -1,6 +1,7 @@
-export type HttpGatewayResponse<Type extends "success" | "failed"> = Type extends "success"
-    ? { data: any }
-    : { errors: string[] }
+export type HttpGatewayResponse<
+    Type extends "success" | "failed",
+    Data = Record<string, any>
+> = Type extends "success" ? { data: Data } : { errors: string[] }
 
 export interface RequestDetails {
     url: string

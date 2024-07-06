@@ -1,6 +1,6 @@
+import { EntityValidationResult } from "../protocols"
+import { CartItem, CartProduct } from "./cartItem"
 import { Entity } from "../helpers"
-import { CartProduct } from "./cartItem"
-import { cartZodSchema } from "./utils"
 
 export interface CartProps {
     items: CartProduct[]
@@ -8,31 +8,27 @@ export interface CartProps {
 
 //Entidade responsável por representar o carrinho de compras do usuário
 export class Cart extends Entity<CartProps> {
-    private props: CartProps
-    private cartSchema = cartZodSchema
+    private props: { items: CartItem[] }
 
     public static empty(): Cart {
         return new Cart({ items: [] })
     }
 
-    constructor(props: CartProps) {
+    constructor(props: { items: CartItem[] }) {
         super()
-        const validation = this.validate(props, this.cartSchema)
+        const validation = this.validate(props)
 
         if (!validation.success) {
             const firstError = validation.errors[0]
             throw new Error(firstError)
         }
 
-        const { data } = validation
-        this.props = {
-            items: data.items.map((item) => ({ ...item }))
-        }
+        this.props = { items: validation.data.items }
     }
 
     public toJSON(): CartProps {
         return {
-            items: this.props.items.map((item) => ({ ...item }))
+            items: this.props.items.map((item) => item.toJSON())
         }
     }
 
@@ -42,5 +38,21 @@ export class Cart extends Entity<CartProps> {
 
     public countItems(): number {
         return this.props.items.reduce((acc, item) => (acc += item.quantity), 0)
+    }
+
+    protected validate(props: any): EntityValidationResult<{ items: CartItem[] }> {
+        const keys = Object.keys(props) as Array<keyof CartProps>
+
+        for (const key of keys) {
+            if (key !== "items") {
+                return { success: false, errors: [`Unknown property: ${key}`] }
+            }
+        }
+
+        if (!Array.isArray(props.items)) {
+            return { success: false, errors: ["Items must be an array"] }
+        }
+
+        return { success: true, data: props }
     }
 }

@@ -1,5 +1,6 @@
 import { GetCartGateway } from "@/@core/frontend/domain/gateways/cart/getCartGateway"
 import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
+import { CartItem } from "@/@core/shared/entities/cart/cartItem"
 import { HttpGatewayResponse, RequestDetails } from "../protocols"
 import { AddCartItemGateway } from "@/@core/frontend/domain/gateways/cart/addCartItemGateway"
 import { RemoveCartItemGateway } from "@/@core/frontend/domain/gateways/cart/removeCartItemGateway"
@@ -15,26 +16,26 @@ export class HttpCartGateway
         const accessToken = localStorage.getItem("accessToken")
         const fullUrl = `${this.baseApiUrl}/cart`
 
-        const cartData = await this.submitRequest({
+        const cart = await this.submitRequest({
             method: "GET",
             url: fullUrl,
             headers: { Authorization: `Bearer ${accessToken}` }
         })
 
-        return new Cart(cartData)
+        return cart
     }
 
     public async clearCart(): Promise<Cart> {
         const accessToken = localStorage.getItem("accessToken")
         const fullUrl = `${this.baseApiUrl}/cart/items`
 
-        const cartData = await this.submitRequest({
+        const cart = await this.submitRequest({
             method: "DELETE",
             url: fullUrl,
             headers: { Authorization: `Bearer ${accessToken}` }
         })
 
-        return new Cart(cartData)
+        return cart
     }
 
     public async addItem(productId: string, quantity: number): Promise<Cart> {
@@ -42,7 +43,7 @@ export class HttpCartGateway
         const fullUrl = `${this.baseApiUrl}/cart/items`
         const body = { productId: productId, quantity }
 
-        const cartData = await this.submitRequest({
+        const cart = await this.submitRequest({
             method: "POST",
             url: fullUrl,
             body: body,
@@ -52,7 +53,7 @@ export class HttpCartGateway
             }
         })
 
-        return new Cart(cartData)
+        return cart
     }
 
     public async removeItem(productId: string, quantity: number): Promise<Cart> {
@@ -60,7 +61,7 @@ export class HttpCartGateway
         const fullUrl = `${this.baseApiUrl}/cart/items/${productId}`
         const body = { quantity }
 
-        const cartData = await this.submitRequest({
+        const cart = await this.submitRequest({
             method: "DELETE",
             url: fullUrl,
             body: body,
@@ -70,10 +71,10 @@ export class HttpCartGateway
             }
         })
 
-        return new Cart(cartData)
+        return cart
     }
 
-    private async submitRequest(request: RequestDetails): Promise<CartProps> {
+    private async submitRequest(request: RequestDetails): Promise<Cart> {
         const { url, method, headers, body } = request
 
         const response = await fetch(url, {
@@ -93,7 +94,9 @@ export class HttpCartGateway
             throw new Error(errors.join(","))
         }
 
-        const { data } = responseData as HttpGatewayResponse<"success">
-        return data
+        const { data } = responseData as HttpGatewayResponse<"success", CartProps>
+
+        const items = data.items.map((item) => new CartItem(item))
+        return new Cart({ items })
     }
 }

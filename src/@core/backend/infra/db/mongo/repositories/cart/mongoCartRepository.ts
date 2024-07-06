@@ -2,10 +2,10 @@ import { AddManyCartItemsRepository } from "@/@core/backend/domain/repositories/
 import { RemoveCartItemRepository } from "@/@core/backend/domain/repositories/cart/removeCartItemRepository"
 import { GetCartItemRepository } from "@/@core/backend/domain/repositories/cart/getCartItemRepository"
 import { AddCartItemRepository } from "@/@core/backend/domain/repositories/cart/addCartItemRepository"
-import { CartItem, CartProduct } from "@/@core/shared/entities/cart/cartItem"
+import { CartProduct, CartItem } from "@/@core/shared/entities/cart/cartItem"
 import { ClearCartRepository } from "@/@core/backend/domain/repositories/cart/clearCartRepository"
 import { GetCartRepository } from "@/@core/backend/domain/repositories/cart/getCartRepository"
-import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
+import { CartProps, Cart } from "@/@core/shared/entities/cart/cart"
 import { MongoCartItem } from "../../models"
 import { UserInfo } from "@/@core/backend/domain/repositories/cart/protocols"
 import { mongoHelper } from "../../config/mongo-config"
@@ -207,7 +207,7 @@ export class MongoCartRepository
         }
 
         return new Cart({
-            items: queryResult[0].items.map((item) => ({ ...item }))
+            items: queryResult[0].items.map((item) => new CartItem({ ...item }))
         })
     }
 }
