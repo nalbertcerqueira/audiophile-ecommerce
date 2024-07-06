@@ -1,15 +1,14 @@
 import { AddManyCartItemsRepository } from "@/@core/backend/domain/repositories/cart/addManyCartItemsRepository"
 import { RemoveCartItemRepository } from "@/@core/backend/domain/repositories/cart/removeCartItemRepository"
-import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
 import { GetCartItemRepository } from "@/@core/backend/domain/repositories/cart/getCartItemRepository"
 import { AddCartItemRepository } from "@/@core/backend/domain/repositories/cart/addCartItemRepository"
+import { CartItem, CartProduct } from "@/@core/shared/entities/cart/cartItem"
 import { ClearCartRepository } from "@/@core/backend/domain/repositories/cart/clearCartRepository"
 import { GetCartRepository } from "@/@core/backend/domain/repositories/cart/getCartRepository"
 import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
 import { MongoCartItem } from "../../models"
 import { UserInfo } from "@/@core/backend/domain/repositories/cart/protocols"
 import { mongoHelper } from "../../config/mongo-config"
-import { UserType } from "@/@core/shared/entities/user/user"
 import {
     InsertionDetails,
     RemovalDetails
@@ -29,16 +28,16 @@ export class MongoCartRepository
         await mongoHelper.connect()
 
         const { id, type } = user
-        const foundCart = this.retrieveCart(id, type)
+        const foundCart = this.retrieveCart({ id, type })
         return foundCart
     }
 
-    public async getItem(user: UserInfo, productId: string): Promise<CartProduct | null> {
+    public async getItem(user: UserInfo, productId: string): Promise<CartItem | null> {
         await mongoHelper.connect()
 
         const { id, type } = user
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
-        const foundCartItem = await cartItemCollection
+        const result = await cartItemCollection
             .aggregate<CartProduct>([
                 { $match: { userId: id, userType: type, productId } },
                 { $set: { productId: { $toObjectId: "$productId" } } },
@@ -56,13 +55,16 @@ export class MongoCartRepository
                         slug: { $first: "$details.slug" },
                         name: { $first: "$details.shortName" },
                         price: { $first: "$details.price" },
-                        quantity: "$quantity"
+                        quantity: "$quantity",
+                        _id: 0
                     }
                 }
             ])
             .toArray()
 
-        return foundCartItem[0] || null
+        const item = result[0]
+
+        return item ? new CartItem({ ...item }) : null
     }
 
     public async addItem(user: UserInfo, operationInfo: InsertionDetails): Promise<Cart> {
@@ -83,7 +85,7 @@ export class MongoCartRepository
             { upsert: true }
         )
 
-        const foundCart = await this.retrieveCart(id, type)
+        const foundCart = await this.retrieveCart({ id, type })
         return foundCart as Cart
     }
 
@@ -113,7 +115,7 @@ export class MongoCartRepository
 
         await cartItemCollection.bulkWrite(bulkOperations, { ordered: false })
 
-        const foundCart = await this.retrieveCart(id, type)
+        const foundCart = await this.retrieveCart({ id, type })
         return foundCart
     }
 
@@ -139,7 +141,7 @@ export class MongoCartRepository
             )
         }
 
-        const foundCart = await this.retrieveCart(id, userType)
+        const foundCart = await this.retrieveCart({ id, type: userType })
         return foundCart
     }
 
@@ -151,11 +153,13 @@ export class MongoCartRepository
         await cartItemCollection.deleteMany({ userId: id, userType: type })
     }
 
-    private async retrieveCart(userId: string, userType: UserType): Promise<Cart | null> {
+    private async retrieveCart(user: UserInfo): Promise<Cart | null> {
+        const { id, type } = user
+
         //Pipeline de agregação para obter o carrinho de compras no formato
         //aceito pela aplicação
         const queryPipeline = [
-            { $match: { userId, userType } },
+            { $match: { userId: id, userType: type } },
             { $set: { productId: { $toObjectId: "$productId" } } },
             {
                 $lookup: {
@@ -202,6 +206,12 @@ export class MongoCartRepository
             .aggregate<CartProps>(queryPipeline)
             .toArray()
 
-        return queryResult[0] ? new Cart({ ...queryResult[0] }) : null
+        if (!queryResult[0]) {
+            return null
+        }
+
+        return new Cart({
+            items: queryResult[0].items.map((item) => ({ ...item }))
+        })
     }
 }
