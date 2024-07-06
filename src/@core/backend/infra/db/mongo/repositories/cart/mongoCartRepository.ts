@@ -9,10 +9,8 @@ import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
 import { MongoCartItem } from "../../models"
 import { UserInfo } from "@/@core/backend/domain/repositories/cart/protocols"
 import { mongoHelper } from "../../config/mongo-config"
-import {
-    InsertionDetails,
-    RemovalDetails
-} from "@/@core/backend/domain/repositories/cart/protocols"
+import { InsertionDetails } from "@/@core/backend/domain/repositories/cart/protocols"
+import { RemovalDetails } from "@/@core/backend/domain/repositories/cart/protocols"
 import { AnyBulkWriteOperation } from "mongodb"
 
 export class MongoCartRepository
@@ -67,10 +65,11 @@ export class MongoCartRepository
         return item ? new CartItem({ ...item }) : null
     }
 
-    public async addItem(user: UserInfo, operationInfo: InsertionDetails): Promise<Cart> {
+    public async addItem(user: UserInfo, item: CartItem): Promise<Cart> {
         await mongoHelper.connect()
-        const { productId, quantity } = operationInfo
+
         const { id, type } = user
+        const { productId, quantity } = item
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
 
         const now = new Date()

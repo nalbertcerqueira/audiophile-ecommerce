@@ -1,6 +1,7 @@
-import { AddCartItemRepository } from "../../repositories/cart/addCartItemRepository"
 import { GetProductByIdRepository } from "../../repositories/product/getProductByIdRepository"
+import { AddCartItemRepository } from "../../repositories/cart/addCartItemRepository"
 import { CartItemInputDTO } from "./cartDTOs"
+import { CartItem } from "@/@core/shared/entities/cart/cartItem"
 import { Cart } from "@/@core/shared/entities/cart/cart"
 
 export class DbAddCartItemUseCase {
@@ -20,7 +21,9 @@ export class DbAddCartItemUseCase {
             return null
         }
 
-        const cart = await this.addCartItemRepository.addItem(user, { productId, quantity })
+        const item = new CartItem({ ...foundProduct, quantity })
+        const cart = await this.addCartItemRepository.addItem(user, item)
+
         return cart
     }
 }
