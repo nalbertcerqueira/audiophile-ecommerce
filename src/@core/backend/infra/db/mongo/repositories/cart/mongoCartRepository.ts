@@ -125,7 +125,8 @@ export class MongoCartRepository
         await mongoHelper.connect()
 
         const { id, type: userType } = user
-        const { type, productId, quantity } = operationInfo
+        const type = operationInfo.type
+        const { productId, quantity } = operationInfo.item
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
 
         if (type === "delete") {

@@ -18,21 +18,18 @@ export class DbRemoveCartItemUseCase {
             productId,
             "shortProduct"
         )
-
         if (!foundProduct) {
             return null
         }
 
-        const foundCartItem = await this.getCartItemRepository.getItem(user, productId)
-
-        if (!foundCartItem) {
+        const foundItem = await this.getCartItemRepository.getItem(user, productId)
+        if (!foundItem) {
             return null
         }
 
         const cart = await this.removeCartItemRepository.removeItem(user, {
-            type: foundCartItem.quantity - quantity < 1 ? "delete" : "decrease",
-            productId,
-            quantity
+            type: foundItem.quantity - quantity < 1 ? "delete" : "decrease",
+            item: { productId: foundItem.productId, quantity: quantity }
         })
 
         return cart || Cart.empty()
