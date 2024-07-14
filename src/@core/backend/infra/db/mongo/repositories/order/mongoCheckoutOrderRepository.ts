@@ -9,9 +9,9 @@ export class MongoCheckoutOrderRepository implements AddCheckoutOrderRepository 
         await mongoHelper.connect()
 
         const { id, type } = user
+        const { items: orderItems, ...orderRest } = order.toJSON()
         const creationDate = new Date()
-        const { cart, ...orderRest } = order.toJSON()
-        const items = cart.items.map(({ productId, quantity, price }) => ({
+        const items = orderItems.map(({ productId, quantity, price }) => ({
             productId,
             quantity,
             price

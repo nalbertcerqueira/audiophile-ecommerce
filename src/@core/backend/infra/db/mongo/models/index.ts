@@ -36,7 +36,7 @@ export interface MongoCartItem extends Pick<CartProduct, "productId" | "quantity
 
 export type MongoOrderItem = Pick<CartProduct, "productId" | "quantity" | "price">
 
-export interface MongoCheckoutOrder extends Omit<CheckoutOrderProps, "cart"> {
+export interface MongoCheckoutOrder extends Omit<CheckoutOrderProps, "items"> {
     readonly _id: ObjectId
     readonly userId: string
     readonly userType: UserType

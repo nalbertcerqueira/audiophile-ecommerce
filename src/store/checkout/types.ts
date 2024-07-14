@@ -1,12 +1,10 @@
-import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
 import { CheckoutOrderProps } from "@/@core/shared/entities/order/checkoutOrder"
 import { Taxes } from "@/@core/shared/entities/order/checkoutOrder"
 
 export type CheckoutStatus = "idle" | "loading" | "settled"
 
-export interface Order extends Pick<CheckoutOrderProps, "orderId"> {
+export interface Order extends Omit<CheckoutOrderProps, "customer"> {
     grandTotal: number
-    items: CartProduct[]
 }
 
 export interface CheckoutState {

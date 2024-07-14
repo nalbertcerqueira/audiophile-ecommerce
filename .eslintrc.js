@@ -30,6 +30,7 @@ module.exports = {
     },
     plugins: ["@typescript-eslint", "react", "prettier"],
     rules: {
+        "prettier/prettier": ["error"],
         "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/explicit-member-accessibility": [
             "error",

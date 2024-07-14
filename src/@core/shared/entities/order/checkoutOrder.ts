@@ -1,5 +1,5 @@
 import { checkoutOrderZodSchema } from "./utils"
-import { CartProps } from "../cart/cart"
+import { CartProduct } from "../cart/cartItem"
 import { Optional } from "../protocols"
 import { Entity } from "../helpers"
 import * as uuid from "uuid"
@@ -17,7 +17,7 @@ export interface Taxes {
 export interface CheckoutOrderProps {
     orderId: string
     customer: Customer
-    cart: CartProps
+    items: CartProduct[]
     taxes: Taxes
 }
 
@@ -37,25 +37,19 @@ export class CheckoutOrder extends Entity<CheckoutOrderProps> {
 
     constructor(props: Optional<CheckoutOrderProps, "orderId">) {
         super()
-        const validation = this.validate(
-            {
-                ...props,
-                orderId: props.orderId ?? uuid.v4()
-            },
-            this.orderSchema
-        )
+        const order = { ...props, orderId: props.orderId ?? uuid.v4() }
+        const validation = this.validate(order, this.orderSchema)
 
         if (!validation.success) {
             const firstError = validation.errors[0]
             throw new Error(firstError)
         }
 
-        const { data } = validation
         this.props = {
-            orderId: data.orderId,
-            customer: { ...data.customer },
-            taxes: { ...data.taxes },
-            cart: { items: data.cart.items.map((item) => ({ ...item })) }
+            orderId: validation.data.orderId,
+            customer: { ...validation.data.customer },
+            taxes: { ...validation.data.taxes },
+            items: validation.data.items.map((item) => ({ ...item }))
         }
     }
 
@@ -64,15 +58,12 @@ export class CheckoutOrder extends Entity<CheckoutOrderProps> {
             ...this.props,
             customer: { ...this.props.customer },
             taxes: { ...this.props.taxes },
-            cart: { items: this.props.cart.items.map((item) => ({ ...item })) }
+            items: this.props.items.map((item) => ({ ...item }))
         }
     }
 
     public calculateCartTotal(): number {
-        return this.props.cart.items.reduce(
-            (acc, item) => (acc += item.quantity * item.price),
-            0
-        )
+        return this.props.items.reduce((acc, item) => (acc += item.quantity * item.price), 0)
     }
 
     public calculateGrandTotal(): number {

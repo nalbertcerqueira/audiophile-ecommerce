@@ -11,6 +11,6 @@ export const fetchTaxes = createAsyncThunk<Taxes, void>("checkout/fetchTaxes", a
 
 export const createOrder = createAsyncThunk<Order, void>("checkout/createOrder", async () => {
     const order = await createCheckoutOrderUseCase.execute()
-    const { orderId, cart } = order.toJSON()
-    return { orderId, items: cart.items, grandTotal: order.calculateGrandTotal() }
+    const { orderId, items, taxes } = order.toJSON()
+    return { orderId, items: items, taxes, grandTotal: order.calculateGrandTotal() }
 })

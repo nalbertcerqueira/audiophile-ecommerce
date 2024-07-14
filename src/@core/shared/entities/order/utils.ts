@@ -1,6 +1,6 @@
 import { emailZodSchema, nameLengthMessage, nameMessage, nameRegexp } from "../user/utils"
 import { CheckoutOrderProps, Customer, Taxes } from "./checkoutOrder"
-import { cartZodSchema } from "../cart/utils"
+import { cartItemZodSchema } from "../cart/utils"
 import { schemaFromType } from "../helpers"
 import z from "zod"
 
@@ -30,7 +30,7 @@ export const checkoutOrderZodSchema = schemaFromType<CheckoutOrderProps>()(
     z.object({
         orderId: z.string().min(1),
         customer: customerZodSchema,
-        taxes: taxesZodSchema,
-        cart: cartZodSchema
+        items: z.array(cartItemZodSchema).min(1),
+        taxes: taxesZodSchema
     })
 ).strict()

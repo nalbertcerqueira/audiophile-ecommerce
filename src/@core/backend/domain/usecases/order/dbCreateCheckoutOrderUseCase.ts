@@ -27,7 +27,7 @@ export class DbCreateCheckoutOrderUseCase {
 
         const order = new CheckoutOrder({
             customer: customer,
-            cart: foundCart.toJSON(),
+            items: foundCart.toJSON().items,
             taxes
         })
         const isCheckoutCreated = await this.addCheckoutOrderRepository.add(
