@@ -10,7 +10,7 @@ import { MongoCartItem } from "../../models"
 import { UserInfo } from "@/@core/backend/domain/repositories/cart/protocols"
 import { mongoHelper } from "../../config/mongo-config"
 import { RemovalDetails } from "@/@core/backend/domain/repositories/cart/protocols"
-import { AnyBulkWriteOperation } from "mongodb"
+import { AnyBulkWriteOperation, ClientSession } from "mongodb"
 
 export class MongoCartRepository
     implements
@@ -21,6 +21,8 @@ export class MongoCartRepository
         ClearCartRepository,
         RemoveCartItemRepository
 {
+    constructor(private session?: ClientSession) {}
+
     public async getCartById(user: UserInfo): Promise<Cart | null> {
         await mongoHelper.connect()
 
@@ -146,7 +148,10 @@ export class MongoCartRepository
 
         const { id, type } = user
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
-        await cartItemCollection.deleteMany({ userId: id, userType: type })
+        await cartItemCollection.deleteMany(
+            { userId: id, userType: type },
+            { session: this.session }
+        )
     }
 
     private async retrieveCart(user: UserInfo): Promise<Cart | null> {
