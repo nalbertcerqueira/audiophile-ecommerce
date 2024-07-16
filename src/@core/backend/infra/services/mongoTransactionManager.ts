@@ -1,11 +1,11 @@
-import { ClientSession, TransactionOptions } from "mongodb"
+import { ClientSession } from "mongodb"
 import { TransactionManager } from "../../domain/services/transactionManager"
 
 export class MongoTransactionManager implements TransactionManager {
     constructor(private readonly session: ClientSession) {}
 
-    public startTransaction(options?: TransactionOptions): void {
-        this.session.startTransaction(options)
+    public startTransaction(): void {
+        this.session.startTransaction()
     }
 
     public async commit(): Promise<void> {
