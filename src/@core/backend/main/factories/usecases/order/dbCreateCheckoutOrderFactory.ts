@@ -1,8 +1,14 @@
 import { DbCreateCheckoutOrderUseCase } from "@/@core/backend/domain/usecases/order/dbCreateCheckoutOrderUseCase"
-import { mongoCheckoutOrderRepository } from "../../repositories/checkoutOrderRepositoryFactory"
-import { mongoCartRepository } from "../../repositories/cartRepositoryFactory"
+import { createMongoCheckoutOrderRepository } from "../../repositories/checkoutOrderRepositoryFactory"
+import { createMongoCartRepository } from "../../repositories/cartRepositoryFactory"
+import { ClientSession } from "mongodb"
 
-function createDbCreateCheckoutOrderUseCase(): DbCreateCheckoutOrderUseCase {
+export function createDbCreateCheckoutOrderUseCase(
+    session?: ClientSession
+): DbCreateCheckoutOrderUseCase {
+    const mongoCartRepository = createMongoCartRepository(session)
+    const mongoCheckoutOrderRepository = createMongoCheckoutOrderRepository(session)
+
     return new DbCreateCheckoutOrderUseCase(
         mongoCartRepository,
         mongoCartRepository,

@@ -1,10 +1,10 @@
-import { mongoCartRepository } from "../../repositories/cartRepositoryFactory"
+import { createMongoCartRepository } from "../../repositories/cartRepositoryFactory"
 import { DbClearCartUseCase } from "@/@core/backend/domain/usecases/cart/dbClearCartUseCase"
 
 function createDbClearCartUseCase(): DbClearCartUseCase {
-    const dbClearCartUseCase = new DbClearCartUseCase(mongoCartRepository)
+    const mongoCartRepository = createMongoCartRepository()
 
-    return dbClearCartUseCase
+    return new DbClearCartUseCase(mongoCartRepository)
 }
 
 export const dbClearCartUseCase = createDbClearCartUseCase()

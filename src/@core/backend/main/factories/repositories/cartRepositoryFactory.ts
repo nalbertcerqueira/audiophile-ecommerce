@@ -1,7 +1,6 @@
 import { MongoCartRepository } from "@/@core/backend/infra/db/mongo/repositories/cart/mongoCartRepository"
+import { ClientSession } from "mongodb"
 
-function createMongoCartRepository(): MongoCartRepository {
-    return new MongoCartRepository()
+export function createMongoCartRepository(session?: ClientSession): MongoCartRepository {
+    return new MongoCartRepository(session)
 }
-
-export const mongoCartRepository = createMongoCartRepository()

@@ -2,10 +2,11 @@ import { DbAddCartItemUseCase } from "@/@core/backend/domain/usecases/cart/dbAdd
 import { ZodCartItemValidator } from "@/@core/backend/infra/services/validators/cart/zodCartItemValidator"
 import { AddCartItemController } from "@/@core/backend/presentation/controllers/cart/addCartItemController"
 import { mongoProductRepository } from "../../repositories/productRepositoryFactory"
-import { mongoCartRepository } from "../../repositories/cartRepositoryFactory"
+import { createMongoCartRepository } from "../../repositories/cartRepositoryFactory"
 
 function createAddCartItemController() {
     const zodCartItemValidator = new ZodCartItemValidator()
+    const mongoCartRepository = createMongoCartRepository()
 
     const dbAddCartItemUseCase = new DbAddCartItemUseCase(
         mongoProductRepository,

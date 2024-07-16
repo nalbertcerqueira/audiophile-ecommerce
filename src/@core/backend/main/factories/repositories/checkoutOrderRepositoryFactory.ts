@@ -1,7 +1,8 @@
 import { MongoCheckoutOrderRepository } from "@/@core/backend/infra/db/mongo/repositories/order/mongoCheckoutOrderRepository"
+import { ClientSession } from "mongodb"
 
-function createMongoCheckoutOrderRepository(): MongoCheckoutOrderRepository {
-    return new MongoCheckoutOrderRepository()
+export function createMongoCheckoutOrderRepository(
+    session?: ClientSession
+): MongoCheckoutOrderRepository {
+    return new MongoCheckoutOrderRepository(session)
 }
-
-export const mongoCheckoutOrderRepository = createMongoCheckoutOrderRepository()
