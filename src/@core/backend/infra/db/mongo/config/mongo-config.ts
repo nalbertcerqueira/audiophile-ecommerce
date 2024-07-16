@@ -1,4 +1,4 @@
-import { MongoClient, Db } from "mongodb"
+import { MongoClient, Db, ClientSession } from "mongodb"
 import { config } from "dotenv"
 
 config()
@@ -30,6 +30,10 @@ export class MongoHelper {
             console.log(error)
             process.exit(1)
         }
+    }
+
+    public startSession(): ClientSession {
+        return this.client.startSession()
     }
 
     public async close(): Promise<void> {
