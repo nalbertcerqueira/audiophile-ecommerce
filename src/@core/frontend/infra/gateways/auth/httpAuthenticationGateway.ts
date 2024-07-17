@@ -31,7 +31,7 @@ export class HttpAuthenticationGateway implements AuthenticationGateway {
             throw new Error(errors.join(","))
         }
 
-        const { data } = responseData as HttpGatewayResponse<"success">
+        const { data } = responseData as HttpGatewayResponse<"success", string>
         return data
     }
 }

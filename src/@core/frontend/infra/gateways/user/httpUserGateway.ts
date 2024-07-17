@@ -45,7 +45,7 @@ export class HttpUserGateway implements CreateUserGateway, GetUserGateway {
             throw new Error(errors.join(","))
         }
 
-        const { data } = responseData as HttpGatewayResponse<"success">
+        const { data } = responseData as HttpGatewayResponse<"success", UserOrGuestToken>
 
         return data
     }
