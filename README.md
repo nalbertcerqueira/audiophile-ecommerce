@@ -15,7 +15,6 @@ Audiophile ecommerce se trata de um projeto desenvolvido a partir de um dos desa
 
 ⚡ Link da aplicação! 🔗 [Audiophile ecommerce](https://audiophile-ecommerce-delta.vercel.app/)
 
-
 ### Principais funcionalidades
 
 -   🟢 Login tradicional
@@ -30,15 +29,15 @@ Audiophile ecommerce se trata de um projeto desenvolvido a partir de um dos desa
 
 #### Rotas privadas 🔐
 
-| **Método** | **Rota**                   | **Descrição**                             |
-| ---------- | -------------------------- | ----------------------------------------- |
-| GET        | `/api/auth/user`           | Obtém os dados do usuário ao inciar a sessão  |
-| GET        | `/api/auth/cart`           | Obtém o carrinho de compras do usuário    |
-| DELETE     | `/api/auth/cart`           | Remove todos os produtos do carrinho      |
-| POST       | `/api/auth/cart/items`     | Adiciona um item ao carrinho              |
-| DELETE     | `/api/auth/cart/items/:id` | Remove o item cujo id = ':id' do carrinho |
-| POST       | `/api/auth/checkout`       | Efetua o checkout da compra               |
-| GET       | `/api/auth/checkout/taxes` | Obtém as taxas relacionadas a compra      |
+| **Método** | **Rota**                   | **Descrição**                                |
+| ---------- | -------------------------- | -------------------------------------------- |
+| GET        | `/api/auth/user`           | Obtém os dados do usuário ao inciar a sessão |
+| GET        | `/api/auth/cart`           | Obtém o carrinho de compras do usuário       |
+| DELETE     | `/api/auth/cart`           | Remove todos os produtos do carrinho         |
+| POST       | `/api/auth/cart/items`     | Adiciona um item ao carrinho                 |
+| DELETE     | `/api/auth/cart/items/:id` | Remove o item cujo id = ':id' do carrinho    |
+| POST       | `/api/auth/checkout`       | Efetua o checkout da compra                  |
+| GET        | `/api/auth/checkout/taxes` | Obtém as taxas relacionadas a compra         |
 
 #### Rotas públicas 🛤️
 
@@ -48,6 +47,14 @@ Audiophile ecommerce se trata de um projeto desenvolvido a partir de um dos desa
 | POST       | `/api/signup`             | Cadastra um usuário na aplicação                        |
 | POST       | `/api/auth/signin/google` | Efetua o login através do google                        |
 | POST       | `/api/auth/signin/github` | Efetua o login através do github                        |
+
+## 📁 Configurando o Mongodb
+
+Como o projeto faz uso da API de transações do Mongodb, é necessário inicializar uma réplica de desenvolvimento, para isso, segue o passo a passo abaixo para o sistema Linux:
+
+1. Vá até /etc/mongod.conf e adicione a seguinte configuração para habilitar uma réplica: `replication: replSetName: "rs0"`
+2. Reinicie o processo do Mongodb via comando `systemctl restart mongod` ou `service mongod restart`;
+3. Abra o mongo bash via comando `mongosh` e digite os seguintes comandos: `use local` e `rs.initiate()`;
 
 ## 🎮 Iniciando o projeto
 
