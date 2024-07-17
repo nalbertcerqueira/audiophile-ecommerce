@@ -3,9 +3,11 @@ import { AddCheckoutOrderRepository } from "../../repositories/order/addCheckout
 import { GetCartRepository } from "../../repositories/cart/getCartRepository"
 import { ClearCartRepository } from "../../repositories/cart/clearCartRepository"
 import { CreateOrderInputDTO } from "./orderDTOs"
+import { TransactionManager } from "../../services/transactionManager"
 
 export class DbCreateCheckoutOrderUseCase {
     constructor(
+        private readonly transactionManager: TransactionManager,
         private readonly getCartRepository: GetCartRepository,
         private readonly clearCartRepository: ClearCartRepository,
         private readonly addCheckoutOrderRepository: AddCheckoutOrderRepository
@@ -31,10 +33,17 @@ export class DbCreateCheckoutOrderUseCase {
             taxes
         })
 
-        await Promise.all([
-            this.addCheckoutOrderRepository.add({ id: user.id, type: user.type }, order),
-            this.clearCartRepository.clearCartById({ id: user.id, type: user.type })
-        ])
+        this.transactionManager.startTransaction()
+
+        try {
+            await this.addCheckoutOrderRepository.add({ id: user.id, type: user.type }, order)
+            await this.clearCartRepository.clearCartById({ id: user.id, type: user.type })
+
+            await this.transactionManager.commit()
+        } catch (error: any) {
+            await this.transactionManager.rollback()
+            throw error
+        }
 
         return order
     }
