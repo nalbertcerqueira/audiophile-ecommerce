@@ -43,9 +43,13 @@ export function ModalRoot({ children }: PropsWithChildren) {
                             </p>
                         </div>
                     </div>
-                    <a href="/" className="btn btn--primary order-confirmation__exit-btn">
+                    <button
+                        type="button"
+                        onClick={() => location.replace("/")}
+                        className="btn btn--primary order-confirmation__exit-btn"
+                    >
                         BACK TO HOME
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
