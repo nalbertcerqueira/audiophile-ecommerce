@@ -1,5 +1,6 @@
 import { AddManyCartItemsRepository } from "@/@core/backend/domain/repositories/cart/addManyCartItemsRepository"
 import { RemoveCartItemRepository } from "@/@core/backend/domain/repositories/cart/removeCartItemRepository"
+import { UpdateCartItemRepository } from "@/@core/backend/domain/repositories/cart/updateCartItemRepository"
 import { GetCartItemRepository } from "@/@core/backend/domain/repositories/cart/getCartItemRepository"
 import { AddCartItemRepository } from "@/@core/backend/domain/repositories/cart/addCartItemRepository"
 import { CartProduct, CartItem } from "@/@core/shared/entities/cart/cartItem"
@@ -8,8 +9,8 @@ import { GetCartRepository } from "@/@core/backend/domain/repositories/cart/getC
 import { CartProps, Cart } from "@/@core/shared/entities/cart/cart"
 import { MongoCartItem } from "../../models"
 import { UserInfo } from "@/@core/backend/domain/repositories/cart/protocols"
-import { mongoHelper } from "../../config/mongo-config"
 import { RemovalDetails } from "@/@core/backend/domain/repositories/cart/protocols"
+import { mongoHelper } from "../../config/mongo-config"
 import { AnyBulkWriteOperation, ClientSession } from "mongodb"
 
 export class MongoCartRepository
@@ -18,6 +19,7 @@ export class MongoCartRepository
         GetCartItemRepository,
         AddCartItemRepository,
         AddManyCartItemsRepository,
+        UpdateCartItemRepository,
         ClearCartRepository,
         RemoveCartItemRepository
 {
@@ -85,8 +87,8 @@ export class MongoCartRepository
             { upsert: true }
         )
 
-        const foundCart = await this.retrieveCart({ id, type })
-        return foundCart as Cart
+        const cart = await this.retrieveCart({ id, type })
+        return cart || Cart.empty()
     }
 
     public async addManyItems(user: UserInfo, items: CartItem[]): Promise<Cart | null> {
@@ -141,6 +143,24 @@ export class MongoCartRepository
 
         const foundCart = await this.retrieveCart({ id, type: userType })
         return foundCart
+    }
+
+    public async updateItem(
+        user: UserInfo,
+        item: Pick<CartProduct, "productId" | "quantity">
+    ): Promise<Cart> {
+        await mongoHelper.connect()
+
+        const { id, type } = user
+        const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
+
+        await cartItemCollection.findOneAndUpdate(
+            { userId: id, userType: type, productId: item.productId },
+            { $set: { quantity: item.quantity, updatedAt: new Date() } }
+        )
+
+        const cart = await this.retrieveCart(user)
+        return cart || Cart.empty()
     }
 
     public async clearCartById(user: UserInfo): Promise<void> {
