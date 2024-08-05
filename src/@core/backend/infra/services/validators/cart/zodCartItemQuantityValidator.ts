@@ -3,9 +3,8 @@ import {
     ValidationResult
 } from "@/@core/backend/domain/services/schemaValidator"
 import { generateCustomZodErrors } from "@/@core/shared/entities/helpers"
-import { cartItemZodSchema } from "@/@core/shared/entities/cart/utils"
 import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
-import { ZodSchema } from "zod"
+import { ZodSchema, object as zodObject, number as zodNumber } from "zod"
 
 type QuantitySchema = Pick<CartProduct, "quantity">
 
@@ -13,7 +12,7 @@ export class ZodCartItemQuantityValidator implements SchemaValidatorService {
     private readonly quantitySchema: ZodSchema<QuantitySchema>
 
     constructor() {
-        this.quantitySchema = cartItemZodSchema.pick({ quantity: true })
+        this.quantitySchema = zodObject({ quantity: zodNumber().int().gte(0).finite() })
     }
 
     public async validate(data: any): Promise<ValidationResult> {
