@@ -12,3 +12,8 @@ export interface MoveCartItemsInputDTO {
     to: UserInfo
     items: Pick<CartProduct, "productId" | "quantity">[]
 }
+
+export interface UpdateCartItemInputDTO {
+    user: UserInfo
+    item: Pick<CartProduct, "productId" | "quantity">
+}
