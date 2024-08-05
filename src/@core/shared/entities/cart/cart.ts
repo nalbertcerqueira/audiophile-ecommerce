@@ -26,6 +26,36 @@ export class Cart extends Entity<CartProps> {
         this.props = { items: validation.data.items }
     }
 
+    public addItem(item: CartItem): CartItem {
+        const foundItem = this.props.items.find(
+            ({ productId }) => productId === item.productId
+        )
+
+        if (foundItem) {
+            foundItem.quantity += item.quantity
+            return foundItem
+        }
+
+        this.props.items.push(item)
+        return item
+    }
+
+    public removeItem(id: string, qty: number): CartItem | null {
+        const foundItem = this.props.items.find(({ productId }) => productId === id)
+
+        if (!foundItem) {
+            throw new Error(`Item with id '${id}' not found`)
+        }
+
+        if (foundItem.quantity - qty <= 0) {
+            this.props.items = this.props.items.filter((item) => item.productId != id)
+            return null
+        }
+
+        foundItem.quantity -= qty
+        return foundItem
+    }
+
     public toJSON(): CartProps {
         return {
             items: this.props.items.map((item) => item.toJSON())

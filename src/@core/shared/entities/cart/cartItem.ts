@@ -47,6 +47,13 @@ export class CartItem extends Entity<CartProduct> {
         return this.props.price
     }
 
+    public set quantity(qty: number) {
+        if (qty <= 0) {
+            throw new Error("Quantity must be greater than 0")
+        }
+        this.props.quantity -= qty
+    }
+
     public toJSON(): CartProduct {
         return { ...this.props }
     }
