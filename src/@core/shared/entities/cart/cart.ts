@@ -26,18 +26,15 @@ export class Cart extends Entity<CartProps> {
         this.props = { items: validation.data.items }
     }
 
-    public addItem(item: CartItem): CartItem {
-        const foundItem = this.props.items.find(
-            ({ productId }) => productId === item.productId
-        )
+    public addItem(id: string, qty: number): CartItem | null {
+        const foundItem = this.props.items.find(({ productId }) => productId === id)
 
-        if (foundItem) {
-            foundItem.quantity += item.quantity
-            return foundItem
+        if (!foundItem) {
+            return null
         }
 
-        this.props.items.push(item)
-        return item
+        foundItem.quantity += qty
+        return foundItem
     }
 
     public removeItem(id: string, qty: number): CartItem | null {

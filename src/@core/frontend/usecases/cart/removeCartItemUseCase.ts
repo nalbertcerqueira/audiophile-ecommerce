@@ -1,20 +1,29 @@
-import { RemoveCartItemGateway } from "../../domain/gateways/cart/removeCartItemGateway"
-import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
-import { Cart } from "../../../shared/entities/cart/cart"
+import { Cart, CartProps } from "../../../shared/entities/cart/cart"
+import { CartItem, CartProduct } from "@/@core/shared/entities/cart/cartItem"
+import { UpdateCartItemGateway } from "../../domain/gateways/cart/updateCartItemGateway"
 
-type RemoveItemInputDTO = Pick<CartProduct, "productId" | "quantity">
+interface RemoveItemInputDTO {
+    cartProps: CartProps
+    item: Pick<CartProduct, "productId" | "quantity">
+}
 
 export class RemoveCartItemUseCase {
-    constructor(private readonly removeCartItemGateway: RemoveCartItemGateway) {}
+    constructor(private readonly updateCartItemGateway: UpdateCartItemGateway) {}
 
-    public async execute(item: RemoveItemInputDTO): Promise<Cart | null> {
-        const { productId, quantity } = item
+    public async execute(data: RemoveItemInputDTO): Promise<Cart | null> {
+        const { cartProps, item } = data
 
-        if (quantity < 1) {
+        if (item.quantity < 1) {
             return null
         }
 
-        const cart = await this.removeCartItemGateway.removeItem(productId, quantity)
-        return cart
+        const cart = new Cart({ items: cartProps.items.map((item) => new CartItem(item)) })
+        const removedItem = cart.removeItem(item.productId, item.quantity)
+        const quantity = removedItem?.quantity ?? 0
+
+        return await this.updateCartItemGateway.updateItem({
+            productId: item.productId,
+            quantity
+        })
     }
 }

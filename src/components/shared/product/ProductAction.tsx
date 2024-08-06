@@ -4,6 +4,11 @@ import {
     CartAwaitingMessage,
     SuccessAdditionMessage
 } from "@/libs/react-toastify/components/CartMessages"
+import {
+    selectBusyProductsLength,
+    selectCartItems,
+    selectCartStatus
+} from "@/store/cart/cartSlice"
 import { fetchTaxes, setCheckoutStatus } from "@/store/checkout"
 import { handleHttpErrors } from "@/utils/helpers"
 import { SessionContext } from "@/contexts/sessionContext/SessionContext"
@@ -14,11 +19,11 @@ import { Id } from "react-toastify"
 import { useAppDispatch, useAppSelector } from "@/libs/redux/hooks"
 import { useState, useContext } from "react"
 import { emitToast } from "@/libs/react-toastify/utils"
-import { selectBusyProductsLength, selectCartStatus } from "@/store/cart/cartSlice"
 
 export function AddProductAction({ productId }: { productId: string }) {
     const dispatch = useAppDispatch()
     const [count, setCount] = useState<number>(0)
+    const items = useAppSelector(selectCartItems)
     const cartStatus = useAppSelector(selectCartStatus)
     const busyProductsLength = useAppSelector(selectBusyProductsLength)
 
@@ -31,8 +36,10 @@ export function AddProductAction({ productId }: { productId: string }) {
         }
 
         const toastId = emitToast("loading", <CartAwaitingMessage />)
+        const item = { quantity: count, productId }
+
         dispatch(setCheckoutStatus({ taxes: "loading" }))
-        dispatch(addCartItem({ quantity: count, productId }))
+        dispatch(addCartItem({ cartProps: { items }, item }))
             .unwrap()
             .then((data) => handleSuccess(data, toastId))
             .then(() => dispatch(fetchTaxes()))

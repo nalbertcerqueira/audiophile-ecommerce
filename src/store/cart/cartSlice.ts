@@ -34,7 +34,7 @@ const cartSlice = createSlice({
             })
             .addCase(removeCartItem.pending, (state, action) => {
                 const busyProducts = state.status.busyProducts
-                const { productId } = action.meta.arg
+                const { productId } = action.meta.arg.item
                 return {
                     ...state,
                     status: {
@@ -45,17 +45,19 @@ const cartSlice = createSlice({
             })
             .addCase(addCartItem.pending, (state, action) => {
                 const busyProducts = state.status.busyProducts
+                const { productId } = action.meta.arg.item
                 return {
                     ...state,
                     status: {
                         ...state.status,
-                        busyProducts: [...busyProducts, action.meta.arg.productId]
+                        busyProducts: [...busyProducts, productId]
                     }
                 }
             })
             .addMatcher(isCartSettledAction, (state, action) => {
                 const busyProducts = state.status.busyProducts
-                const arg = action.meta.arg as { productId: string } | undefined
+                action.meta.arg
+                const arg = action.meta.arg as { item: { productId: string } } | undefined
                 switch (action.meta.requestStatus) {
                     case "fulfilled": {
                         const payload = action.payload as CartThunkPayload
@@ -66,8 +68,8 @@ const cartSlice = createSlice({
                             totalSpent: payload.totalSpent,
                             status: {
                                 state: "settled",
-                                busyProducts: arg?.productId
-                                    ? busyProducts.filter((id) => id !== arg.productId)
+                                busyProducts: arg?.item.productId
+                                    ? busyProducts.filter((id) => id !== arg.item.productId)
                                     : busyProducts
                             }
                         }
@@ -77,8 +79,8 @@ const cartSlice = createSlice({
                             ...state,
                             status: {
                                 state: "settled",
-                                busyProducts: arg?.productId
-                                    ? busyProducts.filter((id) => id !== arg.productId)
+                                busyProducts: arg?.item.productId
+                                    ? busyProducts.filter((id) => id !== arg.item.productId)
                                     : busyProducts
                             }
                         }
@@ -93,6 +95,7 @@ const cartSlice = createSlice({
 export const cartReducer = cartSlice.reducer
 
 export const selectCart = (state: AppState) => state.cart
+export const selectCartItems = (state: AppState) => state.cart.items
 export const selectCartStatus = (state: AppState) => state.cart.status.state
 export const selectCartItemsLength = (state: AppState) => state.cart.items.length
 export const selectBusyProductsLength = (state: AppState) =>

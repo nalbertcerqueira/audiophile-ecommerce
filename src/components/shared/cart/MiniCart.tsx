@@ -58,8 +58,10 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
 
         const thunkAction = operation === "add" ? addCartItem : removeCartItem
         const requestId = (requestRef.current += 1)
+        const item = { quantity: 1, productId }
+
         dispatch(setCheckoutStatus({ taxes: "loading" }))
-        dispatch(thunkAction({ quantity: 1, productId }))
+        dispatch(thunkAction({ cartProps: { items }, item }))
             .unwrap()
             .then(() => dispatch(fetchTaxes()))
             .catch((error: Error) => handleHttpErrors(error, true))
