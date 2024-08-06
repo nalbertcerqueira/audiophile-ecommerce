@@ -1,7 +1,7 @@
 import { DbCreateCheckoutOrderUseCase } from "@/@core/backend/domain/usecases/order/dbCreateCheckoutOrderUseCase"
 import { Controller } from "../../protocols/controller"
 import { HttpRequest, HttpResponse } from "../../protocols/http"
-import { serverError } from "../../helpers/errors"
+import { badRequestError, serverError } from "../../helpers/errors"
 
 export class CreateCheckoutOrderController implements Controller {
     constructor(private readonly createCheckoutOrderUseCase: DbCreateCheckoutOrderUseCase) {}
@@ -18,7 +18,7 @@ export class CreateCheckoutOrderController implements Controller {
             })
 
             if (!order) {
-                throw new Error()
+                return badRequestError(["Cannot place a order with empty cart"])
             }
 
             return { statusCode: 200, data: order.toJSON() }
