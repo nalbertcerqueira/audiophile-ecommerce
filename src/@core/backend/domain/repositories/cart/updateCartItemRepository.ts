@@ -1,6 +1,6 @@
 import { Cart } from "@/@core/shared/entities/cart/cart"
 import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
-import { UserInfo } from "./protocols"
+import { UserInfo } from "../../protocols"
 
 export interface UpdateCartItemRepository {
     updateItem(

@@ -1,5 +1,5 @@
 import { AddManyCartItemsRepository } from "@/@core/backend/domain/repositories/cart/addManyCartItemsRepository"
-import { RemoveCartItemRepository } from "@/@core/backend/domain/repositories/cart/removeCartItemRepository"
+import { DeleteCartItemRepository } from "@/@core/backend/domain/repositories/cart/deleteCartItemRepository"
 import { UpdateCartItemRepository } from "@/@core/backend/domain/repositories/cart/updateCartItemRepository"
 import { GetCartItemRepository } from "@/@core/backend/domain/repositories/cart/getCartItemRepository"
 import { AddCartItemRepository } from "@/@core/backend/domain/repositories/cart/addCartItemRepository"
@@ -8,8 +8,7 @@ import { ClearCartRepository } from "@/@core/backend/domain/repositories/cart/cl
 import { GetCartRepository } from "@/@core/backend/domain/repositories/cart/getCartRepository"
 import { CartProps, Cart } from "@/@core/shared/entities/cart/cart"
 import { MongoCartItem } from "../../models"
-import { UserInfo } from "@/@core/backend/domain/repositories/cart/protocols"
-import { RemovalDetails } from "@/@core/backend/domain/repositories/cart/protocols"
+import { UserInfo } from "@/@core/backend/domain/protocols"
 import { mongoHelper } from "../../config/mongo-config"
 import { AnyBulkWriteOperation, ClientSession } from "mongodb"
 
@@ -21,7 +20,7 @@ export class MongoCartRepository
         AddManyCartItemsRepository,
         UpdateCartItemRepository,
         ClearCartRepository,
-        RemoveCartItemRepository
+        DeleteCartItemRepository
 {
     constructor(private session?: ClientSession) {}
 
@@ -118,31 +117,16 @@ export class MongoCartRepository
         return foundCart
     }
 
-    public async removeItem(
-        user: UserInfo,
-        operationInfo: RemovalDetails
-    ): Promise<Cart | null> {
+    public async deleteItem(user: UserInfo, productId: string): Promise<Cart> {
         await mongoHelper.connect()
 
         const { id, type: userType } = user
-        const type = operationInfo.type
-        const { productId, quantity } = operationInfo.item
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
 
-        if (type === "delete") {
-            await cartItemCollection.findOneAndDelete({ userId: id, userType, productId })
-        }
-
-        if (type === "decrease") {
-            const updatedAt = new Date()
-            await cartItemCollection.findOneAndUpdate(
-                { userId: id, userType, productId },
-                { $set: { updatedAt }, $inc: { quantity: quantity * -1 } }
-            )
-        }
+        await cartItemCollection.findOneAndDelete({ userId: id, userType, productId })
 
         const foundCart = await this.retrieveCart({ id, type: userType })
-        return foundCart
+        return foundCart || Cart.empty()
     }
 
     public async updateItem(
