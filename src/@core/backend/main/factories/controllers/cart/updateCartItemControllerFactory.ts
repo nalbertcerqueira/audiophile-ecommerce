@@ -9,7 +9,6 @@ function createUpdateCartItemController() {
 
     const dbUpdateCartItemUseCase = new DbUpdateCartItemUseCase(
         mongoCartRepository,
-        mongoCartRepository,
         mongoCartRepository
     )
 

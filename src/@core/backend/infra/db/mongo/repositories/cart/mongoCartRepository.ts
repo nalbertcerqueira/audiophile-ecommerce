@@ -1,7 +1,6 @@
 import { AddManyCartItemsRepository } from "@/@core/backend/domain/repositories/cart/addManyCartItemsRepository"
 import { DeleteCartItemRepository } from "@/@core/backend/domain/repositories/cart/deleteCartItemRepository"
 import { UpdateCartItemRepository } from "@/@core/backend/domain/repositories/cart/updateCartItemRepository"
-import { GetCartItemRepository } from "@/@core/backend/domain/repositories/cart/getCartItemRepository"
 import { AddCartItemRepository } from "@/@core/backend/domain/repositories/cart/addCartItemRepository"
 import { CartProduct, CartItem } from "@/@core/shared/entities/cart/cartItem"
 import { ClearCartRepository } from "@/@core/backend/domain/repositories/cart/clearCartRepository"
@@ -15,7 +14,6 @@ import { AnyBulkWriteOperation, ClientSession, ObjectId, WithId } from "mongodb"
 export class MongoCartRepository
     implements
         GetCartRepository,
-        GetCartItemRepository,
         AddCartItemRepository,
         AddManyCartItemsRepository,
         UpdateCartItemRepository,
@@ -30,41 +28,6 @@ export class MongoCartRepository
         const { id, type } = user
         const foundCart = this.retrieveCart({ id, type })
         return foundCart
-    }
-
-    public async getItem(user: UserInfo, productId: string): Promise<CartItem | null> {
-        await mongoHelper.connect()
-
-        const { id, type } = user
-        const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
-        const result = await cartItemCollection
-            .aggregate<CartProduct>([
-                { $match: { userId: id, userType: type, productId } },
-                { $set: { productId: { $toObjectId: "$productId" } } },
-                {
-                    $lookup: {
-                        from: "products",
-                        localField: "productId",
-                        foreignField: "_id",
-                        as: "details"
-                    }
-                },
-                {
-                    $project: {
-                        productId: { $toString: "$productId" },
-                        slug: { $first: "$details.slug" },
-                        name: { $first: "$details.shortName" },
-                        price: { $first: "$details.price" },
-                        quantity: "$quantity",
-                        _id: 0
-                    }
-                }
-            ])
-            .toArray()
-
-        const item = result[0]
-
-        return item ? new CartItem({ ...item }) : null
     }
 
     public async addItem(user: UserInfo, item: CartItem): Promise<Cart> {
