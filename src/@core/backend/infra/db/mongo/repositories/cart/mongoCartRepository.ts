@@ -10,7 +10,7 @@ import { CartProps, Cart } from "@/@core/shared/entities/cart/cart"
 import { MongoCartItem } from "../../models"
 import { UserInfo } from "@/@core/backend/domain/protocols"
 import { mongoHelper } from "../../config/mongo-config"
-import { AnyBulkWriteOperation, ClientSession } from "mongodb"
+import { AnyBulkWriteOperation, ClientSession, ObjectId, WithId } from "mongodb"
 
 export class MongoCartRepository
     implements
@@ -78,11 +78,7 @@ export class MongoCartRepository
 
         await cartItemCollection.findOneAndUpdate(
             { userId: id, userType: type, productId },
-            {
-                $set: { updatedAt: now },
-                $inc: { quantity },
-                $setOnInsert: { createdAt: now }
-            },
+            { $set: { updatedAt: now }, $inc: { quantity }, $setOnInsert: { createdAt: now } },
             { upsert: true }
         )
 
@@ -117,8 +113,13 @@ export class MongoCartRepository
         return foundCart
     }
 
-    public async deleteItem(user: UserInfo, productId: string): Promise<Cart> {
+    public async deleteItem(user: UserInfo, productId: string): Promise<Cart | null> {
         await mongoHelper.connect()
+
+        const foundItem = await this.findItem(user, productId)
+        if (!foundItem) {
+            return null
+        }
 
         const { id, type: userType } = user
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
@@ -132,8 +133,13 @@ export class MongoCartRepository
     public async updateItem(
         user: UserInfo,
         item: Pick<CartProduct, "productId" | "quantity">
-    ): Promise<Cart> {
+    ): Promise<Cart | null> {
         await mongoHelper.connect()
+
+        const foundItem = await this.findItem(user, item.productId)
+        if (!foundItem) {
+            return null
+        }
 
         const { id, type } = user
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
@@ -218,5 +224,28 @@ export class MongoCartRepository
         return new Cart({
             items: queryResult[0].items.map((item) => new CartItem({ ...item }))
         })
+    }
+
+    private async findItem(
+        user: UserInfo,
+        productId: string
+    ): Promise<WithId<MongoCartItem> | null> {
+        await mongoHelper.connect()
+
+        try {
+            new ObjectId(productId)
+        } catch {
+            return null
+        }
+
+        const { id, type } = user
+        const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
+        const foundItem = await cartItemCollection.findOne({
+            userId: id,
+            userType: type,
+            productId
+        })
+
+        return foundItem
     }
 }

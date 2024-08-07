@@ -6,5 +6,5 @@ export interface UpdateCartItemRepository {
     updateItem(
         user: UserInfo,
         item: Pick<CartProduct, "productId" | "quantity">
-    ): Promise<Cart>
+    ): Promise<Cart | null>
 }
