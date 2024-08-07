@@ -1,5 +1,5 @@
 import { UserInfo } from "../../protocols"
 
 export interface ClearCartRepository {
-    clearCartById(user: UserInfo): Promise<void>
+    clearCart(user: UserInfo): Promise<void>
 }

@@ -147,7 +147,7 @@ export class MongoCartRepository
         return cart || Cart.empty()
     }
 
-    public async clearCartById(user: UserInfo): Promise<void> {
+    public async clearCart(user: UserInfo): Promise<void> {
         await mongoHelper.connect()
 
         const { id, type } = user

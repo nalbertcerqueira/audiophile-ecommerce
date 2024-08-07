@@ -8,7 +8,7 @@ export class DbClearCartUseCase {
     public async execute(user: UserInfo): Promise<Cart> {
         const { id, type } = user
 
-        await this.clearCartRepository.clearCartById({ id, type })
+        await this.clearCartRepository.clearCart({ id, type })
 
         return Cart.empty()
     }

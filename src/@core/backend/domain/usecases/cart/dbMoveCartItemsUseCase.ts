@@ -43,7 +43,7 @@ export class DbMoveCartItemsUseCase {
                 { id: to.id, type: to.type },
                 cartItems
             ),
-            this.clearCartRepository.clearCartById({
+            this.clearCartRepository.clearCart({
                 id: from.id,
                 type: from.type
             })

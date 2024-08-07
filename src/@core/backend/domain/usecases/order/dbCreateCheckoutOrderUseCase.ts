@@ -37,7 +37,7 @@ export class DbCreateCheckoutOrderUseCase {
 
         try {
             await this.addCheckoutOrderRepository.add({ id: user.id, type: user.type }, order)
-            await this.clearCartRepository.clearCartById({ id: user.id, type: user.type })
+            await this.clearCartRepository.clearCart({ id: user.id, type: user.type })
 
             await this.transactionManager.commit()
         } catch (error: any) {
