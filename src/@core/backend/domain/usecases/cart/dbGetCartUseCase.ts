@@ -7,7 +7,7 @@ export class DbGetCartUseCase {
 
     public async execute(user: UserInfo): Promise<Cart> {
         const { id, type } = user
-        const userCart = await this.getCartRepository.getCartById({ id, type })
+        const userCart = await this.getCartRepository.getCart({ id, type })
 
         return userCart ? userCart : Cart.empty()
     }

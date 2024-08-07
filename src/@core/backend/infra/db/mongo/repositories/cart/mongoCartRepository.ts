@@ -24,7 +24,7 @@ export class MongoCartRepository
 {
     constructor(private session?: ClientSession) {}
 
-    public async getCartById(user: UserInfo): Promise<Cart | null> {
+    public async getCart(user: UserInfo): Promise<Cart | null> {
         await mongoHelper.connect()
 
         const { id, type } = user

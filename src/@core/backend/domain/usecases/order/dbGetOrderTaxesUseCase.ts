@@ -7,7 +7,7 @@ export class DbGetOrderTaxesUseCase {
 
     public async execute(user: UserInfo): Promise<Taxes> {
         const { id, type } = user
-        const foundCart = await this.getCartRepository.getCartById({ id, type })
+        const foundCart = await this.getCartRepository.getCart({ id, type })
 
         if (!foundCart) {
             return { vat: 0, shipping: 0 }

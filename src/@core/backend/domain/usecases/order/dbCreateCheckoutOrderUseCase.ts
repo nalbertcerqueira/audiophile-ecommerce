@@ -15,7 +15,7 @@ export class DbCreateCheckoutOrderUseCase {
 
     public async execute(data: CreateOrderInputDTO): Promise<CheckoutOrder | null> {
         const { user, customer } = data
-        const foundCart = await this.getCartRepository.getCartById(user)
+        const foundCart = await this.getCartRepository.getCart(user)
         const cartProps = foundCart?.toJSON()
 
         if (!foundCart || !cartProps?.items) {
