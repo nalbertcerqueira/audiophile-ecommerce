@@ -1,13 +1,13 @@
 import { CartItem } from "@/@core/shared/entities/cart/cartItem"
 import { ClearCartRepository } from "../../repositories/cart/clearCartRepository"
 import { MoveCartItemsInputDTO } from "./cartDTOs"
+import { AddCartItemsRepository } from "../../repositories/cart/addCartItemsRepository"
 import { GetProductsByIdRepository } from "../../repositories/product/getProductsByIdRepository"
-import { AddManyCartItemsRepository } from "../../repositories/cart/addManyCartItemsRepository"
 
 export class DbMoveCartItemsUseCase {
     constructor(
         private readonly getProductsByIdRepository: GetProductsByIdRepository,
-        private readonly addManyCartItemsRepository: AddManyCartItemsRepository,
+        private readonly addCartItemsRepository: AddCartItemsRepository,
         private readonly clearCartRepository: ClearCartRepository
     ) {}
 
@@ -39,10 +39,7 @@ export class DbMoveCartItemsUseCase {
         })
 
         await Promise.all([
-            this.addManyCartItemsRepository.addManyItems(
-                { id: to.id, type: to.type },
-                cartItems
-            ),
+            this.addCartItemsRepository.addItems({ id: to.id, type: to.type }, cartItems),
             this.clearCartRepository.clearCart({
                 id: from.id,
                 type: from.type
