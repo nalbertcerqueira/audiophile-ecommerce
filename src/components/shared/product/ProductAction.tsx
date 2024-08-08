@@ -36,10 +36,10 @@ export function AddProductAction({ productId }: { productId: string }) {
         }
 
         const toastId = emitToast("loading", <CartAwaitingMessage />)
-        const item = { quantity: count, productId }
+        const itemRef = { quantity: count, productId }
 
         dispatch(setCheckoutStatus({ taxes: "loading" }))
-        dispatch(addCartItem({ cartProps: { items }, item }))
+        dispatch(addCartItem({ cartProps: { items }, itemRef }))
             .unwrap()
             .then((data) => handleSuccess(data, toastId))
             .then(() => dispatch(fetchTaxes()))

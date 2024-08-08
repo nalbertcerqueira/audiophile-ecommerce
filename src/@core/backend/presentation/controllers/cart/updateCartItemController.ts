@@ -24,7 +24,7 @@ export class UpdateCartItemController implements Controller {
 
             const cart = await this.updateCartItemUseCase.execute({
                 user: { id: userId!, type: userType! },
-                item: { productId: productId!, quantity: validationResult.data.quantity }
+                itemRef: { productId: productId!, quantity: validationResult.data.quantity }
             })
 
             if (!cart) {

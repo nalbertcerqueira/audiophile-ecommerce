@@ -12,15 +12,15 @@ export class DbMoveCartItemsUseCase {
     ) {}
 
     public async execute(data: MoveCartItemsInputDTO): Promise<void> {
-        const { from, to, items } = data
+        const { from, to, itemRefs } = data
         const ids = []
         const itemMap: Record<string, number> = {}
 
-        if (!items.length) {
+        if (!itemRefs.length) {
             return
         }
 
-        for (const { productId, quantity } of items) {
+        for (const { productId, quantity } of itemRefs) {
             itemMap[productId] = quantity
             ids.push(productId)
         }

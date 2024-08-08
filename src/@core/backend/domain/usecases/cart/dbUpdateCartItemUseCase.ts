@@ -10,12 +10,12 @@ export class DbUpdateCartItemUseCase {
     ) {}
 
     public async execute(data: CartItemInputDTO): Promise<Cart | null> {
-        const { user, item } = data
+        const { user, itemRef } = data
 
-        if (item.quantity <= 0) {
-            return await this.deleteCartItemRepository.deleteItem(user, item.productId)
+        if (itemRef.quantity <= 0) {
+            return await this.deleteCartItemRepository.deleteItem(user, itemRef.productId)
         } else {
-            return await this.updateCartItemRepository.updateItem(user, item)
+            return await this.updateCartItemRepository.updateItem(user, itemRef)
         }
     }
 }

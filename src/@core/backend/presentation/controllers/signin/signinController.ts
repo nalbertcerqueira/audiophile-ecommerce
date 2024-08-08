@@ -47,7 +47,7 @@ export class SigninController implements Controller {
                     id: guestUser.id,
                     type: "guest"
                 })
-                const itemsToAdd = guestCart.toJSON().items.map(({ productId, quantity }) => ({
+                const itemRefs = guestCart.toJSON().items.map(({ productId, quantity }) => ({
                     productId,
                     quantity
                 }))
@@ -55,7 +55,7 @@ export class SigninController implements Controller {
                 await this.dbMoveCartItemsUseCase.execute({
                     from: { id: guestUser.id, type: "guest" },
                     to: { id: id, type: sessionType },
-                    items: itemsToAdd
+                    itemRefs
                 })
             }
 

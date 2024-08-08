@@ -63,7 +63,7 @@ export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOption
                         id: guestUser.id,
                         type: "guest"
                     })
-                    const itemsToAdd = guestCart.toJSON().items.map((item) => ({
+                    const itemRefs = guestCart.toJSON().items.map((item) => ({
                         productId: item.productId,
                         quantity: item.quantity
                     }))
@@ -72,7 +72,7 @@ export function generateNextAuthOptions(httpRequest: NextApiRequest): AuthOption
                     await dbMoveCartItemsUseCase.execute({
                         from: { id: guestUser.id, type: "guest" },
                         to: { id: id, type: sessionType },
-                        items: itemsToAdd
+                        itemRefs
                     })
                 }
                 return newSessionToken

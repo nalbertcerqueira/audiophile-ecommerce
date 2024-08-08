@@ -34,7 +34,7 @@ const cartSlice = createSlice({
             })
             .addCase(removeCartItem.pending, (state, action) => {
                 const busyProducts = state.status.busyProducts
-                const { productId } = action.meta.arg.item
+                const { productId } = action.meta.arg.itemRef
                 return {
                     ...state,
                     status: {
@@ -45,7 +45,7 @@ const cartSlice = createSlice({
             })
             .addCase(addCartItem.pending, (state, action) => {
                 const busyProducts = state.status.busyProducts
-                const { productId } = action.meta.arg.item
+                const { productId } = action.meta.arg.itemRef
                 return {
                     ...state,
                     status: {
@@ -57,7 +57,7 @@ const cartSlice = createSlice({
             .addMatcher(isCartSettledAction, (state, action) => {
                 const busyProducts = state.status.busyProducts
                 action.meta.arg
-                const arg = action.meta.arg as { item: { productId: string } } | undefined
+                const arg = action.meta.arg as { itemRef: { productId: string } } | undefined
                 switch (action.meta.requestStatus) {
                     case "fulfilled": {
                         const payload = action.payload as CartThunkPayload
@@ -68,8 +68,8 @@ const cartSlice = createSlice({
                             totalSpent: payload.totalSpent,
                             status: {
                                 state: "settled",
-                                busyProducts: arg?.item.productId
-                                    ? busyProducts.filter((id) => id !== arg.item.productId)
+                                busyProducts: arg?.itemRef.productId
+                                    ? busyProducts.filter((id) => id !== arg.itemRef.productId)
                                     : busyProducts
                             }
                         }
@@ -79,8 +79,8 @@ const cartSlice = createSlice({
                             ...state,
                             status: {
                                 state: "settled",
-                                busyProducts: arg?.item.productId
-                                    ? busyProducts.filter((id) => id !== arg.item.productId)
+                                busyProducts: arg?.itemRef.productId
+                                    ? busyProducts.filter((id) => id !== arg.itemRef.productId)
                                     : busyProducts
                             }
                         }

@@ -10,7 +10,7 @@ type CartThunkProps = ReturnType<typeof mapCartToState>
 
 interface CartActionParams {
     cartProps: CartProps
-    item: Pick<CartProduct, "productId" | "quantity">
+    itemRef: Pick<CartProduct, "productId" | "quantity">
 }
 
 export const clearCart = createAsyncThunk<CartThunkProps, void>("cart/clearCart", async () => {
@@ -25,16 +25,16 @@ export const fetchCart = createAsyncThunk<CartThunkProps, void>("cart/fetchCart"
 
 export const addCartItem = createAsyncThunk<CartThunkProps, CartActionParams>(
     "cart/addItem",
-    async ({ cartProps, item }) => {
-        const newCart = await addCartItemUseCase.execute({ cartProps, item })
+    async ({ cartProps, itemRef }) => {
+        const newCart = await addCartItemUseCase.execute({ cartProps, itemRef })
         return mapCartToState(newCart)
     }
 )
 
 export const removeCartItem = createAsyncThunk<CartThunkProps, CartActionParams>(
     "cart/removeItem",
-    async ({ cartProps, item }) => {
-        const newCart = await removeCartItemUseCase.execute({ cartProps, item })
+    async ({ cartProps, itemRef }) => {
+        const newCart = await removeCartItemUseCase.execute({ cartProps, itemRef })
         return mapCartToState(newCart)
     }
 )

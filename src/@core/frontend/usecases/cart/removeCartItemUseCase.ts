@@ -4,25 +4,25 @@ import { UpdateCartItemGateway } from "../../domain/gateways/cart/updateCartItem
 
 interface RemoveItemInputDTO {
     cartProps: CartProps
-    item: Pick<CartProduct, "productId" | "quantity">
+    itemRef: Pick<CartProduct, "productId" | "quantity">
 }
 
 export class RemoveCartItemUseCase {
     constructor(private readonly updateCartItemGateway: UpdateCartItemGateway) {}
 
     public async execute(data: RemoveItemInputDTO): Promise<Cart | null> {
-        const { cartProps, item } = data
+        const { cartProps, itemRef } = data
 
-        if (item.quantity < 1) {
+        if (itemRef.quantity < 1) {
             return null
         }
 
         const cart = new Cart({ items: cartProps.items.map((item) => new CartItem(item)) })
-        const removedItem = cart.removeItem(item.productId, item.quantity)
+        const removedItem = cart.removeItem(itemRef.productId, itemRef.quantity)
         const quantity = removedItem?.quantity ?? 0
 
         return await this.updateCartItemGateway.updateItem({
-            productId: item.productId,
+            productId: itemRef.productId,
             quantity
         })
     }

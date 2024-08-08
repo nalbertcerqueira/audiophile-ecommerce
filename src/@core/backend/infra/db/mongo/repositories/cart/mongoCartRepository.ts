@@ -75,11 +75,11 @@ export class MongoCartRepository
 
     public async updateItem(
         user: UserInfo,
-        item: Pick<CartProduct, "productId" | "quantity">
+        itemRef: Pick<CartProduct, "productId" | "quantity">
     ): Promise<Cart | null> {
         await mongoHelper.connect()
 
-        const foundItem = await this.findItem(user, item.productId)
+        const foundItem = await this.findItem(user, itemRef.productId)
         if (!foundItem) {
             return null
         }
@@ -88,8 +88,8 @@ export class MongoCartRepository
         const cartItemCollection = mongoHelper.db.collection<MongoCartItem>("cartItems")
 
         await cartItemCollection.findOneAndUpdate(
-            { userId: id, userType: type, productId: item.productId },
-            { $set: { quantity: item.quantity, updatedAt: new Date() } }
+            { userId: id, userType: type, productId: itemRef.productId },
+            { $set: { quantity: itemRef.quantity, updatedAt: new Date() } }
         )
 
         const cart = await this.retrieveCart(user)

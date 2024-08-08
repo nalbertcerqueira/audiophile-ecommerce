@@ -56,10 +56,12 @@ export class HttpCartGateway
         return cart
     }
 
-    public async updateItem(item: Pick<CartProduct, "productId" | "quantity">): Promise<Cart> {
+    public async updateItem(
+        itemRef: Pick<CartProduct, "productId" | "quantity">
+    ): Promise<Cart> {
         const accessToken = localStorage.getItem("accessToken")
-        const fullUrl = `${this.baseApiUrl}/cart/items/${item.productId}`
-        const body = { quantity: item.quantity }
+        const fullUrl = `${this.baseApiUrl}/cart/items/${itemRef.productId}`
+        const body = { quantity: itemRef.quantity }
 
         const cart = await this.submitRequest({
             method: "PATCH",

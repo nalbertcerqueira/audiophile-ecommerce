@@ -5,7 +5,7 @@ import { UpdateCartItemGateway } from "../../domain/gateways/cart/updateCartItem
 
 interface AddItemInputDTO {
     cartProps: CartProps
-    item: Pick<CartProduct, "productId" | "quantity">
+    itemRef: Pick<CartProduct, "productId" | "quantity">
 }
 
 export class AddCartItemUseCase {
@@ -15,21 +15,21 @@ export class AddCartItemUseCase {
     ) {}
 
     public async execute(data: AddItemInputDTO): Promise<Cart | null> {
-        const { cartProps, item } = data
+        const { cartProps, itemRef } = data
 
-        if (item.quantity < 1) {
+        if (itemRef.quantity < 1) {
             return null
         }
 
         const cart = new Cart({ items: cartProps.items.map((item) => new CartItem(item)) })
-        const modifiedItem = cart.addItem(item.productId, item.quantity)
+        const modifiedItem = cart.addItem(itemRef.productId, itemRef.quantity)
 
         if (!modifiedItem) {
-            return await this.addCartItemGateway.addItem(item.productId, item.quantity)
+            return await this.addCartItemGateway.addItem(itemRef.productId, itemRef.quantity)
         }
 
         return await this.updateCartItemGateway.updateItem({
-            productId: item.productId,
+            productId: itemRef.productId,
             quantity: modifiedItem.quantity
         })
     }
