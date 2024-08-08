@@ -11,9 +11,9 @@ export class DbAddCartItemUseCase {
     ) {}
 
     public async execute(data: CartItemInputDTO): Promise<Cart | null> {
-        const { user, productId, quantity } = data
+        const { user, item } = data
         const foundProduct = await this.getProductByIdRepository.getById(
-            productId,
+            item.productId,
             "shortProduct"
         )
 
@@ -21,8 +21,8 @@ export class DbAddCartItemUseCase {
             return null
         }
 
-        const item = new CartItem({ ...foundProduct, quantity })
-        const cart = await this.addCartItemsRepository.addItems(user, [item])
+        const newItem = new CartItem({ ...foundProduct, quantity: item.quantity })
+        const cart = await this.addCartItemsRepository.addItems(user, [newItem])
 
         return cart
     }

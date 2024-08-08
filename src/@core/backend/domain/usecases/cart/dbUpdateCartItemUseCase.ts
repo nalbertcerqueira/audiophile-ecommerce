@@ -1,6 +1,6 @@
 import { DeleteCartItemRepository } from "../../repositories/cart/deleteCartItemRepository"
 import { UpdateCartItemRepository } from "../../repositories/cart/updateCartItemRepository"
-import { UpdateCartItemInputDTO } from "./cartDTOs"
+import { CartItemInputDTO } from "./cartDTOs"
 import { Cart } from "@/@core/shared/entities/cart/cart"
 
 export class DbUpdateCartItemUseCase {
@@ -9,7 +9,7 @@ export class DbUpdateCartItemUseCase {
         private readonly deleteCartItemRepository: DeleteCartItemRepository
     ) {}
 
-    public async execute(data: UpdateCartItemInputDTO): Promise<Cart | null> {
+    public async execute(data: CartItemInputDTO): Promise<Cart | null> {
         const { user, item } = data
 
         if (item.quantity <= 0) {
