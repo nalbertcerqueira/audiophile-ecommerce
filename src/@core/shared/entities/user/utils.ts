@@ -7,7 +7,7 @@ export const nameRegexp = /^[A-zÀ-ú\s]+$/
 export const nameMessage = "can only have letters"
 export const nameLengthMessage = "must have at least 4 character(s)"
 
-export const passwordRegexp = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%+<>,.?-]).+$/g
+export const passwordRegexp = /^(?=.*[A-zÀ-ú])(?=.*[0-9])(?=.*[!@#$%+<>,.?-]).+$/g
 export const passwordMessage = "must contain letters, numbers and 1 especial character"
 export const passwordLengthMessage = "must have at least 8 character(s)"
 
