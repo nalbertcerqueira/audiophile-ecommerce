@@ -1,10 +1,10 @@
 import { AppState } from "../store"
 import { addCartItem, clearCart, fetchCart, removeCartItem } from "./thunks"
-import { FulfilledAction, CartThunkPayload } from "./types"
+import { settledAction, CartThunkPayload } from "./types"
 import { CartState } from "./types"
 import { createSlice, UnknownAction } from "@reduxjs/toolkit"
 
-function isCartSettledAction(action: UnknownAction): action is FulfilledAction {
+function isCartSettledAction(action: UnknownAction): action is settledAction {
     const isCartAction = action.type.startsWith("cart")
     const isSettled = action.type.endsWith("/fulfilled") || action.type.endsWith("/rejected")
     return typeof action.type === "string" && isCartAction && isSettled

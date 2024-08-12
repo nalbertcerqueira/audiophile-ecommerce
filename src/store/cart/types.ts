@@ -17,6 +17,6 @@ export type CartThunkPayload = Pick<CartState, "items" | "itemCount" | "totalSpe
 
 export type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>
 
-export type FulfilledAction = ReturnType<
+export type settledAction = ReturnType<
     GenericAsyncThunk["fulfilled"] | GenericAsyncThunk["rejected"]
 >
