@@ -13,6 +13,7 @@ import { fetchTaxes, setCheckoutStatus } from "@/store/checkout"
 import { handleHttpErrors } from "@/utils/helpers"
 import { selectOrderStatus } from "@/store/checkout/checkoutSlice"
 import { selectCart } from "@/store/cart/cartSlice"
+import { PrimaryButton } from "../buttons/PrimaryButton"
 
 export function MiniCart({ isOpen }: { isOpen: boolean }) {
     const dispatch = useDispatch<AppDispatch>()
@@ -124,9 +125,8 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
                     value={totalSpent}
                 />
             </div>
-            <button
-                className="btn btn--primary mini-cart__checkout-btn"
-                type="button"
+            <PrimaryButton
+                className="mini-cart__checkout-btn"
                 onClick={() =>
                     session.isLogged
                         ? router.push("/checkout")
@@ -134,7 +134,7 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
                 }
             >
                 CHECKOUT
-            </button>
+            </PrimaryButton>
         </div>
     )
 }

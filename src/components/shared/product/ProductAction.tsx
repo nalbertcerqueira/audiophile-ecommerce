@@ -19,6 +19,7 @@ import { Id } from "react-toastify"
 import { useAppDispatch, useAppSelector } from "@/libs/redux/hooks"
 import { useState, useContext } from "react"
 import { emitToast } from "@/libs/react-toastify/utils"
+import { PrimaryButton } from "../buttons/PrimaryButton"
 
 export function AddProductAction({ productId }: { productId: string }) {
     const dispatch = useAppDispatch()
@@ -68,16 +69,14 @@ export function AddProductAction({ productId }: { productId: string }) {
                     setCount((prevCount) => (prevCount > 0 ? prevCount - 1 : prevCount))
                 }
             />
-            <button
+            <PrimaryButton
                 disabled={isCartBusy}
-                aria-disabled={isCartBusy}
+                ariaDisabled={isCartBusy}
                 onClick={() => handleAddItem(productId)}
-                className="btn btn--primary"
-                aria-label={count ? `add ${count} products to cart` : "can't add 0 products"}
-                type="button"
+                ariaLabel={count ? `add ${count} products to cart` : "can't add 0 products"}
             >
                 ADD TO CART
-            </button>
+            </PrimaryButton>
         </div>
     )
 }

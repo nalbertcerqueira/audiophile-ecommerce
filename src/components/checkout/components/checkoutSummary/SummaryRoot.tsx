@@ -9,6 +9,7 @@ import {
     selectCartItemsLength,
     selectCartStatus
 } from "@/store/cart/cartSlice"
+import { PrimaryButton } from "@/components/shared/buttons/PrimaryButton"
 
 interface SummaryRootProps {
     formId: string
@@ -30,13 +31,13 @@ export function SummaryRoot({ formId, children }: SummaryRootProps) {
         <div className="summary">
             <h2 className="summary__title">SUMMARY</h2>
             {children}
-            <button
-                aria-label="continue and pay"
-                aria-disabled={submitBlocked}
+            <PrimaryButton
+                ariaLabel="continue and pay"
+                ariaDisabled={submitBlocked}
                 disabled={submitBlocked}
-                form={formId}
+                formId={formId}
                 type="submit"
-                className="btn btn--primary summary__submit-btn"
+                className="summary__submit-btn"
             >
                 {isCheckingOut && (
                     <div className="btn-overlay">
@@ -44,7 +45,7 @@ export function SummaryRoot({ formId, children }: SummaryRootProps) {
                     </div>
                 )}
                 CONTINUE & PAY
-            </button>
+            </PrimaryButton>
         </div>
     )
 }

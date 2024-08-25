@@ -1,3 +1,4 @@
+import { PrimaryButton } from "@/components/shared/buttons/PrimaryButton"
 import { RingLoader } from "@/components/shared/loaders/RingLoader"
 import { FormEvent, ReactNode } from "react"
 
@@ -15,11 +16,11 @@ export function AuthForm(props: AuthFormProps) {
     return (
         <form aria-label={ariaLabel} onSubmit={onSubmit} className="auth-form">
             <div className="auth-form__input-wrapper">{children}</div>
-            <button
-                aria-disabled={isSubmitting}
-                disabled={isSubmitting}
-                className="btn btn--primary auth-form__submit-btn"
+            <PrimaryButton
                 type="submit"
+                className=" auth-form__submit-btn"
+                ariaDisabled={isSubmitting}
+                disabled={isSubmitting}
             >
                 {submitBtn}
                 {isSubmitting && (
@@ -27,7 +28,7 @@ export function AuthForm(props: AuthFormProps) {
                         <RingLoader />
                     </div>
                 )}
-            </button>
+            </PrimaryButton>
         </form>
     )
 }

@@ -1,5 +1,6 @@
 import { PageError } from "@/components/errors/components/PageError"
 import "./styles.scss"
+import { PrimaryButton } from "../shared/buttons/PrimaryButton"
 
 export function ErrorBoundaryPage({ reset }: { reset: () => void }) {
     return (
@@ -18,13 +19,9 @@ export function ErrorBoundaryPage({ reset }: { reset: () => void }) {
                 <a href="/">homepage</a>.
             </span>
             <div className="error-boundary__buttons">
-                <button
-                    onClick={() => reset()}
-                    type="button"
-                    className="btn btn--primary btn--thin"
-                >
+                <PrimaryButton onClick={() => reset()} className="btn--thin">
                     TRY AGAIN
-                </button>
+                </PrimaryButton>
             </div>
         </PageError>
     )

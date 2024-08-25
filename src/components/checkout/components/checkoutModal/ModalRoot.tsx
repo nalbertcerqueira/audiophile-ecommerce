@@ -1,5 +1,6 @@
 "use client"
 
+import { PrimaryButton } from "@/components/shared/buttons/PrimaryButton"
 import { ConfirmationIcon } from "@/components/shared/icons/ConfirmationIcon"
 import { useAppSelector } from "@/libs/redux/hooks"
 import { formatCurrency } from "@/utils/helpers"
@@ -43,13 +44,12 @@ export function ModalRoot({ children }: PropsWithChildren) {
                             </p>
                         </div>
                     </div>
-                    <button
-                        type="button"
+                    <PrimaryButton
                         onClick={() => location.replace("/")}
-                        className="btn btn--primary order-confirmation__exit-btn"
+                        className="order-confirmation__exit-btn"
                     >
                         BACK TO HOME
-                    </button>
+                    </PrimaryButton>
                 </div>
             </div>
         </div>
