@@ -2,7 +2,7 @@ import { ChangeEvent } from "react"
 import { ControllerRenderProps } from "react-hook-form"
 import { CheckoutFields } from "../types/types"
 
-import { creditCardRegexp, textMatchRegexp, zipCodeRegexp } from "./constants"
+import { creditCardRegexp, textMatchRegexp, zipCodeRegexp } from "./variables"
 
 //Máscara de input para CEP
 export function maskZipCode(rawInput: string): string {
