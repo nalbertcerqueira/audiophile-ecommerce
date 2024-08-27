@@ -104,6 +104,10 @@ a:focus-visible {
 
 input {
     outline: none;
+
+    &:disabled {
+        background-color: #f5f5f5;
+    }
 }
 
 fieldset {

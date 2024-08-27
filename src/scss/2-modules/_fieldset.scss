@@ -3,6 +3,8 @@
 @use "../1-base/placeholders";
 
 .fieldset {
+    width: 100%;
+
     &__title {
         @extend %subtitle;
         margin-bottom: 1rem;
