@@ -1,0 +1,13 @@
+@use "../1-base/variables" as vars;
+
+.section-heading {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #cacaca;
+
+    &__title {
+        font-size: vars.$h3-font-size;
+        letter-spacing: vars.$h3-letter-spacing;
+        line-height: vars.$h3-line-height;
+        font-weight: vars.$extra-bold-weight;
+    }
+}

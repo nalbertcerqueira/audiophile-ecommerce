@@ -20,6 +20,7 @@ import {
     selectCartItemsLength,
     selectBusyProductsLength
 } from "@/store/cart/cartSlice"
+import { SectionHeading } from "@/components/shared/SectionHeading"
 
 const checkoutFormInitialState: CheckoutFields = {
     fullName: "",
@@ -70,7 +71,7 @@ export function CheckoutForm({ formId }: { formId: string }) {
 
     return (
         <div className="checkout">
-            <h1 className="checkout__title">CHECKOUT</h1>
+            <SectionHeading>CHECKOUT</SectionHeading>
             <form id={formId} className="checkout__form" onSubmit={onSubmit}>
                 <BillingDetailFields
                     fieldsetTitle="BILLING DETAILS"
