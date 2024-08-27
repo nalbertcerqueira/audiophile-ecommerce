@@ -7,7 +7,7 @@ export function ShippingFields(props: BaseCheckoutFieldProps) {
     const { fieldsetTitle, formErrors, control, register } = props
 
     return (
-        <fieldset className="checkout__shipping-details">
+        <fieldset className="checkout-form__shipping-details">
             <legend className="fieldset__title">{fieldsetTitle}</legend>
             <Input
                 {...register("address")}

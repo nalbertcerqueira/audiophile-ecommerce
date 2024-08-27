@@ -19,7 +19,7 @@ export function CreditCardFields(props: CreditCardDetailProps) {
     const expDateError = creditCardErrors.expDate?.root?.message
 
     return (
-        <div className="checkout__cc-fields">
+        <div className="checkout-form__cc-fields">
             <Controller
                 name="cardNumber"
                 control={control}
@@ -40,13 +40,13 @@ export function CreditCardFields(props: CreditCardDetailProps) {
             <div>
                 <label
                     htmlFor="exp-month"
-                    className={`checkout__expdate-label ${
-                        creditCardErrors.expDate ? "checkout__expdate-label--error" : ""
+                    className={`checkout-form__expdate-label ${
+                        creditCardErrors.expDate ? "checkout-form__expdate-label--error" : ""
                     }`}
                 >
                     Expiration Date
                 </label>
-                <div className="checkout__expdate">
+                <div className="checkout-form__expdate">
                     <Controller
                         name="expDate.month"
                         control={control}

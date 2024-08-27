@@ -11,9 +11,9 @@ export function PaymentFields(props: PaymentDetailProps) {
     const { control, formErrors, fieldsetTitle, currentPaymentMethod, register } = props
 
     return (
-        <fieldset className="checkout__payment-details ">
+        <fieldset className="checkout-form__payment-details ">
             <legend className="fieldset__title">{fieldsetTitle}</legend>
-            <div className="checkout__payment-methods">
+            <div className="checkout-form__payment-methods">
                 <RadioInput
                     {...register("paymentMethod")}
                     checked={currentPaymentMethod === "creditCard"}

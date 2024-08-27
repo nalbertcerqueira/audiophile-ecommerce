@@ -1,18 +1,13 @@
 import { Input } from "../../../shared/inputs/Input"
-import { Controller } from "react-hook-form"
 import { BaseCheckoutFieldProps } from "./types"
-import { PhoneInput } from "react-international-phone"
+import { PhoneInput } from "@/components/shared/inputs/PhoneInput"
 import "react-international-phone/style.css"
 
 export function BillingDetailFields(props: BaseCheckoutFieldProps) {
     const { fieldsetTitle, formErrors, control, register } = props
-    const labelErrorClassname = formErrors.phone?.message ? "field__label--error" : ""
-    const phoneErrorClassname = formErrors.phone?.message
-        ? "react-international-phone--error"
-        : ""
 
     return (
-        <fieldset className="checkout__billing-details">
+        <fieldset className="checkout-form__billing-details">
             <legend className="fieldset__title">{fieldsetTitle}</legend>
             <Input
                 {...register("fullName")}
@@ -32,38 +27,13 @@ export function BillingDetailFields(props: BaseCheckoutFieldProps) {
                 autocomplete="email"
                 placeholder="alexei@mail.com"
             />
-            <div className="field">
-                <div className="field__label-wrapper">
-                    <label
-                        htmlFor="phone"
-                        className={`field__label ${labelErrorClassname}`.trim()}
-                    >
-                        Phone Number
-                    </label>
-                </div>
-                <Controller
-                    name="phone"
-                    control={control}
-                    render={({ field }) => (
-                        <PhoneInput
-                            {...field}
-                            placeholder="+1 (999) 999-9999"
-                            className={`${phoneErrorClassname}`.trim()}
-                            disableDialCodePrefill={true}
-                            onChange={(_, meta) =>
-                                field.onChange({
-                                    currentTarget: { value: meta.inputValue },
-                                    target: { value: meta.inputValue }
-                                })
-                            }
-                        />
-                    )}
-                />
-
-                {formErrors.phone && (
-                    <p className="field__error-msg">{formErrors.phone?.message}</p>
-                )}
-            </div>
+            <PhoneInput
+                name="phone"
+                placeholder="+1 (999) 999-9999"
+                label="Phone Number"
+                error={formErrors.phone?.message}
+                control={control as any}
+            />
         </fieldset>
     )
 }

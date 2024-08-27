@@ -45,7 +45,7 @@ export function CheckoutForm({ formId }: { formId: string }) {
 
     const submitBlocked = isCartEmpty || isCartBusy || isLoadingTaxes || form.isSubmitting
 
-    async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
         if (submitBlocked) return
@@ -70,9 +70,9 @@ export function CheckoutForm({ formId }: { formId: string }) {
     }
 
     return (
-        <div className="checkout">
+        <>
             <SectionHeading>CHECKOUT</SectionHeading>
-            <form id={formId} className="checkout__form" onSubmit={onSubmit}>
+            <form id={formId} className="checkout-form" onSubmit={handleSubmit}>
                 <BillingDetailFields
                     fieldsetTitle="BILLING DETAILS"
                     control={form.control}
@@ -94,15 +94,15 @@ export function CheckoutForm({ formId }: { formId: string }) {
                 />
             </form>
             {form.paymentMethod === "cash" && (
-                <div className="checkout__cash-guidance">
-                    <CashIcon className="checkout__cash-icon" />
-                    <p className="checkout__cash-info">
+                <div className="checkout-form__cash-guidance">
+                    <CashIcon className="checkout-form__cash-icon" />
+                    <p className="checkout-form__cash-info">
                         {
                             "The 'Cash on Delivery' option enables you to pay in cash when our delivery courier arrives at your residence. Just make sure your address is correct so that your order will not be cancelled."
                         }
                     </p>
                 </div>
             )}
-        </div>
+        </>
     )
 }

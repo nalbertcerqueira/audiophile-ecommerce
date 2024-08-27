@@ -36,38 +36,11 @@
     }
 }
 
-.checkout {
-    padding: 3.375rem 3rem 3rem;
-    background-color: vars.$white;
-    border-radius: 0.5rem;
-    box-shadow: vars.$light-shadow;
-
-    @include mixins.media-tablet {
-        padding: 2.5rem 2rem 2rem;
-    }
+.checkout-form {
+    margin-top: 2.5rem;
 
     @include mixins.media-mobile {
-        padding: 1.5rem 1.5rem 2rem;
-    }
-
-    &__title {
-        font-size: vars.$h3-font-size;
-        letter-spacing: vars.$h3-letter-spacing;
-        line-height: vars.$h3-line-height;
-        font-weight: vars.$extra-bold-weight;
-
-        @include mixins.media-mobile {
-            font-size: 1.75rem;
-            line-height: 2rem;
-        }
-    }
-
-    &__form {
-        margin-top: 2.5rem;
-
-        @include mixins.media-mobile {
-            margin-top: 2rem;
-        }
+        margin-top: 2rem;
     }
 
     &__user-info {
