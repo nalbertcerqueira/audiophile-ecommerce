@@ -2,12 +2,6 @@
 @use "../../scss/1-base/_mixins.scss" as mixins;
 @use "../../scss/1-base/_placeholders.scss";
 
-%checkout-fieldset {
-    display: grid;
-    gap: 1.5rem 1rem;
-    grid-template-columns: repeat(2, 1fr);
-}
-
 .checkout-page-container {
     background-color: vars.$very-light-grey;
 }
@@ -43,22 +37,7 @@
         margin-top: 2rem;
     }
 
-    &__user-info {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    &__billing-details,
-    &__shipping-details,
-    &__payment-details {
-        @include mixins.media-mobile {
-            grid-template-columns: auto;
-            grid-template-rows: auto;
-        }
-    }
-
     &__billing-details {
-        @extend %checkout-fieldset;
         margin-bottom: 3.375rem;
 
         @include mixins.media-mobile {
@@ -67,48 +46,30 @@
     }
 
     &__shipping-details {
-        @extend %checkout-fieldset;
         margin-bottom: 3.75rem;
 
-        & > *:nth-child(2) {
+        & .field:first-child {
             grid-column: span 2;
+
+            @include mixins.media-mobile {
+                grid-column: unset;
+            }
         }
 
         @include mixins.media-mobile {
             margin-bottom: 2rem;
-
-            & > *:nth-child(2) {
-                grid-column: auto;
-            }
         }
     }
 
     &__payment-details {
-        @extend %checkout-fieldset;
-
-        @include mixins.media-mobile {
-            gap: 2rem;
-        }
-    }
-
-    &__payment-methods {
-        @include mixins.flex($gap: 1rem, $content: stretch);
-        grid-column: span 2;
-
-        & > * {
-            flex-grow: 1;
-        }
-
-        @include mixins.media-mobile {
-            flex-direction: column;
-            grid-column: auto;
-        }
+        margin-bottom: 1.5rem;
     }
 
     &__cc-fields {
         @extend %show-animation;
-        @extend %checkout-fieldset;
-        grid-column: span 2;
+        display: grid;
+        gap: 1.5rem 1rem;
+        grid-template-columns: repeat(2, 1fr);
 
         & > *:first-child {
             grid-column: span 2;
@@ -141,7 +102,6 @@
     &__cash-guidance {
         @extend %show-animation;
         @include mixins.flex($gap: 2rem, $items: center);
-        margin-top: 1.5rem;
 
         @include mixins.media-mobile {
             margin-top: 2rem;

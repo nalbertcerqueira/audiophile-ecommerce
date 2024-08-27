@@ -1,12 +1,5 @@
-import { ReactNode } from "react"
+import { PropsWithChildren } from "react"
 
-interface SectionContentProps {
-    children: ReactNode
-    className?: string
-}
-
-export function SectionContent({ children, className }: SectionContentProps) {
-    return (
-        <section className={`section-content ${className || ""}`.trim()}>{children}</section>
-    )
+export function SectionContent({ children }: PropsWithChildren) {
+    return <section className="section-content">{children}</section>
 }

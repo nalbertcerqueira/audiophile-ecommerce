@@ -1,3 +1,4 @@
+import { Fieldset } from "@/components/shared/form/Fieldset"
 import { Input } from "../../../shared/inputs/Input"
 import { BaseCheckoutFieldProps } from "./types"
 import { PhoneInput } from "@/components/shared/inputs/PhoneInput"
@@ -7,8 +8,7 @@ export function BillingDetailFields(props: BaseCheckoutFieldProps) {
     const { fieldsetTitle, formErrors, control, register } = props
 
     return (
-        <fieldset className="checkout-form__billing-details">
-            <legend className="fieldset__title">{fieldsetTitle}</legend>
+        <Fieldset title={fieldsetTitle} className="checkout-form__billing-details">
             <Input
                 {...register("fullName")}
                 error={formErrors.fullName?.message}
@@ -34,6 +34,6 @@ export function BillingDetailFields(props: BaseCheckoutFieldProps) {
                 error={formErrors.phone?.message}
                 control={control as any}
             />
-        </fieldset>
+        </Fieldset>
     )
 }

@@ -2,13 +2,13 @@ import { handleNumericField, maskZipCode } from "../../helpers/utils"
 import { Input } from "../../../shared/inputs/Input"
 import { Controller } from "react-hook-form"
 import { BaseCheckoutFieldProps } from "./types"
+import { Fieldset } from "@/components/shared/form/Fieldset"
 
 export function ShippingFields(props: BaseCheckoutFieldProps) {
     const { fieldsetTitle, formErrors, control, register } = props
 
     return (
-        <fieldset className="checkout-form__shipping-details">
-            <legend className="fieldset__title">{fieldsetTitle}</legend>
+        <Fieldset title={fieldsetTitle} className="checkout-form__shipping-details">
             <Input
                 {...register("address")}
                 error={formErrors.address?.message}
@@ -53,6 +53,6 @@ export function ShippingFields(props: BaseCheckoutFieldProps) {
                 autocomplete="country-name"
                 placeholder="United States"
             />
-        </fieldset>
+        </Fieldset>
     )
 }
