@@ -12,7 +12,7 @@ export function PaymentFields(props: PaymentDetailProps) {
 
     return (
         <fieldset className="checkout__payment-details ">
-            <legend className="checkout__group-name">{fieldsetTitle}</legend>
+            <legend className="fieldset__title">{fieldsetTitle}</legend>
             <div className="checkout__payment-methods">
                 <RadioInput
                     {...register("paymentMethod")}

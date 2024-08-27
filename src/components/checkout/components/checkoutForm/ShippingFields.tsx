@@ -8,7 +8,7 @@ export function ShippingFields(props: BaseCheckoutFieldProps) {
 
     return (
         <fieldset className="checkout__shipping-details">
-            <legend className="checkout__group-name">{fieldsetTitle}</legend>
+            <legend className="fieldset__title">{fieldsetTitle}</legend>
             <Input
                 {...register("address")}
                 error={formErrors.address?.message}

@@ -13,7 +13,7 @@ export function BillingDetailFields(props: BaseCheckoutFieldProps) {
 
     return (
         <fieldset className="checkout__billing-details">
-            <legend className="checkout__group-name">{fieldsetTitle}</legend>
+            <legend className="fieldset__title">{fieldsetTitle}</legend>
             <Input
                 {...register("fullName")}
                 error={formErrors.fullName?.message}

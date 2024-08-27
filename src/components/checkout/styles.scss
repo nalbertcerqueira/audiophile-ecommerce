@@ -75,12 +75,6 @@
         grid-template-columns: repeat(2, 1fr);
     }
 
-    &__group-name {
-        @extend %subtitle;
-        margin-bottom: 1rem;
-        color: vars.$default-orange;
-    }
-
     &__billing-details,
     &__shipping-details,
     &__payment-details {

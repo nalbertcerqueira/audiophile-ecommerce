@@ -1,0 +1,22 @@
+@use "../1-base/variables" as vars;
+@use "../1-base/mixins" as mixins;
+@use "../1-base/placeholders";
+
+.fieldset {
+    &__title {
+        @extend %subtitle;
+        margin-bottom: 1rem;
+        color: vars.$default-orange;
+    }
+
+    &__fields {
+        display: grid;
+        gap: 1.5rem 1rem;
+        grid-template-columns: repeat(2, 1fr);
+
+        @include mixins.media-mobile {
+            grid-template-columns: auto;
+            grid-template-rows: auto;
+        }
+    }
+}
