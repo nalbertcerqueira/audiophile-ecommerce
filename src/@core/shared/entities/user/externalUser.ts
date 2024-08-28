@@ -20,13 +20,12 @@ export class ExternalUser extends Entity<ExternalUserProps> {
         }
 
         const { data } = validation
-        this.props = { ...data, images: { ...data.images } }
+        this.props = { ...data }
     }
 
     public toJSON(): ExternalUserProps {
         return {
-            ...this.props,
-            images: { ...this.props.images }
+            ...this.props
         }
     }
 }

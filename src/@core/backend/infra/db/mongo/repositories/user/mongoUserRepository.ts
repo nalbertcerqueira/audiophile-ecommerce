@@ -22,8 +22,10 @@ export class MongoUserRepository
         )
 
         if (foundUser) {
-            const { _id, firstName, lastName, email, password, images } = foundUser
-            return { id: _id.toString(), firstName, lastName, email, password, images }
+            const { _id, firstName, lastName, email, password, profileImg, phone } = foundUser
+            const id = _id.toString()
+
+            return { id, firstName, lastName, email, password, profileImg, phone }
         }
 
         return null
@@ -47,22 +49,24 @@ export class MongoUserRepository
         await mongoHelper.connect()
 
         try {
-            const id = new ObjectId(userId)
-
-            const userCollection = mongoHelper.db.collection<MongoUser>("users")
-            const foundUser = await userCollection.findOne<Omit<MongoUser, "password">>(
-                { _id: id },
-                { projection: { password: 0, createdAt: 0, updatedAt: 0 } }
-            )
-
-            if (!foundUser) {
-                return null
-            }
-
-            const { firstName, lastName, email, images } = foundUser
-            return { firstName, lastName, email, images }
+            new ObjectId(userId)
         } catch {
             return null
         }
+
+        const id = new ObjectId(userId)
+
+        const userCollection = mongoHelper.db.collection<MongoUser>("users")
+        const foundUser = await userCollection.findOne<Omit<MongoUser, "password">>(
+            { _id: id },
+            { projection: { password: 0, createdAt: 0, updatedAt: 0 } }
+        )
+
+        if (!foundUser) {
+            return null
+        }
+
+        const { firstName, lastName, email, profileImg, phone } = foundUser
+        return { firstName, lastName, email, profileImg, phone }
     }
 }

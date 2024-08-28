@@ -8,7 +8,7 @@ import { userZodSchema } from "@/@core/shared/entities/user/utils"
 import { UserProps } from "@/@core/shared/entities/user/user"
 import { ZodSchema } from "zod"
 
-interface SignupSchema extends Omit<UserProps, "images"> {
+interface SignupSchema extends Omit<UserProps, "profileImg" | "phone"> {
     passwordConfirmation: string
 }
 export class ZodSignupValidator implements SchemaValidatorService {

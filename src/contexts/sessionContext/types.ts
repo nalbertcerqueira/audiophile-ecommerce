@@ -1,9 +1,6 @@
-import {
-    AuthenticatedUser,
-    GuestUser
-} from "@/@core/frontend/domain/gateways/user/getUserGateway"
+import { DefaultUser, GuestUser } from "@/@core/frontend/domain/gateways/user/getUserGateway"
 
-export type UserBasicInfo = AuthenticatedUser | GuestUser
+export type UserBasicInfo = DefaultUser | GuestUser
 
 export interface SessionStatus {
     isLogged: boolean
@@ -13,7 +10,7 @@ export interface SessionStatus {
 export interface SessionContextProps {
     isLogged: boolean
     isLoading: boolean
-    user: AuthenticatedUser | GuestUser | null
+    user: DefaultUser | GuestUser | null
     logout: () => void
     getFirstName: () => string | null
 }

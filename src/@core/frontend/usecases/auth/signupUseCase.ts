@@ -1,7 +1,7 @@
 import { UserProps } from "@/@core/shared/entities/user/user"
 import { CreateUserGateway } from "../../domain/gateways/user/createUserGateway"
 
-interface SignupInputDTO extends Omit<UserProps, "images"> {
+interface SignupInputDTO extends Omit<UserProps, "profileImg" | "phone"> {
     passwordConfirmation: string
 }
 

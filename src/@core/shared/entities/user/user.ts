@@ -8,9 +8,8 @@ export interface UserProps {
     lastName: string
     email: string
     password: string
-    images: {
-        profile: string | null
-    }
+    profileImg: string | null
+    phone: string | null
 }
 
 //Entidade que representa um usuário comum
@@ -28,10 +27,10 @@ export class User extends Entity<UserProps> {
         }
 
         const { data } = validation
-        this.props = { ...data, images: { ...data.images } }
+        this.props = { ...data }
     }
 
     public toJSON(): UserProps {
-        return { ...this.props, images: { ...this.props.images } }
+        return { ...this.props }
     }
 }

@@ -6,6 +6,6 @@ export type AuthFormFields<T extends "signin" | "signup"> = T extends "signin"
 
 export interface SigninFields extends Pick<UserProps, "email" | "password"> {}
 
-export interface SignupFields extends Omit<UserProps, "images"> {
+export interface SignupFields extends Omit<UserProps, "profileImg" | "phone"> {
     passwordConfirmation: string
 }

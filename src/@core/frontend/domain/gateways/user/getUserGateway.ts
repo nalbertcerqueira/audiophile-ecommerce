@@ -5,12 +5,12 @@ export interface GuestUser {
     type: "guest"
 }
 
-export interface AuthenticatedUser extends Omit<UserProps, "password"> {
+export interface DefaultUser extends Omit<UserProps, "password"> {
     id: string
     type: "authenticated" | "external"
 }
 
-export type UserOrGuestToken = AuthenticatedUser | GuestUser | string
+export type UserOrGuestToken = DefaultUser | GuestUser | string
 
 export interface GetUserGateway {
     getUser(): Promise<UserOrGuestToken>

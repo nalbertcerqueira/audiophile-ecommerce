@@ -26,7 +26,7 @@ export function AvatarCircle({ avatarUrl, alt, className }: AvatarCircleProps) {
 
 export function UserActions() {
     const { user, isLoading, isLogged, logout, getFirstName } = useContext(SessionContext)
-    const profileImage = user?.type !== "guest" ? user?.images.profile : null
+    const profileImage = user?.type !== "guest" ? user?.profileImg : null
     const firstName = getFirstName()
 
     function renderUserActions() {

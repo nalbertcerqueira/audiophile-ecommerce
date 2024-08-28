@@ -11,6 +11,10 @@ export const passwordRegexp = /^(?=.*[A-zÀ-ú])(?=.*[0-9])(?=.*[!@#$%+<>,.?-]).
 export const passwordMessage = "must contain letters, numbers and 1 especial character"
 export const passwordLengthMessage = "must have at least 8 character(s)"
 
+export const phoneRegexp = /^[0-9]+$/
+export const phoneMessage = "must contain only numbers"
+export const phoneLengthMessage = "must have at least 10 character(s)"
+
 export const emailZodSchema = z.string().trim().email("is invalid")
 
 export const userNameZodSchema = z
@@ -31,13 +35,23 @@ export const passwordZodSchema = z
         path: [""]
     })
 
+export const phoneZodSchema = z
+    .string()
+    .min(10, phoneLengthMessage)
+    .nullable()
+    .refine((phone) => phone?.match(phoneRegexp) ?? true, {
+        message: phoneMessage,
+        path: [""]
+    })
+
 export const userZodSchema = schemaFromType<UserProps>()(
     z.object({
         email: emailZodSchema,
         password: passwordZodSchema,
         firstName: userNameZodSchema,
         lastName: userNameZodSchema,
-        images: z.object({ profile: z.string().trim().url().nullable() }).strict()
+        phone: phoneZodSchema,
+        profileImg: z.string().trim().url().nullable()
     })
 ).strict()
 

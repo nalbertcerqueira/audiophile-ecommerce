@@ -10,7 +10,7 @@ import { useContext } from "react"
 
 export function MobileMenu({ isOpen }: { isOpen: boolean }) {
     const { isLoading, isLogged, user, logout, getFirstName } = useContext(SessionContext)
-    const profileImage = user?.type !== "guest" ? user?.images.profile : null
+    const profileImage = user?.type !== "guest" ? user?.profileImg : null
     const firstName = getFirstName()
 
     return (

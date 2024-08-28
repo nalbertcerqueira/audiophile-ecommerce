@@ -23,8 +23,9 @@ export class MongoExternalUserRepository
         )
 
         if (foundUser) {
-            const { _id, firstName, lastName, email, images } = foundUser
-            return { id: _id.toString(), firstName, lastName, email, images }
+            const { _id, firstName, lastName, email, profileImg, phone } = foundUser
+            const id = _id.toString()
+            return { id, firstName, lastName, email, profileImg, phone }
         }
 
         return null
@@ -34,7 +35,7 @@ export class MongoExternalUserRepository
         await mongoHelper.connect()
 
         const creationDate = new Date()
-        const { firstName, lastName, email, images } = user.toJSON()
+        const { firstName, lastName, email, profileImg, phone } = user.toJSON()
 
         const userCollection =
             mongoHelper.db.collection<Omit<MongoExternalUser, "_id">>("externalUsers")
@@ -42,20 +43,23 @@ export class MongoExternalUserRepository
         const updatedUser = await userCollection.findOneAndUpdate(
             { email },
             {
-                $set: { firstName, lastName, images: { ...images } },
+                $set: { firstName, lastName, profileImg, phone },
                 $setOnInsert: { email, createdAt: creationDate, updatedAt: creationDate }
             },
             { upsert: true, returnDocument: "after" }
         )
 
-        if (!updatedUser) throw new Error("findOneAndUpdate operation failed")
+        if (!updatedUser) {
+            throw new Error("findOneAndUpdate operation failed")
+        }
 
         return {
             id: updatedUser._id.toString(),
             firstName: updatedUser.firstName,
             lastName: updatedUser.lastName,
             email: updatedUser.email,
-            images: { ...updatedUser.images }
+            profileImg: updatedUser.profileImg,
+            phone: updatedUser.phone
         }
     }
 
@@ -72,8 +76,8 @@ export class MongoExternalUserRepository
             )
 
             if (foundExternalUser) {
-                const { firstName, lastName, email, images } = foundExternalUser
-                return new ExternalUser({ firstName, lastName, email, images: images })
+                const { firstName, lastName, email, profileImg, phone } = foundExternalUser
+                return new ExternalUser({ firstName, lastName, email, profileImg, phone })
             }
 
             return null

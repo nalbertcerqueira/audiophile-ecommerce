@@ -1,10 +1,10 @@
 import {
-    AuthenticatedUser,
+    DefaultUser,
     GetUserGateway,
     GuestUser
 } from "../../domain/gateways/user/getUserGateway"
 
-type GetUserOutputDTO = AuthenticatedUser | GuestUser | string
+type GetUserOutputDTO = DefaultUser | GuestUser | string
 
 export class GetUserUseCase {
     constructor(private readonly getUserGateway: GetUserGateway) {}

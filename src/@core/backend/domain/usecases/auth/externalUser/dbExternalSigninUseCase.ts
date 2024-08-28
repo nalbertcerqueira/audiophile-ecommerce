@@ -16,7 +16,8 @@ export class DbExternalSigninUseCase {
             firstName,
             lastName,
             email,
-            images: { profile: image }
+            profileImg: image,
+            phone: null
         })
 
         const { id } = await this.upsertExternalUserRepository.upsert(newUser)

@@ -29,6 +29,19 @@ const userImageMongoSchema: Document = {
     ]
 }
 
+const userPhoneMongoSchema: Document = {
+    oneOf: [
+        {
+            bsonType: "string",
+            minLength: 6,
+            pattern: "^[0-9]+$"
+        },
+        {
+            bsonType: "null"
+        }
+    ]
+}
+
 const userNameMongoSchema: Document = {
     bsonType: "string",
     minLength: 4,
@@ -130,7 +143,8 @@ export const userMongoSchema: Document = {
             "lastName",
             "email",
             "password",
-            "images",
+            "profileImg",
+            "phone",
             "createdAt",
             "updatedAt"
         ],
@@ -141,17 +155,11 @@ export const userMongoSchema: Document = {
             firstName: userNameMongoSchema,
             lastName: userNameMongoSchema,
             email: userEmailMongoSchema,
+            profileImg: userImageMongoSchema,
+            phone: userPhoneMongoSchema,
             password: {
                 bsonType: "string",
                 minLength: 8
-            },
-            images: {
-                bsonType: "object",
-                additionalProperties: false,
-                required: ["profile"],
-                properties: {
-                    profile: userImageMongoSchema
-                }
             }
         }
     }
@@ -161,7 +169,15 @@ export const externalUserMongoSchema: Document = {
     $jsonSchema: {
         bsonType: "object",
         additionalProperties: false,
-        required: ["firstName", "lastName", "email", "images", "createdAt", "updatedAt"],
+        required: [
+            "firstName",
+            "lastName",
+            "email",
+            "profileImg",
+            "phone",
+            "createdAt",
+            "updatedAt"
+        ],
         properties: {
             _id: {},
             createdAt: dateMongoSchema,
@@ -169,14 +185,8 @@ export const externalUserMongoSchema: Document = {
             email: userEmailMongoSchema,
             firstName: { bsonType: "string", minLength: 1 },
             lastName: { bsonType: "string", minLength: 1 },
-            images: {
-                bsonType: "object",
-                additionalProperties: false,
-                required: ["profile"],
-                properties: {
-                    profile: userImageMongoSchema
-                }
-            }
+            profileImg: userImageMongoSchema,
+            phone: userPhoneMongoSchema
         }
     }
 }
