@@ -32,7 +32,7 @@ export function BillingDetailFields(props: BaseCheckoutFieldProps) {
                 placeholder="+1 (999) 999-9999"
                 label="Phone Number"
                 error={formErrors.phone?.message}
-                control={control as any}
+                control={control}
             />
         </Fieldset>
     )

@@ -1,15 +1,18 @@
 import { PhoneInput as ReactInternationalPhone } from "react-international-phone"
-import { Controller, Control } from "react-hook-form"
+import { Controller, Control, Path } from "react-hook-form"
 
-interface PhoneInputProps {
+interface PhoneInputProps<Fields extends Record<string, any>> {
     label: string
-    name: string
-    control: Control
+    name: Path<Fields>
+    control: Control<Fields, any>
     placeholder?: string
     error?: string
 }
 
-export function PhoneInput({ name, label, placeholder, error, control }: PhoneInputProps) {
+export function PhoneInput<Fields extends Record<string, any>>(
+    props: PhoneInputProps<Fields>
+) {
+    const { name, label, placeholder, error, control } = props
     const labelErrorClassname = error ? "field__label--error" : ""
     const phoneErrorClassname = error ? "react-international-phone--error" : ""
 
@@ -32,12 +35,13 @@ export function PhoneInput({ name, label, placeholder, error, control }: PhoneIn
                         placeholder={placeholder}
                         className={`${phoneErrorClassname}`.trim()}
                         disableDialCodePrefill={true}
-                        onChange={(_, meta) =>
-                            field.onChange({
-                                currentTarget: { value: meta.inputValue },
-                                target: { value: meta.inputValue }
+                        onChange={(_, meta) => {
+                            const newValue = meta.inputValue.replace(/\D/g, "")
+                            return field.onChange({
+                                currentTarget: { value: newValue },
+                                target: { value: newValue }
                             })
-                        }
+                        }}
                     />
                 )}
             />
