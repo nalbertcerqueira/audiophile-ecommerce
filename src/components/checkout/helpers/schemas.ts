@@ -1,4 +1,5 @@
 import { nameMessage, nameRegexp } from "@/@core/shared/entities/user/utils"
+import { createStringSchema } from "../../../libs/zod/utils"
 import { lengthErrorMessage, requiredErrorMessage } from "../../../libs/zod/errors"
 import { CheckoutFields } from "../types/types"
 import z from "zod"
@@ -58,14 +59,3 @@ export const checkoutFieldsSchema: z.ZodType<CheckoutFields> = z.discriminatedUn
         checkoutBaseSchema.merge(creditCardPaymentSchema).strict()
     ]
 )
-
-function createStringSchema(fieldName: string, { min }: { min: number }) {
-    return z
-        .string({ required_error: requiredErrorMessage(fieldName) })
-        .trim()
-        .min(min, lengthErrorMessage(fieldName, "min", min))
-        .refine((input) => input.replace(/ /g, "").length >= min, {
-            message: lengthErrorMessage(fieldName, "min", min),
-            path: [""]
-        })
-}
