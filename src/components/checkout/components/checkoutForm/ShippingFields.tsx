@@ -1,8 +1,9 @@
-import { handleNumericField, maskZipCode } from "../../helpers/utils"
-import { Input } from "../../../shared/inputs/Input"
-import { Controller } from "react-hook-form"
-import { BaseCheckoutFieldProps } from "./types"
+import { Input } from "@/components/shared/inputs/Input"
 import { Fieldset } from "@/components/shared/form/Fieldset"
+import { maskZipCode } from "@/utils/masks"
+import { handleFormNumericField } from "@/utils/helpers"
+import { BaseCheckoutFieldProps } from "./types"
+import { Controller } from "react-hook-form"
 
 export function ShippingFields(props: BaseCheckoutFieldProps) {
     const { fieldsetTitle, formErrors, control, register } = props
@@ -25,7 +26,7 @@ export function ShippingFields(props: BaseCheckoutFieldProps) {
                     <Input
                         {...field}
                         value={maskZipCode(field.value || "")}
-                        onChange={handleNumericField(field, 8)}
+                        onChange={handleFormNumericField(field, 8)}
                         error={formErrors.zipCode?.message}
                         label="ZIP Code"
                         id="zip-code"

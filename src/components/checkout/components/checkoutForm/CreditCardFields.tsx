@@ -1,15 +1,15 @@
 import { Input } from "../../../shared/inputs/Input"
-import { Controller, FieldErrors } from "react-hook-form"
+import { handleExpirationDate } from "../../helpers/utils"
 import { CheckoutWithCreditCard } from "../../types/types"
+import { handleFormNumericField } from "@/utils/helpers"
+import { BaseCheckoutFieldProps } from "./types"
+import { Controller, FieldErrors } from "react-hook-form"
 import {
     maskCvv,
     maskExpirationMonth,
     maskExpirationYear,
-    maskCreditCardNumber,
-    handleExpirationDate,
-    handleNumericField
-} from "../../helpers/utils"
-import { BaseCheckoutFieldProps } from "./types"
+    maskCreditCardNumber
+} from "@/utils/masks"
 
 type CreditCardDetailProps = Pick<BaseCheckoutFieldProps, "control" | "formErrors">
 
@@ -27,7 +27,7 @@ export function CreditCardFields(props: CreditCardDetailProps) {
                     <Input
                         {...field}
                         value={maskCreditCardNumber(field.value || "")}
-                        onChange={handleNumericField(field, 16)}
+                        onChange={handleFormNumericField(field, 16)}
                         error={creditCardErrors.cardNumber?.message}
                         label="Card Number"
                         id="card-number"
@@ -94,7 +94,7 @@ export function CreditCardFields(props: CreditCardDetailProps) {
                     <Input
                         {...field}
                         value={maskCvv(field.value || "")}
-                        onChange={handleNumericField(field, 3)}
+                        onChange={handleFormNumericField(field, 3)}
                         error={creditCardErrors.cvv?.message}
                         label="CVV"
                         ariaLabel="CVV code"

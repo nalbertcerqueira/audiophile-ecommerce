@@ -1,5 +1,8 @@
 import { Id } from "react-toastify"
 import { emitToast } from "@/libs/react-toastify/utils"
+import { ChangeEvent } from "react"
+import { textMatchRegexp } from "./variables"
+import { ControllerRenderProps } from "react-hook-form"
 
 //Formatando valores monetários para en-US
 export function formatCurrency(value: number): string {
@@ -40,5 +43,21 @@ export function handleHttpErrors(error: Error, showToast: boolean, toastId?: Id 
         toastId
             ? emitToast("error", error.message, { toastId })
             : emitToast("error", error.message)
+    }
+}
+
+//Sanitizando entradas numéricas em strings
+export function sanitizeNumericField(input: string, maxLength: number) {
+    return input.replace(textMatchRegexp, "").slice(0, maxLength)
+}
+
+//Adapter para manipular inputs numéricos
+export function handleFormNumericField<Fields extends Record<string, any>>(
+    field: ControllerRenderProps<Fields, any>,
+    maxLength: number
+) {
+    return (e: ChangeEvent<HTMLInputElement>) => {
+        const newValue = sanitizeNumericField(e.target.value || "", maxLength)
+        field.onChange(newValue)
     }
 }

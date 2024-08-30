@@ -1,3 +1,5 @@
+"use client"
+
 import { checkoutFieldsSchema } from "../../helpers/schemas"
 import { CheckoutFields } from "../../types/types"
 import { zodResolver } from "@hookform/resolvers/zod"
