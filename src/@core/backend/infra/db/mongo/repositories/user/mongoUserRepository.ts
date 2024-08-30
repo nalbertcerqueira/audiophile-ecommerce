@@ -8,9 +8,18 @@ import { User, UserProps } from "@/@core/shared/entities/user/user"
 import { mongoHelper } from "../../config/mongo-config"
 import { MongoUser } from "../../models"
 import { ObjectId } from "mongodb"
+import {
+    UpdatedUser,
+    UpdateUserRepository,
+    UserParams
+} from "@/@core/backend/domain/repositories/user/updateUserRepository"
 
 export class MongoUserRepository
-    implements AddUserRepository, FindUserByEmailRepository, FindUserByIdRepository
+    implements
+        AddUserRepository,
+        FindUserByEmailRepository,
+        FindUserByIdRepository,
+        UpdateUserRepository
 {
     public async findByEmail(email: string): Promise<UserWithId | null> {
         await mongoHelper.connect()
@@ -68,5 +77,33 @@ export class MongoUserRepository
 
         const { firstName, lastName, email, profileImg, phone } = foundUser
         return { firstName, lastName, email, profileImg, phone }
+    }
+
+    public async update(id: string, props: UserParams): Promise<UpdatedUser | null> {
+        await mongoHelper.connect()
+
+        try {
+            new ObjectId(id)
+        } catch {
+            return null
+        }
+
+        const userCollection = mongoHelper.db.collection<MongoUser>("users")
+        const updatedUser = await userCollection.findOneAndUpdate(
+            { _id: new ObjectId(id) },
+            { $set: { ...props, updatedAt: new Date() } },
+            {
+                ignoreUndefined: true,
+                returnDocument: "after",
+                projection: { createdAt: 0, updatedAt: 0, password: 0 }
+            }
+        )
+
+        if (!updatedUser) {
+            return null
+        }
+
+        const { _id, email, firstName, lastName, phone, profileImg } = updatedUser
+        return { id: _id.toString(), email, firstName, lastName, phone, profileImg }
     }
 }
