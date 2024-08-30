@@ -1,11 +1,8 @@
-import { HttpAuthenticationGateway } from "@/@core/frontend/infra/gateways/auth/httpAuthenticationGateway"
+import { httpAuthenticationGateway } from "../../gateways/authenticationGatewayFactory"
 import { SigninUseCase } from "@/@core/frontend/usecases/auth/signinUseCase"
 
-function createSigninUseCase(apiUrl: string): SigninUseCase {
-    const authenticationGateway = new HttpAuthenticationGateway(apiUrl)
-    const signinUseCase = new SigninUseCase(authenticationGateway)
-
-    return signinUseCase
+function createSigninUseCase(): SigninUseCase {
+    return new SigninUseCase(httpAuthenticationGateway)
 }
 
-export const signinUseCase = createSigninUseCase("/api")
+export const signinUseCase = createSigninUseCase()

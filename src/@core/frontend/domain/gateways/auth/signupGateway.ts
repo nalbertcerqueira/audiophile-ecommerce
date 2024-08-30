@@ -4,6 +4,6 @@ export interface SignupData extends Omit<UserProps, "profileImg" | "phone"> {
     passwordConfirmation: string
 }
 
-export interface CreateUserGateway {
-    create(data: SignupData): Promise<boolean>
+export interface SignupGateway {
+    signUp(data: SignupData): Promise<boolean>
 }
