@@ -1,4 +1,7 @@
-import { DefaultUser, GuestUser } from "@/@core/frontend/domain/gateways/user/getUserGateway"
+import {
+    DefaultUser,
+    GuestUser
+} from "@/@core/frontend/domain/gateways/user/profile/getUserProfileGateway"
 
 export type UserBasicInfo = DefaultUser | GuestUser
 

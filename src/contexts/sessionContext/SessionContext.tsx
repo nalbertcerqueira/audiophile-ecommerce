@@ -1,7 +1,7 @@
 "use client"
 
 import { SessionStatus, SessionContextProps, UserBasicInfo } from "./types"
-import { getUserUseCase } from "@/@core/frontend/main/usecases/user/getUserFactory"
+import { getUserProfileUseCase } from "@/@core/frontend/main/usecases/user/getUserProfileFactory"
 import { toCapitalized } from "@/utils/helpers"
 import { useSession, signOut } from "next-auth/react"
 import { PropsWithChildren, createContext, useState, useEffect } from "react"
@@ -33,7 +33,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
         document.cookie = `guest-access-token=0;path=/;expires=${new Date().toUTCString()};sameSite=Lax`
 
         try {
-            const data = await getUserUseCase.execute()
+            const data = await getUserProfileUseCase.execute()
             if (typeof data === "string") {
                 localStorage.setItem("accessToken", data)
                 return setStatus({ isLoading: false, isLogged: false })

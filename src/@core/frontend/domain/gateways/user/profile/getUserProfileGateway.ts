@@ -12,6 +12,6 @@ export interface DefaultUser extends Omit<UserProps, "password"> {
 
 export type UserOrGuestToken = DefaultUser | GuestUser | string
 
-export interface GetUserGateway {
-    getUser(): Promise<UserOrGuestToken>
+export interface GetUserProfileGateway {
+    getProfile(): Promise<UserOrGuestToken>
 }
