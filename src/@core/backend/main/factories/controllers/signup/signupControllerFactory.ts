@@ -1,12 +1,13 @@
 import { DbAddUserUseCase } from "@/@core/backend/domain/usecases/user/dbAddUserUseCase"
-import { ZodSignupValidator } from "@/@core/backend/infra/services/validators/signup/zodSignupValidator"
+import { zodSignupSchema } from "@/@core/backend/infra/services/validators/signup/zodSignupValidator"
 import { SignupController } from "@/@core/backend/presentation/controllers/signup/signupController"
 import { mongoExternalUserRepository } from "../../repositories/externalUserRepositoryFactory"
 import { mongoUserRepository } from "../../repositories/userRepositoryFactory"
 import { bcryptEncrypterService } from "../../services/encrypterServiceFactory"
+import { ZodSchemaValidator } from "@/@core/backend/infra/services/zodSchemaValidator"
 
 function createSignupController() {
-    const zodSignupValidator = new ZodSignupValidator()
+    const zodSignupValidator = new ZodSchemaValidator(zodSignupSchema)
     const dbAddUserUseCase = new DbAddUserUseCase(
         mongoExternalUserRepository,
         mongoUserRepository,

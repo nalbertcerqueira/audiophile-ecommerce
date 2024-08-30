@@ -3,13 +3,14 @@ import { dbGuestAuthorizationUseCase } from "../../usecases/auth/guestUser/dbGue
 import { dbMoveCartItemsUseCase } from "../../usecases/cart/dbMoveCartItemsFactory"
 import { bcryptEncrypterService } from "../../services/encrypterServiceFactory"
 import { mongoUserRepository } from "../../repositories/userRepositoryFactory"
-import { ZodSigninValidator } from "@/@core/backend/infra/services/validators/signin/zodSigninValidator"
+import { zodSigninSchema } from "@/@core/backend/infra/services/validators/signin/zodSigninValidator"
 import { dbGetCartUseCase } from "../../usecases/cart/dbGetCartFactory"
 import { SigninController } from "@/@core/backend/presentation/controllers/signin/signinController"
 import { DbSigninUseCase } from "@/@core/backend/domain/usecases/auth/authenticatedUser/dbSigninUseCase"
+import { ZodSchemaValidator } from "@/@core/backend/infra/services/zodSchemaValidator"
 
 function createSigninController() {
-    const zodSigninValidator = new ZodSigninValidator()
+    const zodSigninValidator = new ZodSchemaValidator(zodSigninSchema)
 
     const dbSigninUseCase = new DbSigninUseCase(
         mongoUserRepository,
