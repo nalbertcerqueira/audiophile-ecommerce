@@ -34,7 +34,7 @@ export function UserActions() {
             <div>
                 <span className="user-actions__name">Hi, {firstName}</span>
                 <div className="user-actions__wrapper">
-                    <Link className="user-actions__action" href="/">
+                    <Link className="user-actions__action" href="/account">
                         Account
                     </Link>
                     <span>|</span>

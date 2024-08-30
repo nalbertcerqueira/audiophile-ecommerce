@@ -1,7 +1,7 @@
 import { UserProps } from "./user"
 import { schemaFromType } from "../helpers"
-import z from "zod"
 import { ExternalUserProps } from "./externalUser"
+import z from "zod"
 
 export const nameRegexp = /^[A-zÀ-ú\s]+$/
 export const nameMessage = "can only have letters"
@@ -35,14 +35,21 @@ export const passwordZodSchema = z
         path: [""]
     })
 
-export const phoneZodSchema = z
-    .string()
-    .min(10, phoneLengthMessage)
-    .nullable()
-    .refine((phone) => phone?.match(phoneRegexp) ?? true, {
-        message: phoneMessage,
-        path: [""]
-    })
+export function phoneZodSchema(
+    nullable: true
+): z.ZodNullable<z.ZodEffects<z.ZodString, string, string>>
+export function phoneZodSchema(nullable: false): z.ZodEffects<z.ZodString, string, string>
+export function phoneZodSchema(nullable: boolean) {
+    const schema = z
+        .string()
+        .min(10, phoneLengthMessage)
+        .refine((phone) => phone?.match(phoneRegexp) ?? true, {
+            message: phoneMessage,
+            path: [""]
+        })
+
+    return nullable ? schema.nullable() : schema
+}
 
 export const userZodSchema = schemaFromType<UserProps>()(
     z.object({
@@ -50,7 +57,7 @@ export const userZodSchema = schemaFromType<UserProps>()(
         password: passwordZodSchema,
         firstName: userNameZodSchema,
         lastName: userNameZodSchema,
-        phone: phoneZodSchema,
+        phone: phoneZodSchema(true),
         profileImg: z.string().trim().url().nullable()
     })
 ).strict()

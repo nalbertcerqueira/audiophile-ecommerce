@@ -11,7 +11,7 @@ interface ProductDetailsProps {
 }
 
 export function ProductDetails({ features, accessories }: ProductDetailsProps) {
-    function renderAccessories(): JSX.Element[] | undefined {
+    function renderAccessories() {
         if (accessories) {
             return accessories.map((accessory, i) => (
                 <li key={i} className="product-details__accessory">
@@ -27,7 +27,7 @@ export function ProductDetails({ features, accessories }: ProductDetailsProps) {
         }
     }
 
-    function renderFeatures(): JSX.Element[] {
+    function renderFeatures() {
         return features.split("\n\n").map((paragraph, i, array) => {
             if (!array[i + 1]) {
                 return (

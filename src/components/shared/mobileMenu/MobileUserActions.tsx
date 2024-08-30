@@ -12,7 +12,10 @@ export function MobileUserActions({ username, logout }: MobileUserActionProps) {
         <div>
             <h4 className="mobile-menu__title">Hi, {username}!</h4>
             <div className="mobile-menu__links">
-                <Link className="btn btn--primary btn--super-thin btn--rounded" href="/">
+                <Link
+                    className="btn btn--primary btn--super-thin btn--rounded"
+                    href="/account"
+                >
                     <AccountIcon className="mobile-menu__user-icon" />
                     Account
                 </Link>

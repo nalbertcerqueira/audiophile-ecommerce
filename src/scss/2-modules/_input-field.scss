@@ -60,10 +60,7 @@
     }
 
     &__error-msg {
-        @extend %show-animation;
-        color: vars.$red;
-        font-size: 0.75rem;
-        font-weight: vars.$bold-weight;
+        @extend %input-error-msg;
         margin-top: 0.5rem;
     }
 }
