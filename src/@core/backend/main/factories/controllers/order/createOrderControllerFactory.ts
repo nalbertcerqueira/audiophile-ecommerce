@@ -5,7 +5,7 @@ import { DbCreateCheckoutOrderUseCase } from "@/@core/backend/domain/usecases/or
 import { createMongoCartRepository } from "../../repositories/cartRepositoryFactory"
 import { ClientSession } from "mongodb"
 
-export function createCheckoutOrderCreationController(
+export function buildCreateOrderController(
     session: ClientSession
 ): CreateCheckoutOrderController {
     const mongoCartRepository = createMongoCartRepository(session)
