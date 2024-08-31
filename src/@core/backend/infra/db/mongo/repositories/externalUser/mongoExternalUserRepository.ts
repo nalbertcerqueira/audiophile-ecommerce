@@ -6,12 +6,18 @@ import { MongoExternalUser } from "../../models"
 import { ExternalUser } from "@/@core/shared/entities/user/externalUser"
 import { mongoHelper } from "../../config/mongo-config"
 import { ObjectId } from "mongodb"
+import {
+    ExternalUserParams,
+    UpdatedExternalUser,
+    UpdateExternalUserRepository
+} from "@/@core/backend/domain/repositories/externalUser/updateExternalUserRepository"
 
 export class MongoExternalUserRepository
     implements
         FindExternalUserByEmailRepository,
         UpsertExternalUserRepository,
-        FindExternalUserByIdRepository
+        FindExternalUserByIdRepository,
+        UpdateExternalUserRepository
 {
     public async findByEmail(email: string): Promise<ExternalUserWithId | null> {
         await mongoHelper.connect()
@@ -84,5 +90,36 @@ export class MongoExternalUserRepository
         } catch {
             return null
         }
+    }
+
+    public async update(
+        id: string,
+        props: ExternalUserParams
+    ): Promise<UpdatedExternalUser | null> {
+        await mongoHelper.connect()
+
+        try {
+            new ObjectId(id)
+        } catch {
+            return null
+        }
+
+        const userCollection = mongoHelper.db.collection<MongoExternalUser>("externalUsers")
+        const updatedUser = await userCollection.findOneAndUpdate(
+            { _id: new ObjectId(id) },
+            { $set: { ...props, updatedAt: new Date() } },
+            {
+                ignoreUndefined: true,
+                returnDocument: "after",
+                projection: { createdAt: 0, updatedAt: 0, password: 0 }
+            }
+        )
+
+        if (!updatedUser) {
+            return null
+        }
+
+        const { _id, email, firstName, lastName, phone, profileImg } = updatedUser
+        return { id: _id.toString(), email, firstName, lastName, phone, profileImg }
     }
 }
