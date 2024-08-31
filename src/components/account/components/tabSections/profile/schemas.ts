@@ -1,28 +1,16 @@
 import { createStringSchema } from "@/libs/zod/utils"
 import { AddressFields, ProfileFields } from "./types"
-import { phoneZodSchema, userZodSchema } from "@/@core/shared/entities/user/utils"
-import { lengthErrorMessage } from "@/libs/zod/errors"
 import {
-    allowedImgMessage,
-    allowedImgTypes,
-    maxUploadSize,
-    maxUploadSizeMessage
-} from "./variables"
+    imageFileZodSchema,
+    phoneZodSchema,
+    userZodSchema
+} from "@/@core/shared/entities/user/utils"
+import { lengthErrorMessage } from "@/libs/zod/errors"
 import z from "zod"
-
-const profileImageSchema = z
-    .instanceof(File, { message: "is required" })
-    .optional()
-    .refine((file) => (file ? allowedImgTypes.includes(file.type) : true), {
-        message: allowedImgMessage
-    })
-    .refine((file) => (file ? file.size <= maxUploadSize : true), {
-        message: maxUploadSizeMessage
-    })
 
 export const profileSchema: z.ZodType<ProfileFields> = userZodSchema
     .pick({ firstName: true, lastName: true })
-    .merge(z.object({ phone: phoneZodSchema(false), profileImg: profileImageSchema }))
+    .merge(z.object({ phone: phoneZodSchema(false), profileImg: imageFileZodSchema }))
     .strict()
 
 export const addressSchema: z.ZodType<AddressFields> = z

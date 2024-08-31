@@ -3,7 +3,7 @@
 
 import { toBase64 } from "@/utils/helpers"
 import { UploadIcon } from "@/components/shared/icons/UploadIcon"
-import { allowedImgTypes } from "./variables"
+import { allowedImgTypes } from "@/@core/shared/entities/user/utils"
 import { Controller, Path, Control } from "react-hook-form"
 import { KeyboardEvent, useRef, useState } from "react"
 import DefaultProfile from "../../../../../../public/imgs/profile.jpg"

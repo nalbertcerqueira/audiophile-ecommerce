@@ -3,6 +3,8 @@ import { schemaFromType } from "../helpers"
 import { ExternalUserProps } from "./externalUser"
 import z from "zod"
 
+export const emailZodSchema = z.string().trim().email("is invalid")
+
 export const nameRegexp = /^[A-zÀ-ú\s]+$/
 export const nameMessage = "can only have letters"
 export const nameLengthMessage = "must have at least 4 character(s)"
@@ -15,7 +17,11 @@ export const phoneRegexp = /^[0-9]+$/
 export const phoneMessage = "must contain only numbers"
 export const phoneLengthMessage = "must have at least 10 character(s)"
 
-export const emailZodSchema = z.string().trim().email("is invalid")
+export const allowedImgTypes = ["image/jpg", "image/jpeg", "image/png", "image/webp"]
+export const allowedImgMessage = `accepts only ${allowedImgTypes.map((type) => type.split("/")[1]).join(", ")} formats`
+
+export const maxUploadSize = 1000000
+export const maxUploadSizeMessage = `size must be lesser than ${maxUploadSize / maxUploadSize}MB`
 
 export const userNameZodSchema = z
     .string()
@@ -43,13 +49,22 @@ export function phoneZodSchema(nullable: boolean) {
     const schema = z
         .string()
         .min(10, phoneLengthMessage)
-        .refine((phone) => phone?.match(phoneRegexp) ?? true, {
+        .refine((phone) => (phone ? phone.match(phoneRegexp) : true), {
             message: phoneMessage,
             path: [""]
         })
 
     return nullable ? schema.nullable() : schema
 }
+
+export const imageFileZodSchema = z
+    .instanceof(File, { message: "must be an instance of File" })
+    .refine((file) => (file ? allowedImgTypes.includes(file.type) : true), {
+        message: allowedImgMessage
+    })
+    .refine((file) => (file ? file.size <= maxUploadSize : true), {
+        message: maxUploadSizeMessage
+    })
 
 export const userZodSchema = schemaFromType<UserProps>()(
     z.object({
