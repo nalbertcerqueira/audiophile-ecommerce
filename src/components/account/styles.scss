@@ -120,7 +120,8 @@
 
     &__img {
         @extend %full-width-height;
-        object-fit: contain;
+        object-fit: cover;
+        object-position: top center;
         border-radius: 50%;
     }
 
