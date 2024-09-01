@@ -5,7 +5,7 @@ import { PropsWithChildren, createContext, useCallback, useEffect } from "react"
 
 import { useAppDispatch } from "@/libs/redux/hooks"
 import { useSession, signOut } from "next-auth/react"
-import { getUserProfile, setUserStatus } from "@/store/user/index"
+import { getUserProfile } from "@/store/user/index"
 import { emitToast } from "@/libs/react-toastify/utils"
 
 export const SessionContext = createContext<SessionContextProps>({} as SessionContextProps)
@@ -20,15 +20,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
         //autenticado com auxilio do next-auth
         document.cookie = `guest-access-token=0;path=/;expires=${new Date().toUTCString()};sameSite=Lax`
 
-        try {
-            const data = await dispatch(getUserProfile()).unwrap()
-            if (typeof data === "string") {
-                dispatch(setUserStatus("settled"))
-                localStorage.setItem("accessToken", data)
-            }
-        } catch (error: any) {
-            emitToast("error", error.message)
-        }
+        await dispatch(getUserProfile()).catch((error) => emitToast("error", error.message))
     }, [dispatch])
 
     function logout() {

@@ -17,6 +17,6 @@ export class DbGuestSessionUseCase {
             sessionType: "guest"
         })
 
-        return { token: accessToken }
+        return { id: guestId, type: "guest", token: accessToken }
     }
 }

@@ -1,17 +1,5 @@
-import { UserProps } from "@/@core/shared/entities/user/user"
-
-export interface GuestUser {
-    id: string
-    type: "guest"
-}
-
-export interface DefaultUser extends Omit<UserProps, "password"> {
-    id: string
-    type: "authenticated" | "external"
-}
-
-export type UserOrGuestToken = DefaultUser | GuestUser | string
+import { UserOrGuest } from "./protocols"
 
 export interface GetUserProfileGateway {
-    getProfile(): Promise<UserOrGuestToken>
+    getProfile(): Promise<UserOrGuest>
 }

@@ -1,10 +1,7 @@
-import {
-    DefaultUser,
-    GetUserProfileGateway,
-    GuestUser
-} from "../../../domain/gateways/user/profile/getUserProfileGateway"
+import { GetUserProfileGateway } from "@/@core/frontend/domain/gateways/user/profile/getUserProfileGateway"
+import { DefaultUser, GuestUser } from "../../../domain/gateways/user/profile/protocols"
 
-export type GetUserProfileOutputDTO = DefaultUser | GuestUser | string
+export type GetUserProfileOutputDTO = DefaultUser | GuestUser
 
 export class GetUserUseProfileUseCase {
     constructor(private readonly getUserProfileGateway: GetUserProfileGateway) {}

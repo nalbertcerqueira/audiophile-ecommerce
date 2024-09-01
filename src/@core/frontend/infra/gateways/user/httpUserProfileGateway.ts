@@ -1,11 +1,9 @@
-import {
-    GetUserProfileGateway,
-    UserOrGuestToken
-} from "@/@core/frontend/domain/gateways/user/profile/getUserProfileGateway"
+import { GetUserProfileGateway } from "@/@core/frontend/domain/gateways/user/profile/getUserProfileGateway"
 import { HttpGatewayResponse } from "../protocols"
+import { UserOrGuest } from "@/@core/frontend/domain/gateways/user/profile/protocols"
 
 export class HttpUserProfileGateway implements GetUserProfileGateway {
-    public async getProfile(): Promise<UserOrGuestToken> {
+    public async getProfile(): Promise<UserOrGuest> {
         const accessToken = localStorage.getItem("accessToken") as string
 
         const response = await fetch("/api/auth/user/profile", {
@@ -19,7 +17,7 @@ export class HttpUserProfileGateway implements GetUserProfileGateway {
             throw new Error(errors.join(","))
         }
 
-        const { data } = responseData as HttpGatewayResponse<"success", UserOrGuestToken>
+        const { data } = responseData as HttpGatewayResponse<"success", UserOrGuest>
 
         return data
     }
