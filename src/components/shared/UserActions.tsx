@@ -1,10 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
 
-import GenericProfileImage from "/public/imgs/profile.jpg"
-import { SessionContext } from "@/contexts/sessionContext/SessionContext"
 import { useContext } from "react"
+import { toCapitalized } from "@/utils/helpers"
+import { useAppSelector } from "@/libs/redux/hooks"
+import { SessionContext } from "@/contexts/sessionContext/SessionContext"
+import { selectUserProfile, selectUserStatus } from "@/store/user/userSlice"
+
 import Link from "next/link"
+import GenericProfileImage from "/public/imgs/profile.jpg"
 
 interface AvatarCircleProps {
     className?: string
@@ -25,9 +29,13 @@ export function AvatarCircle({ avatarUrl, alt, className }: AvatarCircleProps) {
 }
 
 export function UserActions() {
-    const { user, isLoading, isLogged, logout, getFirstName } = useContext(SessionContext)
-    const profileImage = user?.type !== "guest" ? user?.profileImg : null
-    const firstName = getFirstName()
+    const { logout } = useContext(SessionContext)
+    const isLogged = useAppSelector((state) => state.user.isLogged)
+    const isLoading = useAppSelector(selectUserStatus) === "loading"
+
+    const profile = useAppSelector(selectUserProfile)
+    const firstName = profile?.type !== "guest" ? toCapitalized(profile.firstName) : null
+    const profileImage = profile.type !== "guest" ? profile.profileImg : null
 
     function renderUserActions() {
         return (

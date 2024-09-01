@@ -3,14 +3,16 @@ import { LogoutIcon } from "../icons/LogoutIcon"
 import Link from "next/link"
 
 interface MobileUserActionProps {
-    username: string | null
+    username?: string
     logout: () => void
 }
 
 export function MobileUserActions({ username, logout }: MobileUserActionProps) {
     return (
         <div>
-            <h4 className="mobile-menu__title">Hi, {username}!</h4>
+            <h4 className="mobile-menu__title">
+                {username ? `Hi, ${username}!` : "Hi, Guest!"}
+            </h4>
             <div className="mobile-menu__links">
                 <Link
                     className="btn btn--primary btn--super-thin btn--rounded"

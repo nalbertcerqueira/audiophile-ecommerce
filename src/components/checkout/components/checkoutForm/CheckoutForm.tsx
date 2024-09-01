@@ -3,10 +3,9 @@
 import { BillingDetailFields } from "./BillingDetailFields"
 import { ShippingFields } from "./ShippingFields"
 import { CheckoutFields } from "../../types/types"
-import { SessionContext } from "@/contexts/sessionContext/SessionContext"
 import { PaymentFields } from "./PaymentFields"
 import { CashIcon } from "@/components/shared/icons/CashIcon"
-import { FormEvent, useContext } from "react"
+import { FormEvent } from "react"
 import { useCheckoutForm } from "./useCheckoutForm"
 import { useAppDispatch, useAppSelector } from "@/libs/redux/hooks"
 import { createOrder } from "@/store/checkout"
@@ -41,7 +40,7 @@ export function CheckoutForm({ formId }: { formId: string }) {
     const isLoadingTaxes = useAppSelector(selectTaxesStatus) !== "settled"
     const isCartEmpty = useAppSelector(selectCartItemsLength) === 0
     const isCartBusy = cartStatus !== "settled" || busyProductsLength > 0
-    const { isLogged } = useContext(SessionContext)
+    const isLogged = useAppSelector((state) => state.user.isLogged)
 
     const submitBlocked = isCartEmpty || isCartBusy || isLoadingTaxes || form.isSubmitting
 

@@ -1,17 +1,24 @@
 "use client"
 
+import { selectUserProfile, selectUserStatus } from "@/store/user/userSlice"
 import { MobileUserActions } from "./MobileUserActions"
 import { MobileAuthActions } from "./MobileAuthActions"
 import { MobileMenuItem } from "./MobileMenuItem"
 import { SessionContext } from "@/contexts/sessionContext/SessionContext"
+import { useAppSelector } from "@/libs/redux/hooks"
 import { AvatarCircle } from "../UserActions"
+import { toCapitalized } from "@/utils/helpers"
 import { categories } from "@/utils/variables"
 import { useContext } from "react"
 
 export function MobileMenu({ isOpen }: { isOpen: boolean }) {
-    const { isLoading, isLogged, user, logout, getFirstName } = useContext(SessionContext)
-    const profileImage = user?.type !== "guest" ? user?.profileImg : null
-    const firstName = getFirstName()
+    const { logout } = useContext(SessionContext)
+    const isLogged = useAppSelector((state) => state.user.isLogged)
+    const isLoading = useAppSelector(selectUserStatus) === "loading"
+
+    const profile = useAppSelector(selectUserProfile)
+    const firstName = profile?.type !== "guest" ? toCapitalized(profile.firstName) : undefined
+    const profileImage = profile.type !== "guest" ? profile.profileImg : null
 
     return (
         <div

@@ -6,11 +6,11 @@ import { UploadIcon } from "@/components/shared/icons/UploadIcon"
 import { allowedImgTypes } from "@/@core/shared/entities/user/utils"
 import { Controller, Path, Control } from "react-hook-form"
 import { KeyboardEvent, useRef, useState } from "react"
-import DefaultProfile from "../../../../../../public/imgs/profile.jpg"
 
 interface ProfileImageInputProps<Fields extends Record<string, any>> {
-    name: Path<Fields>
     id: string
+    name: Path<Fields>
+    imageUrl: string
     control: Control<Fields, any>
     error?: string
 }
@@ -18,7 +18,7 @@ interface ProfileImageInputProps<Fields extends Record<string, any>> {
 export function ProfileImageInput<Fields extends Record<string, any>>(
     props: ProfileImageInputProps<Fields>
 ) {
-    const { control, name, id, error } = props
+    const { id, name, imageUrl, control, error } = props
     const fileRef = useRef<HTMLInputElement | null>(null)
     const [base64Image, setBase64Image] = useState<string | null>("")
 
@@ -103,7 +103,7 @@ export function ProfileImageInput<Fields extends Record<string, any>>(
                 </label>
                 <img
                     className="file-field__img"
-                    src={base64Image || DefaultProfile.src}
+                    src={base64Image || imageUrl}
                     alt="Profile image"
                 />
             </div>

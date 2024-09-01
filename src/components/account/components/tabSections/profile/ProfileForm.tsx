@@ -9,6 +9,9 @@ import { PrimaryButton } from "@/components/shared/buttons/PrimaryButton"
 import { ProfileImageInput } from "./ProfileImageInput"
 import { customZodResolver } from "@/libs/zod/resolvers"
 import { useForm, FieldErrors } from "react-hook-form"
+import { useAppSelector } from "@/libs/redux/hooks"
+import { selectUserProfile } from "@/store/user/userSlice"
+import DefaultProfile from "../../../../../../public/imgs/profile.jpg"
 
 const profileFormInitialState: ProfileFields = {
     firstName: "",
@@ -17,6 +20,8 @@ const profileFormInitialState: ProfileFields = {
 }
 
 export function ProfileForm() {
+    const profile = useAppSelector(selectUserProfile)
+    const profileImgUrl = profile.type !== "guest" ? profile.profileImg : null
     const { control, formState, register, handleSubmit } = useForm<ProfileFields>({
         mode: "onSubmit",
         reValidateMode: "onSubmit",
@@ -40,6 +45,7 @@ export function ProfileForm() {
         >
             <ProfileImageInput
                 control={control}
+                imageUrl={profileImgUrl || DefaultProfile.src}
                 name="profileImg"
                 id="profile-img"
                 error={formState.errors.profileImg?.message}
