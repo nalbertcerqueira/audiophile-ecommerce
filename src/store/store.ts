@@ -1,9 +1,11 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit"
-import { checkoutReducer } from "./checkout"
-import { cartReducer } from "./cart/cartSlice"
+import { checkoutReducer } from "./checkout/index"
+import { cartReducer } from "./cart/index"
 import { modalsReducer } from "./modals/modalsSlice"
+import { userReducer } from "./user/index"
 
 const appReducer = combineReducers({
+    user: userReducer,
     cart: cartReducer,
     checkout: checkoutReducer,
     modals: modalsReducer
