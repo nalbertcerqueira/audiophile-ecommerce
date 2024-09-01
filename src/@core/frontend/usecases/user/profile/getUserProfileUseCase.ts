@@ -4,12 +4,12 @@ import {
     GuestUser
 } from "../../../domain/gateways/user/profile/getUserProfileGateway"
 
-type GetUserOutputProfileDTO = DefaultUser | GuestUser | string
+export type GetUserProfileOutputDTO = DefaultUser | GuestUser | string
 
 export class GetUserUseProfileUseCase {
     constructor(private readonly getUserProfileGateway: GetUserProfileGateway) {}
 
-    public async execute(): Promise<GetUserOutputProfileDTO> {
+    public async execute(): Promise<GetUserProfileOutputDTO> {
         const foundUser = await this.getUserProfileGateway.getProfile()
 
         return foundUser

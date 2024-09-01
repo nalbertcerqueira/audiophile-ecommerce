@@ -1,8 +1,8 @@
 import { UserProps } from "@/@core/shared/entities/user/user"
 import {
     imageFileZodSchema,
-    phoneZodSchema,
-    userZodSchema
+    userZodSchema,
+    phoneZodSchema
 } from "@/@core/shared/entities/user/utils"
 import z from "zod"
 
@@ -13,16 +13,12 @@ interface UserProfileSchema
 }
 
 const zodUserContactSchema = z.object({
-    phone: phoneZodSchema(false),
+    phone: phoneZodSchema,
     profileImg: imageFileZodSchema
 })
 
 export const zodUserProfileSchema: z.ZodSchema<UserProfileSchema> = userZodSchema
-    .pick({
-        firstName: true,
-        lastName: true,
-        profileImg: true
-    })
+    .pick({ firstName: true, lastName: true, profileImg: true })
     .merge(zodUserContactSchema)
     .partial()
     .strict()

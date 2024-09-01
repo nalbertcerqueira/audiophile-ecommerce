@@ -10,7 +10,7 @@ import z from "zod"
 
 export const profileSchema: z.ZodType<ProfileFields> = userZodSchema
     .pick({ firstName: true, lastName: true })
-    .merge(z.object({ phone: phoneZodSchema(false), profileImg: imageFileZodSchema }))
+    .merge(z.object({ phone: phoneZodSchema, profileImg: imageFileZodSchema.optional() }))
     .strict()
 
 export const addressSchema: z.ZodType<AddressFields> = z

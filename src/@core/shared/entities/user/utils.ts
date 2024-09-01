@@ -41,21 +41,13 @@ export const passwordZodSchema = z
         path: [""]
     })
 
-export function phoneZodSchema(
-    nullable: true
-): z.ZodNullable<z.ZodEffects<z.ZodString, string, string>>
-export function phoneZodSchema(nullable: false): z.ZodEffects<z.ZodString, string, string>
-export function phoneZodSchema(nullable: boolean) {
-    const schema = z
-        .string()
-        .min(10, phoneLengthMessage)
-        .refine((phone) => (phone ? phone.match(phoneRegexp) : true), {
-            message: phoneMessage,
-            path: [""]
-        })
-
-    return nullable ? schema.nullable() : schema
-}
+export const phoneZodSchema = z
+    .string()
+    .min(10, phoneLengthMessage)
+    .refine((phone) => (phone ? phone.match(phoneRegexp) : true), {
+        message: phoneMessage,
+        path: [""]
+    })
 
 export const imageFileZodSchema = z
     .instanceof(File, { message: "must be an instance of File" })
@@ -72,7 +64,7 @@ export const userZodSchema = schemaFromType<UserProps>()(
         password: passwordZodSchema,
         firstName: userNameZodSchema,
         lastName: userNameZodSchema,
-        phone: phoneZodSchema(true),
+        phone: phoneZodSchema.nullable(),
         profileImg: z.string().trim().url().nullable()
     })
 ).strict()
