@@ -1,7 +1,5 @@
 import { ExternalUserProps } from "@/@core/shared/entities/user/externalUser"
-
-export type UpdatedExternalUser = ExternalUserProps & { id: string }
-
+import { ExternalUserWithId } from "./protocols"
 export interface ExternalUserParams
     extends Partial<Omit<ExternalUserProps, "phone" | "profileImg">> {
     phone?: NonNullable<ExternalUserProps["phone"]>
@@ -9,5 +7,5 @@ export interface ExternalUserParams
 }
 
 export interface UpdateExternalUserRepository {
-    update(id: string, props: ExternalUserParams): Promise<UpdatedExternalUser | null>
+    update(id: string, props: ExternalUserParams): Promise<ExternalUserWithId | null>
 }

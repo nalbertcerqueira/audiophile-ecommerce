@@ -1,5 +1,5 @@
-import { ExternalUser } from "@/@core/shared/entities/user/externalUser"
+import { ExternalUserWithId } from "./protocols"
 
 export interface FindExternalUserByIdRepository {
-    findById(userId: string): Promise<ExternalUser | null>
+    findById(userId: string): Promise<ExternalUserWithId | null>
 }

@@ -8,7 +8,6 @@ import { mongoHelper } from "../../config/mongo-config"
 import { ObjectId } from "mongodb"
 import {
     ExternalUserParams,
-    UpdatedExternalUser,
     UpdateExternalUserRepository
 } from "@/@core/backend/domain/repositories/externalUser/updateExternalUserRepository"
 
@@ -69,33 +68,33 @@ export class MongoExternalUserRepository
         }
     }
 
-    public async findById(userId: string): Promise<ExternalUser | null> {
+    public async findById(userId: string): Promise<ExternalUserWithId | null> {
         await mongoHelper.connect()
 
         try {
-            const id = new ObjectId(userId)
-
-            const externalUserCollection = mongoHelper.db.collection("externalUsers")
-            const foundExternalUser = await externalUserCollection.findOne<MongoExternalUser>(
-                { _id: id },
-                { projection: { createdAt: 0, updatedAt: 0 } }
-            )
-
-            if (foundExternalUser) {
-                const { firstName, lastName, email, profileImg, phone } = foundExternalUser
-                return new ExternalUser({ firstName, lastName, email, profileImg, phone })
-            }
-
-            return null
+            new ObjectId(userId)
         } catch {
             return null
         }
+
+        const externalUserCollection = mongoHelper.db.collection("externalUsers")
+        const foundExternalUser = await externalUserCollection.findOne<MongoExternalUser>(
+            { _id: new ObjectId(userId) },
+            { projection: { createdAt: 0, updatedAt: 0 } }
+        )
+
+        if (!foundExternalUser) {
+            return null
+        }
+
+        const { _id, ...rest } = foundExternalUser
+        return { id: _id.toString(), ...rest }
     }
 
     public async update(
         id: string,
         props: ExternalUserParams
-    ): Promise<UpdatedExternalUser | null> {
+    ): Promise<ExternalUserWithId | null> {
         await mongoHelper.connect()
 
         try {
