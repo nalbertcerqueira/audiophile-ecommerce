@@ -83,3 +83,8 @@ export class Cart extends Entity<CartProps> {
         return { success: true, data: props }
     }
 }
+
+export function createCart(props: CartProps): Cart {
+    const items = props.items.map((item) => new CartItem(item))
+    return new Cart({ items })
+}

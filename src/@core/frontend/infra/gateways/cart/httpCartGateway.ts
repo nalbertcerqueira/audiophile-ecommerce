@@ -1,6 +1,6 @@
 import { GetCartGateway } from "@/@core/frontend/domain/gateways/cart/getCartGateway"
-import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
-import { CartItem, CartProduct } from "@/@core/shared/entities/cart/cartItem"
+import { Cart, CartProps, createCart } from "@/@core/shared/entities/cart/cart"
+import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
 import { HttpGatewayResponse, RequestDetails } from "../protocols"
 import { AddCartItemGateway } from "@/@core/frontend/domain/gateways/cart/addCartItemGateway"
 import { ClearCartGateway } from "@/@core/frontend/domain/gateways/cart/clearCartGateway"
@@ -98,7 +98,6 @@ export class HttpCartGateway
 
         const { data } = responseData as HttpGatewayResponse<"success", CartProps>
 
-        const items = data.items.map((item) => new CartItem(item))
-        return new Cart({ items })
+        return createCart({ items: data.items })
     }
 }
