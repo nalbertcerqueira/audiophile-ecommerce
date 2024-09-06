@@ -15,13 +15,13 @@ export class UpdateUserProfileController implements Controller {
         const userType = request.user?.type
         const body = request.body
 
-        const validationResult = await this.schemaValidator.validate(body)
-
-        if (!validationResult.isValid) {
-            return badRequestError(validationResult.errors)
-        }
-
         try {
+            const validationResult = await this.schemaValidator.validate(body)
+
+            if (!validationResult.isValid) {
+                return badRequestError(validationResult.errors)
+            }
+
             const updateUser = await this.updateUserCaseCase.execute({
                 id: userId,
                 type: userType,
