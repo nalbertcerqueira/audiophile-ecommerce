@@ -7,11 +7,11 @@ import {
 import {
     selectBusyProductsLength,
     selectCartItems,
-    selectCartStatus
-} from "@/store/cart/cartSlice"
+    selectCartStatus,
+    addCartItem
+} from "@/store/cart"
 import { fetchTaxes, setCheckoutStatus } from "@/store/checkout"
 import { handleHttpErrors } from "@/utils/helpers"
-import { addCartItem } from "@/store/cart"
 import { CartState } from "@/store/cart/types"
 import { Counter } from "../Counter"
 import { Id } from "react-toastify"

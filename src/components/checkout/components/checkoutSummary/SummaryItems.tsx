@@ -3,7 +3,7 @@
 import { CartItemSkeleton } from "@/components/shared/loaders/skeletons/CartItemSkeleton"
 import { useAppSelector } from "@/libs/redux/hooks"
 import { CartItemCard } from "@/components/shared/cart/CartItem"
-import { selectCart } from "@/store/cart/cartSlice"
+import { selectCart } from "@/store/cart"
 
 export function SummaryItems() {
     const { items, status } = useAppSelector(selectCart)

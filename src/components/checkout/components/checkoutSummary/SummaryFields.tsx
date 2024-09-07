@@ -3,7 +3,7 @@
 import { SummarySkeleton } from "@/components/shared/loaders/skeletons/SummarySkeleton"
 import { SummaryField } from "@/components/shared/cart/SummaryField"
 import { useAppSelector } from "@/libs/redux/hooks"
-import { selectCart } from "@/store/cart/cartSlice"
+import { selectCart } from "@/store/cart"
 
 export function SummaryFields() {
     const taxes = useAppSelector((state) => state.checkout.taxes)

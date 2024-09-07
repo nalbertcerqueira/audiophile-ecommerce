@@ -8,17 +8,16 @@ import { CashIcon } from "@/components/shared/icons/CashIcon"
 import { FormEvent } from "react"
 import { useCheckoutForm } from "./useCheckoutForm"
 import { useAppDispatch, useAppSelector } from "@/libs/redux/hooks"
-import { createOrder } from "@/store/checkout"
+import { createOrder, selectTaxesStatus } from "@/store/checkout"
 import { emitToast } from "@/libs/react-toastify/utils"
 import { SuccessCheckoutMessage } from "@/libs/react-toastify/components/CheckoutMessages"
 import { handleHttpErrors } from "@/utils/helpers"
 import { Id } from "react-toastify"
-import { selectTaxesStatus } from "@/store/checkout/checkoutSlice"
 import {
     selectCartStatus,
     selectCartItemsLength,
     selectBusyProductsLength
-} from "@/store/cart/cartSlice"
+} from "@/store/cart"
 import { SectionHeading } from "@/components/shared/SectionHeading"
 
 const checkoutFormInitialState: CheckoutFields = {

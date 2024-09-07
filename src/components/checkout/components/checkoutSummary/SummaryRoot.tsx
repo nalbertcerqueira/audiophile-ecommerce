@@ -3,12 +3,12 @@
 import { RingLoader } from "@/components/shared/loaders/RingLoader"
 import { ReactNode } from "react"
 import { useAppSelector } from "@/libs/redux/hooks"
-import { selectOrderStatus, selectTaxesStatus } from "@/store/checkout/checkoutSlice"
+import { selectOrderStatus, selectTaxesStatus } from "@/store/checkout/"
 import {
     selectBusyProductsLength,
     selectCartItemsLength,
     selectCartStatus
-} from "@/store/cart/cartSlice"
+} from "@/store/cart"
 import { PrimaryButton } from "@/components/shared/buttons/PrimaryButton"
 
 interface SummaryRootProps {
