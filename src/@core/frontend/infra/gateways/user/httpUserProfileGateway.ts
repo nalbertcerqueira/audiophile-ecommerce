@@ -32,13 +32,20 @@ export class HttpUserProfileGateway
     public async update(data: ProfileParams): Promise<DefaultUser> {
         const accessToken = localStorage.getItem("accessToken") as string
         const fullUrl = `${this.baseApiUrl}/user/profile`
+        const formData = new FormData()
+
+        for (const key in data) {
+            const value = data[key as keyof ProfileParams]
+            if (value) {
+                formData.set(key, value)
+            }
+        }
 
         const updatedProfile = await this.submitRequest<DefaultUser>({
             url: fullUrl,
             method: "PUT",
-            body: data,
+            body: formData,
             headers: {
-                "Content-Type": "multipart/form-data",
                 Authorization: `Bearer ${accessToken}`
             }
         })
@@ -51,7 +58,7 @@ export class HttpUserProfileGateway
 
         const response = await fetch(url, {
             method: method,
-            body: body && JSON.stringify(body),
+            body: body,
             headers: headers
         })
 

@@ -6,6 +6,6 @@ export type HttpGatewayResponse<
 export interface RequestDetails {
     url: string
     method: "GET" | "POST" | "PATCH" | "PUT" | "DELETE"
-    body?: Record<string, any>
+    body?: BodyInit
     headers?: HeadersInit
 }

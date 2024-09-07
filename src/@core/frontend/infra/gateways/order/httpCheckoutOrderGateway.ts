@@ -45,7 +45,7 @@ export class HttpCheckoutOrderGateway
 
         const response = await fetch(url, {
             method: method,
-            body: body && JSON.stringify(body),
+            body: body,
             headers: headers
         })
 

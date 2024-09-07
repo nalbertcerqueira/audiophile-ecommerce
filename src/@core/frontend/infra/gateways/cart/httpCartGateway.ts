@@ -46,7 +46,7 @@ export class HttpCartGateway
         const cart = await this.submitRequest({
             method: "POST",
             url: fullUrl,
-            body: body,
+            body: JSON.stringify(body),
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`
@@ -66,7 +66,7 @@ export class HttpCartGateway
         const cart = await this.submitRequest({
             method: "PATCH",
             url: fullUrl,
-            body: body,
+            body: JSON.stringify(body),
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`
@@ -81,7 +81,7 @@ export class HttpCartGateway
 
         const response = await fetch(url, {
             method: method,
-            body: body && JSON.stringify(body),
+            body: body,
             headers: headers
         })
 
