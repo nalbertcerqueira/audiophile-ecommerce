@@ -2,47 +2,55 @@
 
 import { Input } from "@/components/shared/inputs/Input"
 import { Fieldset } from "@/components/shared/form/Fieldset"
+import { RingLoader } from "@/components/shared/loaders/RingLoader"
 import { PhoneInput } from "@/components/shared/inputs/PhoneInput"
 import { ProfileFields } from "./types"
 import { profileSchema } from "./schemas"
 import { PrimaryButton } from "@/components/shared/buttons/PrimaryButton"
+import { handleHttpErrors } from "@/utils/helpers"
 import { ProfileImageInput } from "./ProfileImageInput"
 import { customZodResolver } from "@/libs/zod/resolvers"
-import { useForm, FieldErrors } from "react-hook-form"
-import { useAppSelector } from "@/libs/redux/hooks"
-import { selectUserProfile } from "@/store/user/userSlice"
+import { useAppDispatch, useAppSelector } from "@/libs/redux/hooks"
+import { updateUserProfile, selectUserProfile } from "@/store/user"
+import { useForm } from "react-hook-form"
+import { emitToast } from "@/libs/react-toastify/utils"
+import { FormEvent } from "react"
 import DefaultProfile from "../../../../../../public/imgs/profile.jpg"
 
-const profileFormInitialState: ProfileFields = {
-    firstName: "",
-    lastName: "",
-    phone: ""
-}
-
 export function ProfileForm() {
+    const dispatch = useAppDispatch()
     const profile = useAppSelector(selectUserProfile)
-    const profileImgUrl = profile.type !== "guest" ? profile.profileImg : null
+    const authenticatedProfile = (profile.type !== "guest" && profile) || null
+    const profileImgUrl = authenticatedProfile?.profileImg || null
     const { control, formState, register, handleSubmit } = useForm<ProfileFields>({
         mode: "onSubmit",
         reValidateMode: "onSubmit",
-        defaultValues: profileFormInitialState,
-        resolver: customZodResolver(profileSchema)
+        resolver: customZodResolver(profileSchema),
+        defaultValues: {
+            firstName: authenticatedProfile?.firstName,
+            lastName: authenticatedProfile?.lastName,
+            phone: authenticatedProfile?.phone || undefined
+        }
     })
 
-    function handleSuccessfulSubmit(data: ProfileFields) {
-        console.log(data)
+    async function formHandler(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+
+        if (!formState.isSubmitting) {
+            return await handleSubmit(handleSuccessfulSubmit)(e)
+        }
     }
 
-    function handleFailedSubmit(errors: FieldErrors<ProfileFields>) {
-        console.log(errors)
+    async function handleSuccessfulSubmit(data: ProfileFields) {
+        const toastId = emitToast("loading", "Saving your changes, please wait...'")
+        return dispatch(updateUserProfile(data))
+            .unwrap()
+            .then(() => emitToast("success", "Profile updated with success!", { toastId }))
+            .catch((error: Error) => handleHttpErrors(error, true, toastId))
     }
 
     return (
-        <form
-            encType="multipart/form-data"
-            onSubmit={handleSubmit(handleSuccessfulSubmit, handleFailedSubmit)}
-            className="profile-form"
-        >
+        <form encType="multipart/form-data" onSubmit={formHandler} className="profile-form">
             <ProfileImageInput
                 control={control}
                 imageUrl={profileImgUrl || DefaultProfile.src}
@@ -83,10 +91,21 @@ export function ProfileForm() {
                         id="email"
                         type="text"
                         disabled={true}
+                        value={authenticatedProfile?.email}
                         placeholder="alexei@mail.com"
                     />
                 </Fieldset>
-                <PrimaryButton type="submit" className="tab-submit-btn">
+                <PrimaryButton
+                    ariaDisabled={formState.isSubmitting}
+                    disabled={formState.isSubmitting}
+                    type="submit"
+                    className="tab-submit-btn"
+                >
+                    {formState.isSubmitting && (
+                        <div className="btn-overlay">
+                            <RingLoader />
+                        </div>
+                    )}
                     SAVE CHANGES
                 </PrimaryButton>
             </div>

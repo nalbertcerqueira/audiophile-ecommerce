@@ -1,2 +1,2 @@
-export { getUserProfile } from "./thunks"
-export { userReducer } from "./userSlice"
+export { getUserProfile, updateUserProfile } from "./thunks"
+export { userReducer, selectUserProfile, selectUserStatus } from "./userSlice"

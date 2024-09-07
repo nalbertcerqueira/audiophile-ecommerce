@@ -55,7 +55,7 @@ export function CheckoutForm({ formId }: { formId: string }) {
 
     async function handleSuccessfulSubmit() {
         const toastId = emitToast("loading", "Processing your order. Please wait a moment...")
-        dispatch(createOrder())
+        return dispatch(createOrder())
             .unwrap()
             .then((order) => handleSuccess(order.orderId, toastId))
             .catch((error: Error) => handleHttpErrors(error, true, toastId))
