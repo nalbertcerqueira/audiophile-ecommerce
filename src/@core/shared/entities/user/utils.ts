@@ -1,5 +1,5 @@
 import { UserProps } from "./user"
-import { schemaFromType } from "../helpers"
+import { createZodStringSchema, schemaFromType } from "../helpers"
 import { ExternalUserProps } from "./externalUser"
 import z from "zod"
 
@@ -7,7 +7,6 @@ export const emailZodSchema = z.string().trim().email("is invalid")
 
 export const nameRegexp = /^[A-zÀ-ú\s]+$/
 export const nameMessage = "can only have letters"
-export const nameLengthMessage = "must have at least 4 character(s)"
 
 export const passwordRegexp = /^(?=.*[A-zÀ-ú])(?=.*[0-9])(?=.*[!@#$%+<>,.?-]).+$/g
 export const passwordMessage = "must contain letters, numbers and 1 especial character"
@@ -23,30 +22,23 @@ export const allowedImgMessage = `accepts only ${allowedImgTypes.map((type) => t
 export const maxUploadSize = 1000000
 export const maxUploadSizeMessage = `size must be lesser than ${maxUploadSize / maxUploadSize}MB`
 
-export const userNameZodSchema = z
-    .string()
-    .trim()
-    .min(4, nameLengthMessage)
-    .refine((name) => name.match(nameRegexp), { message: nameMessage, path: [""] })
-    .refine((input) => input.replace(/ /g, "").length >= 4, {
-        message: nameLengthMessage,
-        path: [""]
-    })
+export const userNameZodSchema = createZodStringSchema(4).refine(
+    (name) => name.match(nameRegexp),
+    { message: nameMessage }
+)
 
 export const passwordZodSchema = z
     .string()
     .min(8, passwordLengthMessage)
     .refine((password) => password.match(passwordRegexp), {
-        message: passwordMessage,
-        path: [""]
+        message: passwordMessage
     })
 
 export const phoneZodSchema = z
     .string()
     .min(10, phoneLengthMessage)
     .refine((phone) => (phone ? phone.match(phoneRegexp) : true), {
-        message: phoneMessage,
-        path: [""]
+        message: phoneMessage
     })
 
 export const imageFileZodSchema = z
