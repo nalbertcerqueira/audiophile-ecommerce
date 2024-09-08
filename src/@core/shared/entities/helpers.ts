@@ -1,12 +1,12 @@
 import z from "zod"
 import { EntityValidationResult } from "./protocols"
 
-//Gerando um schema do zod a partir de um tipo genérico <T>
+//Gera um schema do zod a partir de um tipo genérico <T>
 export function schemaFromType<T>() {
     return <S extends z.ZodType<T, any, any>>(arg: S) => arg
 }
 
-//Gerando um array de erros a partir do error recebido pelo zod
+//Gera um array de erros a partir do error recebido pelo zod
 export function generateCustomZodErrors<T extends z.ZodError<any>>(
     error: T,
     errorsPerField: number
@@ -39,6 +39,17 @@ export function generateCustomZodErrors<T extends z.ZodError<any>>(
     })
 
     return errors.filter((error) => !!error) as string[]
+}
+
+//Cria um schema padrão para strings
+export function createZodStringSchema(min: number) {
+    return z
+        .string()
+        .trim()
+        .min(min, `must have at least ${min} character(s)`)
+        .refine((input) => input.replace(/[^A-zÀ-ú0-9]/g, "").length >= min, {
+            message: `must have at least ${min} character(s) without symbols`
+        })
 }
 
 //Entidade genérica

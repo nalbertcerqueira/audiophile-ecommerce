@@ -1,11 +1,10 @@
-import { createStringSchema } from "@/libs/zod/utils"
 import { AddressFields, ProfileFields } from "./types"
+import { addressZodSchema } from "@/@core/shared/entities/address/utils"
 import {
     imageFileZodSchema,
     phoneZodSchema,
     userZodSchema
 } from "@/@core/shared/entities/user/utils"
-import { lengthErrorMessage } from "@/libs/zod/errors"
 import z from "zod"
 
 export const profileSchema: z.ZodType<ProfileFields> = userZodSchema
@@ -13,13 +12,4 @@ export const profileSchema: z.ZodType<ProfileFields> = userZodSchema
     .merge(z.object({ phone: phoneZodSchema, profileImg: imageFileZodSchema.optional() }))
     .strict()
 
-export const addressSchema: z.ZodType<AddressFields> = z
-    .object({
-        address: createStringSchema("Address", { min: 8 }),
-        country: createStringSchema("Country", { min: 4 }),
-        city: createStringSchema("City", { min: 4 }),
-        zipCode: z
-            .string({ required_error: "Zip code is required" })
-            .min(5, lengthErrorMessage("Zip code", "min", 5))
-    })
-    .strict()
+export const addressSchema: z.ZodType<AddressFields> = addressZodSchema

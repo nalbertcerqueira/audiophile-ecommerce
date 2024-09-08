@@ -7,8 +7,8 @@ import { AddressFields } from "./types"
 import { PrimaryButton } from "@/components/shared/buttons/PrimaryButton"
 import { addressSchema } from "./schemas"
 import { handleFormNumericField } from "@/utils/helpers"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, Controller, FieldErrors } from "react-hook-form"
+import { customZodResolver } from "@/libs/zod/resolvers"
 
 const addressFormInitialState: AddressFields = {
     address: "",
@@ -22,7 +22,7 @@ export function AddressForm() {
         mode: "onSubmit",
         reValidateMode: "onSubmit",
         defaultValues: addressFormInitialState,
-        resolver: zodResolver(addressSchema)
+        resolver: customZodResolver(addressSchema)
     })
 
     function failedSubmit(errors: FieldErrors<AddressFields>) {
