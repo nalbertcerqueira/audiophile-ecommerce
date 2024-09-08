@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { getUserProfile, updateUserProfile } from "./thunks"
+import { getUserAddress, getUserProfile, updateUserProfile } from "./thunks"
 import { UserState } from "./types"
 import { AppState } from "../store"
 
 const userInitialState: UserState = {
     status: "loading",
     isLogged: false,
-    profile: { id: "", type: "guest" }
+    profile: { id: "", type: "guest" },
+    address: null
 }
 
 export const userSlice = createSlice({
@@ -37,9 +38,13 @@ export const userSlice = createSlice({
             .addCase(updateUserProfile.fulfilled, (state, action) => {
                 return { ...state, status: "settled", profile: action.payload }
             })
+            .addCase(getUserAddress.fulfilled, (state, action) => {
+                return { ...state, address: action.payload }
+            })
 })
 
 export const userReducer = userSlice.reducer
 
 export const selectUserStatus = (state: AppState) => state.user.status
 export const selectUserProfile = (state: AppState) => state.user.profile
+export const selectUserAddress = (state: AppState) => state.user.address

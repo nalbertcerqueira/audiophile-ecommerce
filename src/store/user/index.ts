@@ -1,2 +1,7 @@
-export { getUserProfile, updateUserProfile } from "./thunks"
-export { userReducer, selectUserProfile, selectUserStatus } from "./userSlice"
+export { getUserProfile, updateUserProfile, getUserAddress } from "./thunks"
+export {
+    userReducer,
+    selectUserProfile,
+    selectUserStatus,
+    selectUserAddress
+} from "./userSlice"

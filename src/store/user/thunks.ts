@@ -4,6 +4,8 @@ import { getUserProfileUseCase } from "@/@core/frontend/main/usecases/user/getUs
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { DefaultUser } from "@/@core/frontend/domain/gateways/user/profile/protocols"
 import { UpdateUserProfileInputDTO } from "@/@core/frontend/usecases/user/profile/updateUserProfileUseCase"
+import { AddressProps } from "@/@core/shared/entities/address/address"
+import { getAddressUseCase } from "@/@core/frontend/main/usecases/address/getAddressUseCaseFactory"
 
 export const getUserProfile = createAsyncThunk<GetUserProfileOutputDTO>(
     "user/getUserProfile",
@@ -24,5 +26,13 @@ export const updateUserProfile = createAsyncThunk<DefaultUser, UpdateUserProfile
     async (profileData) => {
         const profile = await updateUserProfileUseCase.execute(profileData)
         return profile
+    }
+)
+
+export const getUserAddress = createAsyncThunk<AddressProps | null>(
+    "user/getUserAddress",
+    async () => {
+        const address = await getAddressUseCase.execute()
+        return address ? address.toJSON() : null
     }
 )

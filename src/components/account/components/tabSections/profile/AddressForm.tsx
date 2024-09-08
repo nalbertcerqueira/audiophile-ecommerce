@@ -9,19 +9,20 @@ import { addressSchema } from "./schemas"
 import { handleFormNumericField } from "@/utils/helpers"
 import { useForm, Controller, FieldErrors } from "react-hook-form"
 import { customZodResolver } from "@/libs/zod/resolvers"
-
-const addressFormInitialState: AddressFields = {
-    address: "",
-    country: "",
-    city: "",
-    zipCode: ""
-}
+import { useAppSelector } from "@/libs/redux/hooks"
+import { selectUserAddress } from "@/store/user"
 
 export function AddressForm() {
+    const userAddress = useAppSelector(selectUserAddress)
     const { formState, control, register, handleSubmit } = useForm<AddressFields>({
         mode: "onSubmit",
         reValidateMode: "onSubmit",
-        defaultValues: addressFormInitialState,
+        defaultValues: {
+            address: userAddress?.address,
+            country: userAddress?.country,
+            city: userAddress?.city,
+            zipCode: userAddress?.zipCode
+        },
         resolver: customZodResolver(addressSchema)
     })
 

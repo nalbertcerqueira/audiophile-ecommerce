@@ -3,7 +3,7 @@ import { SectionContent } from "@/components/shared/SectionContent"
 import { ProfileForm } from "./ProfileForm"
 
 import "react-international-phone/style.css"
-import { AddressForm } from "./AddressFrom"
+import { AddressForm } from "./AddressForm"
 
 export function ProfileSection() {
     return (
