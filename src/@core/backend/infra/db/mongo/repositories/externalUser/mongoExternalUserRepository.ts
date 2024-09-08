@@ -24,7 +24,7 @@ export class MongoExternalUserRepository
         const userCollection = mongoHelper.db.collection<MongoExternalUser>("externalUsers")
         const foundUser = await userCollection.findOne(
             { email },
-            { projection: { createdAt: 0, updatedAt: 0 } }
+            { projection: { address: 0, createdAt: 0, updatedAt: 0 } }
         )
 
         if (foundUser) {
@@ -48,10 +48,20 @@ export class MongoExternalUserRepository
         const updatedUser = await userCollection.findOneAndUpdate(
             { email },
             {
-                $set: { firstName, lastName, profileImg, phone },
-                $setOnInsert: { email, createdAt: creationDate, updatedAt: creationDate }
+                $set: { firstName, lastName, profileImg },
+                $setOnInsert: {
+                    email,
+                    phone,
+                    address: null,
+                    createdAt: creationDate,
+                    updatedAt: creationDate
+                }
             },
-            { upsert: true, returnDocument: "after" }
+            {
+                upsert: true,
+                returnDocument: "after",
+                projection: { createdAt: 0, updatedAt: 0, address: 0 }
+            }
         )
 
         if (!updatedUser) {
@@ -80,7 +90,7 @@ export class MongoExternalUserRepository
         const externalUserCollection = mongoHelper.db.collection("externalUsers")
         const foundExternalUser = await externalUserCollection.findOne<MongoExternalUser>(
             { _id: new ObjectId(userId) },
-            { projection: { createdAt: 0, updatedAt: 0 } }
+            { projection: { address: 0, createdAt: 0, updatedAt: 0 } }
         )
 
         if (!foundExternalUser) {
@@ -110,7 +120,7 @@ export class MongoExternalUserRepository
             {
                 ignoreUndefined: true,
                 returnDocument: "after",
-                projection: { createdAt: 0, updatedAt: 0, password: 0 }
+                projection: { address: 0, createdAt: 0, updatedAt: 0 }
             }
         )
 

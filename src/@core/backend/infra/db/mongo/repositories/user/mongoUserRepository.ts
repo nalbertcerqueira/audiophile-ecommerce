@@ -25,9 +25,9 @@ export class MongoUserRepository
         await mongoHelper.connect()
 
         const userCollection = mongoHelper.db.collection<MongoUser>("users")
-        const foundUser = await userCollection.findOne<MongoUser>(
+        const foundUser = await userCollection.findOne(
             { email },
-            { projection: { createdAt: 0, updatedAt: 0 } }
+            { projection: { address: 0, createdAt: 0, updatedAt: 0 } }
         )
 
         if (foundUser) {
@@ -49,6 +49,7 @@ export class MongoUserRepository
 
         await userCollection.insertOne({
             ...user.toJSON(),
+            address: null,
             createdAt: creationDate,
             updatedAt: creationDate
         })
@@ -66,9 +67,9 @@ export class MongoUserRepository
         const id = new ObjectId(userId)
 
         const userCollection = mongoHelper.db.collection<MongoUser>("users")
-        const foundUser = await userCollection.findOne<Omit<MongoUser, "password">>(
+        const foundUser = await userCollection.findOne(
             { _id: id },
-            { projection: { password: 0, createdAt: 0, updatedAt: 0 } }
+            { projection: { address: 0, password: 0, createdAt: 0, updatedAt: 0 } }
         )
 
         if (!foundUser) {
@@ -95,7 +96,7 @@ export class MongoUserRepository
             {
                 ignoreUndefined: true,
                 returnDocument: "after",
-                projection: { createdAt: 0, updatedAt: 0, password: 0 }
+                projection: { address: 0, createdAt: 0, updatedAt: 0, password: 0 }
             }
         )
 

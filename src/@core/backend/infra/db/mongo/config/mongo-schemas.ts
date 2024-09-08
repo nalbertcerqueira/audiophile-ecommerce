@@ -63,6 +63,19 @@ const userTypeMongoSchema: Document = {
     enum: ["authenticated", "external", "guest"]
 }
 
+const userAddressMongoSchema: Document = {
+    bsonType: "object",
+    additionalProperties: false,
+    required: ["address", "country", "city", "zipCode"],
+    properties: {
+        _id: {},
+        address: { bsonType: "string", minLength: 8 },
+        country: { bsonType: "string", minLength: 4 },
+        city: { bsonType: "string", minLength: 4 },
+        zipCode: { bsonType: "string", minLength: 5 }
+    }
+}
+
 export const productMongoSchema: Document = {
     $jsonSchema: {
         bsonType: "object",
@@ -145,6 +158,7 @@ export const userMongoSchema: Document = {
             "password",
             "profileImg",
             "phone",
+            "address",
             "createdAt",
             "updatedAt"
         ],
@@ -160,6 +174,9 @@ export const userMongoSchema: Document = {
             password: {
                 bsonType: "string",
                 minLength: 8
+            },
+            address: {
+                oneOf: [userAddressMongoSchema, { bsonType: "null" }]
             }
         }
     }
@@ -175,6 +192,7 @@ export const externalUserMongoSchema: Document = {
             "email",
             "profileImg",
             "phone",
+            "address",
             "createdAt",
             "updatedAt"
         ],
@@ -186,7 +204,10 @@ export const externalUserMongoSchema: Document = {
             firstName: { bsonType: "string", minLength: 1 },
             lastName: { bsonType: "string", minLength: 1 },
             profileImg: userImageMongoSchema,
-            phone: userPhoneMongoSchema
+            phone: userPhoneMongoSchema,
+            address: {
+                oneOf: [userAddressMongoSchema, { bsonType: "null" }]
+            }
         }
     }
 }

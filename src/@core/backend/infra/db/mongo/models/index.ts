@@ -5,6 +5,7 @@ import { UserType } from "@/@core/shared/entities/user/user"
 import { ObjectId } from "mongodb"
 import { ExternalUserProps } from "@/@core/shared/entities/user/externalUser"
 import { CheckoutOrderProps } from "@/@core/shared/entities/order/checkoutOrder"
+import { AddressProps } from "@/@core/shared/entities/address/address"
 
 export interface MongoProduct extends Omit<ProductProps, "id"> {
     readonly _id: ObjectId
@@ -16,12 +17,14 @@ export interface MongoShortProduct extends Omit<CartProduct, "productId"> {
 
 export interface MongoUser extends UserProps {
     readonly _id: ObjectId
+    address: AddressProps | null
     createdAt: Date
     updatedAt: Date
 }
 
 export interface MongoExternalUser extends ExternalUserProps {
     readonly _id: ObjectId
+    address: AddressProps | null
     createdAt: Date
     updatedAt: Date
 }
