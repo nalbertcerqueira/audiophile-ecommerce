@@ -6,5 +6,5 @@ interface PageLoaderContainerProps {
 }
 
 export function PageLoaderContainer({ children, className }: PageLoaderContainerProps) {
-    return <div className={`page-loader-container ${className}`.trim()}>{children}</div>
+    return <div className={`page-loader-container ${className || ""}`.trim()}>{children}</div>
 }
