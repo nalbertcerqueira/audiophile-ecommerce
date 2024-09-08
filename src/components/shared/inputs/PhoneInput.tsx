@@ -14,7 +14,7 @@ export function PhoneInput<Fields extends Record<string, any>>(
 ) {
     const { name, label, placeholder, error, control } = props
     const labelErrorClassname = error ? "field__label--error" : ""
-    const phoneErrorClassname = error ? "react-international-phone--error" : ""
+    const phoneErrorClassname = error ? "react-international-phone-input-container--error" : ""
 
     return (
         <div className="field">

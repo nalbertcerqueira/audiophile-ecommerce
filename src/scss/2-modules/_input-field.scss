@@ -95,8 +95,8 @@
         padding: 0rem 0.75rem;
         transition: vars.$transition-duration;
     }
-}
 
-.react-international-phone--error {
-    border: 0.125rem solid vars.$red;
+    &--error {
+        border: 0.125rem solid vars.$red;
+    }
 }
