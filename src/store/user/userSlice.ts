@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { getUserAddress, getUserProfile, updateUserProfile } from "./thunks"
+import { getUserAddress, getUserProfile, updateUserAddress, updateUserProfile } from "./thunks"
 import { UserState } from "./types"
 import { AppState } from "../store"
 
@@ -32,13 +32,14 @@ export const userSlice = createSlice({
 
                 return state
             })
-            .addCase(updateUserProfile.rejected, (state) => {
-                return { ...state, status: "settled" }
-            })
             .addCase(updateUserProfile.fulfilled, (state, action) => {
                 return { ...state, status: "settled", profile: action.payload }
             })
             .addCase(getUserAddress.fulfilled, (state, action) => {
+                const address = action.payload
+                return { ...state, address: address ? { ...address } : null }
+            })
+            .addCase(updateUserAddress.fulfilled, (state, action) => {
                 return { ...state, address: action.payload }
             })
 })

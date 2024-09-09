@@ -14,24 +14,33 @@ import { useAppDispatch, useAppSelector } from "@/libs/redux/hooks"
 import { updateUserProfile, selectUserProfile } from "@/store/user"
 import { useForm } from "react-hook-form"
 import { emitToast } from "@/libs/react-toastify/utils"
-import { FormEvent } from "react"
+import { FormEvent, useEffect } from "react"
 import DefaultProfile from "../../../../../../public/imgs/profile.jpg"
+
+const profileInitialState: ProfileFields = {
+    firstName: "",
+    lastName: "",
+    phone: ""
+}
 
 export function ProfileForm() {
     const dispatch = useAppDispatch()
     const profile = useAppSelector(selectUserProfile)
     const authenticatedProfile = (profile.type !== "guest" && profile) || null
     const profileImgUrl = authenticatedProfile?.profileImg || null
-    const { control, formState, register, handleSubmit } = useForm<ProfileFields>({
+    const { control, formState, register, handleSubmit, reset } = useForm<ProfileFields>({
         mode: "onSubmit",
         reValidateMode: "onSubmit",
         resolver: customZodResolver(profileSchema),
-        defaultValues: {
-            firstName: authenticatedProfile?.firstName,
-            lastName: authenticatedProfile?.lastName,
-            phone: authenticatedProfile?.phone || undefined
-        }
+        defaultValues: profileInitialState
     })
+
+    useEffect(() => {
+        if (profile.type !== "guest") {
+            const { firstName, lastName, phone } = profile
+            reset({ firstName, lastName, phone: phone || "" })
+        }
+    }, [profile, reset])
 
     async function formHandler(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()

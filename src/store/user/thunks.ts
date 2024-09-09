@@ -6,6 +6,7 @@ import { DefaultUser } from "@/@core/frontend/domain/gateways/user/profile/proto
 import { UpdateUserProfileInputDTO } from "@/@core/frontend/usecases/user/profile/updateUserProfileUseCase"
 import { AddressProps } from "@/@core/shared/entities/address/address"
 import { getAddressUseCase } from "@/@core/frontend/main/usecases/address/getAddressUseCaseFactory"
+import { updateAddressUseCase } from "@/@core/frontend/main/usecases/address/updateAddressUseCaseFactory"
 
 export const getUserProfile = createAsyncThunk<GetUserProfileOutputDTO>(
     "user/getUserProfile",
@@ -23,8 +24,8 @@ export const getUserProfile = createAsyncThunk<GetUserProfileOutputDTO>(
 
 export const updateUserProfile = createAsyncThunk<DefaultUser, UpdateUserProfileInputDTO>(
     "user/updateUserProfile",
-    async (profileData) => {
-        const profile = await updateUserProfileUseCase.execute(profileData)
+    async (data) => {
+        const profile = await updateUserProfileUseCase.execute(data)
         return profile
     }
 )
@@ -34,5 +35,13 @@ export const getUserAddress = createAsyncThunk<AddressProps | null>(
     async () => {
         const address = await getAddressUseCase.execute()
         return address ? address.toJSON() : null
+    }
+)
+
+export const updateUserAddress = createAsyncThunk<AddressProps, AddressProps>(
+    "user/updateUserAddress",
+    async (data) => {
+        const address = await updateAddressUseCase.execute(data)
+        return address.toJSON()
     }
 )
