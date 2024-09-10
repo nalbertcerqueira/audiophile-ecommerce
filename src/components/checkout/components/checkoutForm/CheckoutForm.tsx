@@ -5,7 +5,7 @@ import { ShippingFields } from "./ShippingFields"
 import { CheckoutFields } from "../../types/types"
 import { PaymentFields } from "./PaymentFields"
 import { CashIcon } from "@/components/shared/icons/CashIcon"
-import { FormEvent } from "react"
+import { FormEvent, useEffect } from "react"
 import { useCheckoutForm } from "./useCheckoutForm"
 import { useAppDispatch, useAppSelector } from "@/libs/redux/hooks"
 import { createOrder, selectTaxesStatus } from "@/store/checkout"
@@ -19,10 +19,10 @@ import {
     selectBusyProductsLength
 } from "@/store/cart"
 import { SectionHeading } from "@/components/shared/SectionHeading"
+import { selectUserAddress, selectUserProfile } from "@/store/user"
 
 const checkoutFormInitialState: CheckoutFields = {
     fullName: "",
-    email: "",
     phone: "",
     address: "",
     zipCode: "",
@@ -30,18 +30,31 @@ const checkoutFormInitialState: CheckoutFields = {
     country: "",
     paymentMethod: "cash"
 }
+
 export function CheckoutForm({ formId }: { formId: string }) {
-    const dispatch = useAppDispatch()
     const form = useCheckoutForm(checkoutFormInitialState)
     const cartStatus = useAppSelector(selectCartStatus)
     const busyProductsLength = useAppSelector(selectBusyProductsLength)
+    const profile = useAppSelector(selectUserProfile)
+    const address = useAppSelector(selectUserAddress)
+    const reset = form.reset
+    const getValues = form.getValues
+    const dispatch = useAppDispatch()
 
     const isLoadingTaxes = useAppSelector(selectTaxesStatus) !== "settled"
     const isCartEmpty = useAppSelector(selectCartItemsLength) === 0
     const isCartBusy = cartStatus !== "settled" || busyProductsLength > 0
     const isLogged = useAppSelector((state) => state.user.isLogged)
-
     const submitBlocked = isCartEmpty || isCartBusy || isLoadingTaxes || form.isSubmitting
+
+    useEffect(() => {
+        if (profile.type !== "guest") {
+            const { firstName, lastName, phone } = profile
+            const fullName = `${firstName} ${lastName}`
+            const values = getValues()
+            reset({ ...values, ...address, fullName, phone: phone || "" })
+        }
+    }, [reset, getValues, profile, address])
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()

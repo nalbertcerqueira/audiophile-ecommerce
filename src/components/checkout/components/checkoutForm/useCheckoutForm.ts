@@ -14,7 +14,8 @@ export function useCheckoutForm(initialState: CheckoutFields) {
         register,
         handleSubmit,
         unregister,
-        reset
+        reset,
+        getValues
     } = useForm<CheckoutFields>({
         mode: "onSubmit",
         reValidateMode: "onSubmit",
@@ -39,6 +40,7 @@ export function useCheckoutForm(initialState: CheckoutFields) {
         register,
         handleSubmit,
         unregister,
-        reset
+        reset,
+        getValues
     }
 }

@@ -26,10 +26,6 @@ const checkoutBaseSchema = z.object({
         (name) => name.match(nameRegexp),
         { message: `Full Name ${nameMessage}`, path: [""] }
     ),
-    email: z
-        .string({ required_error: "Email is required" })
-        .trim()
-        .email("Invalid email format"),
     phone: createStringSchema("Phone", { min: 10 }),
     zipCode: z
         .string({ required_error: "Zip code is required" })
