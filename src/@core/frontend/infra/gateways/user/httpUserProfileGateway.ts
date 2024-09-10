@@ -1,5 +1,5 @@
 import { GetUserProfileGateway } from "@/@core/frontend/domain/gateways/user/profile/getUserProfileGateway"
-import { HttpGatewayResponse } from "../protocols"
+import { HttpGateway } from "../protocols"
 import {
     DefaultUser,
     UserOrGuest
@@ -8,13 +8,14 @@ import {
     ProfileParams,
     UpdateUserProfileGateway
 } from "@/@core/frontend/domain/gateways/user/profile/updateUserProfileGateway"
-import { RequestDetails } from "../protocols"
-import { UnauthorizedError } from "../../errors"
 
 export class HttpUserProfileGateway
+    extends HttpGateway
     implements GetUserProfileGateway, UpdateUserProfileGateway
 {
-    constructor(private readonly baseApiUrl: string) {}
+    constructor(private readonly baseApiUrl: string) {
+        super()
+    }
 
     public async getProfile(): Promise<UserOrGuest> {
         const accessToken = localStorage.getItem("accessToken")
@@ -51,30 +52,5 @@ export class HttpUserProfileGateway
         })
 
         return updatedProfile
-    }
-
-    private async submitRequest<T>(request: RequestDetails): Promise<T> {
-        const { url, method, headers, body } = request
-
-        const response = await fetch(url, {
-            method: method,
-            body: body,
-            headers: headers
-        })
-
-        const responseData = await response.json()
-
-        if (response.status === 401) {
-            throw new UnauthorizedError("User unauthorized")
-        }
-
-        if (!response.ok && responseData.errors) {
-            const { errors } = responseData as HttpGatewayResponse<"failed">
-            throw new Error(errors.join(","))
-        }
-
-        const { data } = responseData as HttpGatewayResponse<"success", T>
-
-        return data
     }
 }

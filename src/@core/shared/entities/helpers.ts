@@ -53,7 +53,7 @@ export function createZodStringSchema(min: number) {
 }
 
 //Entidade genérica
-export class Entity<Props extends Record<string, any>> {
+export abstract class Entity<Props extends Record<string, any>> {
     protected validate(
         props: any,
         schema: z.ZodObject<Record<string, any>>

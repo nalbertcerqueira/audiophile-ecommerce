@@ -30,7 +30,7 @@ const checkoutBaseSchema = z.object({
         .string({ required_error: "Email is required" })
         .trim()
         .email("Invalid email format"),
-    phone: createStringSchema("Phone", { min: 12 }),
+    phone: createStringSchema("Phone", { min: 10 }),
     zipCode: z
         .string({ required_error: "Zip code is required" })
         .min(5, lengthErrorMessage("Zip code", "min", 5)),

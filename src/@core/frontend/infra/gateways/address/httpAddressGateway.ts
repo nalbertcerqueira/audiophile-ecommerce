@@ -1,17 +1,21 @@
 import { GetAddressGateway } from "@/@core/frontend/domain/gateways/address/getAddressGateway"
 import { Address, AddressProps } from "@/@core/shared/entities/address/address"
-import { RequestDetails, HttpGatewayResponse } from "../protocols"
-import { UnauthorizedError } from "../../errors"
 import { UpdateAddressGateway } from "@/@core/frontend/domain/gateways/address/updateAddressGateway"
+import { HttpGateway } from "../protocols"
 
-export class HttpAddressGateway implements GetAddressGateway, UpdateAddressGateway {
-    constructor(private readonly baseApiUrl: string) {}
+export class HttpAddressGateway
+    extends HttpGateway
+    implements GetAddressGateway, UpdateAddressGateway
+{
+    constructor(private readonly baseApiUrl: string) {
+        super()
+    }
 
     public async get(): Promise<Address | null> {
         const accessToken = localStorage.getItem("accessToken")
         const fullUrl = `${this.baseApiUrl}/user/address`
 
-        const addressProps = await this.submitRequest({
+        const addressProps = await this.submitRequest<AddressProps | null>({
             method: "GET",
             url: fullUrl,
             headers: { Authorization: `Bearer ${accessToken}` }
@@ -35,30 +39,5 @@ export class HttpAddressGateway implements GetAddressGateway, UpdateAddressGatew
         })
 
         return new Address(addressProps as AddressProps)
-    }
-
-    private async submitRequest(request: RequestDetails): Promise<AddressProps | null> {
-        const { url, method, headers, body } = request
-
-        const response = await fetch(url, {
-            method: method,
-            body: body,
-            headers: headers
-        })
-
-        const responseData = await response.json()
-
-        if (response.status === 401) {
-            throw new UnauthorizedError("User unauthorized")
-        }
-
-        if (!response.ok && responseData.errors) {
-            const { errors } = responseData as HttpGatewayResponse<"failed">
-            throw new Error(errors.join(","))
-        }
-
-        const { data } = responseData as HttpGatewayResponse<"success", AddressProps>
-
-        return data
     }
 }
