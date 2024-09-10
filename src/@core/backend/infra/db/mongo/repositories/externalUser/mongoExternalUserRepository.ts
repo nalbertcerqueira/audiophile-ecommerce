@@ -1,6 +1,6 @@
 import { FindExternalUserByEmailRepository } from "@/@core/backend/domain/repositories/externalUser/findExternalUserByEmailRepository"
 import { FindExternalUserByIdRepository } from "@/@core/backend/domain/repositories/externalUser/findExternalUserByIdRepository"
-import { UpsertExternalUserRepository } from "@/@core/backend/domain/repositories/externalUser/upsertExternalUserRepository"
+import { AddExternalUserRepository } from "@/@core/backend/domain/repositories/externalUser/addExternalUserRepository"
 import { ExternalUserWithId } from "@/@core/backend/domain/repositories/externalUser/protocols"
 import { MongoExternalUser } from "../../models"
 import { ExternalUser } from "@/@core/shared/entities/user/externalUser"
@@ -14,7 +14,7 @@ import {
 export class MongoExternalUserRepository
     implements
         FindExternalUserByEmailRepository,
-        UpsertExternalUserRepository,
+        AddExternalUserRepository,
         FindExternalUserByIdRepository,
         UpdateExternalUserRepository
 {
@@ -36,46 +36,27 @@ export class MongoExternalUserRepository
         return null
     }
 
-    public async upsert(user: ExternalUser): Promise<ExternalUserWithId> {
+    public async add(user: ExternalUser): Promise<{ id: string }> {
         await mongoHelper.connect()
 
         const creationDate = new Date()
-        const { firstName, lastName, email, profileImg, phone } = user.toJSON()
+        const { firstName, lastName, email, profileImg } = user.toJSON()
 
         const userCollection =
             mongoHelper.db.collection<Omit<MongoExternalUser, "_id">>("externalUsers")
 
-        const updatedUser = await userCollection.findOneAndUpdate(
-            { email },
-            {
-                $set: { firstName, lastName, profileImg },
-                $setOnInsert: {
-                    email,
-                    phone,
-                    address: null,
-                    createdAt: creationDate,
-                    updatedAt: creationDate
-                }
-            },
-            {
-                upsert: true,
-                returnDocument: "after",
-                projection: { createdAt: 0, updatedAt: 0, address: 0 }
-            }
-        )
+        const newUser = await userCollection.insertOne({
+            firstName,
+            lastName,
+            email,
+            profileImg,
+            phone: null,
+            address: null,
+            createdAt: creationDate,
+            updatedAt: creationDate
+        })
 
-        if (!updatedUser) {
-            throw new Error("findOneAndUpdate operation failed")
-        }
-
-        return {
-            id: updatedUser._id.toString(),
-            firstName: updatedUser.firstName,
-            lastName: updatedUser.lastName,
-            email: updatedUser.email,
-            profileImg: updatedUser.profileImg,
-            phone: updatedUser.phone
-        }
+        return { id: newUser.insertedId.toString() }
     }
 
     public async findById(userId: string): Promise<ExternalUserWithId | null> {
