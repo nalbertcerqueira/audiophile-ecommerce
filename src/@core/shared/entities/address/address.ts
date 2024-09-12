@@ -25,7 +25,7 @@ export class Address extends Entity<AddressProps> {
         this.props = { ...data }
     }
 
-    public toJSON() {
+    public toJSON(): AddressProps {
         return {
             ...this.props
         }

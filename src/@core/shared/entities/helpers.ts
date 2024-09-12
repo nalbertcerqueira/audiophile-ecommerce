@@ -54,6 +54,8 @@ export function createZodStringSchema(min: number) {
 
 //Entidade genérica
 export abstract class Entity<Props extends Record<string, any>> {
+    public abstract toJSON(): Props
+
     protected validate(
         props: any,
         schema: z.ZodObject<Record<string, any>>
