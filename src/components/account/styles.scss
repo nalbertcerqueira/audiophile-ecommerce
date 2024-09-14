@@ -210,10 +210,16 @@
 }
 
 .address-form {
+    &__fields {
+        @include mixins.media-620 {
+            grid-template-columns: auto;
+        }
+    }
+
     .field:first-child {
         grid-column: span 2;
 
-        @include mixins.media-mobile {
+        @include mixins.media-620 {
             grid-column: unset;
         }
     }

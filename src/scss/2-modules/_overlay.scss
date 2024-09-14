@@ -5,7 +5,7 @@
 .overlay {
     @extend %section-padding;
     min-height: 100%;
-    min-width: 100%;
+    width: 100%;
     padding-top: calc(98px + 2rem);
     position: absolute;
     background-color: rgba(vars.$black, 0.4);
@@ -23,5 +23,9 @@
     &__inner {
         @extend %inner-container;
         @include mixins.flex($content: flex-end);
+
+        @include mixins.media-420 {
+            justify-content: flex-start;
+        }
     }
 }

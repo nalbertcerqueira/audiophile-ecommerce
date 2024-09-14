@@ -55,7 +55,11 @@ export function AddressForm() {
 
     return (
         <form onSubmit={formHandler}>
-            <Fieldset className="address-form" title="SHIPPING ADDRESS">
+            <Fieldset
+                fieldsClassName="address-form__fields"
+                className="address-form"
+                title="SHIPPING ADDRESS"
+            >
                 <Input
                     {...register("address")}
                     error={formState.errors.address?.message}

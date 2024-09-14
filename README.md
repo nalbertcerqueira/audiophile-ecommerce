@@ -74,6 +74,7 @@ Como o projeto faz uso da API de transações do Mongodb, é necessário inicial
 -   Redux
 -   Next.js
 -   Mongodb
+-   Cloudinary
 -   Next auth
 -   Zod
 -   React hook form
