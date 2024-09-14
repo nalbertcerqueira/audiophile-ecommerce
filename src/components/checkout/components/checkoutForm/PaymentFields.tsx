@@ -2,6 +2,7 @@ import { PaymentMethod } from "../../types/types"
 import { CreditCardFields } from "./CreditCardFields"
 import { RadioInput } from "../RadioInput"
 import { BaseCheckoutFieldProps } from "./types"
+import { Fieldset } from "@/components/shared/form/Fieldset"
 
 interface PaymentDetailProps extends BaseCheckoutFieldProps {
     currentPaymentMethod: PaymentMethod
@@ -11,9 +12,8 @@ export function PaymentFields(props: PaymentDetailProps) {
     const { control, formErrors, fieldsetTitle, currentPaymentMethod, register } = props
 
     return (
-        <fieldset className="checkout__payment-details ">
-            <legend className="checkout__group-name">{fieldsetTitle}</legend>
-            <div className="checkout__payment-methods">
+        <>
+            <Fieldset title={fieldsetTitle} className="checkout-form__payment-details">
                 <RadioInput
                     {...register("paymentMethod")}
                     checked={currentPaymentMethod === "creditCard"}
@@ -28,10 +28,10 @@ export function PaymentFields(props: PaymentDetailProps) {
                     label="Cash on Delivery"
                     id="cash"
                 />
-            </div>
+            </Fieldset>
             {currentPaymentMethod === "creditCard" && (
                 <CreditCardFields control={control} formErrors={formErrors} />
             )}
-        </fieldset>
+        </>
     )
 }

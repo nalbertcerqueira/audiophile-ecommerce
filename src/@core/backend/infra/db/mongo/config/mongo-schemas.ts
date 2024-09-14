@@ -29,6 +29,19 @@ const userImageMongoSchema: Document = {
     ]
 }
 
+const userPhoneMongoSchema: Document = {
+    oneOf: [
+        {
+            bsonType: "string",
+            minLength: 6,
+            pattern: "^[0-9]+$"
+        },
+        {
+            bsonType: "null"
+        }
+    ]
+}
+
 const userNameMongoSchema: Document = {
     bsonType: "string",
     minLength: 4,
@@ -48,6 +61,19 @@ const dateMongoSchema: Document = {
 const userTypeMongoSchema: Document = {
     bsonType: "string",
     enum: ["authenticated", "external", "guest"]
+}
+
+const userAddressMongoSchema: Document = {
+    bsonType: "object",
+    additionalProperties: false,
+    required: ["address", "country", "city", "zipCode"],
+    properties: {
+        _id: {},
+        address: { bsonType: "string", minLength: 8 },
+        country: { bsonType: "string", minLength: 4 },
+        city: { bsonType: "string", minLength: 4 },
+        zipCode: { bsonType: "string", minLength: 5 }
+    }
 }
 
 export const productMongoSchema: Document = {
@@ -130,7 +156,9 @@ export const userMongoSchema: Document = {
             "lastName",
             "email",
             "password",
-            "images",
+            "profileImg",
+            "phone",
+            "address",
             "createdAt",
             "updatedAt"
         ],
@@ -141,17 +169,14 @@ export const userMongoSchema: Document = {
             firstName: userNameMongoSchema,
             lastName: userNameMongoSchema,
             email: userEmailMongoSchema,
+            profileImg: userImageMongoSchema,
+            phone: userPhoneMongoSchema,
             password: {
                 bsonType: "string",
                 minLength: 8
             },
-            images: {
-                bsonType: "object",
-                additionalProperties: false,
-                required: ["profile"],
-                properties: {
-                    profile: userImageMongoSchema
-                }
+            address: {
+                oneOf: [userAddressMongoSchema, { bsonType: "null" }]
             }
         }
     }
@@ -161,7 +186,16 @@ export const externalUserMongoSchema: Document = {
     $jsonSchema: {
         bsonType: "object",
         additionalProperties: false,
-        required: ["firstName", "lastName", "email", "images", "createdAt", "updatedAt"],
+        required: [
+            "firstName",
+            "lastName",
+            "email",
+            "profileImg",
+            "phone",
+            "address",
+            "createdAt",
+            "updatedAt"
+        ],
         properties: {
             _id: {},
             createdAt: dateMongoSchema,
@@ -169,13 +203,10 @@ export const externalUserMongoSchema: Document = {
             email: userEmailMongoSchema,
             firstName: { bsonType: "string", minLength: 1 },
             lastName: { bsonType: "string", minLength: 1 },
-            images: {
-                bsonType: "object",
-                additionalProperties: false,
-                required: ["profile"],
-                properties: {
-                    profile: userImageMongoSchema
-                }
+            profileImg: userImageMongoSchema,
+            phone: userPhoneMongoSchema,
+            address: {
+                oneOf: [userAddressMongoSchema, { bsonType: "null" }]
             }
         }
     }

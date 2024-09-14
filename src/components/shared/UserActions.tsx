@@ -1,10 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
 
-import GenericProfileImage from "/public/imgs/profile.jpg"
-import { SessionContext } from "@/contexts/sessionContext/SessionContext"
 import { useContext } from "react"
+import { toCapitalized } from "@/utils/helpers"
+import { useAppSelector } from "@/libs/redux/hooks"
+import { SessionContext } from "@/contexts/sessionContext/SessionContext"
+import { selectUserProfile } from "@/store/user/userSlice"
+
 import Link from "next/link"
+import GenericProfileImage from "/public/imgs/profile.jpg"
 
 interface AvatarCircleProps {
     className?: string
@@ -25,16 +29,18 @@ export function AvatarCircle({ avatarUrl, alt, className }: AvatarCircleProps) {
 }
 
 export function UserActions() {
-    const { user, isLoading, isLogged, logout, getFirstName } = useContext(SessionContext)
-    const profileImage = user?.type !== "guest" ? user?.images.profile : null
-    const firstName = getFirstName()
+    const { logout } = useContext(SessionContext)
+    const isLogged = useAppSelector((state) => state.user.isLogged)
+    const profile = useAppSelector(selectUserProfile)
+    const firstName = profile?.type !== "guest" ? toCapitalized(profile.firstName) : null
+    const profileImage = profile.type !== "guest" ? profile.profileImg : null
 
     function renderUserActions() {
         return (
             <div>
                 <span className="user-actions__name">Hi, {firstName}</span>
                 <div className="user-actions__wrapper">
-                    <Link className="user-actions__action" href="/">
+                    <Link className="user-actions__action" href="/account">
                         Account
                     </Link>
                     <span>|</span>
@@ -63,7 +69,7 @@ export function UserActions() {
     }
 
     return (
-        <div className={`user-actions ${isLoading ? "user-actions--hidden" : ""}`.trim()}>
+        <div className="user-actions">
             <AvatarCircle
                 alt={isLogged && firstName ? `${firstName}'s profile image` : ""}
                 avatarUrl={profileImage}

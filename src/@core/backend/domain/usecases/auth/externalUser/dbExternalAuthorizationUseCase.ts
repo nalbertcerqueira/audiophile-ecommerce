@@ -18,10 +18,6 @@ export class DbExternalAuthorizationUseCase {
         const { id } = payload
         const foundExternalUser = await this.findExternalUserByIdRepository.findById(id)
 
-        if (!foundExternalUser) {
-            return null
-        }
-
-        return { id, ...foundExternalUser.toJSON() }
+        return foundExternalUser
     }
 }

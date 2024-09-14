@@ -1,0 +1,238 @@
+@use "../../scss/1-base/_variables.scss" as vars;
+@use "../../scss/1-base/mixins" as mixins;
+@use "../../scss/1-base/placeholders";
+
+%tab-button {
+    @include mixins.flex($gap: 0.75rem, $items: center);
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.35rem;
+    color: #1d1d1d;
+    font-size: 0.875rem;
+    transition:
+        background-color 0.1s,
+        color 0.1s;
+
+    &:hover,
+    &:focus-visible {
+        background-color: #ebebeb;
+    }
+}
+
+.account-page-container {
+    background-color: vars.$very-light-grey;
+}
+
+.account-section {
+    @extend %section-padding;
+
+    &__inner-container {
+        @extend %inner-container;
+        margin: 2.375rem auto 8.8125rem;
+        display: grid;
+        grid-template-columns: 1fr 3.5fr;
+        gap: 2rem;
+
+        @include mixins.media-960 {
+            grid-template-columns: auto;
+        }
+
+        @include mixins.media-tablet {
+            margin: 1.5rem auto 7.25rem;
+        }
+
+        @include mixins.media-mobile {
+            margin: 1.5rem auto 6.125rem;
+        }
+    }
+}
+
+.account-menu {
+    height: fit-content;
+    background-color: vars.$white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    box-shadow: 2px 2px 6px #dfdfdf;
+
+    &__links {
+        @include mixins.flex($direction: column);
+
+        @include mixins.media-960 {
+            flex-direction: row;
+            gap: 0.5rem;
+        }
+
+        & > * {
+            width: 100%;
+        }
+    }
+}
+
+.tab {
+    @extend %tab-button;
+
+    &--selected {
+        background-color: vars.$default-orange;
+        color: vars.$white;
+        &:hover,
+        &:focus-visible {
+            background-color: vars.$default-orange;
+        }
+
+        .tab__icon {
+            stroke: #ffffff;
+        }
+    }
+
+    &__icon {
+        width: 22px;
+        height: 22px;
+        stroke: #1d1d1d;
+        transition: stroke 0.1s;
+    }
+}
+
+.tab-logout {
+    @extend %tab-button;
+
+    &__icon {
+        height: 22px;
+        width: 22px;
+        stroke: #1d1d1d;
+    }
+}
+
+//Sessão - perfil do usuário e endereço
+.profile-section {
+    @include mixins.flex($gap: 1.5rem, $direction: column);
+}
+
+.profile-form {
+    @include mixins.flex($gap: 2.25rem);
+    margin-top: 2.5rem;
+
+    @include mixins.media-620 {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    &__inputs {
+        @include mixins.media-960 {
+            width: 100%;
+        }
+    }
+
+    &__fields {
+        @include mixins.media-960 {
+            width: 100%;
+            grid-template-columns: auto;
+        }
+    }
+}
+
+.file-field {
+    &__img-wrapper {
+        position: relative;
+        flex-shrink: 0;
+        width: 160px;
+        height: 160px;
+    }
+
+    &__label {
+        @extend %full-width-height;
+        position: absolute;
+        overflow: hidden;
+        border-radius: 50%;
+
+        &:focus-visible {
+            outline: 2px dashed vars.$matte-black;
+            border-radius: 0.125rem;
+            outline-offset: 0.25rem;
+
+            .file-field__img-overlay {
+                opacity: 1;
+            }
+        }
+    }
+
+    &__input {
+        height: 0;
+        width: 0;
+        visibility: hidden;
+    }
+
+    &__img {
+        @extend %full-width-height;
+        object-fit: cover;
+        object-position: top center;
+        border-radius: 50%;
+    }
+
+    &__img-overlay {
+        @extend %full-width-height;
+        @include mixins.flex(
+            $gap: 0.5rem,
+            $direction: column,
+            $content: center,
+            $items: center
+        );
+        position: absolute;
+        top: 0;
+        border-radius: 50%;
+        background-color: #00000080;
+        opacity: 0;
+        transition: opacity vars.$transition-duration;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    &__overlay-content {
+        font-size: 0.875rem;
+        color: vars.$white;
+        font-size: vars.$medium-weight;
+    }
+
+    &__overlay-icon {
+        width: 1.75rem;
+        height: 1.75rem;
+        stroke: vars.$white;
+        color: vars.$white;
+    }
+
+    &__error {
+        @extend %input-error-msg;
+        max-width: 160px;
+        margin-top: 0.5rem;
+    }
+}
+
+.address-form {
+    &__fields {
+        @include mixins.media-620 {
+            grid-template-columns: auto;
+        }
+    }
+
+    .field:first-child {
+        grid-column: span 2;
+
+        @include mixins.media-620 {
+            grid-column: unset;
+        }
+    }
+}
+
+.tab-submit-btn {
+    position: relative;
+    margin-top: 2rem;
+}
+
+//Outros
+.tab-not-found,
+.tab-loader {
+    padding: 0;
+    min-height: 250px;
+}

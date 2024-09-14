@@ -3,27 +3,26 @@
 import { BillingDetailFields } from "./BillingDetailFields"
 import { ShippingFields } from "./ShippingFields"
 import { CheckoutFields } from "../../types/types"
-import { SessionContext } from "@/contexts/sessionContext/SessionContext"
 import { PaymentFields } from "./PaymentFields"
 import { CashIcon } from "@/components/shared/icons/CashIcon"
-import { FormEvent, useContext } from "react"
+import { FormEvent, useEffect } from "react"
 import { useCheckoutForm } from "./useCheckoutForm"
 import { useAppDispatch, useAppSelector } from "@/libs/redux/hooks"
-import { createOrder } from "@/store/checkout"
+import { createOrder, selectTaxesStatus } from "@/store/checkout"
 import { emitToast } from "@/libs/react-toastify/utils"
 import { SuccessCheckoutMessage } from "@/libs/react-toastify/components/CheckoutMessages"
 import { handleHttpErrors } from "@/utils/helpers"
 import { Id } from "react-toastify"
-import { selectTaxesStatus } from "@/store/checkout/checkoutSlice"
 import {
     selectCartStatus,
     selectCartItemsLength,
     selectBusyProductsLength
-} from "@/store/cart/cartSlice"
+} from "@/store/cart"
+import { SectionHeading } from "@/components/shared/SectionHeading"
+import { selectUserAddress, selectUserProfile } from "@/store/user"
 
 const checkoutFormInitialState: CheckoutFields = {
     fullName: "",
-    email: "",
     phone: "",
     address: "",
     zipCode: "",
@@ -31,20 +30,33 @@ const checkoutFormInitialState: CheckoutFields = {
     country: "",
     paymentMethod: "cash"
 }
+
 export function CheckoutForm({ formId }: { formId: string }) {
-    const dispatch = useAppDispatch()
     const form = useCheckoutForm(checkoutFormInitialState)
     const cartStatus = useAppSelector(selectCartStatus)
     const busyProductsLength = useAppSelector(selectBusyProductsLength)
+    const profile = useAppSelector(selectUserProfile)
+    const address = useAppSelector(selectUserAddress)
+    const reset = form.reset
+    const getValues = form.getValues
+    const dispatch = useAppDispatch()
 
     const isLoadingTaxes = useAppSelector(selectTaxesStatus) !== "settled"
     const isCartEmpty = useAppSelector(selectCartItemsLength) === 0
     const isCartBusy = cartStatus !== "settled" || busyProductsLength > 0
-    const { isLogged } = useContext(SessionContext)
-
+    const isLogged = useAppSelector((state) => state.user.isLogged)
     const submitBlocked = isCartEmpty || isCartBusy || isLoadingTaxes || form.isSubmitting
 
-    async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    useEffect(() => {
+        if (profile.type !== "guest") {
+            const { firstName, lastName, phone } = profile
+            const fullName = `${firstName} ${lastName}`
+            const values = getValues()
+            reset({ ...values, ...address, fullName, phone: phone || "" })
+        }
+    }, [reset, getValues, profile, address])
+
+    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
         if (submitBlocked) return
@@ -55,7 +67,7 @@ export function CheckoutForm({ formId }: { formId: string }) {
 
     async function handleSuccessfulSubmit() {
         const toastId = emitToast("loading", "Processing your order. Please wait a moment...")
-        dispatch(createOrder())
+        return dispatch(createOrder())
             .unwrap()
             .then((order) => handleSuccess(order.orderId, toastId))
             .catch((error: Error) => handleHttpErrors(error, true, toastId))
@@ -69,9 +81,9 @@ export function CheckoutForm({ formId }: { formId: string }) {
     }
 
     return (
-        <div className="checkout">
-            <h1 className="checkout__title">CHECKOUT</h1>
-            <form id={formId} className="checkout__form" onSubmit={onSubmit}>
+        <>
+            <SectionHeading>CHECKOUT</SectionHeading>
+            <form id={formId} className="checkout-form" onSubmit={handleSubmit}>
                 <BillingDetailFields
                     fieldsetTitle="BILLING DETAILS"
                     control={form.control}
@@ -93,15 +105,15 @@ export function CheckoutForm({ formId }: { formId: string }) {
                 />
             </form>
             {form.paymentMethod === "cash" && (
-                <div className="checkout__cash-guidance">
-                    <CashIcon className="checkout__cash-icon" />
-                    <p className="checkout__cash-info">
+                <div className="checkout-form__cash-guidance">
+                    <CashIcon className="checkout-form__cash-icon" />
+                    <p className="checkout-form__cash-info">
                         {
                             "The 'Cash on Delivery' option enables you to pay in cash when our delivery courier arrives at your residence. Just make sure your address is correct so that your order will not be cancelled."
                         }
                     </p>
                 </div>
             )}
-        </div>
+        </>
     )
 }

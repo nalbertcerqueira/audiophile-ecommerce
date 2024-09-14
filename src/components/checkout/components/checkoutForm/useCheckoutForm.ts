@@ -1,3 +1,5 @@
+"use client"
+
 import { checkoutFieldsSchema } from "../../helpers/schemas"
 import { CheckoutFields } from "../../types/types"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -12,7 +14,8 @@ export function useCheckoutForm(initialState: CheckoutFields) {
         register,
         handleSubmit,
         unregister,
-        reset
+        reset,
+        getValues
     } = useForm<CheckoutFields>({
         mode: "onSubmit",
         reValidateMode: "onSubmit",
@@ -37,6 +40,7 @@ export function useCheckoutForm(initialState: CheckoutFields) {
         register,
         handleSubmit,
         unregister,
-        reset
+        reset,
+        getValues
     }
 }

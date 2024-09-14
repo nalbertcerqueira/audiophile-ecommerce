@@ -8,8 +8,8 @@ export class GuestSessionController implements Controller {
 
     public async handle(): Promise<HttpResponse> {
         try {
-            const { token } = await this.guestSessionUseCase.execute()
-            return { statusCode: 200, data: token }
+            const data = await this.guestSessionUseCase.execute()
+            return { statusCode: 200, data }
         } catch (error: any) {
             return serverError()
         }

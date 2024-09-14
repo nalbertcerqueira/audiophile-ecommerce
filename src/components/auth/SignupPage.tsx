@@ -23,13 +23,23 @@ export function SignupPageComponent() {
         return setTimeout(() => location.assign("/signin"), 2000)
     }
 
+    function handleError(message: string) {
+        emitToast("error", message)
+        form.setError("root", {
+            message:
+                "Sorry, Something went wrong with your request. We're working to fix the issue."
+        })
+    }
+
     async function handleSuccessfulSubmit(formData: AuthFormFields<"signup">) {
-        if (isFormBlocked) return
+        if (isFormBlocked) {
+            return
+        }
 
         return signupUseCase
             .execute(formData)
             .then((success) => handleSignup(success))
-            .catch((error) => emitToast("error", error.message))
+            .catch((error) => handleError(error.message))
     }
 
     return (

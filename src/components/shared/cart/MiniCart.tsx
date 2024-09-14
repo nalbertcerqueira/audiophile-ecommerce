@@ -1,37 +1,36 @@
 "use client"
 
-import { addCartItem, clearCart, fetchCart, removeCartItem } from "@/store/cart"
-import { SessionContext } from "@/contexts/sessionContext/SessionContext"
+import { addCartItem, clearCart, fetchCart, removeCartItem, selectCart } from "@/store/cart"
 import { useAppSelector } from "@/libs/redux/hooks"
 import { SummaryField } from "./SummaryField"
 import { AppDispatch } from "@/store/store"
 import { CartItemCard } from "./CartItem"
-import { useContext, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { useDispatch } from "react-redux"
 import { useRouter } from "next/navigation"
-import { fetchTaxes, setCheckoutStatus } from "@/store/checkout"
+import { fetchTaxes, setCheckoutStatus, selectOrderStatus } from "@/store/checkout"
 import { handleHttpErrors } from "@/utils/helpers"
-import { selectOrderStatus } from "@/store/checkout/checkoutSlice"
-import { selectCart } from "@/store/cart/cartSlice"
 import { PrimaryButton } from "../buttons/PrimaryButton"
+import { selectUserStatus } from "@/store/user/userSlice"
 
 export function MiniCart({ isOpen }: { isOpen: boolean }) {
     const dispatch = useDispatch<AppDispatch>()
     const requestRef = useRef<number>(0)
-    const session = useContext(SessionContext)
     const router = useRouter()
     const cart = useAppSelector(selectCart)
     const isCheckingOut = useAppSelector(selectOrderStatus) === "loading"
+    const isSessionLoading = useAppSelector(selectUserStatus) === "loading"
+    const isLogged = useAppSelector((state) => state.user.isLogged)
     const { items, itemCount, totalSpent, status } = cart
 
     //Buscando o carrinho de compras após o carregamento da página
     useEffect(() => {
-        if (!session.isLoading) {
+        if (!isSessionLoading) {
             Promise.all([dispatch(fetchCart()).unwrap(), dispatch(fetchTaxes()).unwrap()])
                 .catch((error: Error) => handleHttpErrors(error, true))
                 .finally(() => dispatch(setCheckoutStatus({ taxes: "settled" })))
         }
-    }, [session.isLoading, dispatch])
+    }, [isSessionLoading, dispatch])
 
     async function handleClearCart() {
         const isCartBusy = status.state !== "settled" || status.busyProducts.length > 0
@@ -49,7 +48,7 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
             .finally(() => dispatch(setCheckoutStatus({ taxes: "settled" })))
     }
 
-    async function addOrRemove(operation: "add" | "remove", productId: string) {
+    async function addOrRemoveItem(operation: "add" | "remove", productId: string) {
         const isProductBusy = status.busyProducts.includes(productId)
         const actionBlocked = isCheckingOut || isProductBusy || status.state !== "settled"
 
@@ -113,8 +112,8 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
                             status.state !== "settled" ||
                             status.busyProducts.includes(item.productId)
                         }
-                        addItem={() => addOrRemove("add", item.productId)}
-                        removeItem={() => addOrRemove("remove", item.productId)}
+                        addItem={() => addOrRemoveItem("add", item.productId)}
+                        removeItem={() => addOrRemoveItem("remove", item.productId)}
                     />
                 ))}
             </div>
@@ -128,9 +127,7 @@ export function MiniCart({ isOpen }: { isOpen: boolean }) {
             <PrimaryButton
                 className="mini-cart__checkout-btn"
                 onClick={() =>
-                    session.isLogged
-                        ? router.push("/checkout")
-                        : window.location.assign("/signin")
+                    isLogged ? router.push("/checkout") : window.location.assign("/signin")
                 }
             >
                 CHECKOUT

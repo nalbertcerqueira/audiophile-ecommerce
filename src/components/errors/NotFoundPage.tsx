@@ -1,14 +1,14 @@
-import { PageError } from "@/components/errors/components/PageError"
-import Link from "next/link"
+import { Header } from "../shared/layouts/Header"
+import { NotFoundContent } from "./components/NotFoundContent"
 import "./styles.scss"
 
 export function NotFoundPage() {
     return (
         <>
-            <PageError title="404">
-                Sorry, we couldn&apos;t find what you&apos;re looking for. But you can find
-                plenty of other things on our <Link href="/">homepage</Link>.
-            </PageError>
+            <div className="header-bg--black">
+                <Header />
+            </div>
+            <NotFoundContent />
         </>
     )
 }

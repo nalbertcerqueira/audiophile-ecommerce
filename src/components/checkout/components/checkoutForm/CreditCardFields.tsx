@@ -1,15 +1,15 @@
 import { Input } from "../../../shared/inputs/Input"
-import { Controller, FieldErrors } from "react-hook-form"
+import { handleExpirationDate } from "../../helpers/utils"
 import { CheckoutWithCreditCard } from "../../types/types"
+import { handleFormNumericField } from "@/utils/helpers"
+import { BaseCheckoutFieldProps } from "./types"
+import { Controller, FieldErrors } from "react-hook-form"
 import {
     maskCvv,
     maskExpirationMonth,
     maskExpirationYear,
-    maskCreditCardNumber,
-    handleExpirationDate,
-    handleNumericField
-} from "../../helpers/utils"
-import { BaseCheckoutFieldProps } from "./types"
+    maskCreditCardNumber
+} from "@/utils/masks"
 
 type CreditCardDetailProps = Pick<BaseCheckoutFieldProps, "control" | "formErrors">
 
@@ -19,7 +19,7 @@ export function CreditCardFields(props: CreditCardDetailProps) {
     const expDateError = creditCardErrors.expDate?.root?.message
 
     return (
-        <div className="checkout__cc-fields">
+        <div className="checkout-form__cc-fields">
             <Controller
                 name="cardNumber"
                 control={control}
@@ -27,7 +27,7 @@ export function CreditCardFields(props: CreditCardDetailProps) {
                     <Input
                         {...field}
                         value={maskCreditCardNumber(field.value || "")}
-                        onChange={handleNumericField(field, 16)}
+                        onChange={handleFormNumericField(field, 16)}
                         error={creditCardErrors.cardNumber?.message}
                         label="Card Number"
                         id="card-number"
@@ -40,13 +40,13 @@ export function CreditCardFields(props: CreditCardDetailProps) {
             <div>
                 <label
                     htmlFor="exp-month"
-                    className={`checkout__expdate-label ${
-                        creditCardErrors.expDate ? "checkout__expdate-label--error" : ""
+                    className={`checkout-form__expdate-label ${
+                        creditCardErrors.expDate ? "checkout-form__expdate-label--error" : ""
                     }`}
                 >
                     Expiration Date
                 </label>
-                <div className="checkout__expdate">
+                <div className="checkout-form__expdate">
                     <Controller
                         name="expDate.month"
                         control={control}
@@ -94,7 +94,7 @@ export function CreditCardFields(props: CreditCardDetailProps) {
                     <Input
                         {...field}
                         value={maskCvv(field.value || "")}
-                        onChange={handleNumericField(field, 3)}
+                        onChange={handleFormNumericField(field, 3)}
                         error={creditCardErrors.cvv?.message}
                         label="CVV"
                         ariaLabel="CVV code"

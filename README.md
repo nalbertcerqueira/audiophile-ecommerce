@@ -23,30 +23,33 @@ Audiophile ecommerce se trata de um projeto desenvolvido a partir de um dos desa
 -   🟢 Sessão anônima
 -   🟢 Carrinho de compras (adição e remoção de produtos)
 -   🟢 Checkout do carrinho
--   ⚪ Painel do usuário (em breve...)
+-   🟢 Painel do usuáriO
 
 ### Rotas da API
 
 #### Rotas privadas 🔐
 
-| **Método** | **Rota**                    | **Descrição**                                |
-| ---------- | --------------------------- | -------------------------------------------- |
-| GET        | `/api/auth/user`            | Obtém os dados do usuário ao inciar a sessão |
-| GET        | `/api/auth/cart`            | Obtém o carrinho de compras do usuário       |
-| POST       | `/api/auth/cart/items`      | Adiciona um novo item ao carrinho            |
-| DELETE     | `/api/auth/cart/items`      | Remove todos os items do carrinho            |
-| PATCH      | `/api/auth/cart/items/[id]` | Atualiza as informações de um item           |
-| POST       | `/api/auth/checkout`        | Efetua o checkout da compra                  |
-| GET        | `/api/auth/checkout/taxes`  | Obtém as taxas relacionadas à compra         |
+| **Método** | **Rota**                    | **Descrição**                             |
+| ---------- | --------------------------- | ----------------------------------------- |
+| GET        | `/api/auth/user/profile`    | Obtém as informações do perfil do usuário |
+| PUT        | `/api/auth/user/profile`    | Atualiza as informações do perfil         |
+| GET        | `/api/auth/user/address`    | Obém o atual endereço do usuário          |
+| PUT        | `/api/auth/user/address`    | Atualiza as informações do endereço       |
+| GET        | `/api/auth/cart`            | Obtém o carrinho de compras do usuário    |
+| POST       | `/api/auth/cart/items`      | Adiciona um novo item ao carrinho         |
+| DELETE     | `/api/auth/cart/items`      | Remove todos os items do carrinho         |
+| PATCH      | `/api/auth/cart/items/[id]` | Atualiza as informações de um item        |
+| POST       | `/api/auth/checkout`        | Efetua o checkout da compra               |
+| GET        | `/api/auth/checkout/taxes`  | Obtém as taxas relacionadas à compra      |
 
 #### Rotas públicas 🛤️
 
-| **Método** | **Rota**                  | **Descrição**                                           |
-| ---------- | ------------------------- | ------------------------------------------------------- |
-| POST       | `/api/signin`             | Efetua o login do usuário retornando um token de acesso |
-| POST       | `/api/signup`             | Cadastra um usuário na aplicação                        |
-| POST       | `/api/auth/signin/google` | Efetua o login através do google                        |
-| POST       | `/api/auth/signin/github` | Efetua o login através do github                        |
+| **Método** | **Rota**                  | **Descrição**                    |
+| ---------- | ------------------------- | -------------------------------- |
+| POST       | `/api/signin`             | Efetua o login do usuário        |
+| POST       | `/api/signup`             | Cadastra um usuário na aplicação |
+| POST       | `/api/auth/signin/google` | Efetua o login através do google |
+| POST       | `/api/auth/signin/github` | Efetua o login através do github |
 
 ## 📁 Configurando o Mongodb
 
@@ -71,6 +74,7 @@ Como o projeto faz uso da API de transações do Mongodb, é necessário inicial
 -   Redux
 -   Next.js
 -   Mongodb
+-   Cloudinary
 -   Next auth
 -   Zod
 -   React hook form

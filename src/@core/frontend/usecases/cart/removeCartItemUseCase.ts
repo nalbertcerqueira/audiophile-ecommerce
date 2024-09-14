@@ -1,5 +1,5 @@
-import { Cart, CartProps } from "../../../shared/entities/cart/cart"
-import { CartItem, CartProduct } from "@/@core/shared/entities/cart/cartItem"
+import { Cart, CartProps, createCart } from "../../../shared/entities/cart/cart"
+import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
 import { UpdateCartItemGateway } from "../../domain/gateways/cart/updateCartItemGateway"
 
 interface RemoveItemInputDTO {
@@ -17,7 +17,7 @@ export class RemoveCartItemUseCase {
             return null
         }
 
-        const cart = new Cart({ items: cartProps.items.map((item) => new CartItem(item)) })
+        const cart = createCart({ items: cartProps.items })
         const removedItem = cart.removeItem(itemRef.productId, itemRef.quantity)
         const quantity = removedItem?.quantity ?? 0
 

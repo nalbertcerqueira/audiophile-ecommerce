@@ -31,6 +31,14 @@ export function SigninPageComponent() {
         return setTimeout(() => location.reload(), 1000)
     }
 
+    function handleError(message: string) {
+        emitToast("error", message)
+        form.setError("root", {
+            message:
+                "Sorry, Something went wrong with your request. We're working to fix the issue."
+        })
+    }
+
     async function externalSignin(provider: BuiltInProviderType) {
         if (isFormBlocked) return
 
@@ -53,7 +61,7 @@ export function SigninPageComponent() {
         return signinUseCase
             .execute(data)
             .then((token) => handleSignin(token))
-            .catch((error) => emitToast("error", error.message))
+            .catch((error) => handleError(error.message))
     }
 
     return (

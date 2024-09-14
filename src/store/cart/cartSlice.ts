@@ -56,7 +56,6 @@ const cartSlice = createSlice({
             })
             .addMatcher(isCartSettledAction, (state, action) => {
                 const busyProducts = state.status.busyProducts
-                action.meta.arg
                 const arg = action.meta.arg as { itemRef: { productId: string } } | undefined
                 switch (action.meta.requestStatus) {
                     case "fulfilled": {

@@ -1,5 +1,10 @@
-import { PropsWithChildren } from "react"
+import { ReactNode } from "react"
 
-export function PageLoaderContainer({ children }: PropsWithChildren) {
-    return <div className="page-loader-container">{children}</div>
+interface PageLoaderContainerProps {
+    children: ReactNode
+    className?: string
+}
+
+export function PageLoaderContainer({ children, className }: PageLoaderContainerProps) {
+    return <div className={`page-loader-container ${className || ""}`.trim()}>{children}</div>
 }

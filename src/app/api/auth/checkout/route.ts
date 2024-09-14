@@ -1,5 +1,5 @@
 import { mongoHelper } from "@/@core/backend/infra/db/mongo/config/mongo-config"
-import { createCheckoutOrderCreationController } from "@/@core/backend/main/factories/controllers/order/createCheckoutOrderControllerFactory"
+import { buildCreateOrderController } from "@/@core/backend/main/factories/controllers/order/createOrderControllerFactory"
 import { authenticatedAuthMiddleware } from "@/@core/backend/main/factories/middlewares/authenticatedAuthMiddlewareFactory"
 import { NextRequest, NextResponse } from "next/server"
 
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     const fullName = `${firstName} ${lastName}`
 
     const session = mongoHelper.startSession()
-    const checkoutOrderController = createCheckoutOrderCreationController(session)
+    const checkoutOrderController = buildCreateOrderController(session)
 
     const { statusCode, headers, ...responseRest } = await checkoutOrderController.handle({
         body: { customer: { fullName, email } },

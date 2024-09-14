@@ -4,7 +4,7 @@ import { AddCartItemsRepository } from "@/@core/backend/domain/repositories/cart
 import { CartProduct, CartItem } from "@/@core/shared/entities/cart/cartItem"
 import { ClearCartRepository } from "@/@core/backend/domain/repositories/cart/clearCartRepository"
 import { GetCartRepository } from "@/@core/backend/domain/repositories/cart/getCartRepository"
-import { CartProps, Cart } from "@/@core/shared/entities/cart/cart"
+import { CartProps, Cart, createCart } from "@/@core/shared/entities/cart/cart"
 import { MongoCartItem } from "../../models"
 import { UserInfo } from "@/@core/backend/domain/protocols"
 import { mongoHelper } from "../../config/mongo-config"
@@ -164,9 +164,7 @@ export class MongoCartRepository
             return null
         }
 
-        return new Cart({
-            items: queryResult[0].items.map((item) => new CartItem({ ...item }))
-        })
+        return createCart({ items: queryResult[0].items })
     }
 
     private async findItem(

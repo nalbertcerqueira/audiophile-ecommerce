@@ -1,0 +1,42 @@
+@use "../../scss/1-base/variables" as vars;
+@use "../../scss/1-base/mixins" as mixins;
+
+.error-page-content {
+    @include mixins.flex($items: center, $content: center);
+    width: 100%;
+    padding: 0 2.5rem;
+    min-height: 85vh;
+
+    @include mixins.media-mobile {
+        padding: 0 1.5rem;
+    }
+
+    &__inner {
+        max-width: 500px;
+    }
+
+    &__title {
+        font-size: 3.75rem;
+        color: vars.$matte-black;
+        text-align: center;
+    }
+
+    &__text {
+        margin-top: 1.5rem;
+        font-size: 1.125rem;
+        color: #383838;
+        font-weight: vars.$medium-weight;
+        text-align: center;
+    }
+
+    & a {
+        display: inline-block;
+        text-decoration: underline;
+        text-decoration-color: transparent;
+        color: vars.$default-orange;
+
+        &:hover {
+            text-decoration-color: vars.$default-orange;
+        }
+    }
+}

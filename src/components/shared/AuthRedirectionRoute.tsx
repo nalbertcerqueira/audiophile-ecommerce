@@ -1,8 +1,9 @@
 "use client"
 
-import { SessionContext } from "@/contexts/sessionContext/SessionContext"
+import { useAppSelector } from "@/libs/redux/hooks"
+import { selectUserStatus } from "@/store/user/userSlice"
 import { useRouter } from "next/navigation"
-import { ReactNode, useContext, useEffect } from "react"
+import { ReactNode, useEffect } from "react"
 
 interface ProtectedRouteProps {
     routeType: "auth" | "protected"
@@ -14,7 +15,8 @@ interface ProtectedRouteProps {
 //Redirecionando o usuário com base no tipo de rota e status da sessão
 export function AuthRedirectionRoute(props: ProtectedRouteProps) {
     const { fallback, routeToRedirect, routeType } = props
-    const { isLoading, isLogged } = useContext(SessionContext)
+    const isLogged = useAppSelector((state) => state.user.isLogged)
+    const isLoading = useAppSelector(selectUserStatus) === "loading"
     const { replace } = useRouter()
 
     useEffect(() => {

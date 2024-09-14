@@ -60,10 +60,43 @@
     }
 
     &__error-msg {
-        @extend %show-animation;
-        color: vars.$red;
-        font-size: 0.75rem;
-        font-weight: vars.$bold-weight;
+        @extend %input-error-msg;
         margin-top: 0.5rem;
+    }
+}
+
+//Alterando alguns estilos da lib 'react-international-phone
+.field .react-international-phone-input-container {
+    border-radius: 0.5rem;
+    border: 1px solid #cfcfcf;
+    transition: border-color vars.$transition-duration;
+
+    &:focus-within {
+        border-color: vars.$default-orange;
+
+        & .react-international-phone-country-selector-button {
+            border-right-color: vars.$default-orange;
+        }
+    }
+
+    & .react-international-phone-input {
+        @extend %input-field;
+        border: none;
+        height: auto;
+        width: 100%;
+        border-radius: 0 0.5rem 0.5rem 0;
+    }
+
+    & .react-international-phone-country-selector-button {
+        border: none;
+        border-radius: 0.5rem 0 0 0.5rem;
+        border-right: 1px solid #cfcfcf;
+        height: 100%;
+        padding: 0rem 0.75rem;
+        transition: vars.$transition-duration;
+    }
+
+    &--error {
+        border: 0.125rem solid vars.$red;
     }
 }

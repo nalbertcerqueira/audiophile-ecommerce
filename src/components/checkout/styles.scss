@@ -2,12 +2,6 @@
 @use "../../scss/1-base/_mixins.scss" as mixins;
 @use "../../scss/1-base/_placeholders.scss";
 
-%checkout-fieldset {
-    display: grid;
-    gap: 1.5rem 1rem;
-    grid-template-columns: repeat(2, 1fr);
-}
-
 .checkout-page-container {
     background-color: vars.$very-light-grey;
 }
@@ -36,62 +30,14 @@
     }
 }
 
-.checkout {
-    padding: 3.375rem 3rem 3rem;
-    background-color: vars.$white;
-    border-radius: 0.5rem;
-    box-shadow: vars.$light-shadow;
-
-    @include mixins.media-tablet {
-        padding: 2.5rem 2rem 2rem;
-    }
+.checkout-form {
+    margin-top: 2.5rem;
 
     @include mixins.media-mobile {
-        padding: 1.5rem 1.5rem 2rem;
-    }
-
-    &__title {
-        font-size: vars.$h3-font-size;
-        letter-spacing: vars.$h3-letter-spacing;
-        line-height: vars.$h3-line-height;
-        font-weight: vars.$extra-bold-weight;
-
-        @include mixins.media-mobile {
-            font-size: 1.75rem;
-            line-height: 2rem;
-        }
-    }
-
-    &__form {
-        margin-top: 2.5rem;
-
-        @include mixins.media-mobile {
-            margin-top: 2rem;
-        }
-    }
-
-    &__user-info {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    &__group-name {
-        @extend %subtitle;
-        margin-bottom: 1rem;
-        color: vars.$default-orange;
-    }
-
-    &__billing-details,
-    &__shipping-details,
-    &__payment-details {
-        @include mixins.media-mobile {
-            grid-template-columns: auto;
-            grid-template-rows: auto;
-        }
+        margin-top: 2rem;
     }
 
     &__billing-details {
-        @extend %checkout-fieldset;
         margin-bottom: 3.375rem;
 
         @include mixins.media-mobile {
@@ -100,48 +46,30 @@
     }
 
     &__shipping-details {
-        @extend %checkout-fieldset;
         margin-bottom: 3.75rem;
 
-        & > *:nth-child(2) {
+        & .field:first-child {
             grid-column: span 2;
+
+            @include mixins.media-mobile {
+                grid-column: unset;
+            }
         }
 
         @include mixins.media-mobile {
             margin-bottom: 2rem;
-
-            & > *:nth-child(2) {
-                grid-column: auto;
-            }
         }
     }
 
     &__payment-details {
-        @extend %checkout-fieldset;
-
-        @include mixins.media-mobile {
-            gap: 2rem;
-        }
-    }
-
-    &__payment-methods {
-        @include mixins.flex($gap: 1rem, $content: stretch);
-        grid-column: span 2;
-
-        & > * {
-            flex-grow: 1;
-        }
-
-        @include mixins.media-mobile {
-            flex-direction: column;
-            grid-column: auto;
-        }
+        margin-bottom: 1.5rem;
     }
 
     &__cc-fields {
         @extend %show-animation;
-        @extend %checkout-fieldset;
-        grid-column: span 2;
+        display: grid;
+        gap: 1.5rem 1rem;
+        grid-template-columns: repeat(2, 1fr);
 
         & > *:first-child {
             grid-column: span 2;
@@ -174,7 +102,6 @@
     &__cash-guidance {
         @extend %show-animation;
         @include mixins.flex($gap: 2rem, $items: center);
-        margin-top: 1.5rem;
 
         @include mixins.media-mobile {
             margin-top: 2rem;
@@ -385,42 +312,6 @@
             margin-top: 1.5rem;
         }
     }
-}
-
-//Alterando alguns estilos da lib 'react-international-phone
-.react-international-phone-input-container {
-    border-radius: 0.5rem;
-    border: 1px solid #cfcfcf;
-    transition: border-color vars.$transition-duration;
-
-    &:focus-within {
-        border-color: vars.$default-orange;
-
-        & .react-international-phone-country-selector-button {
-            border-right-color: vars.$default-orange;
-        }
-    }
-
-    & .react-international-phone-input {
-        @extend %input-field;
-        border: none;
-        height: auto;
-        width: 100%;
-        border-radius: 0 0.5rem 0.5rem 0;
-    }
-
-    & .react-international-phone-country-selector-button {
-        border: none;
-        border-radius: 0.5rem 0 0 0.5rem;
-        border-right: 1px solid #cfcfcf;
-        height: 100%;
-        padding: 0rem 0.75rem;
-        transition: vars.$transition-duration;
-    }
-}
-
-.react-international-phone--error {
-    border: 0.125rem solid vars.$red;
 }
 
 @keyframes grow {

@@ -1,41 +1,43 @@
 import { GetCartGateway } from "@/@core/frontend/domain/gateways/cart/getCartGateway"
-import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
-import { CartItem, CartProduct } from "@/@core/shared/entities/cart/cartItem"
-import { HttpGatewayResponse, RequestDetails } from "../protocols"
+import { Cart, CartProps, createCart } from "@/@core/shared/entities/cart/cart"
+import { CartProduct } from "@/@core/shared/entities/cart/cartItem"
+import { HttpGateway } from "../protocols"
 import { AddCartItemGateway } from "@/@core/frontend/domain/gateways/cart/addCartItemGateway"
 import { ClearCartGateway } from "@/@core/frontend/domain/gateways/cart/clearCartGateway"
-import { UnauthorizedError } from "@/@core/frontend/infra/errors"
 import { UpdateCartItemGateway } from "@/@core/frontend/domain/gateways/cart/updateCartItemGateway"
 
 export class HttpCartGateway
+    extends HttpGateway
     implements GetCartGateway, AddCartItemGateway, ClearCartGateway, UpdateCartItemGateway
 {
-    constructor(private readonly baseApiUrl: string) {}
+    constructor(private readonly baseApiUrl: string) {
+        super()
+    }
 
     public async get(): Promise<Cart> {
         const accessToken = localStorage.getItem("accessToken")
         const fullUrl = `${this.baseApiUrl}/cart`
 
-        const cart = await this.submitRequest({
+        const cartProps = await this.submitRequest<CartProps>({
             method: "GET",
             url: fullUrl,
             headers: { Authorization: `Bearer ${accessToken}` }
         })
 
-        return cart
+        return createCart({ items: cartProps.items })
     }
 
     public async clearCart(): Promise<Cart> {
         const accessToken = localStorage.getItem("accessToken")
         const fullUrl = `${this.baseApiUrl}/cart/items`
 
-        const cart = await this.submitRequest({
+        const cartProps = await this.submitRequest<CartProps>({
             method: "DELETE",
             url: fullUrl,
             headers: { Authorization: `Bearer ${accessToken}` }
         })
 
-        return cart
+        return createCart({ items: cartProps.items })
     }
 
     public async addItem(productId: string, quantity: number): Promise<Cart> {
@@ -43,17 +45,17 @@ export class HttpCartGateway
         const fullUrl = `${this.baseApiUrl}/cart/items`
         const body = { productId: productId, quantity }
 
-        const cart = await this.submitRequest({
+        const cartProps = await this.submitRequest<CartProps>({
             method: "POST",
             url: fullUrl,
-            body: body,
+            body: JSON.stringify(body),
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`
             }
         })
 
-        return cart
+        return createCart({ items: cartProps.items })
     }
 
     public async updateItem(
@@ -63,42 +65,16 @@ export class HttpCartGateway
         const fullUrl = `${this.baseApiUrl}/cart/items/${itemRef.productId}`
         const body = { quantity: itemRef.quantity }
 
-        const cart = await this.submitRequest({
+        const cartProps = await this.submitRequest<CartProps>({
             method: "PATCH",
             url: fullUrl,
-            body: body,
+            body: JSON.stringify(body),
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`
             }
         })
 
-        return cart
-    }
-
-    private async submitRequest(request: RequestDetails): Promise<Cart> {
-        const { url, method, headers, body } = request
-
-        const response = await fetch(url, {
-            method: method,
-            body: body && JSON.stringify(body),
-            headers: headers
-        })
-
-        const responseData = await response.json()
-
-        if (response.status === 401) {
-            throw new UnauthorizedError("User unauthorized")
-        }
-
-        if (!response.ok && responseData.errors) {
-            const { errors } = responseData as HttpGatewayResponse<"failed">
-            throw new Error(errors.join(","))
-        }
-
-        const { data } = responseData as HttpGatewayResponse<"success", CartProps>
-
-        const items = data.items.map((item) => new CartItem(item))
-        return new Cart({ items })
+        return createCart({ items: cartProps.items })
     }
 }

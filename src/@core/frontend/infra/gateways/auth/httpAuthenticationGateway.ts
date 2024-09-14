@@ -1,19 +1,17 @@
-import {
-    AuthenticationGateway,
-    AuthData
-} from "@/@core/frontend/domain/gateways/auth/authenticationGateway"
+import { SigninGateway, AuthData } from "@/@core/frontend/domain/gateways/auth/signinGateway"
 import { HttpGatewayResponse } from "../protocols"
+import { SignupData, SignupGateway } from "@/@core/frontend/domain/gateways/auth/signupGateway"
 
-export class HttpAuthenticationGateway implements AuthenticationGateway {
+export class HttpAuthenticationGateway implements SigninGateway, SignupGateway {
     constructor(private readonly baseApiUrl: string) {}
 
-    public async authenticateUser(authData: AuthData): Promise<string | null> {
+    public async signIn(data: AuthData): Promise<string | null> {
         const fullUrl = `${this.baseApiUrl}/signin`
         const guestSessionToken = localStorage.getItem("accessToken")
 
         const response = await fetch(fullUrl, {
             method: "POST",
-            body: JSON.stringify(authData),
+            body: JSON.stringify(data),
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${guestSessionToken}`
@@ -31,7 +29,28 @@ export class HttpAuthenticationGateway implements AuthenticationGateway {
             throw new Error(errors.join(","))
         }
 
-        const { data } = responseData as HttpGatewayResponse<"success", string>
-        return data
+        return (responseData as HttpGatewayResponse<"success", string>).data
+    }
+
+    public async signUp(data: SignupData): Promise<boolean> {
+        const headers: HeadersInit = { "Content-type": "application/json" }
+        const response = await fetch("/api/signup", {
+            body: JSON.stringify(data),
+            method: "POST",
+            headers
+        })
+
+        const responseData = await response.json()
+
+        if (response.status === 409) {
+            return false
+        }
+
+        if (!responseData.ok && responseData.errors) {
+            const { errors } = responseData as HttpGatewayResponse<"failed">
+            throw new Error(errors.join(","))
+        }
+
+        return true
     }
 }

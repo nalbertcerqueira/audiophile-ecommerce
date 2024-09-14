@@ -1,6 +1,6 @@
-import { Cart, CartProps } from "@/@core/shared/entities/cart/cart"
+import { Cart, CartProps, createCart } from "@/@core/shared/entities/cart/cart"
 import { AddCartItemGateway } from "../../domain/gateways/cart/addCartItemGateway"
-import { CartItem, CartProduct } from "../../../shared/entities/cart/cartItem"
+import { CartProduct } from "../../../shared/entities/cart/cartItem"
 import { UpdateCartItemGateway } from "../../domain/gateways/cart/updateCartItemGateway"
 
 interface AddItemInputDTO {
@@ -21,7 +21,7 @@ export class AddCartItemUseCase {
             return null
         }
 
-        const cart = new Cart({ items: cartProps.items.map((item) => new CartItem(item)) })
+        const cart = createCart({ items: cartProps.items })
         const modifiedItem = cart.addItem(itemRef.productId, itemRef.quantity)
 
         if (!modifiedItem) {

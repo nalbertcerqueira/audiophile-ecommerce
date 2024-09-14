@@ -6,9 +6,9 @@ import { PropsWithChildren } from "react"
 export function AppProvider({ children }: PropsWithChildren) {
     return (
         <NextAuthProvider>
-            <SessionProvider>
-                <StoreProvider>{children}</StoreProvider>
-            </SessionProvider>
+            <StoreProvider>
+                <SessionProvider>{children}</SessionProvider>
+            </StoreProvider>
         </NextAuthProvider>
     )
 }

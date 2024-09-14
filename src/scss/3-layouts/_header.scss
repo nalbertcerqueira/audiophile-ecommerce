@@ -20,7 +20,7 @@
         align-items: center;
         justify-items: stretch;
         gap: 2rem;
-        padding: 1.75rem 0;
+        padding: 1.5rem 0;
 
         @include mixins.media-960 {
             grid-template-columns: auto 1fr auto;

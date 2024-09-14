@@ -66,7 +66,6 @@ export const Input = forwardRef(function Input(
                 />
                 {props.children}
             </div>
-
             {props.error && (
                 <p
                     id={`${props.name}-error`}
