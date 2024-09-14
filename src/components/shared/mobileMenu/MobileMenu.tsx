@@ -1,6 +1,6 @@
 "use client"
 
-import { selectUserProfile, selectUserStatus } from "@/store/user/userSlice"
+import { selectUserProfile } from "@/store/user/userSlice"
 import { MobileUserActions } from "./MobileUserActions"
 import { MobileAuthActions } from "./MobileAuthActions"
 import { MobileMenuItem } from "./MobileMenuItem"
@@ -14,7 +14,6 @@ import { useContext } from "react"
 export function MobileMenu({ isOpen }: { isOpen: boolean }) {
     const { logout } = useContext(SessionContext)
     const isLogged = useAppSelector((state) => state.user.isLogged)
-    const isLoading = useAppSelector(selectUserStatus) === "loading"
 
     const profile = useAppSelector(selectUserProfile)
     const firstName = profile?.type !== "guest" ? toCapitalized(profile.firstName) : undefined
@@ -37,7 +36,7 @@ export function MobileMenu({ isOpen }: { isOpen: boolean }) {
                     avatarUrl={profileImage}
                     className="avatar-circle--mobile"
                 />
-                {isLoading ? null : isLogged ? (
+                {isLogged ? (
                     <MobileUserActions username={firstName} logout={logout} />
                 ) : (
                     <MobileAuthActions />

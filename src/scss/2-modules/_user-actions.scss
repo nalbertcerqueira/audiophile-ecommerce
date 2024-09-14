@@ -16,10 +16,6 @@
         display: none;
     }
 
-    &--hidden {
-        visibility: hidden;
-    }
-
     &__name {
         @extend %text-default-styles;
         font-weight: vars.$bold-weight;
