@@ -71,13 +71,11 @@
 
 %show-animation {
     opacity: 0;
-    visibility: hidden;
     animation: show-up vars.$transition-duration forwards;
 }
 
 @keyframes show-up {
     100% {
         opacity: 100%;
-        visibility: visible;
     }
 }

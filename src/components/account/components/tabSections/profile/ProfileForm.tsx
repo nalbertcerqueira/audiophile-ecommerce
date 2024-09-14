@@ -67,8 +67,8 @@ export function ProfileForm() {
                 id="profile-img"
                 error={formState.errors.profileImg?.message}
             />
-            <div>
-                <Fieldset title="PROFILE INFO">
+            <div className="profile-form__inputs">
+                <Fieldset fieldsClassName="profile-form__fields" title="PROFILE INFO">
                     <Input
                         {...register("firstName")}
                         error={formState.errors.firstName?.message}

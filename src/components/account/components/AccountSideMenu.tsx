@@ -14,7 +14,7 @@ export function AccountSideMenu() {
 
     return (
         <div className="account-menu">
-            <ul>
+            <ul className="account-menu__links">
                 {tabList.map((tab) => (
                     <li key={tab.id}>
                         <TabButton
@@ -27,11 +27,13 @@ export function AccountSideMenu() {
                         </TabButton>
                     </li>
                 ))}
+                <li>
+                    <button onClick={() => logout()} type="button" className="tab-logout">
+                        <LogoutIcon className="tab-logout__icon" />
+                        Logout
+                    </button>
+                </li>
             </ul>
-            <button onClick={() => logout()} type="button" className="tab-logout">
-                <LogoutIcon className="tab-logout__icon" />
-                Logout
-            </button>
         </div>
     )
 }
