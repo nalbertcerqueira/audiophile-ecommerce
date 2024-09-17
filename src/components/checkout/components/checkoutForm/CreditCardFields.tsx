@@ -16,7 +16,7 @@ type CreditCardDetailProps = Pick<BaseCheckoutFieldProps, "control" | "formError
 export function CreditCardFields(props: CreditCardDetailProps) {
     const { control, formErrors } = props
     const creditCardErrors: FieldErrors<CheckoutWithCreditCard> = formErrors
-    const expDateError = creditCardErrors.expDate?.root?.message
+    const expDateError = creditCardErrors.expMonth || creditCardErrors.expYear
 
     return (
         <div className="checkout-form__cc-fields">
@@ -41,14 +41,14 @@ export function CreditCardFields(props: CreditCardDetailProps) {
                 <label
                     htmlFor="exp-month"
                     className={`checkout-form__expdate-label ${
-                        creditCardErrors.expDate ? "checkout-form__expdate-label--error" : ""
+                        expDateError ? "checkout-form__expdate-label--error" : ""
                     }`}
                 >
                     Expiration Date
                 </label>
                 <div className="checkout-form__expdate">
                     <Controller
-                        name="expDate.month"
+                        name="expMonth"
                         control={control}
                         render={({ field }) => (
                             <Input
@@ -60,14 +60,12 @@ export function CreditCardFields(props: CreditCardDetailProps) {
                                 type="tel"
                                 autocomplete="off"
                                 placeholder="MM"
-                                error={
-                                    expDateError || creditCardErrors.expDate?.month?.message
-                                }
+                                error={creditCardErrors.expMonth?.message}
                             />
                         )}
                     />
                     <Controller
-                        name="expDate.year"
+                        name="expYear"
                         control={control}
                         render={({ field }) => (
                             <Input
@@ -79,9 +77,7 @@ export function CreditCardFields(props: CreditCardDetailProps) {
                                 type="tel"
                                 autocomplete="off"
                                 placeholder="YY"
-                                error={
-                                    !!expDateError || creditCardErrors.expDate?.year?.message
-                                }
+                                error={creditCardErrors.expYear?.message}
                             />
                         )}
                     />

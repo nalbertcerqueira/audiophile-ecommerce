@@ -2,9 +2,9 @@
 
 import { checkoutFieldsSchema } from "../../helpers/schemas"
 import { CheckoutFields } from "../../types/types"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useEffect } from "react"
+import { customZodResolver } from "@/libs/zod/resolvers"
 
 export function useCheckoutForm(initialState: CheckoutFields) {
     const {
@@ -20,14 +20,14 @@ export function useCheckoutForm(initialState: CheckoutFields) {
         mode: "onSubmit",
         reValidateMode: "onSubmit",
         defaultValues: initialState,
-        resolver: zodResolver(checkoutFieldsSchema)
+        resolver: customZodResolver(checkoutFieldsSchema)
     })
 
     const paymentMethod = watch("paymentMethod")
 
     useEffect(() => {
         if (paymentMethod === "cash") {
-            unregister(["cardNumber", "expDate", "cvv"], { keepValue: false })
+            unregister(["cardNumber", "expMonth", "expYear", "cvv"], { keepValue: false })
         }
     }, [paymentMethod, unregister])
 

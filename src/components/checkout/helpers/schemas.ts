@@ -1,47 +1,36 @@
-import { nameMessage, nameRegexp } from "@/@core/shared/entities/user/utils"
-import { createStringSchema } from "../../../libs/zod/utils"
-import { lengthErrorMessage } from "../../../libs/zod/errors"
+import { nameMessage, nameRegexp, phoneZodSchema } from "@/@core/shared/entities/user/utils"
+import { addressZodSchema } from "@/@core/shared/entities/address/utils"
 import { CheckoutFields } from "../types/types"
 import z from "zod"
+import { createZodStringSchema } from "@/@core/shared/entities/helpers"
 
 const cashPaymentSchema = z.object({
     paymentMethod: z.literal("cash")
 })
 
-const creditCartExpDateSchema = z.object(
-    {
-        month: z
-            .number({ required_error: "Exp. month is required" })
-            .min(1, "Invalid Exp. month")
-            .max(12, "Invalid Exp. month"),
-        year: z
-            .number({ required_error: "Exp. year is required" })
-            .gte(parseInt(`${new Date().getFullYear()}`.slice(-2)), "Invalid Exp. year")
-    },
-    { required_error: "Exp. date is required" }
-)
-
-const checkoutBaseSchema = z.object({
-    fullName: createStringSchema("Full Name", { min: 8 }).refine(
-        (name) => name.match(nameRegexp),
-        { message: `Full Name ${nameMessage}`, path: [""] }
-    ),
-    phone: createStringSchema("Phone", { min: 10 }),
-    zipCode: z
-        .string({ required_error: "Zip code is required" })
-        .min(5, lengthErrorMessage("Zip code", "min", 5)),
-    address: createStringSchema("Address", { min: 8 }),
-    city: createStringSchema("City", { min: 4 }),
-    country: createStringSchema("Country", { min: 4 })
-})
+const checkoutBaseSchema = z
+    .object({
+        phone: phoneZodSchema,
+        fullName: createZodStringSchema(8).refine((name) => name.match(nameRegexp), {
+            message: nameMessage
+        })
+    })
+    .merge(addressZodSchema)
+    .strict()
 
 const creditCardPaymentSchema = z.object({
     paymentMethod: z.literal("creditCard"),
-    cvv: z.string({ required_error: "CVV is required" }).length(3, "Invalid CVV"),
+    cvv: z.string({ required_error: "is required" }).length(3, "is invalid"),
     cardNumber: z
-        .string({ required_error: "Card number is required" })
-        .length(16, "Card number must be 16 characters long"),
-    expDate: creditCartExpDateSchema
+        .string({ required_error: "is required" })
+        .length(16, "must be 16 characters long"),
+    expMonth: z
+        .number({ required_error: "is required" })
+        .min(1, "is invalid")
+        .max(12, "is invalid"),
+    expYear: z
+        .number({ required_error: "is required" })
+        .gte(parseInt(`${new Date().getFullYear()}`.slice(-2)), "is invalid")
 })
 
 export const checkoutFieldsSchema: z.ZodType<CheckoutFields> = z.discriminatedUnion(

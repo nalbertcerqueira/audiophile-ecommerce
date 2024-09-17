@@ -47,7 +47,7 @@ export function createZodStringSchema(min: number) {
         .string()
         .trim()
         .min(min, `must have at least ${min} character(s)`)
-        .refine((input) => input.replace(/[^A-zÀ-ú0-9]/g, "").length >= min, {
+        .refine((input) => input.replace(/[^À-ú\w]|_/g, "").length >= min, {
             message: `must have at least ${min} character(s) without symbols`
         })
 }

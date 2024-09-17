@@ -1,7 +1,5 @@
 export type PaymentMethod = "creditCard" | "cash"
 
-export type ExpirationDate = { month: number; year: number }
-
 export interface CheckoutBaseFields {
     fullName: string
     phone: string
@@ -18,7 +16,8 @@ export interface CheckoutWithCash extends CheckoutBaseFields {
 export interface CheckoutWithCreditCard extends CheckoutBaseFields {
     paymentMethod: "creditCard"
     cardNumber: string
-    expDate: ExpirationDate
+    expMonth: number
+    expYear: number
     cvv: string
 }
 
