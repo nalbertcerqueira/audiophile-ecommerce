@@ -17,7 +17,7 @@ interface InputProps {
     value?: string | number
     autocomplete?: string
     placeholder?: string
-    error?: string | boolean
+    error?: string
     className?: string
     children?: ReactNode
     onBlur?: (e: FocusEvent<HTMLInputElement>) => void

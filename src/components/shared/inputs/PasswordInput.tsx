@@ -11,7 +11,7 @@ interface InputProps {
     id?: string
     value?: string | number
     autocomplete?: string
-    error?: string | boolean
+    error?: string
     onBlur?: (e: FocusEvent<HTMLInputElement>) => void
     onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 }
