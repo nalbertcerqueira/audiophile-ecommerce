@@ -23,7 +23,7 @@ Audiophile ecommerce se trata de um projeto desenvolvido a partir de um dos desa
 -   🟢 Sessão anônima
 -   🟢 Carrinho de compras (adição e remoção de produtos)
 -   🟢 Checkout do carrinho
--   🟢 Painel do usuáriO
+-   🟢 Painel do usuário
 
 ### Rotas da API
 
@@ -33,7 +33,7 @@ Audiophile ecommerce se trata de um projeto desenvolvido a partir de um dos desa
 | ---------- | --------------------------- | ----------------------------------------- |
 | GET        | `/api/auth/user/profile`    | Obtém as informações do perfil do usuário |
 | PUT        | `/api/auth/user/profile`    | Atualiza as informações do perfil         |
-| GET        | `/api/auth/user/address`    | Obém o atual endereço do usuário          |
+| GET        | `/api/auth/user/address`    | Obtém o atual endereço do usuário         |
 | PUT        | `/api/auth/user/address`    | Atualiza as informações do endereço       |
 | GET        | `/api/auth/cart`            | Obtém o carrinho de compras do usuário    |
 | POST       | `/api/auth/cart/items`      | Adiciona um novo item ao carrinho         |
