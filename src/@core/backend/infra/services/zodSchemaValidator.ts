@@ -3,7 +3,7 @@ import {
     ValidationResult
 } from "../../domain/services/schemaValidator"
 import { ZodSchema } from "zod"
-import { generateCustomZodErrors } from "@/@core/shared/entities/helpers"
+import { ZodHelper } from "@/@core/shared/entities/helpers"
 
 export class ZodSchemaValidator implements SchemaValidatorService {
     constructor(private readonly schema: ZodSchema) {}
@@ -14,7 +14,7 @@ export class ZodSchemaValidator implements SchemaValidatorService {
         if (!validationResult.success) {
             return {
                 isValid: false,
-                errors: generateCustomZodErrors(validationResult.error, 1)
+                errors: ZodHelper.generateCustomZodErrors(validationResult.error, 1)
             }
         }
 

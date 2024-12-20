@@ -1,5 +1,6 @@
-import { passwordZodSchema, userZodSchema } from "@/@core/shared/entities/user/utils"
+import { userZodSchema } from "@/@core/shared/entities/user/utils"
 import { AuthFormFields } from "../types/types"
+import { ZodHelper } from "@/@core/shared/entities/helpers"
 import z from "zod"
 
 export const signinSchema: z.ZodType<AuthFormFields<"signin">> = userZodSchema.pick({
@@ -14,11 +15,14 @@ export const signupSchema: z.ZodType<AuthFormFields<"signup">> = userZodSchema
         email: true,
         password: true
     })
-    .extend({ passwordConfirmation: passwordZodSchema })
+    .extend({ passwordConfirmation: ZodHelper.password("Password confirmation") })
     .strict()
     .refine(
         (values) => {
             return values.password === values.passwordConfirmation
         },
-        { message: "and password don't match", path: ["passwordConfirmation"] }
+        {
+            message: "Passwords don't match",
+            path: ["passwordConfirmation"]
+        }
     )

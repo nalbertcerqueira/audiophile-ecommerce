@@ -38,7 +38,7 @@ export function UserActions() {
     function renderUserActions() {
         return (
             <div>
-                <span className="user-actions__name">Hi, {firstName}</span>
+                <p className="user-actions__name">Hi, {firstName}</p>
                 <div className="user-actions__wrapper">
                     <Link className="user-actions__action" href="/account">
                         Account

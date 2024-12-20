@@ -4,7 +4,7 @@ import { CheckoutFields } from "../types/types"
 import { maskExpirationMonth } from "@/utils/masks"
 import { sanitizeNumericField } from "@/utils/helpers"
 
-//Adapter para manipular a data de expiração do cartão
+//Adapter para manipular a data de vencimento do cartão
 export function handleExpirationDate(
     field: ControllerRenderProps<CheckoutFields, any>,
     type: "month" | "year"
