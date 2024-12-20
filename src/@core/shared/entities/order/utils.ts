@@ -1,22 +1,19 @@
-import { emailZodSchema, nameMessage, nameRegexp } from "../user/utils"
 import { CheckoutOrderProps, Customer, Taxes } from "./checkoutOrder"
 import { cartItemZodSchema } from "../cart/utils"
-import { createZodStringSchema, schemaFromType } from "../helpers"
+import { schemaFromType, ZodHelper } from "../helpers"
 import z from "zod"
 
 export const customerZodSchema = schemaFromType<Customer>()(
     z.object({
-        email: emailZodSchema,
-        fullName: createZodStringSchema(8).refine((name) => name.match(nameRegexp), {
-            message: nameMessage
-        })
+        email: ZodHelper.email("Email"),
+        fullName: ZodHelper.userName("Full name", 8)
     })
 ).strict()
 
 export const taxesZodSchema = schemaFromType<Taxes>()(
     z.object({
-        vat: z.number().gt(0),
-        shipping: z.number().gt(0)
+        vat: ZodHelper.number("Vat tax", 0),
+        shipping: ZodHelper.number("Shipping tax", 0)
     })
 )
 

@@ -13,7 +13,7 @@ import "./styles.scss"
 export function SignupPageComponent() {
     const form = useAuthForm("signup")
     const isFormBlocked = form.isSubmitting || form.isSubmitSuccessful
-
+    console.log(form.errors)
     function handleSignup(success: boolean) {
         if (!success) {
             return form.setError("email", { message: "This email is already registered" })
