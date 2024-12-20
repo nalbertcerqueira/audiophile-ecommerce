@@ -3,7 +3,7 @@
 
 import { toBase64 } from "@/utils/helpers"
 import { UploadIcon } from "@/components/shared/icons/UploadIcon"
-import { allowedImgTypes } from "@/@core/shared/entities/user/utils"
+import { allowedImgTypes } from "@/@core/shared/entities/constants"
 import { Controller, Path, Control } from "react-hook-form"
 import { KeyboardEvent, useRef, useState } from "react"
 

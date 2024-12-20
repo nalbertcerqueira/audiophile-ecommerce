@@ -1,6 +1,6 @@
 import { ImageStorageService } from "@/@core/backend/domain/services/imageStorageService"
 import { uploadStreamToCloudinary } from "./config/cloudinary-config"
-import { allowedImgTypes } from "@/@core/shared/entities/user/utils"
+import { allowedImgTypes } from "@/@core/shared/entities/constants"
 import { UploadApiOptions } from "cloudinary"
 
 export class CloudinaryImageStorageService implements ImageStorageService {

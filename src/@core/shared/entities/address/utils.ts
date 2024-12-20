@@ -1,17 +1,16 @@
-import { schemaFromType, createZodStringSchema } from "../helpers"
+import { zipCodeRegexp } from "../constants"
+import { ZodHelper } from "../helpers"
 import { AddressProps } from "./address"
 import z from "zod"
 
-export const zipCodeRegexp = /^[0-9]+$/
-export const zipCodeMessage = "must contain only numbers"
-
-export const addressZodSchema = schemaFromType<AddressProps>()(
+export const addressZodSchema = ZodHelper.schemaFromType<AddressProps>()(
     z.object({
-        address: createZodStringSchema(8),
-        country: createZodStringSchema(4),
-        city: createZodStringSchema(4),
-        zipCode: createZodStringSchema(5).refine((zipCode) => zipCode.match(zipCodeRegexp), {
-            message: zipCodeMessage
-        })
+        address: ZodHelper.string("Address", 8),
+        country: ZodHelper.string("Country name", 4),
+        city: ZodHelper.string("City", 4),
+        zipCode: ZodHelper.string("Zip code", 5).refine(
+            (zipCode) => zipCode.match(zipCodeRegexp),
+            { message: "Zip code must contain only numbers" }
+        )
     })
 ).strict()

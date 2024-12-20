@@ -1,8 +1,8 @@
 import z from "zod"
 import { CartProduct } from "./cartItem"
-import { schemaFromType } from "../helpers"
+import { ZodHelper } from "../helpers"
 
-export const cartItemZodSchema = schemaFromType<CartProduct>()(
+export const cartItemZodSchema = ZodHelper.schemaFromType<CartProduct>()(
     z.object({
         productId: z.string().min(1),
         name: z.string().min(1).trim(),
