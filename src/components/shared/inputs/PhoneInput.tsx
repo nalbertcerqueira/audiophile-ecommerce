@@ -36,7 +36,6 @@ export function PhoneInput<Fields extends Record<string, any>>(
                         className={`${phoneErrorClassname}`.trim()}
                         disableDialCodePrefill={true}
                         onChange={(_, meta) => {
-                            console.log(meta)
                             const newValue = meta.inputValue.replace(/\D/g, "")
                             return field.onChange({
                                 currentTarget: { value: newValue },
